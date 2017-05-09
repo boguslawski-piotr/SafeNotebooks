@@ -10,7 +10,6 @@ namespace SafeNotebooks
 		public NavDrawer()
 		{
 			InitializeComponent();
-
 		}
 
 		protected override void OnSizeAllocated(double width, double height)
@@ -24,7 +23,8 @@ namespace SafeNotebooks
 		private void SetPadding(bool IsLandscape)
 		{
 #if __IOS__
-			Padding = new Thickness(0, IsLandscape ? 0 : 20, 0, 0);
+			bool StatusBarVisible = !IsLandscape || Device.Idiom == TargetIdiom.Tablet;
+			Padding = new Thickness(0, StatusBarVisible ? 20 : 0, 0, 0);
 #endif
 		}
 	}

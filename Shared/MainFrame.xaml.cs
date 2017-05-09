@@ -10,6 +10,7 @@ namespace SafeNotebooks
 		public MainFrame()
 		{
 			InitializeComponent();
+
 			IsPresentedChanged += MainFrame_IsPresentedChanged;
 			MainFrame_IsPresentedChanged(this, null);
 		}
@@ -18,15 +19,11 @@ namespace SafeNotebooks
 		{
 #if __IOS__
 			if (IsPresented)
-				Master.Title = "[current notebook]";
+				Master.Title = "";
 			else
-				Master.Title = "[ ]";
+				Master.Title = "\ud83d\udcd5";
 #endif
 #if __ANDROID__
-			if (IsPresented)
-				Master.Title = "[app name?]";
-			else
-				Master.Title = "";
 #endif
 
 		}

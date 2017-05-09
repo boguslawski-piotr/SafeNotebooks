@@ -5,9 +5,9 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-	public partial class PagesList : ContentPage
+	public partial class ListOfNotes : ContentPage
 	{
-		public PagesList()
+		public ListOfNotes()
 		{
 			InitializeComponent();
 		}

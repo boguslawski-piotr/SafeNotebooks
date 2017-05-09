@@ -13,7 +13,7 @@
     <MasterDetailPage.Detail>
         <NavigationPage>
             <x:Arguments>
-                <local:PagesList />
+                <local:ListOfNotes />
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>
