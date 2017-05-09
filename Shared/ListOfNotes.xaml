@@ -5,8 +5,62 @@
 	x:Class="SafeNotebooks.ListOfNotes"
 	Title="[page name]">
 	
-	<ContentPage.Content>
-		<Label Text="ListOfNotes" />
-	</ContentPage.Content>
-	
+	<ContentPage.ToolbarItems>
+        <ToolbarItem
+			x:Name="SearchBtn"
+			Text="🔍"
+			Clicked="SearchBtn_Clicked"
+            Order="Primary"
+		>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>	
+
+	<StackLayout
+		Orientation="Vertical"
+		VerticalOptions="FillAndExpand"
+		HorizontalOptions="FillAndExpand"
+		Padding="0,0"
+		Spacing="0"
+	>
+
+		<SearchBar
+			IsVisible="false"
+			x:Name="Search"
+			Placeholder="search"
+		/>
+
+		<ListView>
+		</ListView>
+
+		<!-- bottom toolbar -->
+		
+		<!-- TODO: color (lighter) from theme -->
+		
+		<StackLayout
+			Orientation="Horizontal"
+			HorizontalOptions="Fill"
+			Padding="0,0"
+			Spacing="0"
+			BackgroundColor="#efefef"
+		>
+			<StackLayout
+				Orientation="Horizontal"
+				HorizontalOptions="CenterAndExpand"
+				Padding="10,0"
+				Spacing="20"
+			>
+				
+				<Button 
+					Text="New..." 
+					HorizontalOptions="FillAndExpand"
+				/>
+				<Button 
+					Text="New note" 
+				/>
+
+			</StackLayout>
+		</StackLayout>
+		
+	</StackLayout>
+
 </ContentPage>

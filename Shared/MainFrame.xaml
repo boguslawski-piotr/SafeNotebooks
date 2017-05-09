@@ -3,19 +3,24 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:local="clr-namespace:SafeNotebooks"
 	x:Class="SafeNotebooks.MainFrame">
-   	Title=""
-    MasterBehavior="Default">
+   	Title="Safe Notebooks"
+    MasterBehavior="Default"
+>
 
     <MasterDetailPage.Master>
         <local:NavDrawer />
     </MasterDetailPage.Master>
 
     <MasterDetailPage.Detail>
-        <NavigationPage>
+    	<!-- TODO: color (darker) from theme -->
+		<NavigationPage 
+			BarBackgroundColor="#2196F3"
+		>
             <x:Arguments>
                 <local:ListOfNotes />
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>
+
 </MasterDetailPage>
 

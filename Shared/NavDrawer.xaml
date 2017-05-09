@@ -3,10 +3,82 @@
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	x:Class="SafeNotebooks.NavDrawer"
-	Title=" ">
+	Title=" "
+>
 	
-	<ContentPage.Content>
-		<Label Text="NavDrawer" />
-	</ContentPage.Content>
+   	<!-- TODO: color (darker) from theme -->
+
+	<StackLayout
+		Orientation="Vertical"
+		VerticalOptions="FillAndExpand"
+		HorizontalOptions="FillAndExpand"
+		Padding="0,0,1,0"
+		Spacing="0"
+		BackgroundColor="#2196F3"
+	>
+		
+		<StackLayout
+			Orientation="Horizontal"
+			HorizontalOptions="FillAndExpand"
+			Padding="10,17,10,3"
+			Spacing="15"
+			BackgroundColor="#2196F3"
+		>
+			<Label 
+				Text="Safe Notebooks" 
+				FontSize="Medium"
+				VerticalOptions="Center" 
+				HorizontalOptions="FillAndExpand" 
+				HorizontalTextAlignment="Start" 
+			/>
+			<Button 
+				x:Name="SearchBtn"
+				Text="🔍"
+				Clicked="SearchBtn_Clicked"
+			/>
+			<Button 
+				Text="⚙️" 
+			/>
+		</StackLayout>
+		
+		<SearchBar
+			IsVisible="false"
+			x:Name="Search"
+			Placeholder="search"
+		/>
+
+		<!-- TODO: color (lighter) from theme -->
+
+		<ListView BackgroundColor="#efefef">
+		</ListView>
+
+		<!-- bottom toolbar -->
+		
+		<StackLayout
+			Orientation="Horizontal"
+			HorizontalOptions="Fill"
+			Padding="0,0"
+			Spacing="0"
+			BackgroundColor="#efefef"
+		>
+			<StackLayout
+				Orientation="Horizontal"
+				HorizontalOptions="CenterAndExpand"
+				Padding="10,0"
+				Spacing="20"
+			>
+				
+				<Button 
+					Text="New Notebook " 
+				/>
+			
+				<Button 
+					Text="New Page" 
+				/>
+
+			</StackLayout>
+		</StackLayout>
+
+	</StackLayout>
 	
 </ContentPage>

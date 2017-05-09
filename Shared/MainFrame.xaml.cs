@@ -17,6 +17,7 @@ namespace SafeNotebooks
 
 		void MainFrame_IsPresentedChanged(object sender, EventArgs e)
 		{
+			MessagingCenter.Send<MainFrame>(this, "NavDrawerIsPresentedChanged");
 #if __IOS__
 			if (IsPresented)
 				Master.Title = "";
