@@ -8,7 +8,7 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
-			MainPage = new SafeNotebooksPage();
+			MainPage = new MainFrame();
 		}
 
 		protected override void OnStart()
