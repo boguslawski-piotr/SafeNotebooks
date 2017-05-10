@@ -11,22 +11,13 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
-			IsPresentedChanged += MainFrame_IsPresentedChanged;
-			MainFrame_IsPresentedChanged(this, null);
+			IsPresentedChanged += NavDrawerVisibilityChanged;
+			IsPresented = true;
 		}
 
-		void MainFrame_IsPresentedChanged(object sender, EventArgs e)
+		void NavDrawerVisibilityChanged(object sender, EventArgs e)
 		{
-			MessagingCenter.Send<MainFrame>(this, "NavDrawerIsPresentedChanged");
-#if __IOS__
-			if (IsPresented)
-				Master.Title = "";
-			else
-				Master.Title = "\ud83d\udcd5";
-#endif
-#if __ANDROID__
-#endif
-
+			MessagingCenter.Send<MainFrame, bool>(this, App.MsgNavDrawerVisibilityChanged, IsPresented);
 		}
 
 	}

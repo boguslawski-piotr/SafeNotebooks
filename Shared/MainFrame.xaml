@@ -4,22 +4,15 @@
     xmlns:local="clr-namespace:SafeNotebooks"
 	x:Class="SafeNotebooks.MainFrame">
    	Title="Safe Notebooks"
-    MasterBehavior="Default"
+    MasterBehavior="SplitOnLandscape"
 >
 
     <MasterDetailPage.Master>
-        <local:NavDrawer />
+   		<local:NavDrawer />
     </MasterDetailPage.Master>
 
     <MasterDetailPage.Detail>
-    	<!-- TODO: color (darker) from theme -->
-		<NavigationPage 
-			BarBackgroundColor="#2196F3"
-		>
-            <x:Arguments>
-                <local:ListOfNotes />
-            </x:Arguments>
-        </NavigationPage>
+    	<local:ListOfNotes />
     </MasterDetailPage.Detail>
 
 </MasterDetailPage>

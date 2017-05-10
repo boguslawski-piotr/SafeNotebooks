@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using pbXForms;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-	public partial class NavDrawer : ContentPage
+	public partial class NavDrawer : ContentPageWAppBar
 	{
 		public NavDrawer()
 		{
@@ -13,21 +13,32 @@ namespace SafeNotebooks
 
 		}
 
-		//protected override void OnSizeAllocated(double width, double height)
-		//{
-		//	base.OnSizeAllocated(width, height);
+		protected override void AdjustAppBar(bool IsLandscape)
+		{
+#if __IOS__
+			bool StatusBarVisible = !IsLandscape || Device.Idiom == TargetIdiom.Tablet;
+#endif
+#if __ANDROID__
+			//bool StatusBarVisible = (Device.Idiom == TargetIdiom.Tablet) ? !IsLandscape : true;
+			bool StatusBarVisible = true;
+#endif
+			AppBar.HeightRequest = (IsLandscape ? Metrics.AppBarHeightLandscape : Metrics.AppBarHeightPortrait);
+			AppBar.Padding = new Thickness(
+				Metrics.ScreenEdgeLeftRightMargin,
+				StatusBarVisible ? Metrics.StatusBarHeight : 0,
+				Metrics.ScreenEdgeLeftRightMargin,
+				0);
+		}
 
-		//	Rectangle AppRect = Application.Current.MainPage.Bounds;
-		//	SetPadding(AppRect.Width > AppRect.Height);
-		//}
-
-//		private void SetPadding(bool IsLandscape)
-//		{
-//#if __IOS__
-//			bool StatusBarVisible = !IsLandscape || Device.Idiom == TargetIdiom.Tablet;
-//			Padding = new Thickness(0, StatusBarVisible ? 20 : 0, 0, 0);
-//#endif
-//		}
+		protected override void AdjustToolBar(bool IsLandscape)
+		{
+			ToolBar.HeightRequest = (IsLandscape? Metrics.AppBarHeightLandscape : Metrics.AppBarHeightPortrait);
+			ToolBar.Padding = new Thickness(
+				Metrics.ScreenEdgeLeftRightMargin,
+				0,
+				Metrics.ScreenEdgeLeftRightMargin,
+				0);
+		}
 
 		void SearchBtn_Clicked(object sender, System.EventArgs e)
 		{

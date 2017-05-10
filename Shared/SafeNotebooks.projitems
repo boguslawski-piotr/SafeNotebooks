@@ -33,5 +33,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ListOfNotes.xaml.cs">
 <DependentUpon>ListOfNotes.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ContentPageWAppBar.cs" />
   </ItemGroup>
 </Project>

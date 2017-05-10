@@ -4,10 +4,11 @@ namespace SafeNotebooks
 {
 	public partial class App : Application
 	{
+		public static string MsgNavDrawerVisibilityChanged = "MsgNavDrawerVisibilityChanged";
+
 		public App()
 		{
 			InitializeComponent();
-
 			MainPage = new MainFrame();
 		}
 

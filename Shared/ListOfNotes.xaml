@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<local:ContentPageWAppBar
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	xmlns:local="clr-namespace:SafeNotebooks"
+    xmlns:pbXForms="clr-namespace:pbXForms"
 	x:Class="SafeNotebooks.ListOfNotes"
-	Title="[page name]">
-	
-	<ContentPage.ToolbarItems>
-        <ToolbarItem
-			x:Name="SearchBtn"
-			Text="🔍"
-			Clicked="SearchBtn_Clicked"
-            Order="Primary"
-		>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>	
+>
 
 	<StackLayout
 		Orientation="Vertical"
 		VerticalOptions="FillAndExpand"
 		HorizontalOptions="FillAndExpand"
-		Padding="0,0"
+		Padding="0"
 		Spacing="0"
 	>
+
+		<StackLayout
+			x:Name="AppBar"
+			Orientation="Horizontal"
+			HorizontalOptions="FillAndExpand"
+			VerticalOptions="CenterAndExpand"
+			Padding="10,0"
+			Spacing="{StaticResource ScreenEdgeLeftRightMargin}"
+			BackgroundColor="{StaticResource AppBarBackgroundColor}"
+		>
+			<pbXForms:FlatButton 
+				x:Name="NavDrawerBtn"
+				Text="📕" 
+			/>
+			<Label 
+				Text="[page name]" 
+				TextColor="{StaticResource AppBarTextColor}"
+				VerticalOptions="Center" 
+				HorizontalOptions="FillAndExpand" 
+			/>
+			<pbXForms:FlatButton 
+				x:Name="SearchBtn"
+				Text="🔍"
+			/>
+		</StackLayout>
+		<Label HeightRequest="1" BackgroundColor="{StaticResource DividerColor}" />
 
 		<SearchBar
 			IsVisible="false"
@@ -29,32 +47,30 @@
 			Placeholder="search"
 		/>
 
-		<ListView>
+		<ListView
+			BackgroundColor="{StaticResource PageBackgroundColorLight}">
 		</ListView>
 
 		<!-- bottom toolbar -->
 		
-		<!-- TODO: color (lighter) from theme -->
-		
+		<Label HeightRequest="1" BackgroundColor="{StaticResource DividerColor}" />
 		<StackLayout
+			x:Name="ToolBar"
 			Orientation="Horizontal"
 			HorizontalOptions="Fill"
-			Padding="0,0"
+			Padding="0"
 			Spacing="0"
-			BackgroundColor="#efefef"
+			BackgroundColor="{StaticResource ToolBarBackgroundColor}"
 		>
 			<StackLayout
 				Orientation="Horizontal"
-				HorizontalOptions="CenterAndExpand"
-				Padding="10,0"
-				Spacing="20"
+				HorizontalOptions="EndAndExpand"
+				Spacing="{StaticResource ScreenEdgeLeftRightMargin}"
 			>
-				
-				<Button 
+				<pbXForms:FlatButton
 					Text="New..." 
-					HorizontalOptions="FillAndExpand"
 				/>
-				<Button 
+				<pbXForms:FlatButton 
 					Text="New note" 
 				/>
 
@@ -62,5 +78,5 @@
 		</StackLayout>
 		
 	</StackLayout>
-
-</ContentPage>
+	
+</local:ContentPageWAppBar>

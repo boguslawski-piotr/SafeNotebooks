@@ -1,6 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="SafeNotebooks.App">
+<Application 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="SafeNotebooks.App">
+
 	<Application.Resources>
-		<!-- Application resource dictionary -->
+		
+		<ResourceDictionary>
+			<Color x:Key="StatusBarBackgroundColor">#1B5E20</Color>
+			
+			<Color x:Key="AppBarBackgroundColor">#4CAF50</Color>
+			<Color x:Key="AppBarTextColor">#ffffff</Color>
+
+			<Color x:Key="ToolBarBackgroundColor">#A5D6A7</Color>
+
+			<Color x:Key="PageBackgroundColorDark">#E8F5E9</Color>
+			<Color x:Key="PageBackgroundColorLight">#ffffff</Color>
+
+			<Color x:Key="DividerColor">#d0d0d0</Color>
+
+			<x:Double x:Key="ScreenEdgeLeftRightMargin">16</x:Double>
+			
+		</ResourceDictionary>
+		
 	</Application.Resources>
 </Application>
