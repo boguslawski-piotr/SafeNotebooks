@@ -1,16 +1,29 @@
-﻿using Xamarin.Forms;
+using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
 	public partial class App : Application
 	{
-		public static string MsgNavDrawerVisibilityChanged = "MsgNavDrawerVisibilityChanged";
-		public static string MsgChangeNavDrawerVisibility = "MsgChangeNavDrawerVisibility";
+		//
+
+		public static Data Data;
+
+
+		//
 
 		public App()
 		{
+			// TODO: list of available FileSystems
+
+			// TODO: credentials manager
+
+			Data = new Data();
+
 			InitializeComponent();
+
 			MainPage = new MainFrame();
+
+			// TODO: restore last selected data
 		}
 
 		protected override void OnStart()
