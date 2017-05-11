@@ -24,7 +24,6 @@
 			<Color x:Key="ListItemsDividerColor">#C5CAE9</Color>			
 
 			<!-- TODO: how to use values from Metrics class in XAML? -->
-			<x:Double x:Key="ScreenEdgeLeftRightMargin">16</x:Double>
 			<x:Double x:Key="ToolBarItemsSpacing">24</x:Double>
 			
 		</ResourceDictionary>

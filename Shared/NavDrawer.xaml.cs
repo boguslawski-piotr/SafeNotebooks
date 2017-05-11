@@ -7,6 +7,8 @@ namespace SafeNotebooks
 {
 	public partial class NavDrawer : ContentPageWAppBar
 	{
+		public Notebook SelectedNotebook = null;
+
 		public NavDrawer()
 		{
 			InitializeComponent();
@@ -14,37 +16,32 @@ namespace SafeNotebooks
 			ListCtl.ItemSelected += ListCtl_ItemSelected;
 			ListCtl.ItemTapped += ListCtl_ItemTapped;
 
-			ListCtl.ItemsSource = App.Data.Notebooks;
-
 			MessagingCenter.Subscribe<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
 		}
 
+		protected override void OnAppearing()
+		{
+			ShowNotebooks();
+		}
 
 		protected override void AdjustAppBar(bool IsLandscape)
 		{
-#if __IOS__
-			bool StatusBarVisible = !IsLandscape || Device.Idiom == TargetIdiom.Tablet;
-#endif
-#if __ANDROID__
-			//bool StatusBarVisible = (Device.Idiom == TargetIdiom.Tablet) ? !IsLandscape : true;
-			bool StatusBarVisible = true;
-#endif
-			AppBar.HeightRequest = (IsLandscape ? Metrics.AppBarHeightLandscape : Metrics.AppBarHeightPortrait);
-			AppBar.Padding = new Thickness(
-				Metrics.ScreenEdgeLeftRightMargin,
-				StatusBarVisible ? Metrics.StatusBarHeight : 0,
-				Metrics.ScreenEdgeLeftRightMargin,
+			AdjustAppBar(IsLandscape, Grid, AppBar, true);
+		}
+
+		protected override void AdjustContent(bool IsLandscape)
+		{
+			SelectedNotebookBar.HeightRequest = (IsLandscape ? Metrics.ToolBarHeightLandscape : Metrics.ToolBarHeightPortrait);
+			SelectedNotebookBar.Padding = new Thickness(
+				Metrics.ScreenEdgeMargin,
+				0,
+				Metrics.ScreenEdgeMargin,
 				0);
 		}
 
 		protected override void AdjustToolBar(bool IsLandscape)
 		{
-			ToolBar.HeightRequest = (IsLandscape? Metrics.ToolBarHeightLandscape : Metrics.ToolBarHeightPortrait);
-			ToolBar.Padding = new Thickness(
-				Metrics.ScreenEdgeLeftRightMargin,
-				0,
-				Metrics.ScreenEdgeLeftRightMargin,
-				0);
+			AdjustToolBar(IsLandscape, Grid, ToolBar);
 		}
 
 
@@ -64,7 +61,7 @@ namespace SafeNotebooks
 		}
 
 
-		void SelectedNotebook_Clicked(object sender, System.EventArgs e)
+		void ShowNotebooksBtn_Clicked(object sender, System.EventArgs e)
 		{
 			ShowNotebooks();
 		}
@@ -72,42 +69,83 @@ namespace SafeNotebooks
 		void ShowNotebooks()
 		{
 			ListCtl.ItemsSource = App.Data.Notebooks;
-			SelectedNotebook.Text = "";
+			SelectedNotebookName.Text = "Notebooks";	// TODO: translation
+			ShowNotebooksBtn.IsVisible = false;
+			SelectedNotebook = null;
 		}
+
 
 		void ListCtl_ItemSelected(object sender, SelectedItemChangedEventArgs e)
 		{
+			if(e.SelectedItem is Notebook)
+				SelectedNotebook = (Notebook)e.SelectedItem;
 		}
 
 		void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
 		{
 			if (e.Item is Notebook)
 			{
-				Notebook n = (Notebook)e.Item;
-				ListCtl.ItemsSource = n.Pages;
-				SelectedNotebook.Text = "< " + n.ToString();
+				ShowNotebook((Notebook)e.Item);
 			}
 			else
 			{
-				MessagingCenter.Send<Data, Page>(App.Data, Data.MsgPageSelected, (Page)e.Item);
-				MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgChangeNavDrawerVisibility);
+				ShowPage((Page)e.Item);
 			}
 		}
 
-		void NewNotebookBtn_Clicked(object sender, System.EventArgs e)
+		void ShowNotebook(Notebook n)
 		{
-			//Application.Current.MainPage.DisplayAlert("Create new", "notebook", "Cancel");
-			ShowNotebooks();
-			Notebook n = new Notebook()
+			SelectedNotebook = n;
+
+			if (SelectedNotebook == null) 
 			{
-				Name = "Notebook " + App.Data.Notebooks.Count
-			};
-			App.Data.Notebooks.Add(n);
+				ShowNotebooks();
+			}
+			else
+			{
+				ListCtl.ItemsSource = SelectedNotebook.Pages;
+				SelectedNotebookName.Text = SelectedNotebook.Name;
+
+				ShowNotebooksBtn.IsVisible = true;
+			}
 		}
 
-		void NewPageBtn_Clicked(object sender, System.EventArgs e)
+		void ShowPage(Page p)
 		{
-			Application.Current.MainPage.DisplayAlert("Create new", "page", "Cancel");
+			Page SelectedPage = p;
+			ListCtl.SelectedItem = p;
+
+			MessagingCenter.Send<Data, Page>(App.Data, Data.MsgPageSelected, SelectedPage);
+			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgHideNavDrawer);
 		}
+
+		async void NewBtn_Clicked(object sender, System.EventArgs e)
+		{
+			if (SelectedNotebook == null)
+			{
+				Notebook n = new Notebook()
+				{
+					Name = "Notebook " + App.Data.Notebooks.Count
+				};
+
+				await Application.Current.MainPage.DisplayAlert("New notebook", "Window for creating new notebook.", "Cancel");
+
+				App.Data.Notebooks.Add(n);
+
+				ShowNotebook(n);
+			}
+			else
+			{
+				Page p = new Page()
+				{
+					Name = "Page " + SelectedNotebook.Pages.Count
+				};
+
+				SelectedNotebook.Pages.Add(p);
+
+				ShowPage(p);
+			}
+		}
+
 	}
 }

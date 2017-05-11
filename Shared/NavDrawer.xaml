@@ -7,17 +7,23 @@
 	x:Class="SafeNotebooks.NavDrawer"
 	Title=" "
 >
-	<StackLayout
-		Orientation="Vertical"
-		VerticalOptions="FillAndExpand"
-		HorizontalOptions="FillAndExpand"
-		Padding="0"
-		Spacing="0"
+	<Grid
+		x:Name="Grid"
 	>
-
+		<Grid.RowDefinitions>
+			<RowDefinition Height="0" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="0" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		
 		<!-- AppBar -->
 		
 		<StackLayout
+			Grid.Row="0"
+			Grid.Column="0"
 			x:Name="AppBar"
 			Orientation="Horizontal"
 			HorizontalOptions="FillAndExpand"
@@ -26,7 +32,6 @@
 			BackgroundColor="{StaticResource AppBarBackgroundColor}"
 		>
 			<Label 
-				x:Name="PageName"
 				Text="Safe Notebooks" 
 				FontAttributes="Bold"
 				TextColor="{StaticResource AppBarTextColor}"
@@ -35,35 +40,69 @@
 			/>
 			<pbXForms:FlatButton
 				x:Name="SearchBtn"
-				Text="🔍"
-				TextColor="{StaticResource AppBarTextColor}"
+				Image="ic_search.png"
 				Clicked="SearchBtn_Clicked"
 			/>
 			<pbXForms:FlatButton
 				x:Name="SettingsBtn"
-				TextColor="{StaticResource AppBarTextColor}"
-				Text="🛠"
+				Image="ic_settings.png"
 				Clicked="SettingsBtn_Clicked"
 			/>
 		</StackLayout>
 
 		<!-- Content -->
 
-		<pbXForms:FlatButton
-			x:Name="SelectedNotebook"
-			Text=""
-			Clicked="SelectedNotebook_Clicked"
-		/>
-		<ListView
-			x:Name="ListCtl"
-			BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
-			SeparatorColor="{StaticResource ListItemsDividerColor}"
+		<StackLayout
+			Grid.Row="1"
+			Grid.Column="0"
+			Orientation="Vertical"
+			VerticalOptions="FillAndExpand"
+			HorizontalOptions="FillAndExpand"
+			Padding="0"
+			Spacing="0"
+			Margin="0"
 		>
-		</ListView>
+
+			<StackLayout
+				x:Name="SelectedNotebookBar"
+				Orientation="Horizontal"
+				HorizontalOptions="Fill"
+				Padding="0"
+				Spacing="0"
+				BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
+			>
+				<pbXForms:FlatButton
+					x:Name="ShowNotebooksBtn"
+					IsVisible="false"
+					Image="ic_chevron_left.png"
+					Clicked="ShowNotebooksBtn_Clicked"
+				/>
+				<Label 
+					x:Name="SelectedNotebookName"
+					Text="Notebooks" 
+					VerticalOptions="Center" 
+					HorizontalOptions="CenterAndExpand" 
+				/>
+				<pbXForms:FlatButton 
+					x:Name="SortBtn"
+					Image="ic_sort.png"
+				/>
+			</StackLayout>
+			
+			<ListView
+				x:Name="ListCtl"
+				BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
+				SeparatorColor="{StaticResource ListItemsDividerColor}"
+			>
+			</ListView>
+
+		</StackLayout>
 
 		<!-- ToolBar -->
-		
+
 		<StackLayout
+			Grid.Row="2"
+			Grid.Column="0"
 			x:Name="ToolBar"
 			Orientation="Horizontal"
 			HorizontalOptions="Fill"
@@ -77,19 +116,14 @@
 				Spacing="{StaticResource ToolBarItemsSpacing}"
 			>
 				<pbXForms:FlatButton
-					Text="New 📕" 
-					TextColor="{StaticResource ToolBarTextColor}"
-					Clicked="NewNotebookBtn_Clicked"
-				/>
-			
-				<pbXForms:FlatButton
-					Text="New 📄" 
-					TextColor="{StaticResource ToolBarTextColor}"
-					Clicked="NewPageBtn_Clicked"
+					Text="New" 
+					TextColor="{StaticResource AccentTextColor}"
+					Image="ic_menu.png"
+					Clicked="NewBtn_Clicked"
 				/>
 			</StackLayout>
 		</StackLayout>
 
-	</StackLayout>
-	
+	</Grid>
+
 </local:ContentPageWAppBar>

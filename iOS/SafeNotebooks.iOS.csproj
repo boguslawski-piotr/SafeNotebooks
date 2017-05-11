@@ -100,6 +100,7 @@
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -115,6 +116,26 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_sort_2x.png" />
+    <BundleResource Include="Resources\ic_sort_3x.png" />
+    <BundleResource Include="Resources\ic_sort.png" />
+    <BundleResource Include="Resources\ic_menu_2x.png" />
+    <BundleResource Include="Resources\ic_menu_3x.png" />
+    <BundleResource Include="Resources\ic_menu.png" />
+    <BundleResource Include="Resources\ic_mode_edit_2x.png" />
+    <BundleResource Include="Resources\ic_mode_edit_3x.png" />
+    <BundleResource Include="Resources\ic_mode_edit.png" />
+    <BundleResource Include="Resources\ic_search_2x.png" />
+    <BundleResource Include="Resources\ic_search_3x.png" />
+    <BundleResource Include="Resources\ic_search.png" />
+    <BundleResource Include="Resources\ic_settings_2x.png" />
+    <BundleResource Include="Resources\ic_settings_3x.png" />
+    <BundleResource Include="Resources\ic_settings.png" />
+    <BundleResource Include="Resources\ic_chevron_left_2x.png" />
+    <BundleResource Include="Resources\ic_chevron_left_3x.png" />
+    <BundleResource Include="Resources\ic_chevron_left.png" />
   </ItemGroup>
   <Import Project="..\..\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbXForms\pbXForms.projitems')" />
   <Import Project="..\Shared\SafeNotebooks.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.projitems')" />

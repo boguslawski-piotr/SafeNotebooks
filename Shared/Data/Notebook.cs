@@ -9,6 +9,7 @@ namespace SafeNotebooks
 
 		public Notebook()
 		{
+			Pages = new ObservableCollection<Page>();
 		}
 
 	}
