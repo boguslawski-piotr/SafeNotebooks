@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:SafeNotebooks"
 	x:Class="SafeNotebooks.MainFrame">
    	Title="Safe Notebooks"
-    MasterBehavior="SplitOnLandscape"
+    MasterBehavior="Split"
 >
 
     <MasterDetailPage.Master>

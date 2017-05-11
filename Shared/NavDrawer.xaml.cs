@@ -11,7 +11,9 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
+			MessagingCenter.Subscribe<MainFrame, bool>(this, App.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
 		}
+
 
 		protected override void AdjustAppBar(bool IsLandscape)
 		{
@@ -32,7 +34,7 @@ namespace SafeNotebooks
 
 		protected override void AdjustToolBar(bool IsLandscape)
 		{
-			ToolBar.HeightRequest = (IsLandscape? Metrics.AppBarHeightLandscape : Metrics.AppBarHeightPortrait);
+			ToolBar.HeightRequest = (IsLandscape? Metrics.ToolBarHeightLandscape : Metrics.ToolBarHeightPortrait);
 			ToolBar.Padding = new Thickness(
 				Metrics.ScreenEdgeLeftRightMargin,
 				0,
@@ -40,11 +42,31 @@ namespace SafeNotebooks
 				0);
 		}
 
+
+		public void NavDrawerVisibilityChanged(SafeNotebooks.MainFrame MainFrame, bool IsVisible)
+		{
+		}
+
+
 		void SearchBtn_Clicked(object sender, System.EventArgs e)
 		{
-			Search.IsVisible = !Search.IsVisible;
-			if (Search.IsVisible)
-				Search.Focus();
+			Application.Current.MainPage.DisplayAlert("Search...", "Window for search in all data.", "Cancel");
+		}
+
+		void SettingsBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Settings...", "Window for setting different program options.", "Cancel");
+		}
+
+
+		void NewNotebookBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Create new", "notebook", "Cancel");
+		}
+
+		void NewPageBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Create new", "page", "Cancel");
 		}
 	}
 }

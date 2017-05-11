@@ -12,13 +12,20 @@ namespace SafeNotebooks
 			InitializeComponent();
 
 			IsPresentedChanged += NavDrawerVisibilityChanged;
-			IsPresented = true;
+			//IsPresented = true;
+
+			MessagingCenter.Subscribe<Page>(this, App.MsgChangeNavDrawerVisibility, ChangeNavDrawerVisibility);
 		}
 
 		void NavDrawerVisibilityChanged(object sender, EventArgs e)
 		{
+			// TODO: hide keyboard (how?)
 			MessagingCenter.Send<MainFrame, bool>(this, App.MsgNavDrawerVisibilityChanged, IsPresented);
 		}
 
+		void ChangeNavDrawerVisibility(Page obj)
+		{
+			IsPresented = !IsPresented;
+		}
 	}
 }

@@ -22,11 +22,13 @@
 			Orientation="Horizontal"
 			HorizontalOptions="FillAndExpand"
 			Padding="0"
-			Spacing="{StaticResource ScreenEdgeLeftRightMargin}"
+			Spacing="{StaticResource ToolBarItemsSpacing}"
 			BackgroundColor="{StaticResource AppBarBackgroundColor}"
 		>
 			<Label 
+				x:Name="PageName"
 				Text="Safe Notebooks" 
+				FontAttributes="Bold"
 				TextColor="{StaticResource AppBarTextColor}"
 				VerticalOptions="Center" 
 				HorizontalOptions="FillAndExpand" 
@@ -34,30 +36,28 @@
 			<pbXForms:FlatButton
 				x:Name="SearchBtn"
 				Text="🔍"
+				TextColor="{StaticResource AppBarTextColor}"
+				Clicked="SearchBtn_Clicked"
 			/>
 			<pbXForms:FlatButton
 				x:Name="SettingsBtn"
-				Text="⚙️" 
+				TextColor="{StaticResource AppBarTextColor}"
+				Text="🛠"
+				Clicked="SettingsBtn_Clicked"
 			/>
 		</StackLayout>
-		<Label HeightRequest="1" BackgroundColor="{StaticResource DividerColor}" />
-		
+
 		<!-- Content -->
 
-		<SearchBar
-			x:Name="Search"
-			IsVisible="false"
-			Placeholder="search"
-		/>
-
 		<ListView
-			BackgroundColor="{StaticResource PageBackgroundColorDark}"
+			x:Name="ListCtl"
+			BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
+			SeparatorColor="{StaticResource ListItemsDividerColor}"
 		>
 		</ListView>
 
 		<!-- ToolBar -->
 		
-		<Label HeightRequest="1" BackgroundColor="{StaticResource DividerColor}" />
 		<StackLayout
 			x:Name="ToolBar"
 			Orientation="Horizontal"
@@ -69,14 +69,18 @@
 			<StackLayout
 				Orientation="Horizontal"
 				HorizontalOptions="CenterAndExpand"
-				Spacing="{StaticResource ScreenEdgeLeftRightMargin}"
+				Spacing="{StaticResource ToolBarItemsSpacing}"
 			>
 				<pbXForms:FlatButton
-					Text="New Notebook " 
+					Text="New 📕" 
+					TextColor="{StaticResource ToolBarTextColor}"
+					Clicked="NewNotebookBtn_Clicked"
 				/>
 			
 				<pbXForms:FlatButton
-					Text="New Page" 
+					Text="New 📄" 
+					TextColor="{StaticResource ToolBarTextColor}"
+					Clicked="NewPageBtn_Clicked"
 				/>
 			</StackLayout>
 		</StackLayout>

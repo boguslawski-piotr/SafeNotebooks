@@ -15,45 +15,42 @@
 		Spacing="0"
 	>
 
+		<!-- AppBar -->
+
 		<StackLayout
 			x:Name="AppBar"
 			Orientation="Horizontal"
 			HorizontalOptions="FillAndExpand"
-			VerticalOptions="CenterAndExpand"
-			Padding="10,0"
-			Spacing="{StaticResource ScreenEdgeLeftRightMargin}"
+			Padding="0"
+			Spacing="{StaticResource ToolBarItemsSpacing}"
 			BackgroundColor="{StaticResource AppBarBackgroundColor}"
 		>
 			<pbXForms:FlatButton 
 				x:Name="NavDrawerBtn"
-				Text="📕" 
+				Text="📕"
+				TextColor="{StaticResource AccentTextColor}"
+				Clicked="NavDrawerBtn_Clicked"
 			/>
 			<Label 
-				Text="[page name]" 
+				x:Name="PageName"
+				Text="[page name] in [notebook name]" 
 				TextColor="{StaticResource AppBarTextColor}"
 				VerticalOptions="Center" 
 				HorizontalOptions="FillAndExpand" 
 			/>
-			<pbXForms:FlatButton 
-				x:Name="SearchBtn"
-				Text="🔍"
-			/>
 		</StackLayout>
-		<Label HeightRequest="1" BackgroundColor="{StaticResource DividerColor}" />
 
-		<SearchBar
-			IsVisible="false"
-			x:Name="Search"
-			Placeholder="search"
-		/>
+		<!-- Content -->
 
 		<ListView
-			BackgroundColor="{StaticResource PageBackgroundColorLight}">
+			x:Name="ListCtl"
+			BackgroundColor="{StaticResource ListOfNotesBackgroundColor}"
+			SeparatorColor="{StaticResource ListItemsDividerColor}"
+		>
 		</ListView>
 
-		<!-- bottom toolbar -->
-		
-		<Label HeightRequest="1" BackgroundColor="{StaticResource DividerColor}" />
+		<!-- ToolBar -->
+
 		<StackLayout
 			x:Name="ToolBar"
 			Orientation="Horizontal"
@@ -65,13 +62,18 @@
 			<StackLayout
 				Orientation="Horizontal"
 				HorizontalOptions="EndAndExpand"
-				Spacing="{StaticResource ScreenEdgeLeftRightMargin}"
+				Spacing="{StaticResource ToolBarItemsSpacing}"
 			>
 				<pbXForms:FlatButton
-					Text="New..." 
+					Text="New..."
+					TextColor="{StaticResource ToolBarTextColor}"
+					Clicked="NewBtn_Clicked"
 				/>
 				<pbXForms:FlatButton 
-					Text="New note" 
+					Text="New: note" 
+					FontAttributes="Bold"
+					TextColor="{StaticResource AccentTextColor}"
+					Clicked="FavoriteNewBtn_Clicked"
 				/>
 
 			</StackLayout>

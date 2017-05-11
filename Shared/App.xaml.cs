@@ -5,6 +5,7 @@ namespace SafeNotebooks
 	public partial class App : Application
 	{
 		public static string MsgNavDrawerVisibilityChanged = "MsgNavDrawerVisibilityChanged";
+		public static string MsgChangeNavDrawerVisibility = "MsgChangeNavDrawerVisibility";
 
 		public App()
 		{

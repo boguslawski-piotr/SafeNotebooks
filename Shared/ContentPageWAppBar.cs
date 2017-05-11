@@ -22,6 +22,5 @@ namespace SafeNotebooks
 
 		abstract protected void AdjustAppBar(bool IsLandscape);
 		abstract protected void AdjustToolBar(bool IsLandscape);
-
 	}
 }
