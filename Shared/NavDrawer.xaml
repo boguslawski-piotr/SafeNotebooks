@@ -49,6 +49,11 @@
 
 		<!-- Content -->
 
+		<pbXForms:FlatButton
+			x:Name="SelectedNotebook"
+			Text=""
+			Clicked="SelectedNotebook_Clicked"
+		/>
 		<ListView
 			x:Name="ListCtl"
 			BackgroundColor="{StaticResource NavDrawerBackgroundColor}"

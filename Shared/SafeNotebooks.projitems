@@ -34,5 +34,13 @@
 <DependentUpon>ListOfNotes.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ContentPageWAppBar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Notebook.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Page.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Note.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Item.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Data.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Data\" />
   </ItemGroup>
 </Project>

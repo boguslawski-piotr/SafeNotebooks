@@ -9,50 +9,18 @@ namespace SafeNotebooks
 {
 	public partial class ListOfNotes : ContentPageWAppBar
 	{
-		List<string> l;
+		Page Page = null;
 
 		public ListOfNotes()
 		{
 			InitializeComponent();
 
-
-			//ListCtl.IsPullToRefreshEnabled = true;
-			//ListCtl.Refreshing += ListCtl_Refreshing; ;
-			l = new List<string>()
-			{
-			  "mono",
-			  "monodroid",
-			  "monotouch",
-			  "monorail",
-			  "monodevelop",
-			  "monotone",
-			  "monopoly",
-			  "monomodal",
-			  "mononucleosis",
-			  "2mono",
-			  "2monodroid",
-			  "2monotouch",
-			  "2monorail",
-			  "2monodevelop",
-			  "2monotone",
-			  "2monopoly",
-			  "2monomodal",
-			  "2mononucleosis",
-			};
-			ListCtl.ItemsSource = l;
-
-			MessagingCenter.Subscribe<MainFrame, bool>(this, App.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
-
+			MessagingCenter.Subscribe<Data, Page>(this, Data.MsgPageSelected, PageSelected);
+			MessagingCenter.Subscribe<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
 		}
 
 		protected override void OnAppearing()
 		{
-			//if (l.Count > 0)
-			//	ListCtl.ScrollTo(l[0], ScrollToPosition.Start, false);
-			//else
-			//{
-			//	(ListCtl.Header as StackLayout).IsVisible = false;
-			//}
 		}
 
 
@@ -85,16 +53,23 @@ namespace SafeNotebooks
 
 		public void NavDrawerVisibilityChanged(MainFrame MainFrame, bool IsVisible)
 		{
-		#if __IOS__
-					NavDrawerBtn.IsVisible = !IsVisible;
-		#endif
+#if __IOS__
+			//NavDrawerBtn.IsVisible = !IsVisible;
+#endif
 		}
 
 		void NavDrawerBtn_Clicked(object sender, System.EventArgs e)
 		{
-			MessagingCenter.Send<Page>(this, App.MsgChangeNavDrawerVisibility);
+			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgChangeNavDrawerVisibility);
 		}
 
+
+		void PageSelected(SafeNotebooks.Data obj, Page p)
+		{
+			Page = p;
+			PageName.Text = Page.ToString() ; //+ " in " + App.Data.Notebook.ToString();
+			ListCtl.ItemsSource = Page.Items;
+		}
 
 		void ListCtl_Refreshing(object sender, EventArgs e)
 		{
@@ -115,7 +90,13 @@ namespace SafeNotebooks
 
 		void New(string what)
 		{
-			Application.Current.MainPage.DisplayAlert("Create new", what, "Cancel");
+			//Application.Current.MainPage.DisplayAlert("Create new", what, "Cancel");
+			Note i = new Note()
+			{
+				Name = DateTime.Now.ToString()
+			};
+
+			Page.Items.Add(i);
 		}
 	}
 }

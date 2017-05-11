@@ -11,7 +11,12 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
-			MessagingCenter.Subscribe<MainFrame, bool>(this, App.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
+			ListCtl.ItemSelected += ListCtl_ItemSelected;
+			ListCtl.ItemTapped += ListCtl_ItemTapped;
+
+			ListCtl.ItemsSource = App.Data.Notebooks;
+
+			MessagingCenter.Subscribe<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
 		}
 
 
@@ -59,9 +64,45 @@ namespace SafeNotebooks
 		}
 
 
+		void SelectedNotebook_Clicked(object sender, System.EventArgs e)
+		{
+			ShowNotebooks();
+		}
+
+		void ShowNotebooks()
+		{
+			ListCtl.ItemsSource = App.Data.Notebooks;
+			SelectedNotebook.Text = "";
+		}
+
+		void ListCtl_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+		{
+		}
+
+		void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
+		{
+			if (e.Item is Notebook)
+			{
+				Notebook n = (Notebook)e.Item;
+				ListCtl.ItemsSource = n.Pages;
+				SelectedNotebook.Text = "< " + n.ToString();
+			}
+			else
+			{
+				MessagingCenter.Send<Data, Page>(App.Data, Data.MsgPageSelected, (Page)e.Item);
+				MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgChangeNavDrawerVisibility);
+			}
+		}
+
 		void NewNotebookBtn_Clicked(object sender, System.EventArgs e)
 		{
-			Application.Current.MainPage.DisplayAlert("Create new", "notebook", "Cancel");
+			//Application.Current.MainPage.DisplayAlert("Create new", "notebook", "Cancel");
+			ShowNotebooks();
+			Notebook n = new Notebook()
+			{
+				Name = "Notebook " + App.Data.Notebooks.Count
+			};
+			App.Data.Notebooks.Add(n);
 		}
 
 		void NewPageBtn_Clicked(object sender, System.EventArgs e)

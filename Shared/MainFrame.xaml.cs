@@ -7,23 +7,26 @@ namespace SafeNotebooks
 {
 	public partial class MainFrame : MasterDetailPage
 	{
+		public static string MsgNavDrawerVisibilityChanged = "MsgNavDrawerVisibilityChanged";
+		public static string MsgChangeNavDrawerVisibility = "MsgChangeNavDrawerVisibility";
+
 		public MainFrame()
 		{
 			InitializeComponent();
 
 			IsPresentedChanged += NavDrawerVisibilityChanged;
-			//IsPresented = true;
 
-			MessagingCenter.Subscribe<Page>(this, App.MsgChangeNavDrawerVisibility, ChangeNavDrawerVisibility);
+			IsPresented = true;
+
+			MessagingCenter.Subscribe<Xamarin.Forms.Page>(this, MainFrame.MsgChangeNavDrawerVisibility, ChangeNavDrawerVisibility);
 		}
 
 		void NavDrawerVisibilityChanged(object sender, EventArgs e)
 		{
-			// TODO: hide keyboard (how?)
-			MessagingCenter.Send<MainFrame, bool>(this, App.MsgNavDrawerVisibilityChanged, IsPresented);
+			MessagingCenter.Send<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, IsPresented);
 		}
 
-		void ChangeNavDrawerVisibility(Page obj)
+		void ChangeNavDrawerVisibility(Xamarin.Forms.Page obj)
 		{
 			IsPresented = !IsPresented;
 		}
