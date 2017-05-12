@@ -6,11 +6,17 @@ namespace SafeNotebooks
 {
 	public class Page : Item
 	{
-		public ObservableCollection<Note> Items = null;
+		public ObservableCollection<Note> Notes = null;
 
 		public Page()
 		{
-			Items = new ObservableCollection<Note>();
+			Notes = new ObservableCollection<Note>();
+		}
+
+		public void AddNote(Note note)
+		{
+			note.Parent = this;
+			Notes.Add(note);
 		}
 	}
 }

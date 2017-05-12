@@ -13,40 +13,24 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
-			ListCtl.ItemSelected += ListCtl_ItemSelected;
 			ListCtl.ItemTapped += ListCtl_ItemTapped;
+			ListCtl.ItemSelected += (sender, e) => {
+    			((ListView)sender).SelectedItem = null;
+			};
 
-			MessagingCenter.Subscribe<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
 		}
 
 		protected override void OnAppearing()
 		{
-			ShowNotebooks();
+			ShowNotebook(SelectedNotebook);
 		}
+
 
 		protected override void AdjustAppBar(bool IsLandscape)
 		{
-			AdjustAppBar(IsLandscape, Grid, AppBar, true);
-		}
-
-		protected override void AdjustContent(bool IsLandscape)
-		{
-			SelectedNotebookBar.HeightRequest = (IsLandscape ? Metrics.ToolBarHeightLandscape : Metrics.ToolBarHeightPortrait);
-			SelectedNotebookBar.Padding = new Thickness(
-				Metrics.ScreenEdgeMargin,
-				0,
-				Metrics.ScreenEdgeMargin,
-				0);
-		}
-
-		protected override void AdjustToolBar(bool IsLandscape)
-		{
-			AdjustToolBar(IsLandscape, Grid, ToolBar);
-		}
-
-
-		public void NavDrawerVisibilityChanged(SafeNotebooks.MainFrame MainFrame, bool IsVisible)
-		{
+			AdjustAppBar(IsLandscape, Grid, AppBar, 
+			             (Device.RuntimePlatform == Device.iOS ? true : (Device.Idiom != TargetIdiom.Tablet))
+			            );
 		}
 
 
@@ -55,9 +39,15 @@ namespace SafeNotebooks
 			Application.Current.MainPage.DisplayAlert("Search...", "Window for search in all data.", "Cancel");
 		}
 
-		void SettingsBtn_Clicked(object sender, System.EventArgs e)
+		async void SettingsBtn_Clicked(object sender, System.EventArgs e)
 		{
-			Application.Current.MainPage.DisplayAlert("Settings...", "Window for setting different program options.", "Cancel");
+#if __ANDROID__
+			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgHideNavDrawer);
+#endif
+			await Navigation.PushModalAsync(new Settings(), true);
+#if __ANDROID__
+			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer);
+#endif
 		}
 
 
@@ -70,16 +60,11 @@ namespace SafeNotebooks
 		{
 			ListCtl.ItemsSource = App.Data.Notebooks;
 			SelectedNotebookName.Text = "Notebooks";	// TODO: translation
-			ShowNotebooksBtn.IsVisible = false;
+			SelectedNotebookBar.IsVisible = false;
+
 			SelectedNotebook = null;
 		}
 
-
-		void ListCtl_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-		{
-			if(e.SelectedItem is Notebook)
-				SelectedNotebook = (Notebook)e.SelectedItem;
-		}
 
 		void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
 		{
@@ -105,21 +90,20 @@ namespace SafeNotebooks
 			{
 				ListCtl.ItemsSource = SelectedNotebook.Pages;
 				SelectedNotebookName.Text = SelectedNotebook.Name;
-
-				ShowNotebooksBtn.IsVisible = true;
+				SelectedNotebookBar.IsVisible = true;
 			}
 		}
 
 		void ShowPage(Page p)
 		{
 			Page SelectedPage = p;
-			ListCtl.SelectedItem = p;
 
-			MessagingCenter.Send<Data, Page>(App.Data, Data.MsgPageSelected, SelectedPage);
+			MessagingCenter.Send<Xamarin.Forms.Page, Page>(this, MainFrame.MsgPageSelected, SelectedPage);
 			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgHideNavDrawer);
 		}
 
-		async void NewBtn_Clicked(object sender, System.EventArgs e)
+
+		void NewBtn_Clicked(object sender, System.EventArgs e)
 		{
 			if (SelectedNotebook == null)
 			{
@@ -128,7 +112,7 @@ namespace SafeNotebooks
 					Name = "Notebook " + App.Data.Notebooks.Count
 				};
 
-				await Application.Current.MainPage.DisplayAlert("New notebook", "Window for creating new notebook.", "Cancel");
+				//await Application.Current.MainPage.DisplayAlert("New notebook", "Window for creating new notebook.", "Cancel");
 
 				App.Data.Notebooks.Add(n);
 
@@ -141,7 +125,7 @@ namespace SafeNotebooks
 					Name = "Page " + SelectedNotebook.Pages.Count
 				};
 
-				SelectedNotebook.Pages.Add(p);
+				SelectedNotebook.AddPage(p);
 
 				ShowPage(p);
 			}

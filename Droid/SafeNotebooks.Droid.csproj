@@ -165,6 +165,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_chevron_left.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_chevron_left.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_chevron_left.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_arrow_back.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_arrow_back.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_arrow_back.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_arrow_back.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_arrow_back.png" />
   </ItemGroup>
   <Import Project="..\..\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbXForms\pbXForms.projitems')" />
   <Import Project="..\Shared\SafeNotebooks.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.projitems')" />

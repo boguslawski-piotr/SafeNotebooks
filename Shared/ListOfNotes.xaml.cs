@@ -15,36 +15,24 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
-			MessagingCenter.Subscribe<Data, Page>(this, Data.MsgPageSelected, PageSelected);
+			ListCtl.ItemTapped += ListCtl_ItemTapped;
+			ListCtl.ItemSelected += (sender, e) => {
+    			((ListView)sender).SelectedItem = null;
+			};
+
+			MessagingCenter.Subscribe<Xamarin.Forms.Page, Page>(this, MainFrame.MsgPageSelected, PageSelected);
 			MessagingCenter.Subscribe<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
 		}
 
-
 		protected override void OnAppearing()
 		{
-			PageSelected(App.Data, SelectedPage);
+			ShowPage(SelectedPage);
 		}
 
 
 		protected override void AdjustAppBar(bool IsLandscape)
 		{
-			AdjustAppBar(IsLandscape, Grid, AppBar,
-#if __IOS__
-			             true
-#endif
-#if __ANDROID__
-						 false
-#endif
-						);
-		}
-
-		protected override void AdjustContent(bool IsLandscape)
-		{
-		}
-
-		protected override void AdjustToolBar(bool IsLandscape)
-		{
-            AdjustToolBar(IsLandscape, Grid, ToolBar);
+			AdjustAppBar(IsLandscape, Grid, AppBar, Device.RuntimePlatform == Device.iOS);
 		}
 
 
@@ -56,38 +44,72 @@ namespace SafeNotebooks
 		public void NavDrawerVisibilityChanged(MainFrame MainFrame, bool IsVisible)
 		{
 #if __IOS__
-			NavDrawerBtn.IsVisible = !IsVisible;
+			if (Device.Idiom != TargetIdiom.Tablet)
+			{
+				NavDrawerBtn.IsVisible = !IsVisible;
+				//if (Tools.DeviceOrientation != DeviceOrientations.Landscape)
+				//{
+				//	if (SelectedPage != null)
+				//	{
+				//		SelectedPageName.IsVisible = !IsVisible;
+				//		EditBtn.IsVisible = !IsVisible;
+				//		ListCtl.IsVisible = !IsVisible;
+				//		ToolBar.IsVisible = !IsVisible;
+				//	}
+				//}
+			}
+			else
+			{
+				if (Tools.DeviceOrientation == DeviceOrientations.Landscape)
+					NavDrawerBtn.IsVisible = false;
+
+			}
 #endif
 		}
 
 
-		void PageSelected(SafeNotebooks.Data obj, Page p)
+		void PageSelected(Xamarin.Forms.Page who, Page page)
 		{
-			SelectedPage = p;
+			ShowPage(page);
+		}
+
+		void ShowPage(Page page) 
+		{
+			SelectedPage = page;
 			if (SelectedPage != null)
 			{
-				SelectedPageName.Text = SelectedPage.ToString(); //+ " in " + App.Data.Notebook.ToString();
+				SelectedPageName.Text = SelectedPage.DisplayName
+					+ " in " // TODO: translate
+					+ SelectedPage.Parent.DisplayName;
 				EditBtn.IsVisible = true;
-				SortBtn.IsVisible = true;
-				ListCtl.ItemsSource = SelectedPage.Items;
+
+				ListCtl.ItemsSource = SelectedPage.Notes;
 				ListCtl.IsVisible = true;
+
 				ToolBar.IsVisible = true;
 			}
 			else
 			{
 				SelectedPageName.Text = "";
 				EditBtn.IsVisible = false;
-				SortBtn.IsVisible = false;
+
 				ListCtl.ItemsSource = null;
 				ListCtl.IsVisible = false;
+
 				ToolBar.IsVisible = false;
+
 				MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer);
 			}
 		}
 
+
 		void ListCtl_Refreshing(object sender, EventArgs e)
 		{
 			ListCtl.EndRefresh();
+		}
+
+		void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
+		{
 		}
 
 
@@ -105,12 +127,12 @@ namespace SafeNotebooks
 		void New(string what)
 		{
 			//Application.Current.MainPage.DisplayAlert("Create new", what, "Cancel");
-			Note i = new Note()
+			Note note = new Note()
 			{
 				Name = DateTime.Now.ToString()
 			};
 
-			SelectedPage.Items.Add(i);
+			SelectedPage.AddNote(note);
 		}
 	}
 }

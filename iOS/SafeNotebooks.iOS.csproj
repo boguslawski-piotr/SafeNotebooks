@@ -136,6 +136,9 @@
     <BundleResource Include="Resources\ic_chevron_left_2x.png" />
     <BundleResource Include="Resources\ic_chevron_left_3x.png" />
     <BundleResource Include="Resources\ic_chevron_left.png" />
+    <BundleResource Include="Resources\ic_arrow_back_2x.png" />
+    <BundleResource Include="Resources\ic_arrow_back_3x.png" />
+    <BundleResource Include="Resources\ic_arrow_back.png" />
   </ItemGroup>
   <Import Project="..\..\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbXForms\pbXForms.projitems')" />
   <Import Project="..\Shared\SafeNotebooks.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.projitems')" />

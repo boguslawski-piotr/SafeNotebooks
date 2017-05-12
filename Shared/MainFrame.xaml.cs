@@ -11,6 +11,8 @@ namespace SafeNotebooks
 		public static string MsgHideNavDrawer = "MsgHideNavDrawer";
 		public static string MsgNavDrawerVisibilityChanged = "MsgNavDrawerVisibilityChanged";
 
+		public static string MsgPageSelected = "MsgPageSelected";
+
 		public MainFrame()
 		{
 			InitializeComponent();

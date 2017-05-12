@@ -5,8 +5,6 @@ namespace SafeNotebooks
 {
 	public class Data
 	{
-		public static string MsgPageSelected = "MsgPageSelected";
-
 		public ObservableCollection<Notebook>  Notebooks = null;
 
 		public Data()
@@ -15,27 +13,22 @@ namespace SafeNotebooks
 
 			// Initial data...
 
-			Notebooks.Add(
-				new Notebook() 
-				{ 
-					Name = "Private", 
-					Pages = new ObservableCollection<Page>()
-					{
-						new Page() { Name = "P Page 1", },
-						new Page() { Name = "P Page 2", },
-					}
-				});
+			Notebook n = new Notebook()
+			{
+				Name = "Private"
+			};
+			n.AddPage(new Page() { Name = "Page 0", });
+			n.AddPage(new Page() { Name = "Page 0", });
+			Notebooks.Add(n);
 
-			Notebooks.Add(
-				new Notebook()
-				{
-					Name = "Work", 
-					Pages = new ObservableCollection<Page>()
-					{
-						new Page() { Name = "W Page 1", },
-						new Page() { Name = "W Page 2", },
-					}
-				});
+			n = new Notebook()
+			{
+				Name = "Work (better none inside...)",
+			};
+			n.AddPage(new Page() { Name = "Page 0", });
+			n.AddPage(new Page() { Name = "Page 0", });
+			Notebooks.Add(n);
+
 		}
 
 		//

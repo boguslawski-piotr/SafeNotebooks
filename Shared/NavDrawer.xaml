@@ -9,11 +9,15 @@
 >
 	<Grid
 		x:Name="Grid"
+		Padding="0"
+		Margin="0"
+		ColumnSpacing="0"
+		RowSpacing="0"
 	>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="0" />
 			<RowDefinition Height="*" />
-			<RowDefinition Height="0" />
+			<RowDefinition Height="{x:Static pbXForms:Metrics.ToolBarHeight}" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
@@ -28,24 +32,27 @@
 			Orientation="Horizontal"
 			HorizontalOptions="FillAndExpand"
 			Padding="0"
-			Spacing="{StaticResource ToolBarItemsSpacing}"
+			Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
 			BackgroundColor="{StaticResource AppBarBackgroundColor}"
 		>
 			<Label 
 				Text="Safe Notebooks" 
 				FontAttributes="Bold"
-				TextColor="{StaticResource AppBarTextColor}"
+				TextColor="{StaticResource AccentTextColor}"
 				VerticalOptions="Center" 
 				HorizontalOptions="FillAndExpand" 
+				Margin="8,0,8,0"
 			/>
 			<pbXForms:FlatButton
 				x:Name="SearchBtn"
 				Image="ic_search.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 				Clicked="SearchBtn_Clicked"
 			/>
 			<pbXForms:FlatButton
 				x:Name="SettingsBtn"
 				Image="ic_settings.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 				Clicked="SettingsBtn_Clicked"
 			/>
 		</StackLayout>
@@ -65,16 +72,18 @@
 
 			<StackLayout
 				x:Name="SelectedNotebookBar"
+				IsVisible="false"
 				Orientation="Horizontal"
 				HorizontalOptions="Fill"
 				Padding="0"
-				Spacing="0"
+				Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
+				HeightRequest="{x:Static pbXForms:Metrics.ToolBarHeight}"
 				BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
 			>
 				<pbXForms:FlatButton
 					x:Name="ShowNotebooksBtn"
-					IsVisible="false"
 					Image="ic_chevron_left.png"
+					WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 					Clicked="ShowNotebooksBtn_Clicked"
 				/>
 				<Label 
@@ -84,45 +93,69 @@
 					HorizontalOptions="CenterAndExpand" 
 				/>
 				<pbXForms:FlatButton 
-					x:Name="SortBtn"
-					Image="ic_sort.png"
+					x:Name="EditBtn"
+					Image="ic_mode_edit.png"
+					WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 				/>
 			</StackLayout>
-			
+
 			<ListView
 				x:Name="ListCtl"
 				BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
 				SeparatorColor="{StaticResource ListItemsDividerColor}"
 			>
+				<ListView.ItemTemplate>
+				    <DataTemplate>
+				      	<TextCell
+							Text="{Binding DisplayName}"
+							Detail="{Binding DisplayDetail}"
+						>
+				        	<TextCell.ContextActions>
+				            	<MenuItem CommandParameter="{Binding .}" Text="Edit" />
+				            	<MenuItem CommandParameter="{Binding .}" Text="Delete" IsDestructive="True" />
+				         	</TextCell.ContextActions>
+				      </TextCell>
+				    </DataTemplate>
+				</ListView.ItemTemplate>				
+
 			</ListView>
 
 		</StackLayout>
 
 		<!-- ToolBar -->
 
-		<StackLayout
+		<Grid
 			Grid.Row="2"
 			Grid.Column="0"
 			x:Name="ToolBar"
-			Orientation="Horizontal"
-			HorizontalOptions="Fill"
 			Padding="0"
-			Spacing="0"
+			Margin="0"
+			ColumnSpacing="0"
+			RowSpacing="0"
 			BackgroundColor="{StaticResource ToolBarBackgroundColor}"
 		>
-			<StackLayout
-				Orientation="Horizontal"
-				HorizontalOptions="CenterAndExpand"
-				Spacing="{StaticResource ToolBarItemsSpacing}"
-			>
-				<pbXForms:FlatButton
-					Text="New" 
-					TextColor="{StaticResource AccentTextColor}"
-					Image="ic_menu.png"
-					Clicked="NewBtn_Clicked"
-				/>
-			</StackLayout>
-		</StackLayout>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+			</Grid.ColumnDefinitions>
+
+			<pbXForms:FlatButton
+				Grid.Row="0"
+				Grid.Column="1"
+				Text="New..." 
+				TextColor="{StaticResource AccentTextColor}"
+				FontAttributes="Bold"
+				Clicked="NewBtn_Clicked"
+			/>
+			<pbXForms:FlatButton 
+				Grid.Row="0"
+				Grid.Column="2"
+				x:Name="SortBtn"
+				Image="ic_sort.png"
+			/>
+
+		</Grid>
 
 	</Grid>
 

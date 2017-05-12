@@ -15,7 +15,7 @@
 		<!-- <item name="colorPrimary">#4CAF50</item> -->
 
 		<!-- colorPrimaryDark is used for the status bar -->
-		<item name="colorPrimaryDark">#303f9f</item>
+		<item name="colorPrimaryDark">#4CAF50</item>
 
 		<!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->

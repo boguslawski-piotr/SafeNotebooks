@@ -9,11 +9,15 @@
 
 	<Grid
 		x:Name="Grid"
+		Padding="0"
+		Margin="0"
+		ColumnSpacing="0"
+		RowSpacing="0"
 	>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="0" />
 			<RowDefinition Height="*" />
-			<RowDefinition Height="0" />
+			<RowDefinition Height="{x:Static pbXForms:Metrics.ToolBarHeight}" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
@@ -28,12 +32,13 @@
 			Orientation="Horizontal"
 			HorizontalOptions="FillAndExpand"
 			Padding="0"
-			Spacing="{StaticResource ToolBarItemsSpacing}"
+			Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
 			BackgroundColor="{StaticResource AppBarBackgroundColor}"
 		>
 			<pbXForms:FlatButton 
 				x:Name="NavDrawerBtn"
 				Image="ic_menu.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 				Clicked="NavDrawerBtn_Clicked"
 			/>
 			<Label 
@@ -41,15 +46,13 @@
 				Text="" 
 				TextColor="{StaticResource AppBarTextColor}"
 				VerticalOptions="Center" 
-				HorizontalOptions="FillAndExpand" 
+				HorizontalOptions="FillAndExpand"
+				Margin="8,0,8,0"
 			/>
 			<pbXForms:FlatButton 
 				x:Name="EditBtn"
 				Image="ic_mode_edit.png"
-			/>
-			<pbXForms:FlatButton 
-				x:Name="SortBtn"
-				Image="ic_sort.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 			/>
 		</StackLayout>
 
@@ -66,35 +69,51 @@
 
 		<!-- ToolBar -->
 
-		<StackLayout
+		<Grid
 			Grid.Row="2"
 			Grid.Column="0"
 			x:Name="ToolBar"
-			Orientation="Horizontal"
-			HorizontalOptions="Fill"
 			Padding="0"
-			Spacing="0"
+			Margin="0"
+			ColumnSpacing="0"
+			RowSpacing="0"
 			BackgroundColor="{StaticResource ToolBarBackgroundColor}"
 		>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+			</Grid.ColumnDefinitions>
+			
 			<StackLayout
+				Grid.Row="0"
+				Grid.Column="1"
 				Orientation="Horizontal"
-				HorizontalOptions="EndAndExpand"
-				Spacing="{StaticResource ToolBarItemsSpacing}"
+				HorizontalOptions="CenterAndExpand"
+				Padding="0"
+				Spacing="{x:Static pbXForms:Metrics.ToolBarItemsWideSpacing}"
 			>
 				<pbXForms:FlatButton
-					Text="New..."
+					Text="New..." 
 					TextColor="{StaticResource ToolBarTextColor}"
 					Clicked="NewBtn_Clicked"
 				/>
 				<pbXForms:FlatButton 
-					Text="New: note" 
+					Text="New: Note" 
 					FontAttributes="Bold"
 					TextColor="{StaticResource AccentTextColor}"
 					Clicked="FavoriteNewBtn_Clicked"
 				/>
-
 			</StackLayout>
-		</StackLayout>
+
+			<pbXForms:FlatButton 
+				Grid.Row="0"
+				Grid.Column="2"
+				Image="ic_sort.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+			/>
+
+		</Grid>
 		
 	</Grid>
 	

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:ContentPageWAppBar
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	xmlns:local="clr-namespace:SafeNotebooks"
+    xmlns:pbXForms="clr-namespace:pbXForms"
+	x:Class="SafeNotebooks.Settings"
+>
+
+	<Grid
+		x:Name="Grid"
+		Padding="0"
+		Margin="0"
+		ColumnSpacing="0"
+		RowSpacing="0"
+	>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="0" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<!-- AppBar -->
+
+		<StackLayout
+			Grid.Row="0"
+			Grid.Column="0"
+			x:Name="AppBar"
+			Orientation="Horizontal"
+			HorizontalOptions="FillAndExpand"
+			Padding="0"
+			Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
+			BackgroundColor="{StaticResource AppBarBackgroundColor}"
+		>
+			<pbXForms:FlatButton 
+				x:Name="ReturnBtn"
+				Image="ic_arrow_back.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+				Clicked="ReturnBtn_Clicked"
+			/>
+			<Label 
+				Text="Settings" 
+				TextColor="{StaticResource AppBarTextColor}"
+				VerticalOptions="Center" 
+				HorizontalOptions="FillAndExpand"
+			/>
+		</StackLayout>
+
+		<!-- Content -->
+
+		<Label 
+			Grid.Row="1"
+			Grid.Column="0"
+			Text="Settings..." 
+		/>
+
+		
+	</Grid>
+	
+</local:ContentPageWAppBar>

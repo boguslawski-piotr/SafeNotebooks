@@ -8,24 +8,21 @@
 		
 		<ResourceDictionary>
 			<!-- ANDROID: When modifying this value you must also remember to update the "colorPrimaryDark" value in the "Resources/Values/styles.xml" file. -->
-			<Color x:Key="StatusBarBackgroundColor">#303f9f</Color>
+			<Color x:Key="StatusBarBackgroundColor">#4CAF50</Color>
 			
-			<Color x:Key="AppBarBackgroundColor">#3151b5</Color>
-			<Color x:Key="AppBarTextColor">#ffffff</Color>
+			<Color x:Key="AppBarBackgroundColor">#81C784</Color>
+			<Color x:Key="AppBarTextColor">#000000</Color>
 
-			<Color x:Key="ToolBarBackgroundColor">#3151b5</Color>
-			<Color x:Key="ToolBarTextColor">#ffffff</Color>
+			<Color x:Key="ToolBarBackgroundColor">#81C784</Color>
+			<Color x:Key="ToolBarTextColor">#000000</Color>
 
-			<Color x:Key="NavDrawerBackgroundColor">#FAFAFA</Color>
+			<Color x:Key="NavDrawerBackgroundColor">#E8F5E9</Color>
 			<Color x:Key="ListOfNotesBackgroundColor">#ffffff</Color>
 
-			<Color x:Key="AccentTextColor">#FF5722</Color>
+			<Color x:Key="AccentTextColor">#E65100</Color>
 			
-			<Color x:Key="ListItemsDividerColor">#C5CAE9</Color>			
+			<Color x:Key="ListItemsDividerColor">#C8E6C9</Color>			
 
-			<!-- TODO: how to use values from Metrics class in XAML? -->
-			<x:Double x:Key="ToolBarItemsSpacing">24</x:Double>
-			
 		</ResourceDictionary>
 		
 	</Application.Resources>

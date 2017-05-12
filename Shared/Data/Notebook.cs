@@ -12,5 +12,10 @@ namespace SafeNotebooks
 			Pages = new ObservableCollection<Page>();
 		}
 
+		public void AddPage(Page page)
+		{
+			page.Parent = this;
+			Pages.Add(page);
+		}
 	}
 }
