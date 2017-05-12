@@ -14,8 +14,9 @@ namespace SafeNotebooks
 			InitializeComponent();
 
 			ListCtl.ItemTapped += ListCtl_ItemTapped;
-			ListCtl.ItemSelected += (sender, e) => {
-    			((ListView)sender).SelectedItem = null;
+			ListCtl.ItemSelected += (sender, e) =>
+			{
+				((ListView)sender).SelectedItem = null;
 			};
 
 			PageCoversStatusBar = (Device.RuntimePlatform == Device.iOS ? true : (Device.Idiom != TargetIdiom.Tablet));
@@ -52,7 +53,7 @@ namespace SafeNotebooks
 		void ShowNotebooks()
 		{
 			ListCtl.ItemsSource = App.Data.Notebooks;
-			SelectedNotebookName.Text = "Notebooks";	// TODO: translation
+			SelectedNotebookName.Text = "Notebooks";    // TODO: translation
 			SelectedNotebookBar.IsVisible = false;
 
 			SelectedNotebook = null;
@@ -75,7 +76,7 @@ namespace SafeNotebooks
 		{
 			SelectedNotebook = n;
 
-			if (SelectedNotebook == null) 
+			if (SelectedNotebook == null)
 			{
 				ShowNotebooks();
 			}

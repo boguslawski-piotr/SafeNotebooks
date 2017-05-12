@@ -72,7 +72,9 @@
 				    <DataTemplate>
 				      	<TextCell
 							Text="{Binding DisplayName}"
+							TextColor="{StaticResource ListItemTextColor}"
 							Detail="{Binding DisplayDetail}"
+							DetailColor="{StaticResource ListItemDetailColor}"
 						>
 				        	<TextCell.ContextActions>
 				            	<MenuItem CommandParameter="{Binding .}" Text="Edit" />
