@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-	public partial class NavDrawer : ContentPageWAppBar
+	public partial class NavDrawer : ContentPageEx
 	{
 		public Notebook SelectedNotebook = null;
 
@@ -18,19 +18,12 @@ namespace SafeNotebooks
     			((ListView)sender).SelectedItem = null;
 			};
 
+			AppBarCoversStatusBar = (Device.RuntimePlatform == Device.iOS ? true : (Device.Idiom != TargetIdiom.Tablet));
 		}
 
 		protected override void OnAppearing()
 		{
 			ShowNotebook(SelectedNotebook);
-		}
-
-
-		protected override void AdjustAppBar(bool IsLandscape)
-		{
-			AdjustAppBar(IsLandscape, Grid, AppBar, 
-			             (Device.RuntimePlatform == Device.iOS ? true : (Device.Idiom != TargetIdiom.Tablet))
-			            );
 		}
 
 

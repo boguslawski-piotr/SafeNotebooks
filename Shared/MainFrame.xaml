@@ -13,6 +13,7 @@
 
     <MasterDetailPage.Detail>
     	<local:ListOfNotes />
+		<!-- <local:Test /> -->
     </MasterDetailPage.Detail>
 
 </MasterDetailPage>

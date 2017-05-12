@@ -5,19 +5,12 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-	public partial class Settings : ContentPageWAppBar
+	public partial class Settings : pbXForms.ContentPageEx
 	{
 		public Settings()
 		{
 			InitializeComponent();
 		}
-
-
-		protected override void AdjustAppBar(bool IsLandscape)
-		{
-			AdjustAppBar(IsLandscape, Grid, AppBar, Device.RuntimePlatform == Device.iOS);
-		}
-
 
 		void ReturnBtn_Clicked(object sender, System.EventArgs e)
 		{

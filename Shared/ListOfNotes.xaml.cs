@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SafeNotebooks
 {
-	public partial class ListOfNotes : ContentPageWAppBar
+	public partial class ListOfNotes : ContentPageEx
 	{
 		Page SelectedPage = null;
 
@@ -27,12 +27,6 @@ namespace SafeNotebooks
 		protected override void OnAppearing()
 		{
 			ShowPage(SelectedPage);
-		}
-
-
-		protected override void AdjustAppBar(bool IsLandscape)
-		{
-			AdjustAppBar(IsLandscape, Grid, AppBar, Device.RuntimePlatform == Device.iOS);
 		}
 
 
@@ -86,7 +80,7 @@ namespace SafeNotebooks
 				ListCtl.ItemsSource = SelectedPage.Notes;
 				ListCtl.IsVisible = true;
 
-				ToolBar.IsVisible = true;
+				ToolBarRow.IsVisible = true;
 			}
 			else
 			{
@@ -96,7 +90,7 @@ namespace SafeNotebooks
 				ListCtl.ItemsSource = null;
 				ListCtl.IsVisible = false;
 
-				ToolBar.IsVisible = false;
+				ToolBarRow.IsVisible = false;
 
 				MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer);
 			}
