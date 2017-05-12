@@ -41,7 +41,7 @@
 				HorizontalOptions="Fill"
 				Padding="0"
 				Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
-				HeightRequest="{x:Static pbXForms:Metrics.ToolBarHeight}"
+				HeightRequest="{x:Static pbXForms:Metrics.ToolBarHeightLandscape}"
 				BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
 			>
 				<pbXForms:FlatButton
