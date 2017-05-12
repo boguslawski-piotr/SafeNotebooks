@@ -2,8 +2,8 @@
 <Application 
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-	x:Class="SafeNotebooks.App">
-
+	x:Class="SafeNotebooks.App"
+>
 	<Application.Resources>
 		
 		<ResourceDictionary>
