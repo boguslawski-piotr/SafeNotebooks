@@ -18,7 +18,7 @@ namespace SafeNotebooks
     			((ListView)sender).SelectedItem = null;
 			};
 
-			AppBarCoversStatusBar = (Device.RuntimePlatform == Device.iOS ? true : (Device.Idiom != TargetIdiom.Tablet));
+			PageCoversStatusBar = (Device.RuntimePlatform == Device.iOS ? true : (Device.Idiom != TargetIdiom.Tablet));
 		}
 
 		protected override void OnAppearing()

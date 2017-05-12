@@ -54,7 +54,7 @@ namespace SafeNotebooks
 			}
 			else
 			{
-				if (Tools.DeviceOrientation == DeviceOrientations.Landscape)
+				if (DeviceEx.Orientation == DeviceOrientations.Landscape)
 					NavDrawerBtn.IsVisible = false;
 
 			}
@@ -73,7 +73,7 @@ namespace SafeNotebooks
 			if (SelectedPage != null)
 			{
 				SelectedPageName.Text = SelectedPage.DisplayName
-					+ " in " // TODO: translate
+					+ " in " // TODO: translation
 					+ SelectedPage.Parent.DisplayName;
 				EditBtn.IsVisible = true;
 
