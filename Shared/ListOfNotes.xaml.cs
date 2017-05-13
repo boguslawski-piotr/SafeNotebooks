@@ -9,6 +9,11 @@ namespace SafeNotebooks
 {
 	public partial class ListOfNotes : ContentPageEx
 	{
+		MainFrame _frame
+		{
+			get { return (MainFrame)Parent; }
+		}
+
 		Page SelectedPage = null;
 
 		public ListOfNotes()
@@ -21,12 +26,22 @@ namespace SafeNotebooks
 			};
 
 			MessagingCenter.Subscribe<Xamarin.Forms.Page, Page>(this, MainFrame.MsgPageSelected, PageSelected);
-			MessagingCenter.Subscribe<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
+			//MessagingCenter.Subscribe<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
+		}
+
+		protected override void OnParentSet()
+		{
+			_frame.IsPresentedChanged += NavDrawerVisibilityChanged;
 		}
 
 		protected override void OnAppearing()
 		{
 			ShowPage(SelectedPage);
+		}
+
+		protected override void OnLayoutFixed()
+		{
+			NavDrawerVisibilityChanged(this, null);
 		}
 
 
@@ -35,30 +50,15 @@ namespace SafeNotebooks
 			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer);
 		}
 
-		public void NavDrawerVisibilityChanged(MainFrame MainFrame, bool IsVisible)
+		public void NavDrawerVisibilityChanged(object sender, EventArgs e)
 		{
-#if __IOS__
-			if (Device.Idiom != TargetIdiom.Tablet)
-			{
-				NavDrawerBtn.IsVisible = !IsVisible;
-				//if (Tools.DeviceOrientation != DeviceOrientations.Landscape)
-				//{
-				//	if (SelectedPage != null)
-				//	{
-				//		SelectedPageName.IsVisible = !IsVisible;
-				//		EditBtn.IsVisible = !IsVisible;
-				//		ListCtl.IsVisible = !IsVisible;
-				//		ToolBar.IsVisible = !IsVisible;
-				//	}
-				//}
-			}
-			else
-			{
-				if (DeviceEx.Orientation == DeviceOrientations.Landscape)
-					NavDrawerBtn.IsVisible = false;
+			bool NavDrawerVisible = _frame.IsPresented;
 
-			}
-#endif
+			NavDrawerBtn.IsVisible = !NavDrawerVisible;
+
+						double m = !NavDrawerBtn.IsVisible ? Metrics.ToolBarItemsWideSpacing : 0;
+			SelectedPageName.Margin = new Thickness(m, 0, m, 0);
+			SelectedPageParentName.Margin = new Thickness(m, 0, m, 0);
 		}
 
 
