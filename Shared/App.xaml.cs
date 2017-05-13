@@ -39,7 +39,7 @@ namespace SafeNotebooks
 			// TEST
 			Debug.WriteLine("OnStart");
             var ttt = Settings.Current.GetValueOrDefault("test", "[no data]");
-            await MainPage.DisplayAlert("settings...", ttt, "cancel");
+            //await MainPage.DisplayAlert("settings...", ttt, "cancel");
 			Settings.Current.AddOrUpdateValue("test", "in OnStart");
             //
 
