@@ -20,7 +20,7 @@ namespace SafeNotebooks
 
             App.Data.NotebookSelected += (sender, notebook) =>
             {
-                ShowNotebook(notebook);
+                ShowSelectedNotebook();
             };
 
             ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) =>
@@ -28,7 +28,7 @@ namespace SafeNotebooks
                 if (e.Item is Notebook)
                     App.Data.SelectNotebook((Notebook)e.Item);
                 else
-                    ShowPage((Page)e.Item);
+                    SelectPage((Page)e.Item);
             };
 
             ListCtl.ItemSelected += (sender, e) =>
@@ -41,7 +41,7 @@ namespace SafeNotebooks
 
         protected override void OnAppearing()
         {
-            ShowNotebook(App.Data.SelectedNotebook);
+            ShowSelectedNotebook();
         }
 
 
@@ -67,28 +67,23 @@ namespace SafeNotebooks
             App.Data.SelectNotebook(null);
         }
 
-        void ShowNotebooks()
+        void ShowSelectedNotebook()
         {
-            ListCtl.ItemsSource = App.Data.Notebooks;
-            SelectedNotebookName.Text = "Notebooks";    // TODO: translation
-            SelectedNotebookBar.IsVisible = false;
-        }
-
-        void ShowNotebook(Notebook notebook)
-        {
-            if (notebook == null)
+            if (App.Data.SelectedNotebook == null)
             {
-                ShowNotebooks();
-            }
+				ListCtl.ItemsSource = App.Data.Notebooks;
+				SelectedNotebookName.Text = "Notebooks";    // TODO: translation
+				SelectedNotebookBar.IsVisible = false;
+			}
             else
             {
-                ListCtl.ItemsSource = notebook.Pages;
-                SelectedNotebookName.Text = notebook.DisplayName;
+                ListCtl.ItemsSource = App.Data.SelectedNotebook.Pages;
+                SelectedNotebookName.Text = App.Data.SelectedNotebook.DisplayName;
                 SelectedNotebookBar.IsVisible = true;
             }
         }
 
-        void ShowPage(Page page)
+        void SelectPage(Page page)
         {
             App.Data.SelectPage(page);
             _frame.HideNavDrawer();
@@ -108,7 +103,7 @@ namespace SafeNotebooks
 
                 App.Data.Notebooks.Add(n);
 
-                ShowNotebook(n);
+                App.Data.SelectNotebook(n);
             }
             else
             {
@@ -119,7 +114,7 @@ namespace SafeNotebooks
 
                 App.Data.SelectedNotebook.AddPage(p);
 
-                ShowPage(p);
+                SelectPage(p);
             }
         }
 
