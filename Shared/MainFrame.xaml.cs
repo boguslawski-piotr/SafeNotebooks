@@ -9,15 +9,12 @@ namespace SafeNotebooks
 	{
 		public static string MsgShowNavDrawer = "MsgShowNavDrawer";
 		public static string MsgHideNavDrawer = "MsgHideNavDrawer";
-		public static string MsgNavDrawerVisibilityChanged = "MsgNavDrawerVisibilityChanged";
 
 		public static string MsgPageSelected = "MsgPageSelected";
 
 		public MainFrame()
 		{
 			InitializeComponent();
-
-			IsPresentedChanged += NavDrawerVisibilityChanged;
 
 			MessagingCenter.Subscribe<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer, ShowNavDrawer);
 			MessagingCenter.Subscribe<Xamarin.Forms.Page>(this, MainFrame.MsgHideNavDrawer, HideNavDrawer);
@@ -38,9 +35,5 @@ namespace SafeNotebooks
 			IsPresented = false;
 		}
 
-		void NavDrawerVisibilityChanged(object sender, EventArgs e)
-		{
-			MessagingCenter.Send<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, IsPresented);
-		}
 	}
 }
