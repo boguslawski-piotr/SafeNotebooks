@@ -36,8 +36,12 @@ namespace SafeNotebooks
 
 		async protected override void OnStart()
 		{
-			//MainPage.Navigation.PushModalAsync(new Settings());
+			// TEST
 			Debug.WriteLine("OnStart");
+            var ttt = Settings.Current.GetValueOrDefault("test", "[no data]");
+            await MainPage.DisplayAlert("settings...", ttt, "cancel");
+			Settings.Current.AddOrUpdateValue("test", "in OnStart");
+            //
 
 			// TODO: create credentials manager
 
@@ -60,8 +64,10 @@ namespace SafeNotebooks
 
 		async protected override void OnSleep()
 		{
-			// Handle when your app sleeps
+			// TEST
 			Debug.WriteLine("OnSleep");
+            Settings.Current.AddOrUpdateValue("test", "in OnSleep");
+            //
 
 			// TODO: if user want to: lock all data and clear all forms (unselect)
 			//Data.SelectNotebook(null, false);
@@ -75,8 +81,10 @@ namespace SafeNotebooks
 
 		async protected override void OnResume()
 		{
-			// Handle when your app resumes
+			// TEST
 			Debug.WriteLine("OnResume");
+            Settings.Current.AddOrUpdateValue("test", "after OnResume");
+            //
 
 			// TODO: if user want to: ask for MP/pin/biometrics
 			//_unlock.UnlockMode();
