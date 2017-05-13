@@ -37,22 +37,39 @@ namespace SafeNotebooks
 
 		public event EventHandler<Notebook> NotebookSelected;
 
-		public void SelectNotebook(Notebook notebook)
+		public bool SelectNotebook(Notebook notebook)
 		{
+			// TODO: unlock if protected
+
+			// TODO: load additional data (fields that are encrypted and pages basic data)
+
 			SelectedNotebook = notebook;
 			NotebookSelected?.Invoke(this, SelectedNotebook);
+
+			return true;
 		}
 
+		//
 
 		public Page SelectedPage = null;
 
 		public event EventHandler<Page> PageSelected;
 
-		public void SelectPage(Page page)
+		public bool SelectPage(Page page)
 		{
+			// TODO: unlock if protected
+
+			// TODO: load additional data (fields that are encrypted and notes basic data)
+
 			SelectedPage = page;
 			PageSelected?.Invoke(this, SelectedPage);
+
+			return true;
 		}
+
+		//
+
+		// TODO: notes
 
 	}
 }
