@@ -11,7 +11,7 @@
 		
 		<pbXForms:FlatButton 
 			x:Name="NavDrawerBtn"
-			Image="ic_menu.png"
+			Image="ic_chevron_left.png"
 			WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 			Clicked="NavDrawerBtn_Clicked"
 		/>
