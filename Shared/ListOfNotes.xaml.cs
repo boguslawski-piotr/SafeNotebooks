@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 using pbXForms;
 using System.Threading.Tasks;
+using Xamarin.Forms.Xaml;
 
 namespace SafeNotebooks
 {
+	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ListOfNotes : ContentPageEx
 	{
 		MainFrame _frame

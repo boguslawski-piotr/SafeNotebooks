@@ -1,8 +1,11 @@
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
 {
+	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class App : Application
 	{
 		//
@@ -39,7 +42,7 @@ namespace SafeNotebooks
 		protected override void OnStart()
 		{
 			// Handle when your app starts
-			MainPage.Navigation.PushModalAsync(new Settings());
+			//MainPage.Navigation.PushModalAsync(new Settings());
 		}
 
 		protected override void OnSleep()
