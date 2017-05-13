@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -17,21 +18,39 @@ namespace SafeNotebooks
 
 		public App()
 		{
-            InitializeComponent();
+			Data = new Data();
+			InitializeComponent();
+			MainPage = new MainFrame();
+		}
 
+		private Unlock __unlock = null;
+		private Unlock _unlock
+		{
+			get
+			{
+				if (__unlock == null)
+					__unlock = new Unlock();
+				return __unlock;
+			}
+		}
 
-			// TODO: list of available FileSystems
+		protected override void OnStart()
+		{
+			//MainPage.Navigation.PushModalAsync(new Settings());
+			Debug.WriteLine("OnStart");
 
 			// TODO: create credentials manager
 
-			Data = new Data();
-
 			// TODO: pass credentials manager to data
 
+
+			// TODO: if user want to: ask for MP/pin/biometrics
+			//_unlock.Ask();
+
+
+			// TODO: prepare available FileSystems (with logins)
+
 			// TODO: pass FileSystems to data
-
-
-			MainPage = new MainFrame();
 
 
 			// TODO: load data (minimum set -> global data settings, list of notebooks (minimum data))
@@ -39,20 +58,32 @@ namespace SafeNotebooks
 			// TODO: restore last selections (with unlocking if necessary)
 		}
 
-		protected override void OnStart()
-		{
-			// Handle when your app starts
-			//MainPage.Navigation.PushModalAsync(new Settings());
-		}
-
-		protected override void OnSleep()
+		async protected override void OnSleep()
 		{
 			// Handle when your app sleeps
+			Debug.WriteLine("OnSleep");
+
+			// TODO: if user want to: lock all data and clear all forms (unselect)
+			//Data.SelectNotebook(null, false);
+			//Data.SelectPage(null, false);
+
+			// Show lock screen in order to hide data
+			MainPage.Navigation.PushModalAsync(_unlock, false);
+			await Task.Delay(5000);
 		}
 
-		protected override void OnResume()
+		async protected override void OnResume()
 		{
 			// Handle when your app resumes
+			Debug.WriteLine("OnResume");
+
+			// TODO: if user want to: ask for MP/pin/biometrics
+			//_unlock.Ask();
+			// or
+			// TODO: dispose lock screen
+			await MainPage.Navigation.PopModalAsync();
+
+			// TODO: if not was locked in OnSleep restore previously selected data
 		}
 	}
 }

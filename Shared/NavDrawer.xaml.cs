@@ -18,10 +18,15 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
+			App.Data.NotebookSelected += (sender, notebook) =>
+			{
+				ShowNotebook(notebook);
+			};
+
 			ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) =>
 			{
 				if (e.Item is Notebook)
-	                ShowNotebook((Notebook)e.Item);
+					App.Data.SelectNotebook((Notebook)e.Item);
 				else
 					ShowPage((Page)e.Item);
 			};
@@ -59,7 +64,7 @@ namespace SafeNotebooks
 
 		void ShowNotebooksBtn_Clicked(object sender, System.EventArgs e)
 		{
-			ShowNotebooks();
+			App.Data.SelectNotebook(null);
 		}
 
 		void ShowNotebooks()
@@ -67,8 +72,6 @@ namespace SafeNotebooks
 			ListCtl.ItemsSource = App.Data.Notebooks;
 			SelectedNotebookName.Text = "Notebooks";    // TODO: translation
 			SelectedNotebookBar.IsVisible = false;
-
-			App.Data.SelectNotebook(null);
 		}
 
 		void ShowNotebook(Notebook notebook)
@@ -79,8 +82,6 @@ namespace SafeNotebooks
 			}
 			else
 			{
-				App.Data.SelectNotebook(notebook);
-
 				ListCtl.ItemsSource = notebook.Pages;
 				SelectedNotebookName.Text = notebook.DisplayName;
 				SelectedNotebookBar.IsVisible = true;

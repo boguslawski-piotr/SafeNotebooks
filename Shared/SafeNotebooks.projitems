@@ -22,6 +22,9 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Settings.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Unlock.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -43,6 +46,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Data.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Unlock.xaml.cs">
+      <DependentUpon>Unlock.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

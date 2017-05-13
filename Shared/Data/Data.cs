@@ -37,8 +37,11 @@ namespace SafeNotebooks
 
 		public event EventHandler<Notebook> NotebookSelected;
 
-		public bool SelectNotebook(Notebook notebook)
+		public bool SelectNotebook(Notebook notebook, bool remember = true)
 		{
+			if (SelectedNotebook == notebook)
+				return true;
+			
 			// TODO: unlock if protected
 
 			// TODO: load additional data (fields that are encrypted and pages basic data)
@@ -55,8 +58,11 @@ namespace SafeNotebooks
 
 		public event EventHandler<Page> PageSelected;
 
-		public bool SelectPage(Page page)
+		public bool SelectPage(Page page, bool remember = true)
 		{
+			if (SelectedPage == page)
+				return true;
+			
 			// TODO: unlock if protected
 
 			// TODO: load additional data (fields that are encrypted and notes basic data)
