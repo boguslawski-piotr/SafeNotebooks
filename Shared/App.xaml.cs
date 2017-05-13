@@ -34,7 +34,7 @@ namespace SafeNotebooks
 			}
 		}
 
-		protected override void OnStart()
+		async protected override void OnStart()
 		{
 			//MainPage.Navigation.PushModalAsync(new Settings());
 			Debug.WriteLine("OnStart");
@@ -45,8 +45,8 @@ namespace SafeNotebooks
 
 
 			// TODO: if user want to: ask for MP/pin/biometrics
-			//_unlock.Ask();
-
+			//_unlock.UnlockMode();
+			//MainPage.Navigation.PushModalAsync(_unlock, false);
 
 			// TODO: prepare available FileSystems (with logins)
 
@@ -68,6 +68,7 @@ namespace SafeNotebooks
 			//Data.SelectPage(null, false);
 
 			// Show lock screen in order to hide data
+			//_unlock.SplashMode();
 			MainPage.Navigation.PushModalAsync(_unlock, false);
 			await Task.Delay(5000);
 		}
@@ -78,7 +79,7 @@ namespace SafeNotebooks
 			Debug.WriteLine("OnResume");
 
 			// TODO: if user want to: ask for MP/pin/biometrics
-			//_unlock.Ask();
+			//_unlock.UnlockMode();
 			// or
 			// TODO: dispose lock screen
 			await MainPage.Navigation.PopModalAsync();

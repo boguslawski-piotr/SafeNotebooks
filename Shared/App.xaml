@@ -25,7 +25,7 @@
 			
 			<Color x:Key="ListItemTextColor">#dd000000</Color>			
 			<Color x:Key="ListItemDetailColor">#4c000000</Color>			
-			<Color x:Key="ListItemsDividerColor">#C8E6C9</Color>			
+			<Color x:Key="ListItemDividerColor">#C8E6C9</Color>			
 
 		</ResourceDictionary>
 		

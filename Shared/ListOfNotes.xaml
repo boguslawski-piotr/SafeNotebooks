@@ -53,7 +53,7 @@
 			Grid.Column="0"
 			x:Name="ListCtl"
 			BackgroundColor="{StaticResource ListOfNotesBackgroundColor}"
-			SeparatorColor="{StaticResource ListItemsDividerColor}"
+			SeparatorColor="{StaticResource ListItemDividerColor}"
 		>
 			<ListView.ItemTemplate>
 			    <DataTemplate>

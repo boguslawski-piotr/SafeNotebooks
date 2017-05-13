@@ -67,7 +67,7 @@
 			<ListView
 				x:Name="ListCtl"
 				BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
-				SeparatorColor="{StaticResource ListItemsDividerColor}"
+				SeparatorColor="{StaticResource ListItemDividerColor}"
 			>
 				<ListView.ItemTemplate>
 				    <DataTemplate>
@@ -78,8 +78,8 @@
 							DetailColor="{StaticResource ListItemDetailColor}"
 						>
 				        	<TextCell.ContextActions>
-				            	<MenuItem CommandParameter="{Binding .}" Text="Edit" />
-				            	<MenuItem CommandParameter="{Binding .}" Text="Delete" IsDestructive="True" />
+				            	<MenuItem Clicked="EditItem_Clicked" CommandParameter="{Binding .}" Text="Edit" />
+				            	<MenuItem Clicked="DeleteItem_Clicked" CommandParameter="{Binding .}" IsDestructive="True" Text="Delete"  />
 				         	</TextCell.ContextActions>
 				      </TextCell>
 				    </DataTemplate>
