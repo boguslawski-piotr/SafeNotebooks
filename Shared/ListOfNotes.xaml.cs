@@ -26,7 +26,6 @@ namespace SafeNotebooks
 			};
 
 			MessagingCenter.Subscribe<Xamarin.Forms.Page, Page>(this, MainFrame.MsgPageSelected, PageSelected);
-			//MessagingCenter.Subscribe<MainFrame, bool>(this, MainFrame.MsgNavDrawerVisibilityChanged, NavDrawerVisibilityChanged);
 		}
 
 		protected override void OnParentSet()
@@ -47,7 +46,7 @@ namespace SafeNotebooks
 
 		void NavDrawerBtn_Clicked(object sender, System.EventArgs e)
 		{
-			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer);
+			_frame.ShowNavDrawer();
 		}
 
 		public void NavDrawerVisibilityChanged(object sender, EventArgs e)
@@ -94,7 +93,7 @@ namespace SafeNotebooks
 
 				ToolBarRow.IsVisible = false;
 
-				MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer);
+				_frame.ShowNavDrawer();
 			}
 		}
 

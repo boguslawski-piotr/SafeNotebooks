@@ -7,6 +7,11 @@ namespace SafeNotebooks
 {
 	public partial class NavDrawer : ContentPageEx
 	{
+		MainFrame _frame
+		{
+			get { return (MainFrame)Parent; }
+		}
+
 		public Notebook SelectedNotebook = null;
 
 		public NavDrawer()
@@ -36,11 +41,11 @@ namespace SafeNotebooks
 		async void SettingsBtn_Clicked(object sender, System.EventArgs e)
 		{
 #if __ANDROID__
-			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgHideNavDrawer);
+			_frame.HideNavDrawer();
 #endif
 			await Navigation.PushModalAsync(new Settings(), true);
 #if __ANDROID__
-			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer);
+			_frame.ShowNavDrawer();
 #endif
 		}
 
@@ -93,7 +98,8 @@ namespace SafeNotebooks
 			Page SelectedPage = p;
 
 			MessagingCenter.Send<Xamarin.Forms.Page, Page>(this, MainFrame.MsgPageSelected, SelectedPage);
-			MessagingCenter.Send<Xamarin.Forms.Page>(this, MainFrame.MsgHideNavDrawer);
+
+			_frame.HideNavDrawer();
 		}
 
 

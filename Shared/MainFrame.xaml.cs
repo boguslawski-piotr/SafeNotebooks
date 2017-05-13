@@ -1,38 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using pbXForms;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
 	public partial class MainFrame : MasterDetailPage
 	{
-		public static string MsgShowNavDrawer = "MsgShowNavDrawer";
-		public static string MsgHideNavDrawer = "MsgHideNavDrawer";
 
 		public static string MsgPageSelected = "MsgPageSelected";
 
 		public MainFrame()
 		{
 			InitializeComponent();
-
-			MessagingCenter.Subscribe<Xamarin.Forms.Page>(this, MainFrame.MsgShowNavDrawer, ShowNavDrawer);
-			MessagingCenter.Subscribe<Xamarin.Forms.Page>(this, MainFrame.MsgHideNavDrawer, HideNavDrawer);
-		}
-
-		protected override void OnAppearing()
-		{
 		}
 
 
-		void ShowNavDrawer(Xamarin.Forms.Page obj)
+		public void ShowNavDrawer()
 		{
 			IsPresented = true;
 		}
 
-		void HideNavDrawer(Xamarin.Forms.Page obj)
+		public void HideNavDrawer()
 		{
-			IsPresented = false;
+			if(Device.Idiom == TargetIdiom.Phone || DeviceEx.Orientation == DeviceOrientations.Portrait)
+				IsPresented = false;
 		}
 
 	}
