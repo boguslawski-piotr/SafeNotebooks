@@ -53,6 +53,7 @@
 				<Label 
 					x:Name="SelectedNotebookName"
 					Text="Notebooks" 
+					TextColor="{StaticResource ListItemTextColor}"
 					VerticalOptions="Center" 
 					HorizontalOptions="CenterAndExpand" 
 				/>

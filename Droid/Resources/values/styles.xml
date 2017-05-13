@@ -2,6 +2,7 @@
 <resources>
 	<style name="MyTheme" parent="MyTheme.Base">
 	</style>
+	
 	<!-- Base theme applied no matter what API -->
 	<style name="MyTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
 		<!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
@@ -12,21 +13,24 @@
 
 		<!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette-->
 		<!-- colorPrimary is used for the default action bar background -->
-		<!-- <item name="colorPrimary">#4CAF50</item> -->
+		<item name="colorPrimary">#81C784</item>
 
 		<!-- colorPrimaryDark is used for the status bar -->
 		<item name="colorPrimaryDark">#4CAF50</item>
 
 		<!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->
-		<!-- <item name="colorAccent">#FF4081</item> -->
+		<item name="colorAccent">#E65100</item>
 
 		<!-- You can also set colorControlNormal, colorControlActivated
          colorControlHighlight and colorSwitchThumbNormal. -->
+		
 		<item name="windowActionModeOverlay">true</item>
 		<item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
 	</style>
+	
 	<style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
 		<item name="colorAccent">#FF4081</item>
 	</style>
+	
 </resources>

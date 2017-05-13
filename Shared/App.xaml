@@ -10,6 +10,7 @@
 			<!-- ANDROID: When modifying this value you must also remember to update the "colorPrimaryDark" value in the "Resources/Values/styles.xml" file. -->
 			<Color x:Key="StatusBarBackgroundColor">#4CAF50</Color>
 			
+			<!-- ANDROID: When modifying this value you must also remember to update the "colorPrimary" value in the "Resources/Values/styles.xml" file. -->
 			<Color x:Key="AppBarBackgroundColor">#81C784</Color>
 			<Color x:Key="AppBarTextColor">#000000</Color>
 
@@ -19,6 +20,7 @@
 			<Color x:Key="NavDrawerBackgroundColor">#E8F5E9</Color>
 			<Color x:Key="ListOfNotesBackgroundColor">#ffffff</Color>
 
+			<!-- ANDROID: When modifying this value you must also remember to update the "colorAccent" value in the "Resources/Values/styles.xml" file. -->
 			<Color x:Key="AccentTextColor">#E65100</Color>
 			
 			<Color x:Key="ListItemTextColor">#dd000000</Color>			
