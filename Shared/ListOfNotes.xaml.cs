@@ -72,9 +72,9 @@ namespace SafeNotebooks
 			SelectedPage = page;
 			if (SelectedPage != null)
 			{
-				SelectedPageName.Text = SelectedPage.DisplayName
-					+ " in " // TODO: translation
-					+ SelectedPage.Parent.DisplayName;
+				SelectedPageName.Text = SelectedPage.DisplayName;
+				SelectedPageParentName.Text = "in " /* TODO: translation */ + SelectedPage.Parent.DisplayName;
+
 				EditBtn.IsVisible = true;
 
 				ListCtl.ItemsSource = SelectedPage.Notes;
@@ -85,6 +85,8 @@ namespace SafeNotebooks
 			else
 			{
 				SelectedPageName.Text = "";
+				SelectedPageParentName.Text = "";
+
 				EditBtn.IsVisible = false;
 
 				ListCtl.ItemsSource = null;

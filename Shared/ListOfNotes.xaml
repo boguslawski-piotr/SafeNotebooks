@@ -15,14 +15,29 @@
 			WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 			Clicked="NavDrawerBtn_Clicked"
 		/>
-		<Label 
-			x:Name="SelectedPageName"
-			Text="" 
-			TextColor="{StaticResource AppBarTextColor}"
-			VerticalOptions="Center" 
+		<StackLayout
+			Orientation="Vertical"
+			VerticalOptions="CenterAndExpand"
 			HorizontalOptions="FillAndExpand"
-			Margin="8,0,8,0"
-		/>
+			Padding="0"
+			Margin="0"
+			Spacing="0"
+		>
+			<Label 
+				x:Name="SelectedPageName"
+				Text="" 
+				TextColor="{StaticResource AppBarTextColor}"
+				VerticalOptions="Center" 
+				HorizontalOptions="FillAndExpand"
+			/>
+			<Label 
+				x:Name="SelectedPageParentName"
+				Text="" 
+				FontSize="Micro"
+				TextColor="{StaticResource ListItemDetailColor}"
+				VerticalOptions="Center" 
+			/>
+		</StackLayout>
 		<pbXForms:FlatButton 
 			x:Name="EditBtn"
 			Image="ic_mode_edit.png"
