@@ -54,4 +54,7 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)License.md" />
+  </ItemGroup>
 </Project>

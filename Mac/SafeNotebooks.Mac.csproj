@@ -94,6 +94,7 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
+    <None Include="License.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
