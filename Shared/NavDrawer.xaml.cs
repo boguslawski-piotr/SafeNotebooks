@@ -12,13 +12,18 @@ namespace SafeNotebooks
 			get { return (MainFrame)Parent; }
 		}
 
-		public Notebook SelectedNotebook = null;
-
 		public NavDrawer()
 		{
 			InitializeComponent();
 
-			ListCtl.ItemTapped += ListCtl_ItemTapped;
+			ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) =>
+			{
+				if (e.Item is Notebook)
+	                ShowNotebook((Notebook)e.Item);
+				else
+					ShowPage((Page)e.Item);
+			};
+	
 			ListCtl.ItemSelected += (sender, e) =>
 			{
 				((ListView)sender).SelectedItem = null;
@@ -29,7 +34,7 @@ namespace SafeNotebooks
 
 		protected override void OnAppearing()
 		{
-			ShowNotebook(SelectedNotebook);
+			ShowNotebook(App.Data.SelectedNotebook);
 		}
 
 
@@ -61,51 +66,35 @@ namespace SafeNotebooks
 			SelectedNotebookName.Text = "Notebooks";    // TODO: translation
 			SelectedNotebookBar.IsVisible = false;
 
-			SelectedNotebook = null;
+			App.Data.SelectNotebook(null);
 		}
 
-
-		void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
+		void ShowNotebook(Notebook notebook)
 		{
-			if (e.Item is Notebook)
-			{
-				ShowNotebook((Notebook)e.Item);
-			}
-			else
-			{
-				ShowPage((Page)e.Item);
-			}
-		}
-
-		void ShowNotebook(Notebook n)
-		{
-			SelectedNotebook = n;
-
-			if (SelectedNotebook == null)
+			if (notebook == null)
 			{
 				ShowNotebooks();
 			}
 			else
 			{
-				ListCtl.ItemsSource = SelectedNotebook.Pages;
-				SelectedNotebookName.Text = SelectedNotebook.Name;
+				App.Data.SelectNotebook(notebook);
+
+				ListCtl.ItemsSource = notebook.Pages;
+				SelectedNotebookName.Text = notebook.DisplayName;
 				SelectedNotebookBar.IsVisible = true;
 			}
 		}
 
-		void ShowPage(Page p)
+		void ShowPage(Page page)
 		{
-			Page SelectedPage = p;
-
-			MessagingCenter.Send<Xamarin.Forms.Page, Page>(this, MainFrame.MsgPageSelected, SelectedPage);
-
+			App.Data.SelectPage(page);
 			_frame.HideNavDrawer();
 		}
 
 
 		void NewBtn_Clicked(object sender, System.EventArgs e)
 		{
-			if (SelectedNotebook == null)
+			if (App.Data.SelectedNotebook == null)
 			{
 				Notebook n = new Notebook()
 				{
@@ -122,10 +111,10 @@ namespace SafeNotebooks
 			{
 				Page p = new Page()
 				{
-					Name = "Page " + SelectedNotebook.Pages.Count
+					Name = "Page " + App.Data.SelectedNotebook.Pages.Count
 				};
 
-				SelectedNotebook.AddPage(p);
+				App.Data.SelectedNotebook.AddPage(p);
 
 				ShowPage(p);
 			}

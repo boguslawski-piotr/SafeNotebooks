@@ -14,18 +14,24 @@ namespace SafeNotebooks
 			get { return (MainFrame)Parent; }
 		}
 
-		Page SelectedPage = null;
-
 		public ListOfNotes()
 		{
 			InitializeComponent();
 
-			ListCtl.ItemTapped += ListCtl_ItemTapped;
-			ListCtl.ItemSelected += (sender, e) => {
+			App.Data.PageSelected += (sender, page) =>
+			{
+                ShowPage(page);
+			};
+
+			ListCtl.ItemTapped += (sender, e) =>
+			{
+			};
+
+			ListCtl.ItemSelected += (sender, e) => 
+			{
     			((ListView)sender).SelectedItem = null;
 			};
 
-			MessagingCenter.Subscribe<Xamarin.Forms.Page, Page>(this, MainFrame.MsgPageSelected, PageSelected);
 		}
 
 		protected override void OnParentSet()
@@ -35,7 +41,7 @@ namespace SafeNotebooks
 
 		protected override void OnAppearing()
 		{
-			ShowPage(SelectedPage);
+			ShowPage(App.Data.SelectedPage);
 		}
 
 		protected override void OnLayoutFixed()
@@ -61,22 +67,21 @@ namespace SafeNotebooks
 		}
 
 
-		void PageSelected(Xamarin.Forms.Page who, Page page)
+		void PageSelected(object sender, SafeNotebooks.Page page)
 		{
-			ShowPage(page);
+            ShowPage(page);
 		}
 
 		void ShowPage(Page page) 
 		{
-			SelectedPage = page;
-			if (SelectedPage != null)
+			if (page != null)
 			{
-				SelectedPageName.Text = SelectedPage.DisplayName;
-				SelectedPageParentName.Text = "in " /* TODO: translation */ + SelectedPage.Parent.DisplayName;
+				SelectedPageName.Text = page.DisplayName;
+				SelectedPageParentName.Text = "in " /* TODO: translation */ + page.Parent.DisplayName;
 
 				EditBtn.IsVisible = true;
 
-				ListCtl.ItemsSource = SelectedPage.Notes;
+				ListCtl.ItemsSource = page.Notes;
 				ListCtl.IsVisible = true;
 
 				ToolBarRow.IsVisible = true;
@@ -95,16 +100,6 @@ namespace SafeNotebooks
 
 				_frame.ShowNavDrawer();
 			}
-		}
-
-
-		void ListCtl_Refreshing(object sender, EventArgs e)
-		{
-			ListCtl.EndRefresh();
-		}
-
-		void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
-		{
 		}
 
 
@@ -127,7 +122,7 @@ namespace SafeNotebooks
 				Name = DateTime.Now.ToString()
 			};
 
-			SelectedPage.AddNote(note);
+			App.Data.SelectedPage.AddNote(note);
 		}
 	}
 }

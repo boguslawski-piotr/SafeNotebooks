@@ -7,9 +7,6 @@ namespace SafeNotebooks
 {
 	public partial class MainFrame : MasterDetailPage
 	{
-
-		public static string MsgPageSelected = "MsgPageSelected";
-
 		public MainFrame()
 		{
 			InitializeComponent();
