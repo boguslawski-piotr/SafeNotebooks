@@ -10,19 +10,19 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainFrame.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainWnd.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)NavDrawer.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)NotebooksWnd.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ListOfNotes.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)PageWnd.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Settings.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SettingsWnd.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Unlock.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)UnlockWnd.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -30,25 +30,25 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MainFrame.xaml.cs">
-      <DependentUpon>MainFrame.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)MainWnd.xaml.cs">
+      <DependentUpon>MainWnd.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)NavDrawer.xaml.cs">
-      <DependentUpon>NavDrawer.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)NotebooksWnd.xaml.cs">
+      <DependentUpon>NotebooksWnd.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ListOfNotes.xaml.cs">
-<DependentUpon>ListOfNotes.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)PageWnd.xaml.cs">
+<DependentUpon>PageWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Data\Notebook.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Page.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Note.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Item.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Data.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)SettingsWnd.xaml.cs">
+      <DependentUpon>SettingsWnd.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Unlock.xaml.cs">
-      <DependentUpon>Unlock.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)UnlockWnd.xaml.cs">
+      <DependentUpon>UnlockWnd.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -4,16 +4,16 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	xmlns:local="clr-namespace:SafeNotebooks"
     xmlns:pbXForms="clr-namespace:pbXForms"
-	x:Class="SafeNotebooks.ListOfNotes"
+	x:Class="SafeNotebooks.PageWnd"
 >
 
 	<pbXForms:ContentPageEx.AppBar>
 		
 		<pbXForms:FlatButton 
-			x:Name="NavDrawerBtn"
+			x:Name="BackBtn"
 			Image="ic_chevron_left.png"
 			WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
-			Clicked="NavDrawerBtn_Clicked"
+			Clicked="BackBtn_Clicked"
 		/>
 		<StackLayout
 			Orientation="Vertical"
@@ -42,6 +42,7 @@
 			x:Name="EditBtn"
 			Image="ic_mode_edit.png"
 			WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+			Clicked="EditBtn_Clicked"
 		/>
 
 	</pbXForms:ContentPageEx.AppBar>
@@ -49,8 +50,6 @@
 	<pbXForms:ContentPageEx.ContentEx>
 
 		<ListView
-			Grid.Row="1"
-			Grid.Column="0"
 			x:Name="ListCtl"
 			BackgroundColor="{StaticResource ListOfNotesBackgroundColor}"
 			SeparatorColor="{StaticResource ListItemDividerColor}"
@@ -63,6 +62,10 @@
 						Detail="{Binding DisplayDetail}"
 						DetailColor="{StaticResource ListItemDetailColor}"
 					>
+			        	<TextCell.ContextActions>
+			            	<MenuItem Clicked="EditItemBtn_Clicked" CommandParameter="{Binding .}" Text="Edit" />
+			            	<MenuItem Clicked="DeleteItemBtn_Clicked" CommandParameter="{Binding .}" IsDestructive="True" Text="Delete"  />
+			         	</TextCell.ContextActions>
 			    	</TextCell>
 			    </DataTemplate>
 			</ListView.ItemTemplate>
@@ -111,6 +114,7 @@
 				Grid.Column="2"
 				Image="ic_sort.png"
 				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+				Clicked="SortBtn_Clicked"
 			/>
 
 		</Grid>

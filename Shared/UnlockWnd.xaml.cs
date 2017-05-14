@@ -5,9 +5,9 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-	public partial class Unlock : ContentPage
+	public partial class UnlockWnd : ContentPage
 	{
-		public Unlock()
+		public UnlockWnd()
 		{
 			InitializeComponent();
 		}

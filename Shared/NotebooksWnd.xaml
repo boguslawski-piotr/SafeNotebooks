@@ -4,7 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	xmlns:local="clr-namespace:SafeNotebooks"
 	xmlns:pbXForms="clr-namespace:pbXForms"	
-	x:Class="SafeNotebooks.NavDrawer"
+	x:Class="SafeNotebooks.NotebooksWnd"
 	Title=" "
 >
 	<pbXForms:ContentPageEx.AppBar>
@@ -12,6 +12,7 @@
 		<Label 
 			Text="Safe Notebooks" 
 			FontAttributes="Bold"
+			FontSize="Large"
 			TextColor="{StaticResource AccentTextColor}"
 			VerticalOptions="Center" 
 			HorizontalOptions="FillAndExpand" 
@@ -45,10 +46,9 @@
 				BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
 			>
 				<pbXForms:FlatButton
-					x:Name="ShowNotebooksBtn"
 					Image="ic_chevron_left.png"
 					WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
-					Clicked="ShowNotebooksBtn_Clicked"
+					Clicked="BackBtn_Clicked"
 				/>
 				<Label 
 					x:Name="SelectedNotebookName"
@@ -58,9 +58,9 @@
 					HorizontalOptions="CenterAndExpand" 
 				/>
 				<pbXForms:FlatButton 
-					x:Name="EditBtn"
 					Image="ic_mode_edit.png"
 					WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+					Clicked="EditBtn_Clicked"
 				/>
 			</StackLayout>
 
@@ -78,8 +78,8 @@
 							DetailColor="{StaticResource ListItemDetailColor}"
 						>
 				        	<TextCell.ContextActions>
-				            	<MenuItem Clicked="EditItem_Clicked" CommandParameter="{Binding .}" Text="Edit" />
-				            	<MenuItem Clicked="DeleteItem_Clicked" CommandParameter="{Binding .}" IsDestructive="True" Text="Delete"  />
+				            	<MenuItem Clicked="EditItemBtn_Clicked" CommandParameter="{Binding .}" Text="Edit" />
+				            	<MenuItem Clicked="DeleteItemBtn_Clicked" CommandParameter="{Binding .}" IsDestructive="True" Text="Delete"  />
 				         	</TextCell.ContextActions>
 				      </TextCell>
 				    </DataTemplate>
@@ -103,6 +103,7 @@
 				<ColumnDefinition Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+				<ColumnDefinition Width="1" />
 			</Grid.ColumnDefinitions>
 
 			<pbXForms:FlatButton
@@ -118,6 +119,7 @@
 				Grid.Column="2"
 				x:Name="SortBtn"
 				Image="ic_sort.png"
+				Clicked="SortBtn_Clicked"
 			/>
 
 		</Grid>

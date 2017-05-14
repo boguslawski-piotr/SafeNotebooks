@@ -1,47 +1,56 @@
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+using Plugin.Settings;
+using Plugin.Settings.Abstractions;
+
+//[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+	//[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class App : Application
 	{
 		//
 
-		public static Data Data;
+		static Lazy<Data> _data = new Lazy<Data>(() => new Data(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+		public static Data Data
+		{
+			get { return _data.Value; }
+		}
 
+		//
+
+		public static ISettings Settings
+		{
+			get { return CrossSettings.Current; }
+		}
 
 		//
 
 		public App()
 		{
-			Data = new Data();
 			InitializeComponent();
-			MainPage = new MainFrame();
+			MainPage = new MainWnd();
 		}
 
-		private Unlock __unlock = null;
-		private Unlock _unlock
+		private Lazy<UnlockWnd> _unlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+		private UnlockWnd UnlockWnd
 		{
-			get
-			{
-				if (__unlock == null)
-					__unlock = new Unlock();
-				return __unlock;
-			}
+			get { return _unlockWnd.Value; }
 		}
 
 		async protected override void OnStart()
 		{
 			// TEST
 			Debug.WriteLine("OnStart");
-            var ttt = Settings.Current.GetValueOrDefault("test", "[no data]");
-            //await MainPage.DisplayAlert("settings...", ttt, "cancel");
-			Settings.Current.AddOrUpdateValue("test", "in OnStart");
-            //
+			var ttt = Settings.GetValueOrDefault("test", "[no data]");
+			//await MainPage.DisplayAlert("settings...", ttt, "cancel");
+			Settings.AddOrUpdateValue("test", "in OnStart");
+			//
 
 			// TODO: create credentials manager
 
@@ -60,14 +69,29 @@ namespace SafeNotebooks
 			// TODO: load data (minimum set -> global data settings, list of notebooks (minimum data))
 
 			// TODO: restore last selections (with unlocking if necessary)
+
+			//Notebook n = new Notebook()
+			//{
+			//	Name = "Notebook " + App.Data.Notebooks.Count
+			//};
+			//App.Data.Notebooks.Add(n);
+			//App.Data.SelectNotebook(n);
+
+			//Page p = new Page()
+			//{
+			//	Name = "Page _"
+			//};
+			//n.AddPage(p);
+			//App.Data.SelectPage(p);
+
 		}
 
 		async protected override void OnSleep()
 		{
 			// TEST
 			Debug.WriteLine("OnSleep");
-            Settings.Current.AddOrUpdateValue("test", "in OnSleep");
-            //
+			Settings.AddOrUpdateValue("test", "in OnSleep");
+			//
 
 			// TODO: if user want to: lock all data and clear all forms (unselect)
 			//Data.SelectNotebook(null, false);
@@ -75,7 +99,7 @@ namespace SafeNotebooks
 
 			// Show lock screen in order to hide data
 			//_unlock.SplashMode();
-			MainPage.Navigation.PushModalAsync(_unlock, false);
+			MainPage.Navigation.PushModalAsync(UnlockWnd, false);
 			await Task.Delay(5000);
 		}
 
@@ -83,8 +107,8 @@ namespace SafeNotebooks
 		{
 			// TEST
 			Debug.WriteLine("OnResume");
-            Settings.Current.AddOrUpdateValue("test", "after OnResume");
-            //
+			Settings.AddOrUpdateValue("test", "after OnResume");
+			//
 
 			// TODO: if user want to: ask for MP/pin/biometrics
 			//_unlock.UnlockMode();

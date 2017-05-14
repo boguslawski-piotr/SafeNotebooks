@@ -2,17 +2,17 @@
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:local="clr-namespace:SafeNotebooks"
-	x:Class="SafeNotebooks.MainFrame">
+	x:Class="SafeNotebooks.MainWnd">
    	Title="Safe Notebooks"
-    MasterBehavior="Default"
+    MasterBehavior="Split"
 >
 
     <MasterDetailPage.Master>
-   		<local:NavDrawer />
+   		<local:NotebooksWnd />
     </MasterDetailPage.Master>
 
     <MasterDetailPage.Detail>
-    	<local:ListOfNotes />
+    	<local:PageWnd />
 		<!-- <local:Test /> -->
     </MasterDetailPage.Detail>
 
