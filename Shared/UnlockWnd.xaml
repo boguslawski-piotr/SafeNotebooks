@@ -18,6 +18,10 @@
 			<Label
 				Text="locked"
 			/>
+			<Button
+				Text="Unlock..."
+				Clicked="UnlockBtn_Clicked"
+			/>
 		</StackLayout>
 		
 	</ContentPage.Content>

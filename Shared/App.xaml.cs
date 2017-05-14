@@ -16,10 +16,10 @@ namespace SafeNotebooks
 	{
 		//
 
-		static Lazy<Data> _data = new Lazy<Data>(() => new Data(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+		static Lazy<Data> _Data = new Lazy<Data>(() => new Data(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 		public static Data Data
 		{
-			get { return _data.Value; }
+			get { return _Data.Value; }
 		}
 
 		//
@@ -37,86 +37,106 @@ namespace SafeNotebooks
 			MainPage = new MainWnd();
 		}
 
-		private Lazy<UnlockWnd> _unlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+		private Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 		private UnlockWnd UnlockWnd
 		{
-			get { return _unlockWnd.Value; }
+			get { return _UnlockWnd.Value; }
 		}
 
 		async protected override void OnStart()
 		{
-			// TEST
 			Debug.WriteLine("OnStart");
-			var ttt = Settings.GetValueOrDefault("test", "[no data]");
-			//await MainPage.DisplayAlert("settings...", ttt, "cancel");
-			Settings.AddOrUpdateValue("test", "in OnStart");
-			//
+
 
 			// TODO: create credentials manager
-
 			// TODO: pass credentials manager to data
 
 
-			// TODO: if user want to: ask for MP/pin/biometrics
-			//_unlock.UnlockMode();
-			//MainPage.Navigation.PushModalAsync(_unlock, false);
+			UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
+
+			// If user want to: ask for MP/pin/biometrics
+			UnlockWnd.UnlockingMode();
+			await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
+			// or
+			// go on
+			// UnlockedCorrectlyInOnStart(this, null);
+		}
+
+		async void UnlockedCorrectlyInOnStart(object sender, EventArgs e)
+		{
+			UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
+			await Application.Current.MainPage.Navigation.PopModalAsync();
 
 			// TODO: prepare available FileSystems (with logins)
-
 			// TODO: pass FileSystems to data
 
 
 			// TODO: load data (minimum set -> global data settings, list of notebooks (minimum data))
-
 			// TODO: restore last selections (with unlocking if necessary)
 
-			//Notebook n = new Notebook()
-			//{
-			//	Name = "Notebook " + App.Data.Notebooks.Count
-			//};
-			//App.Data.Notebooks.Add(n);
-			//App.Data.SelectNotebook(n);
+			//await MainPage.DisplayAlert("settings...", ttt, "cancel");
+			Notebook n = new Notebook()
+			{
+				Name = "Notebook " + App.Data.Notebooks.Count
+			};
+			App.Data.Notebooks.Add(n);
+			App.Data.SelectNotebook(n);
 
-			//Page p = new Page()
-			//{
-			//	Name = "Page _"
-			//};
-			//n.AddPage(p);
-			//App.Data.SelectPage(p);
+			Page p = new Page()
+			{
+				Name = "Page _"
+			};
+			n.AddPage(p);
+			App.Data.SelectPage(p);
+			//await MainPage.DisplayAlert("settings... 2", ttt, "cancel");
 
 		}
 
+
 		async protected override void OnSleep()
 		{
-			// TEST
 			Debug.WriteLine("OnSleep");
-			Settings.AddOrUpdateValue("test", "in OnSleep");
-			//
+
+			// Do not do anything if unlocking is in progress (app loses focus because system needs to show some dialogs)
+			if (UnlockWnd.State == UnlockWnd.TState.Unlocking)
+				return;
 
 			// TODO: if user want to: lock all data and clear all forms (unselect)
 			//Data.SelectNotebook(null, false);
 			//Data.SelectPage(null, false);
 
-			// Show lock screen in order to hide data
-			//_unlock.SplashMode();
+			// Show lock screen in order to hide data in task manager
+			UnlockWnd.SplashMode();
 			MainPage.Navigation.PushModalAsync(UnlockWnd, false);
-			await Task.Delay(5000);
+			//await Task.Delay(5000);
 		}
+
 
 		async protected override void OnResume()
 		{
-			// TEST
 			Debug.WriteLine("OnResume");
-			Settings.AddOrUpdateValue("test", "after OnResume");
-			//
 
-			// TODO: if user want to: ask for MP/pin/biometrics
-			//_unlock.UnlockMode();
+			// Do not do anything if not unlocked
+			if (UnlockWnd.State != UnlockWnd.TState.Splash)
+				return;
+
+			UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
+
+			// If user want to: ask for MP/pin/biometrics
+			UnlockWnd.TryToUnlock();
 			// or
-			// TODO: dispose lock screen
-			await MainPage.Navigation.PopModalAsync();
+			// dispose lock screen
+			//UnlockedCorrectlyInOnResume(this, null);
+
+		}
+
+		async void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
+		{
+			UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
+			await Application.Current.MainPage.Navigation.PopModalAsync();
 
 			// TODO: if not was locked in OnSleep restore previously selected data
 		}
+
 	}
 }
