@@ -126,28 +126,35 @@
     <Compile Include="Helpers\Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_sort_2x.png" />
-    <BundleResource Include="Resources\ic_sort_3x.png" />
+    <BundleResource Include="Resources\ic_sort%402x.png" />
+    <BundleResource Include="Resources\ic_sort%403x.png" />
     <BundleResource Include="Resources\ic_sort.png" />
-    <BundleResource Include="Resources\ic_menu_2x.png" />
-    <BundleResource Include="Resources\ic_menu_3x.png" />
+    <BundleResource Include="Resources\ic_menu%402x.png" />
+    <BundleResource Include="Resources\ic_menu%403x.png" />
     <BundleResource Include="Resources\ic_menu.png" />
-    <BundleResource Include="Resources\ic_mode_edit_2x.png" />
-    <BundleResource Include="Resources\ic_mode_edit_3x.png" />
+    <BundleResource Include="Resources\ic_mode_edit%402x.png" />
+    <BundleResource Include="Resources\ic_mode_edit%403x.png" />
     <BundleResource Include="Resources\ic_mode_edit.png" />
-    <BundleResource Include="Resources\ic_search_2x.png" />
-    <BundleResource Include="Resources\ic_search_3x.png" />
+    <BundleResource Include="Resources\ic_search%402x.png" />
+    <BundleResource Include="Resources\ic_search%403x.png" />
     <BundleResource Include="Resources\ic_search.png" />
-    <BundleResource Include="Resources\ic_settings_2x.png" />
-    <BundleResource Include="Resources\ic_settings_3x.png" />
+    <BundleResource Include="Resources\ic_settings%402x.png" />
+    <BundleResource Include="Resources\ic_settings%403x.png" />
     <BundleResource Include="Resources\ic_settings.png" />
-    <BundleResource Include="Resources\ic_chevron_left_2x.png" />
-    <BundleResource Include="Resources\ic_chevron_left_3x.png" />
+    <BundleResource Include="Resources\ic_chevron_left%402x.png" />
+    <BundleResource Include="Resources\ic_chevron_left%403x.png" />
     <BundleResource Include="Resources\ic_chevron_left.png" />
-    <BundleResource Include="Resources\ic_arrow_back_2x.png" />
-    <BundleResource Include="Resources\ic_arrow_back_3x.png" />
+    <BundleResource Include="Resources\ic_arrow_back%402x.png" />
+    <BundleResource Include="Resources\ic_arrow_back%403x.png" />
     <BundleResource Include="Resources\ic_arrow_back.png" />
+    <BundleResource Include="Resources\icon.png" />
+    <BundleResource Include="Resources\icon%402x.png" />
+    <BundleResource Include="Resources\icon%403x.png" />
+    <BundleResource Include="Resources\splash.png" />
+    <BundleResource Include="Resources\splash%402x.png" />
+    <BundleResource Include="Resources\splash%403x.png" />
   </ItemGroup>
+  <Import Project="..\..\pbXSecurity\pbXSecurity.projitems" Label="Shared" Condition="Exists('..\..\pbXSecurity\pbXSecurity.projitems')" />
   <Import Project="..\..\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbXForms\pbXForms.projitems')" />
   <Import Project="..\Shared\SafeNotebooks.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

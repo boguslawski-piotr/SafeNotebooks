@@ -16,47 +16,33 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" customColorSpace="calibratedWhite" colorSpace="calibratedRGB" red="0.37254901960784315" green="0.70196078431372544" blue="0.36470588235294116" alpha="1"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" usesAttributedText="YES" numberOfLines="3" adjustsLetterSpacingToFitWidth="NO">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                                <rect key="contentStretch" x="0.0" y="0.0" width="0.95" height="1"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="Safe Notebooks &#xA;">
-                                        <attributes>
-                                            <font key="NSFont" name="HelveticaNeue" family="Helvetica Neue" size="28"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="by&#xA;Piotr Bogusławski">
-                                        <attributes>
-                                            <font key="NSFont" name="HelveticaNeue" family="Helvetica Neue" size="20"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <color key="backgroundColor" colorSpace="calibratedRGB" red="0.4392156862745098" green="0.74509803921568629" blue="0.44313725490196076" alpha="1"/>
-                                </variation>
-                                <size key="shadowOffset" width="7" height="8"/>
-                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="83" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" image="splash.png">
+                                <rect key="frame" x="0.0" y="1" width="414" height="736"/>
+                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES" image="splash.png"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="1" height="1"/>
+                            </imageView>
                         </subviews>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <color key="backgroundColor" colorSpace="calibratedRGB" red="0.37254901960784315" green="0.70196078431372544" blue="0.36470588235294116" alpha="1"/>
+                        </variation>
                         <constraints>
-                            <constraint id="12" firstItem="6" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width"/>
-                            <constraint id="15" firstItem="6" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height"/>
+                            <constraint id="85" firstItem="83" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width"/>
+                            <constraint id="91" firstItem="83" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height"/>
+                            <constraint id="99" firstItem="83" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height"/>
+                            <constraint id="100" firstItem="83" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="12"/>
-                                <exclude reference="15"/>
+                                <exclude reference="99"/>
+                                <exclude reference="100"/>
                             </mask>
                         </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
+                        <variation key="heightClass=regular-widthClass=regular">
                             <mask key="constraints">
-                                <include reference="12"/>
-                                <include reference="15"/>
+                                <include reference="99"/>
+                                <include reference="100"/>
                             </mask>
                         </variation>
                     </view>
@@ -67,27 +53,15 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_sort_2x.png" width="48" height="48"/>
-        <image name="ic_sort_3x.png" width="72" height="72"/>
         <image name="ic_sort.png" width="24" height="24"/>
-        <image name="ic_menu_2x.png" width="48" height="48"/>
-        <image name="ic_menu_3x.png" width="72" height="72"/>
         <image name="ic_menu.png" width="24" height="24"/>
-        <image name="ic_mode_edit_2x.png" width="48" height="48"/>
-        <image name="ic_mode_edit_3x.png" width="72" height="72"/>
         <image name="ic_mode_edit.png" width="24" height="24"/>
-        <image name="ic_search_2x.png" width="48" height="48"/>
-        <image name="ic_search_3x.png" width="72" height="72"/>
         <image name="ic_search.png" width="24" height="24"/>
-        <image name="ic_settings_2x.png" width="48" height="48"/>
-        <image name="ic_settings_3x.png" width="72" height="72"/>
         <image name="ic_settings.png" width="24" height="24"/>
-        <image name="ic_chevron_left_2x.png" width="48" height="48"/>
-        <image name="ic_chevron_left_3x.png" width="72" height="72"/>
         <image name="ic_chevron_left.png" width="24" height="24"/>
-        <image name="ic_arrow_back_2x.png" width="48" height="48"/>
-        <image name="ic_arrow_back_3x.png" width="72" height="72"/>
         <image name="ic_arrow_back.png" width="24" height="24"/>
+        <image name="icon.png" width="72" height="72"/>
+        <image name="splash.png" width="320" height="320"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina4"/>
