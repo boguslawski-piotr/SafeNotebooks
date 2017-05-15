@@ -24,10 +24,10 @@ namespace SafeNotebooks
 
 			ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) =>
 			{
-				if (e.Item is Notebook)
-					App.Data.SelectNotebook((Notebook)e.Item);
-				else
-					App.Data.SelectPage((Page)e.Item);
+                if (e.Item is Notebook)
+                    App.Data.SelectNotebook((Notebook)e.Item);
+                else
+                    App.Data.SelectPage((Page)e.Item);
 			};
 
 			PageCoversStatusBar = (Device.RuntimePlatform == Device.iOS ? true : (Device.Idiom != TargetIdiom.Tablet));

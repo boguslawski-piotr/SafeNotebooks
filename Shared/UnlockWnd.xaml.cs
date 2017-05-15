@@ -3,128 +3,178 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using Xamarin.Forms;
+using pbXForms;
+using System.Threading.Tasks;
 
-#if __IOS__
+//#if __IOS__
+#if __UNIFIED__
 using LocalAuthentication;
 using Foundation;
 #endif
 
 namespace SafeNotebooks
 {
-	public partial class UnlockWnd : ContentPage
-	{
-		public enum TState
-		{
-			Splash,
-			Unlocking,
-			Locked,
-			Unlocked,
-		}
+    public partial class UnlockWnd : ContentPage
+    {
+        public enum TState
+        {
+            Splash,
+            Unlocking,
+            Unlocked,
+            Locked,
+        }
 
-		public TState State = TState.Splash;
+        public TState State = TState.Splash;
 
-		public UnlockWnd()
-		{
-			InitializeComponent();
-		}
+        public UnlockWnd()
+        {
+            InitializeComponent();
+        }
 
-		protected override void OnAppearing()
-		{
-			if (State == TState.Unlocking)
-				TryToUnlock();
-		}
+        protected override void OnAppearing()
+        {
+            if (State == TState.Unlocking)
+                TryToUnlock();
+        }
 
-		public void SplashMode()
-		{
-			State = TState.Splash;
-		}
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            PK_Focused(this, new FocusEventArgs(PIN, PIN.IsFocused));
+        }
 
-		public void UnlockingMode()
-		{
-			State = TState.Unlocking;
-		}
+        public void SplashMode()
+        {
+            State = TState.Splash;
+            PIN.IsVisible = false;
+            PK_Focused(this, new FocusEventArgs(PIN, false));
+        }
 
-		public void TryToUnlock()
-		{
-			UnlockingMode();
-			if (!RuntimePlatformTryToUnlock(_UnlockedCorrectly, _NotUnlocked))
-			{
-				CrossPlatformTryToUnlock(_UnlockedCorrectly, _NotUnlocked);
-			}
-		}
+        public void UnlockingMode()
+        {
+            State = TState.Unlocking;
+        }
 
-		public event EventHandler UnlockedCorrectly = null;
+        public void TryToUnlock()
+        {
+            UnlockingMode();
 
-		//
+            if (App.Settings.UnlockUsingSystem)
+            {
+                if (RuntimePlatformTryToUnlock())
+                {
+                    return;
+                };
+            }
 
-		bool RuntimePlatformTryToUnlock(Action Unlocked, Action NotUnlocked)
-		{
-#if __IOS__
-			// TODO: do tools?
+            CrossPlatformTryToUnlock();
+        }
 
-			var myReason = new NSString("To add a new chore");
+        public event EventHandler UnlockedCorrectly = null;
 
-			var context = new LAContext();
-			NSError AuthError;
+        //
 
-			LAPolicy policy = LAPolicy.DeviceOwnerAuthenticationWithBiometrics;
-			if (!context.CanEvaluatePolicy(policy, out AuthError))
-				policy = LAPolicy.DeviceOwnerAuthentication;
-			if (context.CanEvaluatePolicy(policy, out AuthError))
-			{
-				var replyHandler = new LAContextReplyHandler((success, error) =>
-				{
+        bool RuntimePlatformTryToUnlock()
+        {
+            return App.CredentialsManager.AuthenticateDeviceOwner("TODO: some explanation", _RuntimePlatformUnlockedCorrectly, _RuntimePlatformNotUnlocked);
+        }
 
-					Device.BeginInvokeOnMainThread(() =>
-					{
-						if (success)
-						{
-							Debug.WriteLine("You are logged in!");
-							Unlocked();
-						}
-						else
-						{
-							Debug.WriteLine($"Not auth! -> {error}");
-							NotUnlocked();
-						}
-					});
+        void _RuntimePlatformUnlockedCorrectly()
+        {
+            CrossPlatformTryToUnlock();
+        }
 
-				});
+        void _RuntimePlatformNotUnlocked(string Error)
+        {
+            State = TState.Locked;
+        }
 
-				context.EvaluatePolicy(policy, myReason, replyHandler);
+        void CrossPlatformTryToUnlock()
+        {
+            if (App.Settings.UnlockUsingPin)
+            {
+                UnlockingMode();
 
-				return true;
-			}
-			else
-			{
-				Debug.WriteLine($"Error! -> {AuthError}");
-				return false;
-			}
-#endif
-		}
+                PIN.IsVisible = true;
+                PIN.Focus();
+            }
+            else
+                _UnlockedCorrectly();
+        }
 
-		void CrossPlatformTryToUnlock(Action Unlocked, Action NotUnlocked)
-		{
-			State = TState.Locked;
-		}
+        async void CrossPlatformCheckPK()
+        {
+            string _PIN = PIN.Text ?? "";
+            PIN.Text = "";
 
-		void _UnlockedCorrectly()
-		{
-			State = TState.Unlocked;
-			UnlockedCorrectly?.Invoke(this, null);
-		}
+            if (_PIN == "1")
+            {
+                _UnlockedCorrectly();
+            }
+            else
+            {
+                PIN.Focus();
 
-		void _NotUnlocked()
-		{
-			State = TState.Locked;
-		}
+				// TODO: zrobić animację wstrząśnięcia ;)
+                await PIN.ScaleTo(0.3);
+                await PIN.ScaleTo(1);
+            }
+        }
 
-		//
+        void _UnlockedCorrectly()
+        {
+            State = TState.Unlocked;
+            UnlockedCorrectly?.Invoke(this, null);
+        }
 
-		void UnlockBtn_Clicked(object sender, System.EventArgs e)
-		{
-			UnlockingMode();
-			TryToUnlock();
-		}
-	}
+        void _NotUnlocked()
+        {
+            State = TState.Locked;
+        }
+
+        //
+
+        void UnlockBtn_Clicked(object sender, System.EventArgs e)
+        {
+            if (PIN.IsVisible)
+            {
+                CrossPlatformCheckPK();
+            }
+            else
+                TryToUnlock();
+        }
+
+        void PK_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
+        {
+            if (Device.Idiom == TargetIdiom.Desktop)
+                return;
+
+			BatchBegin();
+			if (e.IsFocused)
+            {
+                Layout.VerticalOptions = LayoutOptions.FillAndExpand;
+                Layout.Padding = new Thickness(0,
+                                               (DeviceEx.Orientation == DeviceOrientations.Landscape
+                                                    ? Metrics.AppBarHeightLandscape / (Device.Idiom == TargetIdiom.Tablet ? 1 : 4)
+                                                    : Metrics.AppBarHeightPortrait),
+                                               0,
+                                               0);
+            	Logo.IsVisible = DeviceEx.Orientation != DeviceOrientations.Landscape;
+            }
+            else
+            {
+                Layout.VerticalOptions = LayoutOptions.CenterAndExpand;
+                Layout.Padding = new Thickness(0);
+				Logo.IsVisible = true;
+            }
+			BatchCommit();
+        }
+
+        void PK_Completed(object sender, System.EventArgs e)
+        {
+            if (PIN.Text != null && PIN.Text.Length > 0)
+                CrossPlatformCheckPK();
+        }
+
+    }
 }

@@ -7,136 +7,229 @@ using Xamarin.Forms.Xaml;
 
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
+using pbXSecurity;
+using System.Collections.Generic;
 
 //[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
 {
-	//[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class App : Application
-	{
-		//
+    //[XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class App : Application
+    {
+        //
 
-		static Lazy<Data> _Data = new Lazy<Data>(() => new Data(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-		public static Data Data
-		{
-			get { return _Data.Value; }
-		}
+        static Lazy<Data> _Data = new Lazy<Data>(() => new Data(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        public static Data Data
+        {
+            get { return _Data.Value; }
+        }
 
-		//
+        //
 
-		public static ISettings Settings
-		{
-			get { return CrossSettings.Current; }
-		}
+        public static class Settings
+        {
+            public static ISettings Current
+            {
+                get { return CrossSettings.Current; }
+            }
 
-		//
+            // Security
 
-		public App()
-		{
-			InitializeComponent();
-			MainPage = new MainWnd();
-		}
+            private const string UnlockUsingSystemKey = "_uus";
+            static readonly bool UnlockUsingSystemDefault = false;
+            private const string UnlockUsingPinKey = "_uup";
+            static readonly bool UnlockUsingPinDefault = true;
 
-		private Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-		private UnlockWnd UnlockWnd
-		{
-			get { return _UnlockWnd.Value; }
-		}
+            public static bool UnlockUsingSystem
+            {
+                get
+                {
+                    return Current.GetValueOrDefault<bool>(UnlockUsingSystemKey, UnlockUsingSystemDefault);
+                }
+                set
+                {
+                    Current.AddOrUpdateValue<bool>(UnlockUsingSystemKey, value);
+                }
+            }
 
-		async protected override void OnStart()
-		{
-			Debug.WriteLine("OnStart");
+            public static bool UnlockUsingPin
+            {
+                get
+                {
+                    return Current.GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault);
+                }
+                set
+                {
+                    Current.AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
+                }
+            }
+        }
 
+        //
 
-			// TODO: create credentials manager
-			// TODO: pass credentials manager to data
+        static Lazy<CredentialsManager> _CredentialsManager = new Lazy<CredentialsManager>(() => new CredentialsManager(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        public static CredentialsManager CredentialsManager
+        {
+            get { return _CredentialsManager.Value; }
+        }
 
+        private Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        private UnlockWnd UnlockWnd
+        {
+            get { return _UnlockWnd.Value; }
+        }
 
-			UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
+        //
 
-			// If user want to: ask for MP/pin/biometrics
-			UnlockWnd.UnlockingMode();
-			await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
-			// or
-			// go on
-			// UnlockedCorrectlyInOnStart(this, null);
-		}
+        public App()
+        {
+            InitializeComponent();
+            MainPage = new MainWnd();
+        }
 
-		async void UnlockedCorrectlyInOnStart(object sender, EventArgs e)
-		{
-			UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
-			await Application.Current.MainPage.Navigation.PopModalAsync();
-
-			// TODO: prepare available FileSystems (with logins)
-			// TODO: pass FileSystems to data
-
-
-			// TODO: load data (minimum set -> global data settings, list of notebooks (minimum data))
-			// TODO: restore last selections (with unlocking if necessary)
-
-			//await MainPage.DisplayAlert("settings...", ttt, "cancel");
-			Notebook n = new Notebook()
-			{
-				Name = "Notebook " + App.Data.Notebooks.Count
-			};
-			App.Data.Notebooks.Add(n);
-			App.Data.SelectNotebook(n);
-
-			Page p = new Page()
-			{
-				Name = "Page _"
-			};
-			n.AddPage(p);
-			App.Data.SelectPage(p);
-			//await MainPage.DisplayAlert("settings... 2", ttt, "cancel");
-
-		}
+        async protected override void OnStart()
+        {
+            Debug.WriteLine("OnStart");
 
 
-		async protected override void OnSleep()
-		{
-			Debug.WriteLine("OnSleep");
-
-			// Do not do anything if unlocking is in progress (app loses focus because system needs to show some dialogs)
-			if (UnlockWnd.State == UnlockWnd.TState.Unlocking)
-				return;
-
-			// TODO: if user want to: lock all data and clear all forms (unselect)
-			//Data.SelectNotebook(null, false);
-			//Data.SelectPage(null, false);
-
-			// Show lock screen in order to hide data in task manager
-			UnlockWnd.SplashMode();
-			MainPage.Navigation.PushModalAsync(UnlockWnd, false);
-			//await Task.Delay(5000);
-		}
+            // TODO: pass credentials manager to data
 
 
-		async protected override void OnResume()
-		{
-			Debug.WriteLine("OnResume");
+            if (App.Settings.UnlockUsingSystem || App.Settings.UnlockUsingPin)
+            {
+                UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
 
-			// Do not do anything if not unlocked
-			if (UnlockWnd.State != UnlockWnd.TState.Splash)
-				return;
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    UnlockWnd.UnlockingMode();
+                    await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
+                });
+            }
+            else
+            {
+                ContinueOnStart();
+            }
+        }
 
-			UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
+        async void UnlockedCorrectlyInOnStart(object sender, EventArgs e)
+        {
+            Debug.WriteLine("UnlockedCorrectlyInOnStart");
 
-			// If user want to: ask for MP/pin/biometrics
-			UnlockWnd.TryToUnlock();
-			// or
-			// dispose lock screen
-			//UnlockedCorrectlyInOnResume(this, null);
+            UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
 
-		}
+            await Task.Delay(500); // give a little time for everything to be done in case there was no action on the UnlockWnd window displayed during OnStart execution
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync(false);
+            });
 
-		async void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
-		{
-			UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
-			await Application.Current.MainPage.Navigation.PopModalAsync();
+            ContinueOnStart();
+        }
 
-			// TODO: if not was locked in OnSleep restore previously selected data
-		}
+        async void ContinueOnStart()
+        {
+            Debug.WriteLine("ContinueOnStart");
 
-	}
+            // TODO: prepare available FileSystems (with logins)
+            // TODO: pass FileSystems to data
+
+
+            // TODO: load data (minimum set -> global data settings, list of notebooks (minimum data))
+            // TODO: restore last selections (with unlocking if necessary)
+
+            //await MainPage.DisplayAlert("settings...", ttt, "cancel");
+            Notebook n = new Notebook()
+            {
+                Name = "Notebook " + App.Data.Notebooks.Count
+            };
+            App.Data.Notebooks.Add(n);
+            App.Data.SelectNotebook(n);
+
+            Page p = new Page()
+            {
+                Name = "Page _"
+            };
+            n.AddPage(p);
+            App.Data.SelectPage(p);
+            //await MainPage.DisplayAlert("settings... 2", ttt, "cancel");
+        }
+
+
+        async protected override void OnSleep()
+        {
+            Debug.WriteLine("OnSleep");
+
+            // Do not do anything if unlocking is in progress (app loses focus because system needs to show some dialogs)
+            if (UnlockWnd.State == UnlockWnd.TState.Unlocking)
+                return;
+            IEnumerator<Xamarin.Forms.Page> ModalPages = MainPage.Navigation.ModalStack.GetEnumerator();
+            ModalPages.Reset();
+            while (ModalPages.MoveNext())
+            {
+                if (ModalPages.Current == UnlockWnd)
+                    return;
+            }
+
+
+            // TODO: if user want to: lock all data and clear all forms (unselect)
+            //Data.SelectNotebook(null, false);
+            //Data.SelectPage(null, false);
+
+
+            // Show lock screen in order to hide data in task manager
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                UnlockWnd.SplashMode();
+                await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
+            });
+            //await Task.Delay(5000);
+        }
+
+
+        async protected override void OnResume()
+        {
+            Debug.WriteLine("OnResume");
+
+            // Do not do anything if not unlocked
+            if (UnlockWnd.State != UnlockWnd.TState.Splash)
+                return;
+
+            if (App.Settings.UnlockUsingSystem || App.Settings.UnlockUsingPin)
+            {
+                UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    UnlockWnd.TryToUnlock();
+                });
+            }
+            else
+            {
+                ContinueOnResume();
+            }
+
+        }
+
+        async void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
+        {
+            Debug.WriteLine("UnlockedCorrectlyInOnResume");
+
+            UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
+
+            ContinueOnResume();
+        }
+
+        async void ContinueOnResume()
+        {
+            Debug.WriteLine("ContinueOnResume");
+
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync(false);
+            });
+
+            // TODO: if data was not locked in OnSleep restore previously selected data
+        }
+
+    }
 }

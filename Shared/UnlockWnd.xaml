@@ -1,29 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
-	xmlns="http://xamarin.com/schemas/2014/forms" 
-	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms="clr-namespace:pbXForms"
 	x:Class="SafeNotebooks.UnlockWnd">
-	
-	<ContentPage.Content>
+
+	<StackLayout
+		Orientation="Vertical"
+		VerticalOptions="FillAndExpand"
+		Padding="0"
+		Margin="0"
+		Spacing="0"
+		BackgroundColor="{StaticResource AppBarBackgroundColor}">
 
 		<StackLayout
+			x:Name="Layout"
 			Orientation="Vertical"
 			VerticalOptions="CenterAndExpand"
-			HorizontalOptions="CenterAndExpand"
-		>
+			HorizontalOptions="Center"
+			Padding="0"
+			Margin="0"
+			Spacing="0">
+
+			<Image
+				x:Name="Logo"
+				WidthRequest="112"
+				HeightRequest="112"
+				Aspect="AspectFit"
+				Margin="20, 0, 20, 20"
+				Source="icon.png" />
+
 			<Label
 				Text="Safe Notebooks"
 				FontSize="Large"
-			/>
+				HorizontalTextAlignment="Center" />
+
 			<Label
-				Text="locked"
-			/>
-			<Button
-				Text="Unlock..."
-				Clicked="UnlockBtn_Clicked"
-			/>
+				Text="is currently locked"
+				FontSize="Medium"
+				HorizontalTextAlignment="Center" />
+
+			<Entry
+				IsVisible="false"
+				x:Name="PIN"
+				IsPassword="true"
+				Keyboard="Numeric"
+				Placeholder="enter pin"
+				Margin="0,16,0,0"
+				FontSize="Medium"
+				HorizontalTextAlignment="Center"
+				Completed="PK_Completed"
+				Focused="PK_Focused" />
+
+			<pbXForms:FlatButton
+				x:Name="UnlockBtn"
+				Text="Unlock"
+				FontSize="Medium"
+				Clicked="UnlockBtn_Clicked" />
+
 		</StackLayout>
-		
-	</ContentPage.Content>
-	
+
+	</StackLayout>
+
 </ContentPage>

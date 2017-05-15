@@ -58,6 +58,7 @@ namespace SafeNotebooks
 
 		void ShowSelectedPage(Page page)
 		{
+			BatchBegin();
 			if (page != null)
 			{
 				AppBarRow.IsVisible = true;
@@ -90,6 +91,7 @@ namespace SafeNotebooks
 
 				_MainWnd?.ShowNotebooksWnd();
 			}
+			BatchCommit();
 		}
 
 
@@ -140,7 +142,8 @@ namespace SafeNotebooks
 
 		void SortBtn_Clicked(object sender, System.EventArgs e)
 		{
-			Application.Current.MainPage.DisplayAlert("Sort", "Select sort for current view (ask for default?)", "Cancel");
+			//Application.Current.MainPage.DisplayAlert("Sort", "Select sort for current view (ask for default?)", "Cancel");
+            Application.Current.MainPage.Navigation.PushModalAsync(new UnlockWnd(), false);
 		}
 
 

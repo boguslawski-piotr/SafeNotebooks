@@ -1,50 +1,60 @@
 ﻿using System;
 namespace SafeNotebooks
 {
-	public class Item
-	{
-		public Item Parent = null;
+    public class Item
+    {
+        public Item Parent = null;
 
-		public DateTime CreatedOn { get; }
+        //public IFileSystem _Fs = null;
+        //public IFileSystem Fs
+        //{
+        //    get {
+        //        // TODO: walk to the root if neccessary
+        //        return _Fs;
+        //    }
+        //    set {
+        //        _Fs = value;
+        //    }
+        //}
 
-		public string Name { get; set; }
+        public DateTime CreatedOn { get; }
 
-		public string DisplayName
-		{
-			get
-			{
-				return _DisplayName();
-			}
-		}
+        public string Name { get; set; }
 
-		protected virtual string _DisplayName()
-		{
-			return Name;
-		}
+        public string DisplayName
+        {
+            get {
+                return _DisplayName();
+            }
+        }
 
-		public string DisplayDetail 
-		{ 
-			get
-			{
-				return _DisplayDetail();
-			}
-		}
+        protected virtual string _DisplayName()
+        {
+            return Name;
+        }
 
-		protected virtual string _DisplayDetail()
-		{
-			return CreatedOn.ToLocalTime().ToString();
-		}
+        public string DisplayDetail
+        {
+            get {
+                return _DisplayDetail();
+            }
+        }
+
+        protected virtual string _DisplayDetail()
+        {
+            return CreatedOn.ToLocalTime().ToString();
+        }
 
 
-		public Item()
-		{
-			CreatedOn = DateTime.UtcNow;
-		}
+        public Item()
+        {
+            CreatedOn = DateTime.UtcNow;
+        }
 
-		public override string ToString()
-		{
-			return $"{this.GetType().ToString()}: {_DisplayName()} [{_DisplayDetail()}]";
-		}
+        public override string ToString()
+        {
+            return $"{this.GetType().ToString()}: {_DisplayName()} [{_DisplayDetail()}]";
+        }
 
-	}
+    }
 }
