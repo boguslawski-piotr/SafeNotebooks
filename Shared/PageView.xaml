@@ -6,43 +6,13 @@
 	xmlns:local="clr-namespace:SafeNotebooks"
 	x:Class="SafeNotebooks.PageView">
 
-	<Grid
-		x:Name="_Grid"
-		Padding="0"
-		Margin="0"
-		ColumnSpacing="0"
-		RowSpacing="0">
+    <pbXForms:ContentPageExGrid
+        x:Name="_Grid">
 
-		<Grid.RowDefinitions>
-
-			<RowDefinition
-				Height="0" />
-
-			<RowDefinition
-				Height="*" />
-
-			<RowDefinition
-				Height="0" />
-
-		</Grid.RowDefinitions>
-
-		<Grid.ColumnDefinitions>
-
-			<ColumnDefinition
-				Width="*" />
-
-		</Grid.ColumnDefinitions>
-
-		<StackLayout
+        <pbXForms:ContentPageExToolBar
 			Grid.Row="0"
 			Grid.Column="0"
 			x:Name="_AppBarRow"
-			Orientation="Horizontal"
-			VerticalOptions="FillAndExpand"
-			HorizontalOptions="FillAndExpand"
-			Padding="0"
-			Margin="0"
-			Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
 			BackgroundColor="{StaticResource AppBarBackgroundColor}">
 
 			<pbXForms:FlatButton
@@ -81,18 +51,12 @@
 				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
 				Clicked="EditBtn_Clicked" />
 
-		</StackLayout>
+		</pbXForms:ContentPageExToolBar>
 
-		<StackLayout
+		<pbXForms:ContentPageExContent
 			Grid.Row="1"
 			Grid.Column="0"
-			x:Name="_ContentRow"
-			Orientation="Vertical"
-			VerticalOptions="FillAndExpand"
-			HorizontalOptions="FillAndExpand"
-			Padding="0"
-			Margin="0"
-			Spacing="0">
+			x:Name="_ContentRow">
 
 			<ListView
 				x:Name="ListCtl"
@@ -112,11 +76,6 @@
 							<TextCell.ContextActions>
 
 								<MenuItem
-									Clicked="EditItemBtn_Clicked"
-									CommandParameter="{Binding .}"
-									Text="Edit" />
-
-								<MenuItem
 									Clicked="DeleteItemBtn_Clicked"
 									CommandParameter="{Binding .}"
 									IsDestructive="True"
@@ -132,17 +91,12 @@
 
 			</ListView>
 
-		</StackLayout>
+		</pbXForms:ContentPageExContent>
 
-		<StackLayout
+		<pbXForms:ContentPageExToolBar
 			Grid.Row="2"
 			Grid.Column="0"
 			x:Name="_ToolBarRow"
-			Orientation="Horizontal"
-			VerticalOptions="FillAndExpand"
-			HorizontalOptions="FillAndExpand"
-			Padding="0"
-			Margin="0"
 			BackgroundColor="{StaticResource ToolBarBackgroundColor}">
 
 			<Grid
@@ -195,8 +149,8 @@
 
 			</Grid>
 
-		</StackLayout>
+		</pbXForms:ContentPageExToolBar>
 
-	</Grid>
+	</pbXForms:ContentPageExGrid>
 
 </ContentView>

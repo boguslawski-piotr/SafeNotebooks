@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using pbXForms;
+using pbXNet;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
@@ -16,18 +17,23 @@ namespace SafeNotebooks
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
             //ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) => App.Data.SelectNote((Note)e.Item);
 
-            NoPageUI();
+            NoDataUI();
         }
 
+		Size _osa;
+		
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
 
+			if (!Tools.IsDifferent(new Size(width, height), ref _osa))
+				return;
+			
             if (_Grid != null)
             {
-                MainWnd.Current.View_OnSizeAllocated(width, height, _Grid, _AppBarRow);
+				ContentPageEx.LayoutAppBarAndToolBar(width, height, _Grid, _AppBarRow, _ToolBarRow);
 
-                BackBtn.IsVisible = !MainWnd.Current.IsSplitView;
+				BackBtn.IsVisible = !MainWnd.Current.IsSplitView;
 
                 double m = !BackBtn.IsVisible ? Metrics.ToolBarItemsWideSpacing : 0;
                 SelectedPageName.Margin = new Thickness(m, 0, m, 0);
@@ -35,21 +41,26 @@ namespace SafeNotebooks
             }
         }
 
-        void NoPageUI()
+        void NoDataUI()
         {
+            BatchBegin();
+
             _AppBarRow.IsVisible = false;
 
             ListCtl.ItemsSource = null;
             ListCtl.IsVisible = false;
 
             _ToolBarRow.IsVisible = false;
+
+            BatchCommit();
         }
 
         void ShowSelectedPage()
         {
-            BatchBegin();
             if (App.Data.SelectedPage != null)
             {
+				BatchBegin();
+				
                 _AppBarRow.IsVisible = true;
 
                 SelectedPageName.Text = App.Data.SelectedPage .DisplayName;
@@ -61,13 +72,14 @@ namespace SafeNotebooks
                 _ToolBarRow.IsVisible = true;
 
                 MainWnd.Current.NotebooksViewIsVisible = false;
-            }
+				
+                BatchCommit();
+			}
             else
             {
-                NoPageUI();
+                NoDataUI();
                 MainWnd.Current.NotebooksViewIsVisible = true;
             }
-            BatchCommit();
         }
 
 
@@ -81,11 +93,6 @@ namespace SafeNotebooks
             Application.Current.MainPage.DisplayAlert("Edit...", "Enable multiple items edit/delete mode?", "Cancel");
         }
 
-        async void EditItemBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Item item = (Item)(sender as MenuItem).CommandParameter;
-            await Application.Current.MainPage.DisplayAlert("Edit", item.ToString(), "Cancel");
-        }
 
         async void DeleteItemBtn_Clicked(object sender, System.EventArgs e)
         {

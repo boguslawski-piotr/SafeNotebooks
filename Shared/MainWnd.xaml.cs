@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using pbXForms;
+using pbXNet;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
@@ -13,12 +14,6 @@ namespace SafeNotebooks
 
 		PageView PageView { get { return (PageView)_PageView.Children[0]; } }
 
-		public bool IsSplitView
-		{
-			//get { return !(Device.Idiom == TargetIdiom.Phone || (DeviceEx.Orientation == DeviceOrientations.Portrait)); }
-			get { return DeviceEx.Orientation != DeviceOrientations.Portrait; }
-		}
-
 		public MainWnd()
 		{
 			Current = this;
@@ -27,6 +22,12 @@ namespace SafeNotebooks
 		}
 
 		//
+
+		public bool IsSplitView
+		{
+			//get { return !(Device.Idiom == TargetIdiom.Phone || (DeviceEx.Orientation == DeviceOrientations.Portrait)); }
+			get { return DeviceEx.Orientation != DeviceOrientations.Portrait || Device.Idiom != TargetIdiom.Phone; }
+		}
 
 		bool _NotebooksViewIsVisible;
 		public bool NotebooksViewIsVisible
@@ -43,18 +44,15 @@ namespace SafeNotebooks
 
 		//
 
-		double _osa_width = -1;
-		double _osa_height = -1;
+		Size _osa;
 
 		protected override void OnSizeAllocated(double width, double height)
 		{
 			base.OnSizeAllocated(width, height);
 
-			if (this._osa_width == width && this._osa_height == height)
+			if (!Tools.IsDifferent(new Size(width, height), ref _osa))
 				return;
-			this._osa_width = width;
-			this._osa_height = height;
-
+            
 			if (!IsSplitView)
 			{
 				_NotebooksView.WidthRequest = width;
@@ -62,34 +60,12 @@ namespace SafeNotebooks
 			}
 			else
 			{
-				_NotebooksView.WidthRequest = Math.Max(320, width * 0.3);
+				_NotebooksView.WidthRequest = Math.Max(240, width * 0.3);
 				_PageView.WidthRequest = width - _NotebooksView.WidthRequest;
 			}
 
 			_NotebooksView.IsVisible = IsSplitView ? true : NotebooksViewIsVisible;
 			_PageView.IsVisible = IsSplitView ? true : !NotebooksViewIsVisible;
-		}
-
-		public void View_OnSizeAllocated(double width, double height, Grid Grid, Layout<View> AppBarRow)
-		{
-			base.OnSizeAllocated(width, height);
-
-			bool IsLandscape = (DeviceEx.Orientation == DeviceOrientations.Landscape);
-
-			bool StatusBarVisible = DeviceEx.StatusBarVisible;
-
-			Grid.RowDefinitions[0].Height =
-				(IsLandscape ? Metrics.AppBarHeightLandscape : Metrics.AppBarHeightPortrait)
-				+ ((StatusBarVisible) ? Metrics.StatusBarHeight : 0);
-
-			AppBarRow.Padding = new Thickness(
-				0,
-				(StatusBarVisible ? Metrics.StatusBarHeight : 0),
-				0,
-				0);
-
-			Grid.RowDefinitions[2].Height = (IsLandscape ? Metrics.ToolBarHeightLandscape : Metrics.ToolBarHeightPortrait);
-
 		}
 	}
 }

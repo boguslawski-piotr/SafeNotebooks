@@ -114,6 +114,7 @@
     <BundleResource Include="Resources\ic_sort.png" />
     <BundleResource Include="Resources\icon.png" />
   </ItemGroup>
+  <Import Project="..\..\pbXNet\pbXNet.projitems" Label="Shared" Condition="Exists('..\..\pbXNet\pbXNet.projitems')" />
   <Import Project="..\..\pbXSecurity\pbXSecurity.projitems" Label="Shared" Condition="Exists('..\..\pbXSecurity\pbXSecurity.projitems')" />
   <Import Project="..\..\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbXForms\pbXForms.projitems')" />
   <Import Project="..\Shared\SafeNotebooks.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.projitems')" />

@@ -26,11 +26,17 @@ namespace SafeNotebooks
             ShowSelectedNotebook();
         }
 
+		Size _osa;
+		
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            if (_Grid != null)
-                MainWnd.Current.View_OnSizeAllocated(width, height, _Grid, _AppBarRow);
+			
+            if (!pbXNet.Tools.IsDifferent(new Size(width, height), ref _osa))
+				return;
+
+			if (_Grid != null)
+                ContentPageEx.LayoutAppBarAndToolBar(width, height, _Grid, _AppBarRow, _ToolBarRow);
         }
 
         //
@@ -40,14 +46,20 @@ namespace SafeNotebooks
             if (App.Data.SelectedNotebook == null)
             {
                 BackBtn.IsVisible = false;
+
                 ListCtl.ItemsSource = App.Data.Notebooks;
+
                 SelectedNotebookName.Text = "Safe Notebooks";    // TODO: translation
+                SelectedNotebookName.Margin = new Thickness(Metrics.ToolBarItemsWideSpacing, 0, 0, 0);
             }
             else
             {
                 BackBtn.IsVisible = true;
+
                 ListCtl.ItemsSource = App.Data.SelectedNotebook.Pages;
+
                 SelectedNotebookName.Text = App.Data.SelectedNotebook.DisplayName;
+                SelectedNotebookName.Margin = new Thickness(0);
             }
         }
 
