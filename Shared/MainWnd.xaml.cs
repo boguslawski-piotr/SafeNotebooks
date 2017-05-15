@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using pbXForms;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace SafeNotebooks
 {
-	//[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class MainWnd : MasterDetailPage
+    //[XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MainWnd : MasterDetailPage
 	{
 		public MainWnd()
 		{
@@ -15,6 +13,12 @@ namespace SafeNotebooks
 
 			IsPresentedChanged += (sender, e) => NotebooksWndVisibilityChanged?.Invoke(sender, e);
 		}
+
+		//protected override void OnSizeAllocated(double width, double height)
+		//{
+		//	base.OnSizeAllocated(width, height);
+		//	MasterBounds = new Rectangle(0, 0, Bounds.Width, Bounds.Height);
+		//}
 
 		public event EventHandler NotebooksWndVisibilityChanged = null;
 
@@ -25,14 +29,14 @@ namespace SafeNotebooks
 
 		public void ShowNotebooksWnd()
 		{
-			if(IsPresented != true)
+			if (IsPresented != true)
 				IsPresented = true;
 		}
 
 		public void HideNotebooksWnd()
 		{
 			if (IsPresented != false)
-				if(Device.Idiom == TargetIdiom.Phone || DeviceEx.Orientation == DeviceOrientations.Portrait)
+				if (Device.Idiom == TargetIdiom.Phone || DeviceEx.Orientation == DeviceOrientations.Portrait)
 					IsPresented = false;
 		}
 
