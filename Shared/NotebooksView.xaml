@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms="clr-namespace:pbXForms"
+	xmlns:local="clr-namespace:SafeNotebooks"
+	x:Class="SafeNotebooks.NotebooksView">
+
+	<Grid
+		x:Name="_Grid"
+		Padding="0"
+		Margin="0"
+		ColumnSpacing="0"
+		RowSpacing="0">
+
+		<Grid.RowDefinitions>
+
+			<RowDefinition
+				Height="0" />
+
+			<RowDefinition
+				Height="*" />
+
+			<RowDefinition
+				Height="0" />
+
+		</Grid.RowDefinitions>
+
+		<Grid.ColumnDefinitions>
+
+			<ColumnDefinition
+				Width="*" />
+
+		</Grid.ColumnDefinitions>
+
+		<StackLayout
+			Grid.Row="0"
+			Grid.Column="0"
+			x:Name="_AppBarRow"
+			Orientation="Horizontal"
+			VerticalOptions="FillAndExpand"
+			HorizontalOptions="FillAndExpand"
+			Padding="0"
+			Margin="0"
+            Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
+			BackgroundColor="{StaticResource AppBarBackgroundColor}">
+
+			<pbXForms:FlatButton
+				x:Name="BackBtn"
+				Image="ic_chevron_left.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+				Clicked="BackBtn_Clicked" />
+
+			<Label
+				BackgroundColor="Fuchsia"
+				x:Name="SelectedNotebookName"
+				Text="Safe Notebooks"
+				TextColor="{StaticResource ListItemTextColor}"
+				VerticalOptions="Center"
+				HorizontalOptions="FillAndExpand" />
+
+			<pbXForms:FlatButton
+				Image="ic_mode_edit.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+				Clicked="EditBtn_Clicked" />
+
+			<pbXForms:FlatButton
+				x:Name="SearchBtn"
+				Image="ic_search.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+				Clicked="SearchBtn_Clicked" />
+
+			<pbXForms:FlatButton
+				x:Name="SettingsBtn"
+				Image="ic_settings.png"
+				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+				Clicked="SettingsBtn_Clicked" />
+
+		</StackLayout>
+
+		<StackLayout
+			Grid.Row="1"
+			Grid.Column="0"
+			x:Name="_ContentRow"
+			Orientation="Vertical"
+			VerticalOptions="FillAndExpand"
+			HorizontalOptions="FillAndExpand"
+			Padding="0"
+			Margin="0"
+			Spacing="0">
+
+			<ListView
+				x:Name="ListCtl"
+				BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
+				SeparatorColor="{StaticResource ListItemDividerColor}">
+
+				<ListView.ItemTemplate>
+
+					<DataTemplate>
+
+						<TextCell
+							Text="{Binding DisplayName}"
+							TextColor="{StaticResource ListItemTextColor}"
+							Detail="{Binding DisplayDetail}"
+							DetailColor="{StaticResource ListItemDetailColor}">
+
+							<TextCell.ContextActions>
+
+								<MenuItem
+									Clicked="EditItemBtn_Clicked"
+									CommandParameter="{Binding .}"
+									Text="Edit" />
+
+								<MenuItem
+									Clicked="DeleteItemBtn_Clicked"
+									CommandParameter="{Binding .}"
+									IsDestructive="True"
+									Text="Delete" />
+
+							</TextCell.ContextActions>
+
+						</TextCell>
+
+					</DataTemplate>
+
+				</ListView.ItemTemplate>
+
+			</ListView>
+
+		</StackLayout>
+
+		<StackLayout
+			Grid.Row="2"
+			Grid.Column="0"
+			x:Name="_ToolBarRow"
+			Orientation="Horizontal"
+			VerticalOptions="FillAndExpand"
+			HorizontalOptions="FillAndExpand"
+			Padding="0"
+			Margin="0"
+			BackgroundColor="{StaticResource ToolBarBackgroundColor}">
+
+			<Grid
+				Padding="0"
+				Margin="0"
+				ColumnSpacing="0"
+				RowSpacing="0"
+				HorizontalOptions="FillAndExpand">
+
+				<Grid.ColumnDefinitions>
+
+					<ColumnDefinition
+						Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+
+					<ColumnDefinition
+						Width="*" />
+
+					<ColumnDefinition
+						Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+
+				</Grid.ColumnDefinitions>
+
+				<pbXForms:FlatButton
+					Grid.Row="0"
+					Grid.Column="1"
+					Text="New..."
+					TextColor="{StaticResource AccentTextColor}"
+					FontAttributes="Bold"
+					Clicked="NewBtn_Clicked" />
+
+				<pbXForms:FlatButton
+					Grid.Row="0"
+					Grid.Column="2"
+					x:Name="SortBtn"
+					Image="ic_sort.png"
+					Clicked="SortBtn_Clicked" />
+
+			</Grid>
+
+		</StackLayout>
+
+	</Grid>
+
+</ContentView>

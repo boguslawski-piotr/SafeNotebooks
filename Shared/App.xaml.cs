@@ -38,7 +38,7 @@ namespace SafeNotebooks
             private const string UnlockUsingSystemKey = "_uus";
             static readonly bool UnlockUsingSystemDefault = false;
             private const string UnlockUsingPinKey = "_uup";
-            static readonly bool UnlockUsingPinDefault = true;
+            static readonly bool UnlockUsingPinDefault = false;
 
             public static bool UnlockUsingSystem
             {

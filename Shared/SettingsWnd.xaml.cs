@@ -13,7 +13,7 @@ namespace SafeNotebooks
 			InitializeComponent();
 		}
 
-		void ReturnBtn_Clicked(object sender, System.EventArgs e)
+		void BackBtn_Clicked(object sender, System.EventArgs e)
 		{
 			Navigation.PopModalAsync();
 		}

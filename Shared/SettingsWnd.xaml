@@ -9,10 +9,10 @@
 	<pbXForms:ContentPageEx.AppBar>
 		
 			<pbXForms:FlatButton 
-				x:Name="ReturnBtn"
-				Image="ic_arrow_back.png"
+				x:Name="BackBtn"
+				Image="ic_chevron_left.png"
 				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
-				Clicked="ReturnBtn_Clicked"
+				Clicked="BackBtn_Clicked"
 			/>
 			<Label 
 				Text="Settings" 
