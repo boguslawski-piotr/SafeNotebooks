@@ -36,7 +36,7 @@ namespace SafeNotebooks
 				return;
 
 			if (_NotebooksView != null)
-                ContentPageEx.LayoutAppBarAndToolBar(width, height, _NotebooksView, _AppBarRow, _ToolBarRow);
+                ContentPageExView.LayoutAppBarAndToolBar(width, height, _NotebooksView, _AppBarRow, _ToolBarRow);
         }
 
         //
