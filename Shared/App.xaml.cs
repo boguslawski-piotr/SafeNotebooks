@@ -87,7 +87,7 @@ namespace SafeNotebooks
             MainPage = new MainWnd();
         }
 
-        async protected override void OnStart()
+        protected override void OnStart()
         {
             Debug.WriteLine("OnStart");
 
@@ -126,7 +126,7 @@ namespace SafeNotebooks
             ContinueOnStart();
         }
 
-        async void ContinueOnStart()
+        void ContinueOnStart()
         {
             Debug.WriteLine("ContinueOnStart");
 
@@ -155,7 +155,7 @@ namespace SafeNotebooks
         }
 
 
-        async protected override void OnSleep()
+        protected override void OnSleep()
         {
             Debug.WriteLine("OnSleep");
 
@@ -186,7 +186,7 @@ namespace SafeNotebooks
         }
 
 
-        async protected override void OnResume()
+        protected override void OnResume()
         {
             Debug.WriteLine("OnResume");
 
@@ -210,7 +210,7 @@ namespace SafeNotebooks
 
         }
 
-        async void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
+        void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
         {
             Debug.WriteLine("UnlockedCorrectlyInOnResume");
 
@@ -219,7 +219,7 @@ namespace SafeNotebooks
             ContinueOnResume();
         }
 
-        async void ContinueOnResume()
+        void ContinueOnResume()
         {
             Debug.WriteLine("ContinueOnResume");
 

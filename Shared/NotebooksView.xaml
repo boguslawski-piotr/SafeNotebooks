@@ -7,9 +7,9 @@
     x:Class="SafeNotebooks.NotebooksView">
 
     <pbXForms:ContentPageExGrid
-        x:Name="_Grid">
+        x:Name="_NotebooksView">
 
-        <pbXForms:ContentPageExToolBar
+        <pbXForms:ContentPageExAppBar
             Grid.Row="0"
             Grid.Column="0"
             x:Name="_AppBarRow"
@@ -17,39 +17,61 @@
 
             <pbXForms:FlatButton
                 x:Name="BackBtn"
-                Image="ic_chevron_left.png"
-                WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+				IsVisible="false"
+                Image="ic_arrow_back.png"
                 Clicked="BackBtn_Clicked" />
 
             <Label
-                x:Name="SelectedNotebookName"
+                x:Name="AppTitle"
                 Text="Safe Notebooks"
-                TextColor="{StaticResource ListItemTextColor}"
+                FontAttributes="Bold"
+                TextColor="{StaticResource AccentTextColor}"
                 VerticalOptions="Center"
                 HorizontalOptions="FillAndExpand" />
 
             <pbXForms:FlatButton
                 x:Name="SearchBtn"
                 Image="ic_search.png"
-                WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
                 Clicked="SearchBtn_Clicked" />
 
             <pbXForms:FlatButton
                 x:Name="SettingsBtn"
                 Image="ic_settings.png"
-                WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
                 Clicked="SettingsBtn_Clicked" />
 
-        </pbXForms:ContentPageExToolBar>
+        </pbXForms:ContentPageExAppBar>
 
         <pbXForms:ContentPageExContent
             Grid.Row="1"
             Grid.Column="0"
             x:Name="_ContentRow">
 
+            <StackLayout
+                x:Name="SelectedNotebookBar"
+                IsVisible="false"
+                Orientation="Horizontal"
+                HorizontalOptions="Fill"
+                Padding="0"
+                Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
+                HeightRequest="{x:Static pbXForms:Metrics.ToolBarHeightLandscape}"
+                BackgroundColor="{StaticResource NotebooksListBackgroundColor}">
+
+                <Label
+                    x:Name="SelectedNotebookName"
+                    Text="Notebooks"
+                    TextColor="{StaticResource ListItemTextColor}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="CenterAndExpand" />
+
+                <pbXForms:FlatButton
+                    Image="ic_mode_edit.png"
+                    Clicked="EditBtn_Clicked" />
+
+            </StackLayout>
+
             <ListView
                 x:Name="ListCtl"
-                BackgroundColor="{StaticResource NavDrawerBackgroundColor}"
+                BackgroundColor="{StaticResource NotebooksListBackgroundColor}"
                 SeparatorColor="{StaticResource ListItemDividerColor}">
 
                 <ListView.ItemTemplate>
@@ -69,6 +91,11 @@
                                     CommandParameter="{Binding .}"
                                     Text="Edit" />
 
+                                <MenuItem
+                                    Clicked="MoveItemBtn_Clicked"
+                                    CommandParameter="{Binding .}"
+                                    Text="Move" />
+                                
                                 <MenuItem
                                     Clicked="DeleteItemBtn_Clicked"
                                     CommandParameter="{Binding .}"
@@ -91,7 +118,7 @@
             Grid.Row="2"
             Grid.Column="0"
             x:Name="_ToolBarRow"
-            BackgroundColor="{StaticResource ToolBarBackgroundColor}">
+            BackgroundColor="{StaticResource NotebooksViewToolBarBackgroundColor}">
 
             <Grid
                 Padding="0"
@@ -104,11 +131,9 @@
 
                     <ColumnDefinition
                         Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
-                    <ColumnDefinition
-                        Width="*" />
 
                     <ColumnDefinition
-                        Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+                        Width="*" />
 
                     <ColumnDefinition
                         Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
@@ -116,27 +141,23 @@
                 </Grid.ColumnDefinitions>
 
                 <pbXForms:FlatButton
+                    x:Name="NewBtn"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Text="New..."
+					WidthRequest="-1"
+                    Text=""
                     TextColor="{StaticResource AccentTextColor}"
                     FontAttributes="Bold"
                     Clicked="NewBtn_Clicked" />
 
+                <!--
                 <pbXForms:FlatButton
                     Grid.Row="0"
                     Grid.Column="2"
-                    Image="ic_mode_edit.png"
-                    WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
-                    Clicked="EditBtn_Clicked" />
-
-                <pbXForms:FlatButton
-                    Grid.Row="0"
-                    Grid.Column="3"
                     x:Name="SortBtn"
                     Image="ic_sort.png"
                     Clicked="SortBtn_Clicked" />
-
+                -->
             </Grid>
 
         </pbXForms:ContentPageExToolBar>

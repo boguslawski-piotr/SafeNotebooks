@@ -1,61 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms="clr-namespace:pbXForms"
-    xmlns:local="clr-namespace:SafeNotebooks"
-    x:Class="SafeNotebooks.MainWnd">
+<pbXForms:MasterDetailPageEx
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms="clr-namespace:pbXForms"
+	xmlns:local="clr-namespace:SafeNotebooks"
+	x:Class="SafeNotebooks.MainWnd">
 
-<!--    <ContentPage.Resources>
+	<pbXForms:MasterDetailPageEx.Views>
 
-        <ResourceDictionary>
+		<local:NotebooksView />
 
-            <ControlTemplate
-                x:Key="TealTemplate">
+		<local:PageView />
 
-            </ControlTemplate>
+	</pbXForms:MasterDetailPageEx.Views>
 
-        </ResourceDictionary>
-
-    </ContentPage.Resources>
--->
-    <StackLayout
-        IsVisible="true"
-        Orientation="Horizontal"
-        VerticalOptions="FillAndExpand"
-        HorizontalOptions="FillAndExpand"
-        Padding="0"
-        Margin="0"
-        Spacing="0">
-
-        <StackLayout
-            IsVisible="true"
-            x:Name="_NotebooksView"
-            Orientation="Vertical"
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"
-            Padding="0"
-            Margin="0"
-            Spacing="0">
-
-            <local:NotebooksView />
-
-        </StackLayout>
-
-        <StackLayout
-            IsVisible="false"
-            x:Name="_PageView"
-            Orientation="Vertical"
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"
-            Padding="0"
-            Margin="0"
-            Spacing="0">
-
-            <local:PageView />
-
-        </StackLayout>
-
-    </StackLayout>
-
-</ContentPage>
+</pbXForms:MasterDetailPageEx>

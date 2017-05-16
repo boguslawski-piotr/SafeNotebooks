@@ -14,10 +14,13 @@
 			<Color x:Key="AppBarBackgroundColor">#81C784</Color>
 			<Color x:Key="AppBarTextColor">#000000</Color>
 
-			<Color x:Key="ToolBarBackgroundColor">#81C784</Color>
+<!--			<Color x:Key="ToolBarBackgroundColor">#81C784</Color>-->
+            <Color x:Key="ToolBarBackgroundColor">#E8F5E9</Color>
+            <Color x:Key="NotebooksViewToolBarBackgroundColor">#E8F5E9</Color>
+            <Color x:Key="PageViewToolBarBackgroundColor">#ffffff</Color>
 			<Color x:Key="ToolBarTextColor">#000000</Color>
 
-			<Color x:Key="NavDrawerBackgroundColor">#E8F5E9</Color>
+			<Color x:Key="NotebooksListBackgroundColor">#E8F5E9</Color>
 			<Color x:Key="ListOfNotesBackgroundColor">#ffffff</Color>
 
 			<!-- ANDROID: When modifying this value you must also remember to update the "colorAccent" value in the "Resources/Values/styles.xml" file. -->

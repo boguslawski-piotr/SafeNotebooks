@@ -152,8 +152,8 @@ namespace SafeNotebooks
 			BatchBegin();
 			if (e.IsFocused)
             {
-                Layout.VerticalOptions = LayoutOptions.FillAndExpand;
-                Layout.Padding = new Thickness(0,
+                _View.VerticalOptions = LayoutOptions.FillAndExpand;
+                _View.Padding = new Thickness(0,
                                                (DeviceEx.Orientation == DeviceOrientations.Landscape
                                                     ? Metrics.AppBarHeightLandscape / (Device.Idiom == TargetIdiom.Tablet ? 1 : 4)
                                                     : Metrics.AppBarHeightPortrait),
@@ -163,8 +163,8 @@ namespace SafeNotebooks
             }
             else
             {
-                Layout.VerticalOptions = LayoutOptions.CenterAndExpand;
-                Layout.Padding = new Thickness(0);
+                _View.VerticalOptions = LayoutOptions.CenterAndExpand;
+                _View.Padding = new Thickness(0);
 				Logo.IsVisible = true;
             }
 			BatchCommit();

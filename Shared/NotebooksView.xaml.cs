@@ -23,7 +23,7 @@ namespace SafeNotebooks
                     App.Data.SelectPage((Page)e.Item);
             };
 
-            ShowSelectedNotebook();
+			ShowSelectedNotebook();
         }
 
 		Size _osa;
@@ -35,45 +35,47 @@ namespace SafeNotebooks
             if (!pbXNet.Tools.IsDifferent(new Size(width, height), ref _osa))
 				return;
 
-			if (_Grid != null)
-                ContentPageEx.LayoutAppBarAndToolBar(width, height, _Grid, _AppBarRow, _ToolBarRow);
+			if (_NotebooksView != null)
+                ContentPageEx.LayoutAppBarAndToolBar(width, height, _NotebooksView, _AppBarRow, _ToolBarRow);
         }
 
         //
 
         void ShowSelectedNotebook()
         {
+            BatchBegin();
+
             if (App.Data.SelectedNotebook == null)
             {
                 BackBtn.IsVisible = false;
 
+                AppTitle.Margin = new Thickness(Metrics.ToolBarItemsWideSpacing, 0, 0, 0);
+
+                SelectedNotebookBar.IsVisible = false;
+
                 ListCtl.ItemsSource = App.Data.Notebooks;
 
-                SelectedNotebookName.Text = "Safe Notebooks";    // TODO: translation
-                SelectedNotebookName.Margin = new Thickness(Metrics.ToolBarItemsWideSpacing, 0, 0, 0);
+                NewBtn.Text = "New: Notebook"; // TODO: translation
             }
             else
             {
                 BackBtn.IsVisible = true;
 
+                AppTitle.Margin = new Thickness(0, 0, 0, 0);
+
+                SelectedNotebookBar.IsVisible = true;
+
                 ListCtl.ItemsSource = App.Data.SelectedNotebook.Pages;
 
                 SelectedNotebookName.Text = App.Data.SelectedNotebook.DisplayName;
-                SelectedNotebookName.Margin = new Thickness(0);
-            }
+
+                NewBtn.Text = "New: Page"; // TODO: translation
+			}
+
+            BatchCommit();
         }
 
         //
-
-        void BackBtn_Clicked(object sender, System.EventArgs e)
-        {
-            App.Data.SelectNotebook(null);
-        }
-
-        void EditBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Application.Current.MainPage.DisplayAlert("Edit...", "Enable multiple items edit/delete mode?", "Cancel");
-        }
 
         void SearchBtn_Clicked(object sender, System.EventArgs e)
         {
@@ -86,12 +88,29 @@ namespace SafeNotebooks
         }
 
 
+		void BackBtn_Clicked(object sender, System.EventArgs e)
+		{
+			App.Data.SelectNotebook(null);
+		}
+
+		void EditBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Edit...", "Enable multiple items edit/delete mode?", "Cancel");
+		}
+
+		
         async void EditItemBtn_Clicked(object sender, System.EventArgs e)
         {
             Item item = (Item)(sender as MenuItem).CommandParameter;
             await Application.Current.MainPage.DisplayAlert("Edit", item.ToString(), "Cancel");
         }
 
+		async void MoveItemBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Item item = (Item)(sender as MenuItem).CommandParameter;
+			await Application.Current.MainPage.DisplayAlert("Move", item.ToString(), "Cancel");
+		}
+		
         async void DeleteItemBtn_Clicked(object sender, System.EventArgs e)
         {
             Item item = (Item)(sender as MenuItem).CommandParameter;

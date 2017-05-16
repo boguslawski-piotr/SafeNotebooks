@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pbXForms:ContentPageEx
-	xmlns="http://xamarin.com/schemas/2014/forms" 
-	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:pbXForms="clr-namespace:pbXForms"
-	x:Class="SafeNotebooks.SettingsWnd"
->
-	
-	<pbXForms:ContentPageEx.AppBar>
-		
-			<pbXForms:FlatButton 
-				x:Name="BackBtn"
-				Image="ic_chevron_left.png"
-				WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
-				Clicked="BackBtn_Clicked"
-			/>
-			<Label 
-				Text="Settings" 
-				TextColor="{StaticResource AppBarTextColor}"
-				VerticalOptions="Center" 
-				HorizontalOptions="FillAndExpand"
-			/>
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms="clr-namespace:pbXForms"
+	x:Class="SafeNotebooks.SettingsWnd">
 
-	</pbXForms:ContentPageEx.AppBar>
+	<pbXForms:ContentPageEx.AppBarContent>
+
+		<pbXForms:FlatButton
+			x:Name="BackBtn"
+			Image="ic_arrow_back.png"
+			WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
+			Clicked="BackBtn_Clicked" />
+
+		<Label
+			Text="Settings"
+			TextColor="{StaticResource AppBarTextColor}"
+			VerticalOptions="Center"
+			HorizontalOptions="FillAndExpand" />
+
+	</pbXForms:ContentPageEx.AppBarContent>
 
 	<pbXForms:ContentPageEx.ContentEx>
 
-		<Label 
-			Text="Settings..." 
-			VerticalOptions="CenterAndExpand" 
-			HorizontalOptions="CenterAndExpand" 
-		/>
+		<Label
+			Text="Settings..."
+			VerticalOptions="CenterAndExpand"
+			HorizontalOptions="CenterAndExpand" />
 
 	</pbXForms:ContentPageEx.ContentEx>
 

@@ -14,7 +14,7 @@
 		BackgroundColor="{StaticResource AppBarBackgroundColor}">
 
 		<StackLayout
-			x:Name="Layout"
+			x:Name="_View"
 			Orientation="Vertical"
 			VerticalOptions="CenterAndExpand"
 			HorizontalOptions="Center"
