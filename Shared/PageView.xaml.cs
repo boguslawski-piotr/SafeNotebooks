@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public partial class PageView : ContentView
+    public partial class PageView : ContentPageExView
     {
         public PageView()
         {
@@ -17,40 +17,28 @@ namespace SafeNotebooks
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
             //ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) => App.Data.SelectNote((Note)e.Item);
 
-            NoDataUI();
+            //NoDataUI();
         }
 
-        Size _osa;
-
-        protected override void OnSizeAllocated(double width, double height)
+        protected override void ContinueOnSizeAllocated(double width, double height)
         {
-            base.OnSizeAllocated(width, height);
+            BackBtn.IsVisible = !MainWnd.Current.IsSplitView;
 
-            if (!Tools.IsDifferent(new Size(width, height), ref _osa))
-                return;
-
-            if (_PageView != null)
-            {
-                ContentPageExView.LayoutAppBarAndToolBar(width, height, _PageView, _AppBarRow, _ToolBarRow);
-
-                BackBtn.IsVisible = !MainWnd.Current.IsSplitView;
-
-                double m = !BackBtn.IsVisible ? Metrics.ToolBarItemsWideSpacing : 0;
-                SelectedPageName.Margin = new Thickness(m, 0, m, 0);
-                SelectedPageParentName.Margin = new Thickness(m, 0, m, 0);
-            }
+            double m = !BackBtn.IsVisible ? Metrics.ScreenEdgeMargin : 0;
+            SelectedPageName.Margin = new Thickness(m, 0, 0, 0);
+            SelectedPageParentName.Margin = new Thickness(m, 0, 0, 0);
         }
 
         void NoDataUI()
         {
             BatchBegin();
 
-            _AppBarRow.IsVisible = false;
+            AppBar.IsVisible = false;
 
             ListCtl.ItemsSource = null;
             ListCtl.IsVisible = false;
 
-            _ToolBarRow.IsVisible = false;
+            ToolBar.IsVisible = false;
 
             BatchCommit();
         }
@@ -61,7 +49,7 @@ namespace SafeNotebooks
             {
                 BatchBegin();
 
-                _AppBarRow.IsVisible = true;
+                AppBar.IsVisible = true;
 
                 SelectedPageName.Text = App.Data.SelectedPage.DisplayName;
                 SelectedPageParentName.Text = "in " /* TODO: translation */ + App.Data.SelectedPage.Parent.DisplayName;
@@ -69,7 +57,7 @@ namespace SafeNotebooks
                 ListCtl.ItemsSource = App.Data.SelectedPage.Notes;
                 ListCtl.IsVisible = true;
 
-                _ToolBarRow.IsVisible = true;
+                ToolBar.IsVisible = true;
 
                 MainWnd.Current.NotebooksViewIsVisible = false;
 

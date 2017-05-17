@@ -1,158 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentView
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms="clr-namespace:pbXForms"
-    xmlns:local="clr-namespace:SafeNotebooks"
-    x:Class="SafeNotebooks.PageView">
+<pbXForms:ContentPageExView
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms="clr-namespace:pbXForms"
+	xmlns:local="clr-namespace:SafeNotebooks"
+	x:Class="SafeNotebooks.PageView">
 
-    <pbXForms:ContentPageExGrid
-        x:Name="_PageView">
+	<pbXForms:ContentPageExView.AppBarContent>
 
-        <pbXForms:ContentPageExToolBar
-            Grid.Row="0"
-            Grid.Column="0"
-            x:Name="_AppBarRow"
-            BackgroundColor="{StaticResource AppBarBackgroundColor}">
+		<pbXForms:FlatButton
+			x:Name="BackBtn"
+			Image="ic_arrow_back.png"
+			Clicked="BackBtn_Clicked" />
 
-            <pbXForms:FlatButton
-                x:Name="BackBtn"
-                Image="ic_arrow_back.png"
-                Clicked="BackBtn_Clicked" />
+		<StackLayout
+			Orientation="Vertical"
+			VerticalOptions="CenterAndExpand"
+			HorizontalOptions="FillAndExpand"
+			Padding="0"
+			Margin="0"
+			Spacing="0">
 
-            <StackLayout
-                Orientation="Vertical"
-                VerticalOptions="CenterAndExpand"
-                HorizontalOptions="FillAndExpand"
-                Padding="0"
-                Margin="0"
-                Spacing="0">
+			<Label
+				x:Name="SelectedPageName"
+				Text=""
+				TextColor="{StaticResource AppBarTextColor}"
+				VerticalOptions="Center"
+				HorizontalOptions="FillAndExpand" />
 
-                <Label
-                    x:Name="SelectedPageName"
-                    Text=""
-                    TextColor="{StaticResource AppBarTextColor}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="FillAndExpand" />
+			<Label
+				x:Name="SelectedPageParentName"
+				Text=""
+				FontSize="Micro"
+				TextColor="{StaticResource ListItemDetailColor}"
+				VerticalOptions="Center" />
 
-                <Label
-                    x:Name="SelectedPageParentName"
-                    Text=""
-                    FontSize="Micro"
-                    TextColor="{StaticResource ListItemDetailColor}"
-                    VerticalOptions="Center" />
+		</StackLayout>
 
-            </StackLayout>
+		<pbXForms:FlatButton
+			x:Name="EditBtn"
+			Image="ic_mode_edit.png"
+			Clicked="EditBtn_Clicked" />
 
-            <pbXForms:FlatButton
-                x:Name="EditBtn"
-                Image="ic_mode_edit.png"
-                Clicked="EditBtn_Clicked" />
+	</pbXForms:ContentPageExView.AppBarContent>
 
-        </pbXForms:ContentPageExToolBar>
+	<pbXForms:ContentPageExView.ViewContent>
 
-        <pbXForms:ContentPageExContent
-            Grid.Row="1"
-            Grid.Column="0"
-            x:Name="_ContentRow">
+		<ListView
+			x:Name="ListCtl"
+			BackgroundColor="{StaticResource ListOfNotesBackgroundColor}"
+			SeparatorColor="{StaticResource ListItemDividerColor}">
 
-            <ListView
-                x:Name="ListCtl"
-                BackgroundColor="{StaticResource ListOfNotesBackgroundColor}"
-                SeparatorColor="{StaticResource ListItemDividerColor}">
+			<ListView.ItemTemplate>
 
-                <ListView.ItemTemplate>
+				<DataTemplate>
 
-                    <DataTemplate>
+					<TextCell
+						Text="{Binding DisplayName}"
+						TextColor="{StaticResource ListItemTextColor}"
+						Detail="{Binding DisplayDetail}"
+						DetailColor="{StaticResource ListItemDetailColor}">
 
-                        <TextCell
-                            Text="{Binding DisplayName}"
-                            TextColor="{StaticResource ListItemTextColor}"
-                            Detail="{Binding DisplayDetail}"
-                            DetailColor="{StaticResource ListItemDetailColor}">
+						<TextCell.ContextActions>
 
-                            <TextCell.ContextActions>
+							<MenuItem
+								Clicked="MoveItemBtn_Clicked"
+								CommandParameter="{Binding .}"
+								Text="Move" />
 
-                                <MenuItem
-                                    Clicked="MoveItemBtn_Clicked"
-                                    CommandParameter="{Binding .}"
-                                    Text="Move" />
+							<MenuItem
+								Clicked="DeleteItemBtn_Clicked"
+								CommandParameter="{Binding .}"
+								IsDestructive="True"
+								Text="Delete" />
 
-                                <MenuItem
-                                    Clicked="DeleteItemBtn_Clicked"
-                                    CommandParameter="{Binding .}"
-                                    IsDestructive="True"
-                                    Text="Delete" />
+						</TextCell.ContextActions>
 
-                            </TextCell.ContextActions>
+					</TextCell>
 
-                        </TextCell>
+				</DataTemplate>
 
-                    </DataTemplate>
+			</ListView.ItemTemplate>
 
-                </ListView.ItemTemplate>
+		</ListView>
 
-            </ListView>
+	</pbXForms:ContentPageExView.ViewContent>
 
-        </pbXForms:ContentPageExContent>
+	<pbXForms:ContentPageExView.ToolBarBackgroundColor>
 
-        <pbXForms:ContentPageExToolBar
-            Grid.Row="2"
-            Grid.Column="0"
-            x:Name="_ToolBarRow"
-            BackgroundColor="{StaticResource PageViewToolBarBackgroundColor}">
+		<StaticResourceExtension
+			Key="PageViewToolBarBackgroundColor" />
 
-            <Grid
-                Padding="0"
-                Margin="0"
-                ColumnSpacing="0"
-                RowSpacing="0"
-                HorizontalOptions="FillAndExpand">
+	</pbXForms:ContentPageExView.ToolBarBackgroundColor>
 
-                <Grid.ColumnDefinitions>
+	<pbXForms:ContentPageExView.ToolBarContent>
 
-                    <ColumnDefinition
-                        Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+		<Label
+			HorizontalOptions="FillAndExpand" />
 
-                    <ColumnDefinition
-                        Width="*" />
+		<Label
+			HorizontalOptions="FillAndExpand" />
 
-                    <ColumnDefinition
-                        Width="*" />
+		<Label
+			HorizontalOptions="FillAndExpand" />
 
-                    <ColumnDefinition
-                        Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+		<pbXForms:FlatButton
+			WidthRequest="-1"
+			HorizontalOptions="FillAndExpand"
+			Text="New: Note"
+			FontAttributes="Bold"
+			TextColor="{StaticResource AccentTextColor}"
+			Clicked="FavoriteNewBtn_Clicked" />
 
-                </Grid.ColumnDefinitions>
+		<pbXForms:FlatButton
+			WidthRequest="-1"
+			HorizontalOptions="FillAndExpand"
+			Text="New..."
+			TextColor="{StaticResource ToolBarTextColor}"
+			Clicked="NewBtn_Clicked" />
 
-                <pbXForms:FlatButton
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    WidthRequest="-1"
-                    Text="New: Note"
-                    FontAttributes="Bold"
-                    TextColor="{StaticResource AccentTextColor}"
-                    Clicked="FavoriteNewBtn_Clicked" />
+		<!--		
+		<pbXForms:FlatButton
+			HorizontalOptions="CenterAndExpand"
+			Image="ic_sort.png"
+			Clicked="SortBtn_Clicked" />
+        -->
+		
+		<Label
+			HorizontalOptions="FillAndExpand" />
 
-                <pbXForms:FlatButton
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    WidthRequest="-1"
-                    Text="New..."
-                    TextColor="{StaticResource ToolBarTextColor}"
-                    Clicked="NewBtn_Clicked" />
+		<Label
+			HorizontalOptions="FillAndExpand" />
 
-                <!--
-                <pbXForms:FlatButton
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Image="ic_sort.png"
-                    Clicked="SortBtn_Clicked" />
-                -->
-            </Grid>
+		<Label
+			HorizontalOptions="FillAndExpand" />
 
-        </pbXForms:ContentPageExToolBar>
+	</pbXForms:ContentPageExView.ToolBarContent>
 
-    </pbXForms:ContentPageExGrid>
-
-</ContentView>
+</pbXForms:ContentPageExView>

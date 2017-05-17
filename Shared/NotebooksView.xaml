@@ -1,167 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentView
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms="clr-namespace:pbXForms"
-    xmlns:local="clr-namespace:SafeNotebooks"
-    x:Class="SafeNotebooks.NotebooksView">
+<pbXForms:ContentPageExView
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms="clr-namespace:pbXForms"
+	xmlns:local="clr-namespace:SafeNotebooks"
+	x:Class="SafeNotebooks.NotebooksView">
 
-    <pbXForms:ContentPageExGrid
-        x:Name="_NotebooksView">
+	<pbXForms:ContentPageExView.AppBarContent>
 
-        <pbXForms:ContentPageExAppBar
-            Grid.Row="0"
-            Grid.Column="0"
-            x:Name="_AppBarRow"
-            BackgroundColor="{StaticResource AppBarBackgroundColor}">
+		<pbXForms:FlatButton
+			x:Name="BackBtn"
+			IsVisible="false"
+			Image="ic_arrow_back.png"
+			Clicked="BackBtn_Clicked" />
 
-            <pbXForms:FlatButton
-                x:Name="BackBtn"
-				IsVisible="false"
-                Image="ic_arrow_back.png"
-                Clicked="BackBtn_Clicked" />
+		<Label
+			x:Name="AppTitle"
+			Text="Safe Notebooks"
+			FontAttributes="Bold"
+			TextColor="{StaticResource AccentTextColor}"
+			VerticalOptions="Center"
+			HorizontalOptions="FillAndExpand" />
 
-            <Label
-                x:Name="AppTitle"
-                Text="Safe Notebooks"
-                FontAttributes="Bold"
-                TextColor="{StaticResource AccentTextColor}"
-                VerticalOptions="Center"
-                HorizontalOptions="FillAndExpand" />
+		<pbXForms:FlatButton
+			x:Name="SearchBtn"
+			Image="ic_search.png"
+			Clicked="SearchBtn_Clicked" />
 
-            <pbXForms:FlatButton
-                x:Name="SearchBtn"
-                Image="ic_search.png"
-                Clicked="SearchBtn_Clicked" />
+		<pbXForms:FlatButton
+			x:Name="SettingsBtn"
+			Image="ic_settings.png"
+			Clicked="SettingsBtn_Clicked" />
 
-            <pbXForms:FlatButton
-                x:Name="SettingsBtn"
-                Image="ic_settings.png"
-                Clicked="SettingsBtn_Clicked" />
+	</pbXForms:ContentPageExView.AppBarContent>
 
-        </pbXForms:ContentPageExAppBar>
+	<pbXForms:ContentPageExView.ViewContent>
 
-        <pbXForms:ContentPageExContent
-            Grid.Row="1"
-            Grid.Column="0"
-            x:Name="_ContentRow">
+		<StackLayout
+			x:Name="SelectedNotebookBar"
+			IsVisible="false"
+			Orientation="Horizontal"
+			HorizontalOptions="Fill"
+			Padding="0"
+			Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
+			HeightRequest="{x:Static pbXForms:Metrics.ToolBarHeightLandscape}"
+			BackgroundColor="{StaticResource NotebooksListBackgroundColor}">
 
-            <StackLayout
-                x:Name="SelectedNotebookBar"
-                IsVisible="false"
-                Orientation="Horizontal"
-                HorizontalOptions="Fill"
-                Padding="0"
-                Spacing="{x:Static pbXForms:Metrics.ToolBarItemsSpacing}"
-                HeightRequest="{x:Static pbXForms:Metrics.ToolBarHeightLandscape}"
-                BackgroundColor="{StaticResource NotebooksListBackgroundColor}">
+			<Label
+				x:Name="SelectedNotebookName"
+				Text="Notebooks"
+				TextColor="{StaticResource ListItemTextColor}"
+				VerticalOptions="Center"
+				HorizontalOptions="CenterAndExpand" />
 
-                <Label
-                    x:Name="SelectedNotebookName"
-                    Text="Notebooks"
-                    TextColor="{StaticResource ListItemTextColor}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="CenterAndExpand" />
+			<pbXForms:FlatButton
+				Image="ic_mode_edit.png"
+				Clicked="EditBtn_Clicked" />
 
-                <pbXForms:FlatButton
-                    Image="ic_mode_edit.png"
-                    Clicked="EditBtn_Clicked" />
+		</StackLayout>
 
-            </StackLayout>
+		<ListView
+			x:Name="ListCtl"
+			BackgroundColor="{StaticResource NotebooksListBackgroundColor}"
+			SeparatorColor="{StaticResource ListItemDividerColor}">
 
-            <ListView
-                x:Name="ListCtl"
-                BackgroundColor="{StaticResource NotebooksListBackgroundColor}"
-                SeparatorColor="{StaticResource ListItemDividerColor}">
+			<ListView.ItemTemplate>
 
-                <ListView.ItemTemplate>
+				<DataTemplate>
 
-                    <DataTemplate>
+					<TextCell
+						Text="{Binding DisplayName}"
+						TextColor="{StaticResource ListItemTextColor}"
+						Detail="{Binding DisplayDetail}"
+						DetailColor="{StaticResource ListItemDetailColor}">
 
-                        <TextCell
-                            Text="{Binding DisplayName}"
-                            TextColor="{StaticResource ListItemTextColor}"
-                            Detail="{Binding DisplayDetail}"
-                            DetailColor="{StaticResource ListItemDetailColor}">
+						<TextCell.ContextActions>
 
-                            <TextCell.ContextActions>
+							<MenuItem
+								Clicked="EditItemBtn_Clicked"
+								CommandParameter="{Binding .}"
+								Text="Edit" />
 
-                                <MenuItem
-                                    Clicked="EditItemBtn_Clicked"
-                                    CommandParameter="{Binding .}"
-                                    Text="Edit" />
+							<MenuItem
+								Clicked="MoveItemBtn_Clicked"
+								CommandParameter="{Binding .}"
+								Text="Move" />
 
-                                <MenuItem
-                                    Clicked="MoveItemBtn_Clicked"
-                                    CommandParameter="{Binding .}"
-                                    Text="Move" />
-                                
-                                <MenuItem
-                                    Clicked="DeleteItemBtn_Clicked"
-                                    CommandParameter="{Binding .}"
-                                    IsDestructive="True"
-                                    Text="Delete" />
+							<MenuItem
+								Clicked="DeleteItemBtn_Clicked"
+								CommandParameter="{Binding .}"
+								IsDestructive="True"
+								Text="Delete" />
 
-                            </TextCell.ContextActions>
+						</TextCell.ContextActions>
 
-                        </TextCell>
+					</TextCell>
 
-                    </DataTemplate>
+				</DataTemplate>
 
-                </ListView.ItemTemplate>
+			</ListView.ItemTemplate>
 
-            </ListView>
+		</ListView>
 
-        </pbXForms:ContentPageExContent>
+	</pbXForms:ContentPageExView.ViewContent>
 
-        <pbXForms:ContentPageExToolBar
-            Grid.Row="2"
-            Grid.Column="0"
-            x:Name="_ToolBarRow"
-            BackgroundColor="{StaticResource NotebooksViewToolBarBackgroundColor}">
+	<pbXForms:ContentPageExView.ToolBarBackgroundColor>
 
-            <Grid
-                Padding="0"
-                Margin="0"
-                ColumnSpacing="0"
-                RowSpacing="0"
-                HorizontalOptions="FillAndExpand">
+		<StaticResourceExtension
+			Key="NotebooksViewToolBarBackgroundColor" />
 
-                <Grid.ColumnDefinitions>
+	</pbXForms:ContentPageExView.ToolBarBackgroundColor>
 
-                    <ColumnDefinition
-                        Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+	<pbXForms:ContentPageExView.ToolBarContent>
 
-                    <ColumnDefinition
-                        Width="*" />
+		<pbXForms:FlatButton
+			x:Name="NewBtn"
+			HorizontalOptions="CenterAndExpand"
+			WidthRequest="-1"
+			Text=""
+			TextColor="{StaticResource AccentTextColor}"
+			FontAttributes="Bold"
+			Clicked="NewBtn_Clicked" />
 
-                    <ColumnDefinition
-                        Width="{x:Static pbXForms:Metrics.TouchTargetHeight}" />
+<!--		<pbXForms:FlatButton
+			HorizontalOptions="CenterAndExpand"
+			x:Name="SortBtn"
+			Image="ic_sort.png"
+			Clicked="SortBtn_Clicked" />
+-->
+	</pbXForms:ContentPageExView.ToolBarContent>
 
-                </Grid.ColumnDefinitions>
-
-                <pbXForms:FlatButton
-                    x:Name="NewBtn"
-                    Grid.Row="0"
-                    Grid.Column="1"
-					WidthRequest="-1"
-                    Text=""
-                    TextColor="{StaticResource AccentTextColor}"
-                    FontAttributes="Bold"
-                    Clicked="NewBtn_Clicked" />
-
-                <!--
-                <pbXForms:FlatButton
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    x:Name="SortBtn"
-                    Image="ic_sort.png"
-                    Clicked="SortBtn_Clicked" />
-                -->
-            </Grid>
-
-        </pbXForms:ContentPageExToolBar>
-
-    </pbXForms:ContentPageExGrid>
-
-</ContentView>
+</pbXForms:ContentPageExView>

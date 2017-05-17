@@ -150,7 +150,8 @@ namespace SafeNotebooks
                 Name = "Page _"
             };
             n.AddPage(p);
-            App.Data.SelectPage(p);
+            //App.Data.SelectPage(p);
+            App.Data.SelectPage(null);
             //await MainPage.DisplayAlert("settings... 2", ttt, "cancel");
         }
 

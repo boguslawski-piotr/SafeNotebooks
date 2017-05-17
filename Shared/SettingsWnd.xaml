@@ -21,13 +21,13 @@
 
 	</pbXForms:ContentPageEx.AppBarContent>
 
-	<pbXForms:ContentPageEx.ContentEx>
+	<pbXForms:ContentPageEx.PageContent>
 
 		<Label
 			Text="Settings..."
 			VerticalOptions="CenterAndExpand"
 			HorizontalOptions="CenterAndExpand" />
 
-	</pbXForms:ContentPageEx.ContentEx>
+	</pbXForms:ContentPageEx.PageContent>
 
 </pbXForms:ContentPageEx>

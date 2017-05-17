@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public partial class NotebooksView : ContentView
+    public partial class NotebooksView : ContentPageExView
     {
         public NotebooksView()
         {
@@ -26,17 +26,8 @@ namespace SafeNotebooks
 			ShowSelectedNotebook();
         }
 
-		Size _osa;
-		
-        protected override void OnSizeAllocated(double width, double height)
+        protected override void ContinueOnSizeAllocated(double width, double height)
         {
-            base.OnSizeAllocated(width, height);
-			
-            if (!pbXNet.Tools.IsDifferent(new Size(width, height), ref _osa))
-				return;
-
-			if (_NotebooksView != null)
-                ContentPageExView.LayoutAppBarAndToolBar(width, height, _NotebooksView, _AppBarRow, _ToolBarRow);
         }
 
         //
@@ -49,7 +40,7 @@ namespace SafeNotebooks
             {
                 BackBtn.IsVisible = false;
 
-                AppTitle.Margin = new Thickness(Metrics.ToolBarItemsWideSpacing, 0, 0, 0);
+                AppTitle.Margin = new Thickness(Metrics.ScreenEdgeMargin, 0, 0, 0);
 
                 SelectedNotebookBar.IsVisible = false;
 
