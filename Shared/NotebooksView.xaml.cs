@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using pbXForms;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public partial class NotebooksView : ContentPageExView
+    public partial class NotebooksView : ContentViewEx
     {
         public NotebooksView()
         {

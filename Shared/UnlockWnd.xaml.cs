@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -154,12 +154,12 @@ namespace SafeNotebooks
             {
                 _View.VerticalOptions = LayoutOptions.FillAndExpand;
                 _View.Padding = new Thickness(0,
-                                               (DeviceEx.Orientation == DeviceOrientations.Landscape
+                                               (DeviceEx.Orientation == DeviceOrientation.Landscape
                                                     ? Metrics.AppBarHeightLandscape / (Device.Idiom == TargetIdiom.Tablet ? 1 : 4)
                                                     : Metrics.AppBarHeightPortrait),
                                                0,
                                                0);
-            	Logo.IsVisible = DeviceEx.Orientation != DeviceOrientations.Landscape;
+            	Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;
             }
             else
             {

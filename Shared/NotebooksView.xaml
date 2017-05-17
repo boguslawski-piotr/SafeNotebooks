@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pbXForms:ContentPageExView
+<pbXForms:ContentViewEx
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:pbXForms="clr-namespace:pbXForms"
 	xmlns:local="clr-namespace:SafeNotebooks"
 	x:Class="SafeNotebooks.NotebooksView">
 
-	<pbXForms:ContentPageExView.AppBarContent>
+	<pbXForms:ContentViewEx.AppBarContent>
 
 		<pbXForms:FlatButton
 			x:Name="BackBtn"
@@ -32,9 +32,9 @@
 			Image="ic_settings.png"
 			Clicked="SettingsBtn_Clicked" />
 
-	</pbXForms:ContentPageExView.AppBarContent>
+	</pbXForms:ContentViewEx.AppBarContent>
 
-	<pbXForms:ContentPageExView.ViewContent>
+	<pbXForms:ContentViewEx.ViewContent>
 
 		<StackLayout
 			x:Name="SelectedNotebookBar"
@@ -102,16 +102,16 @@
 
 		</ListView>
 
-	</pbXForms:ContentPageExView.ViewContent>
+	</pbXForms:ContentViewEx.ViewContent>
 
-	<pbXForms:ContentPageExView.ToolBarBackgroundColor>
+	<pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
 		<StaticResourceExtension
 			Key="NotebooksViewToolBarBackgroundColor" />
 
-	</pbXForms:ContentPageExView.ToolBarBackgroundColor>
+	</pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
-	<pbXForms:ContentPageExView.ToolBarContent>
+	<pbXForms:ContentViewEx.ToolBarContent>
 
 		<pbXForms:FlatButton
 			x:Name="NewBtn"
@@ -128,6 +128,6 @@
 			Image="ic_sort.png"
 			Clicked="SortBtn_Clicked" />
 -->
-	</pbXForms:ContentPageExView.ToolBarContent>
+	</pbXForms:ContentViewEx.ToolBarContent>
 
-</pbXForms:ContentPageExView>
+</pbXForms:ContentViewEx>

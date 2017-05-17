@@ -112,6 +112,7 @@
     <BundleResource Include="Resources\ic_settings.png" />
     <BundleResource Include="Resources\ic_sort.png" />
     <BundleResource Include="Resources\icon.png" />
+    <BundleResource Include="Resources\ic_more_horiz.png" />
   </ItemGroup>
   <Import Project="..\..\pbXNet\pbXNet.projitems" Label="Shared" Condition="Exists('..\..\pbXNet\pbXNet.projitems')" />
   <Import Project="..\..\pbXSecurity\pbXSecurity.projitems" Label="Shared" Condition="Exists('..\..\pbXSecurity\pbXSecurity.projitems')" />

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using pbXForms;
 using pbXNet;
@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public partial class PageView : ContentPageExView
+    public partial class PageView : ContentViewEx
     {
         public PageView()
         {

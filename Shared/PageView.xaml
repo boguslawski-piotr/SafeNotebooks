@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pbXForms:ContentPageExView
+<pbXForms:ContentViewEx
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:pbXForms="clr-namespace:pbXForms"
 	xmlns:local="clr-namespace:SafeNotebooks"
 	x:Class="SafeNotebooks.PageView">
 
-	<pbXForms:ContentPageExView.AppBarContent>
+	<pbXForms:ContentViewEx.AppBarContent>
 
 		<pbXForms:FlatButton
 			x:Name="BackBtn"
@@ -42,9 +42,9 @@
 			Image="ic_mode_edit.png"
 			Clicked="EditBtn_Clicked" />
 
-	</pbXForms:ContentPageExView.AppBarContent>
+	</pbXForms:ContentViewEx.AppBarContent>
 
-	<pbXForms:ContentPageExView.ViewContent>
+	<pbXForms:ContentViewEx.ViewContent>
 
 		<ListView
 			x:Name="ListCtl"
@@ -84,16 +84,16 @@
 
 		</ListView>
 
-	</pbXForms:ContentPageExView.ViewContent>
+	</pbXForms:ContentViewEx.ViewContent>
 
-	<pbXForms:ContentPageExView.ToolBarBackgroundColor>
+	<pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
 		<StaticResourceExtension
 			Key="PageViewToolBarBackgroundColor" />
 
-	</pbXForms:ContentPageExView.ToolBarBackgroundColor>
+	</pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
-	<pbXForms:ContentPageExView.ToolBarContent>
+	<pbXForms:ContentViewEx.ToolBarContent>
 
 		<Label
 			HorizontalOptions="FillAndExpand" />
@@ -135,6 +135,6 @@
 		<Label
 			HorizontalOptions="FillAndExpand" />
 
-	</pbXForms:ContentPageExView.ToolBarContent>
+	</pbXForms:ContentViewEx.ToolBarContent>
 
-</pbXForms:ContentPageExView>
+</pbXForms:ContentViewEx>

@@ -67,8 +67,8 @@ namespace SafeNotebooks
 
         //
 
-        static Lazy<CredentialsManager> _CredentialsManager = new Lazy<CredentialsManager>(() => new CredentialsManager(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-        public static CredentialsManager CredentialsManager
+        static Lazy<SecretsManager> _CredentialsManager = new Lazy<SecretsManager>(() => new SecretsManager(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        public static SecretsManager CredentialsManager
         {
             get { return _CredentialsManager.Value; }
         }
@@ -83,6 +83,9 @@ namespace SafeNotebooks
 
         public App()
         {
+            var tests = new CryptographerTests();
+            tests.BasicEncryptDecrypt();
+
             InitializeComponent();
             MainPage = new MainWnd();
         }
