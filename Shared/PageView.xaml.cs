@@ -52,11 +52,12 @@ namespace SafeNotebooks
                 AppBar.IsVisible = true;
 
                 SelectedPageName.Text = App.Data.SelectedPage.DisplayName;
-                SelectedPageParentName.Text = "in " /* TODO: translation */ + App.Data.SelectedPage.Parent.DisplayName;
+                SelectedPageParentName.Text = $"{T.Localized("in")} {App.Data.SelectedPage.Parent.DisplayName}";
 
                 ListCtl.ItemsSource = App.Data.SelectedPage.Notes;
                 ListCtl.IsVisible = true;
 
+                FavoriteNewBtn.Text = T.Localized("New") + ": " + "@Note@"; // TODO: get favorite item type name from page
                 ToolBar.IsVisible = true;
 
                 MainWnd.Current.NotebooksViewIsVisible = false;
@@ -97,7 +98,7 @@ namespace SafeNotebooks
 
         async void NewBtn_Clicked(object sender, System.EventArgs e)
         {
-            string rc = await Application.Current.MainPage.DisplayActionSheet("New...", "Cancel", null, "Note", "Task", "Account", "Identity");
+            string rc = await Application.Current.MainPage.DisplayActionSheet(T.Localized("SelectAndNew"), T.Localized("Cancel"), null, "Note", "Task", "Account", "Identity");
             New(rc);
         }
 

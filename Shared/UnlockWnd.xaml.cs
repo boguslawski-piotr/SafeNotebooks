@@ -76,7 +76,7 @@ namespace SafeNotebooks
 
         bool RuntimePlatformTryToUnlock()
         {
-            return App.CredentialsManager.AuthenticateDeviceOwner("TODO: some explanation", _RuntimePlatformUnlockedCorrectly, _RuntimePlatformNotUnlocked);
+            return App.SecretsManager.AuthenticateDeviceOwner("TODO: some explanation", _RuntimePlatformUnlockedCorrectly, _RuntimePlatformNotUnlocked);
         }
 
         void _RuntimePlatformUnlockedCorrectly()

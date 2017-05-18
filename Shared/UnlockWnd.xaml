@@ -3,6 +3,7 @@
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:pbXForms="clr-namespace:pbXForms"
+    xmlns:T="clr-namespace:pbXForms"
 	x:Class="SafeNotebooks.UnlockWnd">
 
 	<StackLayout
@@ -31,12 +32,12 @@
 				Source="icon.png" />
 
 			<Label
-				Text="Safe Notebooks"
+				Text="{T:Localized AppName}"
 				FontSize="Large"
 				HorizontalTextAlignment="Center" />
 
 			<Label
-				Text="is currently locked"
+				Text="{T:Localized IsLocked}"
 				FontSize="Medium"
 				HorizontalTextAlignment="Center" />
 
@@ -45,7 +46,7 @@
 				x:Name="PIN"
 				IsPassword="true"
 				Keyboard="Numeric"
-				Placeholder="enter pin"
+				Placeholder="{T:Localized PinPlaceholder}"
 				Margin="0,16,0,0"
 				FontSize="Medium"
 				HorizontalTextAlignment="Center"
@@ -54,7 +55,7 @@
 
 			<pbXForms:FlatButton
 				x:Name="UnlockBtn"
-				Text="Unlock"
+				Text="{T:Localized Unlock}"
 				FontSize="Medium"
 				Clicked="UnlockBtn_Clicked" />
 

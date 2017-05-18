@@ -3,6 +3,7 @@
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:pbXForms="clr-namespace:pbXForms"
+    xmlns:T="clr-namespace:pbXForms"
 	xmlns:local="clr-namespace:SafeNotebooks"
 	x:Class="SafeNotebooks.PageView">
 
@@ -66,13 +67,13 @@
 							<MenuItem
 								Clicked="MoveItemBtn_Clicked"
 								CommandParameter="{Binding .}"
-								Text="Move" />
+								Text="{T:Localized Move}" />
 
 							<MenuItem
 								Clicked="DeleteItemBtn_Clicked"
 								CommandParameter="{Binding .}"
 								IsDestructive="True"
-								Text="Delete" />
+								Text="{T:Localized Delete}" />
 
 						</TextCell.ContextActions>
 
@@ -105,9 +106,10 @@
 			HorizontalOptions="FillAndExpand" />
 
 		<pbXForms:FlatButton
+			x:Name="FavoriteNewBtn"
 			WidthRequest="-1"
 			HorizontalOptions="FillAndExpand"
-			Text="New: Note"
+			Text="@New: Note@"
 			FontAttributes="Bold"
 			TextColor="{StaticResource AccentTextColor}"
 			Clicked="FavoriteNewBtn_Clicked" />
@@ -115,7 +117,7 @@
 		<pbXForms:FlatButton
 			WidthRequest="-1"
 			HorizontalOptions="FillAndExpand"
-			Text="New..."
+			Text="{T:Localized SelectAndNew}"
 			TextColor="{StaticResource ToolBarTextColor}"
 			Clicked="NewBtn_Clicked" />
 

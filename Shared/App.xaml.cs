@@ -1,14 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
+using pbXForms;
+using pbXSecurity;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
-using pbXSecurity;
-using System.Collections.Generic;
+using Xamarin.Forms;
+
+using System.Reflection;
+using pbXNet;
 
 //[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
@@ -42,24 +43,20 @@ namespace SafeNotebooks
 
             public static bool UnlockUsingSystem
             {
-                get
-                {
+                get {
                     return Current.GetValueOrDefault<bool>(UnlockUsingSystemKey, UnlockUsingSystemDefault);
                 }
-                set
-                {
+                set {
                     Current.AddOrUpdateValue<bool>(UnlockUsingSystemKey, value);
                 }
             }
 
             public static bool UnlockUsingPin
             {
-                get
-                {
+                get {
                     return Current.GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault);
                 }
-                set
-                {
+                set {
                     Current.AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
                 }
             }
@@ -67,10 +64,10 @@ namespace SafeNotebooks
 
         //
 
-        static Lazy<SecretsManager> _CredentialsManager = new Lazy<SecretsManager>(() => new SecretsManager(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-        public static SecretsManager CredentialsManager
+        static Lazy<SecretsManager> _SecretsManager = new Lazy<SecretsManager>(() => new SecretsManager(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        public static SecretsManager SecretsManager
         {
-            get { return _CredentialsManager.Value; }
+            get { return _SecretsManager.Value; }
         }
 
         private Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
@@ -83,8 +80,10 @@ namespace SafeNotebooks
 
         public App()
         {
-            var tests = new CryptographerTests();
-            tests.BasicEncryptDecrypt();
+            LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Texts).GetTypeInfo().Assembly);
+
+            //var tests = new CryptographerTests();
+            //tests.BasicEncryptDecrypt();
 
             InitializeComponent();
             MainPage = new MainWnd();

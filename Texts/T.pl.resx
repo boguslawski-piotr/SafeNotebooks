@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+    
+  <data name="AppName" xml:space="preserve">
+    <value>Safe Notebooks (pl)</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
+	
+  <data name="in" xml:space="preserve">
+    <value>w</value>
+  </data>
+	
+  <data name="Unlock" xml:space="preserve">
+    <value>Odblokuj</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="SelectAndNew" xml:space="preserve">
+    <value>Dodaj...</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Przenieś</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Skasuj</value>
+  </data>
+	
+  <data name="Notebook" xml:space="preserve">
+    <value>Notatnik</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Strona</value>
+  </data>
+
+  <data name="NewNotebook" xml:space="preserve">
+    <value>Dodaj: Notatnik</value>
+  </data>
+  <data name="NewPage" xml:space="preserve">
+    <value>Dodaj: Stronę</value>
+  </data>
+	
+  <data name="IsLocked" xml:space="preserve">
+    <value>jest aktualnie zablokowany</value>
+  </data>
+  <data name="PinPlaceholder" xml:space="preserve">
+    <value>wprowadź swój pin</value>
+  </data>
+	
+</root>

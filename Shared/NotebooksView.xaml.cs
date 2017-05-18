@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using pbXForms;
+using pbXNet;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
@@ -46,7 +47,7 @@ namespace SafeNotebooks
 
                 ListCtl.ItemsSource = App.Data.Notebooks;
 
-                NewBtn.Text = "New: Notebook"; // TODO: translation
+                NewBtn.Text = T.Localized("NewNotebook"); // TODO: translation
             }
             else
             {
@@ -60,7 +61,7 @@ namespace SafeNotebooks
 
                 SelectedNotebookName.Text = App.Data.SelectedNotebook.DisplayName;
 
-                NewBtn.Text = "New: Page"; // TODO: translation
+                NewBtn.Text = T.Localized("NewPage");
 			}
 
             BatchCommit();
@@ -114,7 +115,7 @@ namespace SafeNotebooks
             {
                 Notebook n = new Notebook()
                 {
-                    Name = "Notebook " + App.Data.Notebooks.Count
+                    Name = T.Localized("Notebook") + " " + App.Data.Notebooks.Count
                 };
 
                 App.Data.Notebooks.Add(n);
@@ -125,7 +126,7 @@ namespace SafeNotebooks
             {
                 Page p = new Page()
                 {
-                    Name = "Page " + App.Data.SelectedNotebook.Pages.Count
+                    Name = T.Localized("Page") + " " + App.Data.SelectedNotebook.Pages.Count
                 };
 
                 App.Data.SelectedNotebook.AddPage(p);

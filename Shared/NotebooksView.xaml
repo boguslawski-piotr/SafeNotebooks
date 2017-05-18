@@ -3,6 +3,7 @@
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:pbXForms="clr-namespace:pbXForms"
+    xmlns:T="clr-namespace:pbXForms"
 	xmlns:local="clr-namespace:SafeNotebooks"
 	x:Class="SafeNotebooks.NotebooksView">
 
@@ -16,7 +17,7 @@
 
 		<Label
 			x:Name="AppTitle"
-			Text="Safe Notebooks"
+			Text="{T:Localized AppName}"
 			FontAttributes="Bold"
 			TextColor="{StaticResource AccentTextColor}"
 			VerticalOptions="Center"
@@ -48,7 +49,7 @@
 
 			<Label
 				x:Name="SelectedNotebookName"
-				Text="Notebooks"
+				Text=""
 				TextColor="{StaticResource ListItemTextColor}"
 				VerticalOptions="Center"
 				HorizontalOptions="CenterAndExpand" />
@@ -79,18 +80,18 @@
 							<MenuItem
 								Clicked="EditItemBtn_Clicked"
 								CommandParameter="{Binding .}"
-								Text="Edit" />
+								Text="{T:Localized Edit}" />
 
 							<MenuItem
 								Clicked="MoveItemBtn_Clicked"
 								CommandParameter="{Binding .}"
-								Text="Move" />
+								Text="{T:Localized Move}" />
 
 							<MenuItem
 								Clicked="DeleteItemBtn_Clicked"
 								CommandParameter="{Binding .}"
 								IsDestructive="True"
-								Text="Delete" />
+								Text="{T:Localized Delete}" />
 
 						</TextCell.ContextActions>
 
