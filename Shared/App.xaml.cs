@@ -1,22 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
-using pbXForms;
+using pbXNet;
 using pbXSecurity;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using Xamarin.Forms;
 
-using System.Reflection;
-using pbXNet;
-
 //[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
 {
-    //[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class App : Application
     {
+        public static readonly string Name = typeof(App).GetTypeInfo().Assembly.ManifestModule.Name.Replace(".exe", "");
+
         //
 
         static Lazy<Data> _Data = new Lazy<Data>(() => new Data(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
@@ -36,10 +35,10 @@ namespace SafeNotebooks
 
             // Security
 
-            private const string UnlockUsingSystemKey = "_uus";
+            const string UnlockUsingSystemKey = "_uus";
             static readonly bool UnlockUsingSystemDefault = false;
-            private const string UnlockUsingPinKey = "_uup";
-            static readonly bool UnlockUsingPinDefault = false;
+            const string UnlockUsingPinKey = "_uup";
+            static readonly bool UnlockUsingPinDefault = true;
 
             public static bool UnlockUsingSystem
             {
@@ -64,8 +63,8 @@ namespace SafeNotebooks
 
         //
 
-        static Lazy<SecretsManager> _SecretsManager = new Lazy<SecretsManager>(() => new SecretsManager(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-        public static SecretsManager SecretsManager
+        static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new Cryptographer()), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        public static ISecretsManager SecretsManager
         {
             get { return _SecretsManager.Value; }
         }
@@ -80,6 +79,9 @@ namespace SafeNotebooks
 
         async void Tests()
         {
+			await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
+
+
 			DeviceFileSystem fs = new DeviceFileSystem();
 			await fs.SetCurrentDirectoryAsync("a");
             IFileSystem fsc = await fs.MakeCopyAsync();
@@ -94,17 +96,36 @@ namespace SafeNotebooks
 
             bool fe = await fs.FileExistsAsync("ala");
 
-            string tt = await fs.ReadTextAsync("ala");
+            try
+            {
+                string tt = await fs.ReadTextAsync("ala");
+            }
+            catch { }
 
             await fs.CreateDirectoryAsync("dir1");
 
-			//var tests = new CryptographerTests();
-			//tests.BasicEncryptDecrypt();
+			var tests = new CryptographerTests();
+			tests.BasicEncryptDecrypt();
 		}
+
+        void InitializeLocalization()
+        {
+            LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Texts).GetTypeInfo().Assembly);
+        }
+
+        async Task InitializeSecrets()
+        {
+            // TODO: Potential security hole -> should be rethought more thoroughly
+            //if (!await SecretsManager.PasswordExistsAsync(App.Name))
+            //{
+            //    Settings.UnlockUsingPin = false;
+            //}
+        }
 
         public App()
         {
-            LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Texts).GetTypeInfo().Assembly);
+            InitializeLocalization();
+            InitializeSecrets();
 
             Tests();
 
@@ -116,9 +137,7 @@ namespace SafeNotebooks
         {
             Debug.WriteLine("OnStart");
 
-
-            // TODO: pass credentials manager to data
-
+            Data.SecretsManager = SecretsManager;
 
             if (App.Settings.UnlockUsingSystem || App.Settings.UnlockUsingPin)
             {

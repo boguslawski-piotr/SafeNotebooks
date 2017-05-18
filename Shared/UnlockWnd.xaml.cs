@@ -1,16 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
-using Xamarin.Forms;
-using pbXForms;
 using System.Threading.Tasks;
-
-//#if __IOS__
-#if __UNIFIED__
-using LocalAuthentication;
-using Foundation;
-#endif
+using pbXForms;
+using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
@@ -102,12 +93,12 @@ namespace SafeNotebooks
                 _UnlockedCorrectly();
         }
 
-        async void CrossPlatformCheckPK()
+        async Task CrossPlatformCheckPK()
         {
             string _PIN = PIN.Text ?? "";
             PIN.Text = "";
 
-            if (_PIN == "1")
+            if (await App.SecretsManager.ComparePasswordAsync(App.Name, _PIN))
             {
                 _UnlockedCorrectly();
             }
@@ -150,6 +141,7 @@ namespace SafeNotebooks
                 return;
 
 			BatchBegin();
+
 			if (e.IsFocused)
             {
                 _View.VerticalOptions = LayoutOptions.FillAndExpand;
@@ -167,12 +159,13 @@ namespace SafeNotebooks
                 _View.Padding = new Thickness(0);
 				Logo.IsVisible = true;
             }
+
 			BatchCommit();
         }
 
         void PK_Completed(object sender, System.EventArgs e)
         {
-            if (PIN.Text != null && PIN.Text.Length > 0)
+            if (!string.IsNullOrEmpty(PIN.Text))
                 CrossPlatformCheckPK();
         }
 
