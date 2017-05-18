@@ -182,12 +182,17 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_more_horiz.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_more_horiz.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_more_horiz.png" />
+    <AndroidResource Include="Resources\values-pl\strings.xml" />
+    <AndroidResource Include="Resources\values\strings.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">
       <Project>{BD23F900-50B7-4714-98C1-D1A192C1E939}</Project>
       <Name>SafeNotebooks.Texts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\values-pl\" />
   </ItemGroup>
   <Import Project="..\..\pbXNet\pbXNet.projitems" Label="Shared" Condition="Exists('..\..\pbXNet\pbXNet.projitems')" />
   <Import Project="..\..\pbXSecurity\pbXSecurity.projitems" Label="Shared" Condition="Exists('..\..\pbXSecurity\pbXSecurity.projitems')" />

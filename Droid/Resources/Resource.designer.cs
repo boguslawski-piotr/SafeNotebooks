@@ -3727,6 +3727,9 @@ namespace SafeNotebooks.Droid
 			// aapt resource value: 0x7f07002f
 			public const int abc_toolbar_collapse_description = 2131165231;
 			
+			// aapt resource value: 0x7f07003e
+			public const int app_name = 2131165246;
+			
 			// aapt resource value: 0x7f070015
 			public const int appbar_scrolling_view_behavior = 2131165205;
 			

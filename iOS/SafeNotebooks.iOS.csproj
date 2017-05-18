@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Resources\pl.lproj\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -155,6 +156,7 @@
     <BundleResource Include="Resources\ic_more_horiz%402x.png" />
     <BundleResource Include="Resources\ic_more_horiz%403x.png" />
     <BundleResource Include="Resources\ic_more_horiz.png" />
+    <BundleResource Include="Resources\pl.lproj\InfoPlist.strings" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">

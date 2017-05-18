@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Resources\pl.lproj\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -113,6 +114,7 @@
     <BundleResource Include="Resources\ic_sort.png" />
     <BundleResource Include="Resources\icon.png" />
     <BundleResource Include="Resources\ic_more_horiz.png" />
+    <BundleResource Include="Resources\pl.lproj\InfoPlist.strings" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">
