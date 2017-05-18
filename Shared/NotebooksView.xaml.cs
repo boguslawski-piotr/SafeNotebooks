@@ -47,7 +47,7 @@ namespace SafeNotebooks
 
                 ListCtl.ItemsSource = App.Data.Notebooks;
 
-                NewBtn.Text = T.Localized("NewNotebook"); // TODO: translation
+                NewBtn.Text = T.Localized("NewNotebook"); 
             }
             else
             {
