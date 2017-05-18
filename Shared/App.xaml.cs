@@ -78,12 +78,35 @@ namespace SafeNotebooks
 
         //
 
+        async void Tests()
+        {
+			DeviceFileSystem fs = new DeviceFileSystem();
+			await fs.SetCurrentDirectoryAsync("a");
+            IFileSystem fsc = await fs.MakeCopyAsync();
+			await fs.SetCurrentDirectoryAsync("..");
+
+            IEnumerable<string> d = await fs.GetDirectoriesAsync();
+			IEnumerable<string> f = await fs.GetFilesAsync();
+
+            bool de = await fs.DirectoryExistsAsync(".config");
+
+            await fs.WriteTextAsync("ala", "jakiś tekst");
+
+            bool fe = await fs.FileExistsAsync("ala");
+
+            string tt = await fs.ReadTextAsync("ala");
+
+            await fs.CreateDirectoryAsync("dir1");
+
+			//var tests = new CryptographerTests();
+			//tests.BasicEncryptDecrypt();
+		}
+
         public App()
         {
             LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Texts).GetTypeInfo().Assembly);
 
-            //var tests = new CryptographerTests();
-            //tests.BasicEncryptDecrypt();
+            Tests();
 
             InitializeComponent();
             MainPage = new MainWnd();
