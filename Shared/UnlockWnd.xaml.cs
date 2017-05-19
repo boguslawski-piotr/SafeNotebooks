@@ -100,15 +100,13 @@ namespace SafeNotebooks
 
             if (await App.SecretsManager.ComparePasswordAsync(App.Name, _PIN))
             {
-                _UnlockedCorrectly();
+				_UnlockedCorrectly();
             }
             else
             {
                 PIN.Focus();
-
-				// TODO: zrobić animację wstrząśnięcia ;)
-                await PIN.ScaleTo(0.3);
-                await PIN.ScaleTo(1);
+                await PIN.ScaleTo(0.3); // TODO: zrobić animację wstrząśnięcia ;)
+				await PIN.ScaleTo(1);
             }
         }
 
@@ -148,7 +146,7 @@ namespace SafeNotebooks
                 _View.Padding = new Thickness(0,
                                                (DeviceEx.Orientation == DeviceOrientation.Landscape
                                                     ? Metrics.AppBarHeightLandscape / (Device.Idiom == TargetIdiom.Tablet ? 1 : 4)
-                                                    : Metrics.AppBarHeightPortrait),
+                                                    : Metrics.AppBarHeightPortrait / 2),
                                                0,
                                                0);
             	Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;

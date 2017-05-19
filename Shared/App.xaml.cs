@@ -36,7 +36,7 @@ namespace SafeNotebooks
             // Security
 
             const string UnlockUsingSystemKey = "_uus";
-            static readonly bool UnlockUsingSystemDefault = true;
+            static readonly bool UnlockUsingSystemDefault = false;
             const string UnlockUsingPinKey = "_uup";
             static readonly bool UnlockUsingPinDefault = true;
 
@@ -79,8 +79,8 @@ namespace SafeNotebooks
 
         async void Tests()
         {
-			await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
-
+			await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1234");
+            //await SecretsManager.DeletePasswordAsync(App.Name);
 
 			DeviceFileSystem fs = new DeviceFileSystem();
 			await fs.SetCurrentDirectoryAsync("a");
