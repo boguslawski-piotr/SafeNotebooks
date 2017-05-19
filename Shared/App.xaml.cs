@@ -36,7 +36,7 @@ namespace SafeNotebooks
             // Security
 
             const string UnlockUsingSystemKey = "_uus";
-            static readonly bool UnlockUsingSystemDefault = false;
+            static readonly bool UnlockUsingSystemDefault = true;
             const string UnlockUsingPinKey = "_uup";
             static readonly bool UnlockUsingPinDefault = true;
 
@@ -63,7 +63,7 @@ namespace SafeNotebooks
 
         //
 
-        static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new Cryptographer()), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
         public static ISecretsManager SecretsManager
         {
             get { return _SecretsManager.Value; }
@@ -104,7 +104,7 @@ namespace SafeNotebooks
 
             await fs.CreateDirectoryAsync("dir1");
 
-			var tests = new CryptographerTests();
+			var tests = new AesCryptographerTests();
 			tests.BasicEncryptDecrypt();
 		}
 
