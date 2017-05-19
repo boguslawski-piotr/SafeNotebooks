@@ -5,8 +5,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using pbXNet;
 using pbXSecurity;
-using Plugin.Settings;
-using Plugin.Settings.Abstractions;
 using Xamarin.Forms;
 
 //[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -16,9 +14,11 @@ namespace SafeNotebooks
     {
         public static readonly string Name = typeof(App).GetTypeInfo().Assembly.ManifestModule.Name.Replace(".exe", "");
 
+        // Settings in AppSettings.cs
+
         //
 
-        static Lazy<Data> _Data = new Lazy<Data>(() => new Data(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        static Lazy<Data> _Data = new Lazy<Data>(() => new Data());
         public static Data Data
         {
             get { return _Data.Value; }
@@ -26,50 +26,13 @@ namespace SafeNotebooks
 
         //
 
-        public static class Settings
-        {
-            public static ISettings Current
-            {
-                get { return CrossSettings.Current; }
-            }
-
-            // Security
-
-            const string UnlockUsingSystemKey = "_uus";
-            static readonly bool UnlockUsingSystemDefault = false;
-            const string UnlockUsingPinKey = "_uup";
-            static readonly bool UnlockUsingPinDefault = true;
-
-            public static bool UnlockUsingSystem
-            {
-                get {
-                    return Current.GetValueOrDefault<bool>(UnlockUsingSystemKey, UnlockUsingSystemDefault);
-                }
-                set {
-                    Current.AddOrUpdateValue<bool>(UnlockUsingSystemKey, value);
-                }
-            }
-
-            public static bool UnlockUsingPin
-            {
-                get {
-                    return Current.GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault);
-                }
-                set {
-                    Current.AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
-                }
-            }
-        }
-
-        //
-
-        static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new AesCryptographer(), new Settings.Storage()));
         public static ISecretsManager SecretsManager
         {
             get { return _SecretsManager.Value; }
         }
 
-        private Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        private Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
         private UnlockWnd UnlockWnd
         {
             get { return _UnlockWnd.Value; }
@@ -79,7 +42,7 @@ namespace SafeNotebooks
 
         async void Tests()
         {
-			await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1234");
+			await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
             //await SecretsManager.DeletePasswordAsync(App.Name);
 
 			DeviceFileSystem fs = new DeviceFileSystem();
@@ -139,7 +102,7 @@ namespace SafeNotebooks
 
             Data.SecretsManager = SecretsManager;
 
-            if (App.Settings.UnlockUsingSystem || App.Settings.UnlockUsingPin)
+            if (App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin)
             {
                 UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
 
@@ -239,7 +202,7 @@ namespace SafeNotebooks
             if (UnlockWnd.State != UnlockWnd.TState.Splash)
                 return;
 
-            if (App.Settings.UnlockUsingSystem || App.Settings.UnlockUsingPin)
+            if (App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin)
             {
                 UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
 

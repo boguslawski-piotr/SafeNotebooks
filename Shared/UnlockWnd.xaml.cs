@@ -50,7 +50,7 @@ namespace SafeNotebooks
         {
             UnlockingMode();
 
-            if (App.Settings.UnlockUsingSystem)
+            if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
             {
                 if (RuntimePlatformTryToUnlock())
                 {

@@ -50,6 +50,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MainWnd.xaml.cs">
       <DependentUpon>MainWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
