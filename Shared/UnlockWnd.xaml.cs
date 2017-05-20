@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using pbXForms;
+using pbXNet;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
@@ -34,21 +35,26 @@ namespace SafeNotebooks
             PK_Focused(this, new FocusEventArgs(PIN, PIN.IsFocused));
         }
 
-        public void SplashMode()
+        public void SetSplashMode()
         {
             State = TState.Splash;
             PIN.IsVisible = false;
             PK_Focused(this, new FocusEventArgs(PIN, false));
         }
 
-        public void UnlockingMode()
+        public bool UnlockingNeeded
+        {
+            get { return App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin; }
+        }
+
+        public void SetUnlockingMode()
         {
             State = TState.Unlocking;
         }
 
         public void TryToUnlock()
         {
-            UnlockingMode();
+            SetUnlockingMode();
 
             if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
             {
@@ -67,7 +73,7 @@ namespace SafeNotebooks
 
         bool RuntimePlatformTryToUnlock()
         {
-            return App.SecretsManager.AuthenticateDeviceOwner("TODO: some explanation", _RuntimePlatformUnlockedCorrectly, _RuntimePlatformNotUnlocked);
+            return App.SecretsManager.AuthenticateDeviceOwner(T.Localized("AuthenticateDeviceOwnerReason"), _RuntimePlatformUnlockedCorrectly, _RuntimePlatformNotUnlocked);
         }
 
         void _RuntimePlatformUnlockedCorrectly()
@@ -84,7 +90,7 @@ namespace SafeNotebooks
         {
             if (App.Settings.UnlockUsingPin)
             {
-                UnlockingMode();
+                SetUnlockingMode();
 
                 PIN.IsVisible = true;
                 PIN.Focus();
@@ -146,7 +152,7 @@ namespace SafeNotebooks
                 _View.Padding = new Thickness(0,
                                                (DeviceEx.Orientation == DeviceOrientation.Landscape
                                                     ? Metrics.AppBarHeightLandscape / (Device.Idiom == TargetIdiom.Tablet ? 1 : 4)
-                                                    : Metrics.AppBarHeightPortrait / 2),
+                                                    : Metrics.AppBarHeightPortrait / (Device.RuntimePlatform == Device.iOS ? 1 : 2)),
                                                0,
                                                0);
             	Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;

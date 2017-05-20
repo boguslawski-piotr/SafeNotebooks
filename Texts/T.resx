@@ -60,6 +60,9 @@
     <value>Add: Page</value>
   </data>
 
+  <data name="AuthenticateDeviceOwnerReason" xml:space="preserve">
+    <value>The application must recognize you as such an option has been set in the settings.</value>
+  </data>
   <data name="IsLocked" xml:space="preserve">
     <value>is currently locked</value>
   </data>

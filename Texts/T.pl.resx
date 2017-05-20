@@ -60,6 +60,9 @@
     <value>Dodaj: Stronę</value>
   </data>
 	
+  <data name="AuthenticateDeviceOwnerReason" xml:space="preserve">
+    <value>Aplikacja musi Cię rozpoznać, ponieważ taka opcja została ustawiona w ustawieniach.</value>
+  </data>
   <data name="IsLocked" xml:space="preserve">
     <value>jest aktualnie zablokowany</value>
   </data>
