@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using pbXNet;
 using pbXSecurity;
+using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
     public class Item : Observable
     {
-        public NotebooksManager NotebooksManager { get; set; }
+        public Item()
+        {
+            EditItemCommand = new Command(ExecuteEditItemCommand, CanExecuteEditMoveDelete);
+            MoveItemCommand = new Command(ExecuteMoveItemCommand, CanExecuteEditMoveDelete);
+            DeleteItemCommand = new Command(ExecuteDeleteItemCommand, CanExecuteEditMoveDelete);
+        }
 
-        //public Item(NotebooksManager notebooksManager)
-        //{
-        //    NotebooksManager = notebooksManager;
-        //}
+        public NotebooksManager NotebooksManager { get; set; }
 
         ISearchableStorage<string> _Storage;
         public ISearchableStorage<string> Storage
@@ -128,7 +131,26 @@ namespace SafeNotebooks
 
         public virtual string LockedImageName => !DataIsAvailable ? NotebooksManager.UI.LockedImageName : "";
 
-        public virtual string OpenImageName => NotebooksManager.UI.OpenImageName;
+
+		//
+
+		public bool Modified
+		{
+			get;
+			protected set;
+		}
+
+		public virtual void Touch()
+		{
+			Modified = true;
+			ModifiedOn = DateTime.UtcNow;
+		}
+
+		public virtual Task TouchAsync()
+		{
+			Touch();
+			return Task.FromResult(true);
+		}
 
 
 		//
@@ -244,27 +266,6 @@ namespace SafeNotebooks
 
         //
 
-        public bool Modified
-        {
-            get;
-            protected set;
-        }
-
-        public virtual void Touch()
-        {
-            Modified = true;
-            ModifiedOn = DateTime.UtcNow;
-        }
-
-        public virtual Task TouchAsync()
-        {
-            Touch();
-            return Task.FromResult(true);
-        }
-
-
-        //
-
         public virtual string IdForStorage => Id;
 
         public virtual async Task NewAsync(Item parent)
@@ -374,9 +375,44 @@ namespace SafeNotebooks
 
         //
 
-        public override string ToString()
+        public ICommand EditItemCommand { private set; get; }
+        public ICommand MoveItemCommand { private set; get; }
+        public ICommand DeleteItemCommand { private set; get; }
+
+        public virtual async Task EditAsync()
         {
-            return $"{this.GetType().ToString()}: {NameForLists} [{DetailForLists}]";
+            await NotebooksManager.UI.EditItemAsync(this);
+        }
+
+        void ExecuteEditItemCommand(object sender)
+        {
+            ((Item)sender)?.EditAsync();
+        }
+
+        public virtual async Task MoveAsync()
+        {
+            await App.Current.MainPage.DisplayAlert("Move", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
+        }
+
+        void ExecuteMoveItemCommand(object sender)
+        {
+            ((Item)sender)?.MoveAsync();
+        }
+
+        public virtual async Task DeleteAsync()
+        {
+            await App.Current.MainPage.DisplayAlert("Delete", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
+        }
+
+        protected virtual void ExecuteDeleteItemCommand(object sender)
+        {
+            ((Item)sender)?.DeleteAsync();
+        }
+
+        protected virtual bool CanExecuteEditMoveDelete(object sender)
+        {
+            Item item = (Item)sender;
+            return item != null ? item.DataIsAvailable : false;
         }
 
 

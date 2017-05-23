@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using pbXForms;
 using pbXNet;
 using Xamarin.Forms;
@@ -44,25 +45,40 @@ namespace SafeNotebooks
             {
                 BackBtn.IsVisible = false;
 
+                AppTitle.IsVisible = true;
                 AppTitle.Margin = new Thickness(Metrics.ScreenEdgeMargin, 0, 0, 0);
 
-                SelectedNotebookBar.IsVisible = false;
+                EditBtn.IsVisible = false;
+				SettingsBtn.IsVisible = true;
+
+				SelectedNotebookBar.IsVisible = false;
 
                 ListCtl.ItemsSource = App.NotebooksManager.Notebooks;
 
-                NewBtn.Text = T.Localized("NewNotebook");
+                //if (App.NotebooksManager.Notebooks != null && App.NotebooksManager.Notebooks.Count > 0)
+                //{
+                //    Item item = App.NotebooksManager.Notebooks.First();
+                //    ListCtl.ScrollTo(item, ScrollToPosition.Start, true);
+                //}
+
+				NewBtn.Text = T.Localized("NewNotebook");
             }
             else
             {
                 BackBtn.IsVisible = true;
 
-                AppTitle.Margin = new Thickness(0, 0, 0, 0);
+                AppTitle.IsVisible = false;
+				AppTitle.Margin = new Thickness(0, 0, 0, 0);
 
-                SelectedNotebookBar.IsVisible = true;
+				EditBtn.IsVisible = true;
+                SettingsBtn.IsVisible = false;
+
+				SelectedNotebookBar.IsVisible = true;
 
                 ListCtl.ItemsSource = App.NotebooksManager.SelectedNotebook.Pages;
 
                 SelectedNotebookName.Text = App.NotebooksManager.SelectedNotebook.NameForLists;
+                SelectedNotebookStorageName.Text = App.NotebooksManager.SelectedNotebook.Storage?.Name;
 
                 NewBtn.Text = T.Localized("NewPage");
             }
@@ -90,52 +106,34 @@ namespace SafeNotebooks
             RefreshListCtl();
         }
 
-        //
+		//
 
-        void SearchBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Application.Current.MainPage.DisplayAlert("Search...", "Window for search in all data.", "Cancel");
-        }
-
+		void BackBtn_Clicked(object sender, System.EventArgs e)
+		{
+			App.NotebooksManager.SelectNotebookAsync(null, false);
+		}
+		
         async void SettingsBtn_Clicked(object sender, System.EventArgs e)
         {
             await Navigation.PushModalAsync(new SettingsWnd(), true);
         }
 
-
-        void BackBtn_Clicked(object sender, System.EventArgs e)
-        {
-            App.NotebooksManager.SelectNotebookAsync(null, false);
-        }
-
         void EditBtn_Clicked(object sender, System.EventArgs e)
         {
-            Application.Current.MainPage.DisplayAlert("Edit...", "Enable multiple items edit/delete mode?", "Cancel");
+            App.NotebooksManager.SelectedNotebook?.EditAsync();
         }
 
+		void SearchBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Search...", "Window for search in all data.", "Cancel");
+		}
 
-        async void EditItemBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Item item = (Item)(sender as MenuItem).CommandParameter;
-            await Application.Current.MainPage.DisplayAlert("Edit", item.NameForLists, "Cancel");
-        }
-
-        async void MoveItemBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Item item = (Item)(sender as MenuItem).CommandParameter;
-            await Application.Current.MainPage.DisplayAlert("Move", item.NameForLists, "Cancel");
-        }
-
-        async void DeleteItemBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Item item = (Item)(sender as MenuItem).CommandParameter;
-            await Application.Current.MainPage.DisplayAlert("Delete", item.NameForLists, "Cancel");
-        }
-
-
-		//
-
-        public async Task<StorageOnFileSystem<string>> SelectStorageUIAsync(IEnumerable<StorageOnFileSystem<string>> storages)
+		void SortBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Sort", "Select sort for current view (ask for default?)", "Cancel");
+		}
+		
+        async Task<StorageOnFileSystem<string>> SelectStorageUIAsync(IEnumerable<StorageOnFileSystem<string>> storages)
 		{
 			string fsName = await App.Current.MainPage.DisplayActionSheet("Where do you want to store the notebook?", // TODO: localization
 																		  T.Localized("Cancel"),
@@ -171,10 +169,6 @@ namespace SafeNotebooks
             }
         }
 
-        void SortBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Application.Current.MainPage.DisplayAlert("Sort", "Select sort for current view (ask for default?)", "Cancel");
-        }
 
     }
 }

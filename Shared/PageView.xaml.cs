@@ -35,8 +35,8 @@ namespace SafeNotebooks
 
             AppBar.IsVisible = false;
 
-            ListCtl.ItemsSource = null;
-            ListCtl.IsVisible = false;
+			ListCtl.IsVisible = false;
+			ListCtl.ItemsSource = null;
 
             ToolBar.IsVisible = false;
 
@@ -58,6 +58,7 @@ namespace SafeNotebooks
                 ListCtl.IsVisible = true;
 
                 FavoriteNewBtn.Text = T.Localized("New") + ": " + "@Note@"; // TODO: get favorite item type name from page
+
                 ToolBar.IsVisible = true;
 
                 MainWnd.Current.NotebooksViewIsVisible = false;
@@ -80,22 +81,13 @@ namespace SafeNotebooks
 
         void EditBtn_Clicked(object sender, System.EventArgs e)
         {
-            Application.Current.MainPage.DisplayAlert("Edit...", "Enable multiple items edit/delete mode?", "Cancel");
-        }
+			App.NotebooksManager.SelectedPage?.EditAsync();
+		}
 
-
-        async void MoveItemBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Item item = (Item)(sender as MenuItem).CommandParameter;
-            await Application.Current.MainPage.DisplayAlert("Move", item.ToString(), "Cancel");
-        }
-
-        async void DeleteItemBtn_Clicked(object sender, System.EventArgs e)
-        {
-            Item item = (Item)(sender as MenuItem).CommandParameter;
-            await Application.Current.MainPage.DisplayAlert("Delete", item.ToString(), "Cancel");
-        }
-
+		void SearchBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Search...", "Window for search in all data.", "Cancel");
+		}
 
         async void NewBtn_Clicked(object sender, System.EventArgs e)
         {

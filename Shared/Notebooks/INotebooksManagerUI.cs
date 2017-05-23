@@ -17,6 +17,5 @@ namespace SafeNotebooks
         // Images for listviews
 
         string LockedImageName { get; }
-		string OpenImageName { get; }
 	}
 }

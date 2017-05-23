@@ -7,13 +7,23 @@ using System.Linq;
 using pbXNet;
 using pbXSecurity;
 using Xamarin.Forms;
+using System.Windows.Input;
 
 //[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
 {
     public partial class App : Application
     {
-        public static readonly string Name = typeof(App).GetTypeInfo().Assembly.ManifestModule.Name.Replace(".exe", "");
+        public static string Name
+        {
+            get {
+                string name = typeof(App).GetTypeInfo().Assembly.ManifestModule.Name;
+                int firstDot = name.IndexOf('.');
+                if(firstDot > 0)
+                    name = name.Substring(0, firstDot);
+				return name;
+            }
+        }
 
         // Settings in AppSettings.cs
 

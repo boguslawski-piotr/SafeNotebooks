@@ -39,7 +39,7 @@ namespace SafeNotebooks
 			item.Nick = $"{item.GetType().Name} Nick " + xxx++;
             item.Name = $"{item.GetType().Name} " + xxx++;
 			//item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
-			item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+			//item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
 
             return (true, "123");
         }
@@ -48,7 +48,6 @@ namespace SafeNotebooks
         //
 
         public string LockedImageName { get; } = "ic_lock_outline.png";
-        public string OpenImageName { get; } = "ic_chevron_right.png";
 
 	}
 }

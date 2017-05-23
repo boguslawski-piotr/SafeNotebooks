@@ -57,10 +57,10 @@
   </data>
 	
   <data name="NewNotebook" xml:space="preserve">
-    <value>Add: Notebook</value>
+    <value>Add Notebook</value>
   </data>
   <data name="NewPage" xml:space="preserve">
-    <value>Add: Page</value>
+    <value>Add Page</value>
   </data>
 
   <data name="AuthenticateDeviceOwnerReason" xml:space="preserve">
