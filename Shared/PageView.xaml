@@ -26,6 +26,7 @@
 				x:Name="SelectedPageName"
 				Text=""
 				TextColor="{StaticResource AppBarTextColor}"
+                LineBreakMode = "MiddleTruncation"
 				VerticalOptions="Center"
 				HorizontalOptions="FillAndExpand" />
 
@@ -34,6 +35,7 @@
 				Text=""
 				FontSize="Micro"
 				TextColor="{StaticResource ListItemDetailColor}"
+                LineBreakMode = "MiddleTruncation"
 				VerticalOptions="Center" />
 
 		</StackLayout>
@@ -56,13 +58,9 @@
 
 				<DataTemplate>
 
-					<TextCell
-						Text="{Binding DisplayName}"
-						TextColor="{StaticResource ListItemTextColor}"
-						Detail="{Binding DisplayDetail}"
-						DetailColor="{StaticResource ListItemDetailColor}">
+                    <ViewCell>
 
-						<TextCell.ContextActions>
+						<ViewCell.ContextActions>
 
 							<MenuItem
 								Clicked="MoveItemBtn_Clicked"
@@ -75,9 +73,69 @@
 								IsDestructive="True"
 								Text="{T:Localized Delete}" />
 
-						</TextCell.ContextActions>
+						</ViewCell.ContextActions>
 
-					</TextCell>
+                        <Grid
+                            x:Key = "ListViewItemTemplate"
+                            RowSpacing = "0"
+                            ColumnSpacing = "0"
+                            Padding = "0"
+                            Margin = "0">
+
+                            <Grid.ColumnDefinitions>
+
+                                <ColumnDefinition
+                                    Width = "*" />
+
+                                <ColumnDefinition
+                                    Width = "{x:Static pbXForms:Metrics.IconHeight}" />
+
+                                <ColumnDefinition
+                                    Width = "{x:Static pbXForms:Metrics.IconHeight}" />
+
+                            </Grid.ColumnDefinitions>
+
+                            <StackLayout
+                                Grid.Row = "0"
+                                Grid.Column = "0"
+                                Padding = "{x:Static pbXForms:Metrics.ScreenEdgeLeftRightPadding}"
+                                Margin = "0"
+                                Spacing = "0"
+                                Orientation = "Vertical"
+                                HorizontalOptions = "FillAndExpand"
+                                VerticalOptions = "Center">
+
+                                <Label
+                                    Text = "{Binding NameForLists}"
+                                    LineBreakMode = "MiddleTruncation"
+                                    FontSize = "Medium"
+                                    Margin = "0"
+                                    TextColor = "{StaticResource ListItemTextColor}" />
+
+                                <Label
+                                    Text = "{Binding DetailForLists}"
+                                    LineBreakMode = "MiddleTruncation"
+                                    FontSize = "Micro"
+                                    Margin = "0"
+                                    TextColor = "{StaticResource ListItemDetailColor}" />
+
+                            </StackLayout>
+
+                            <Image
+                                Grid.Row = "0"
+                                Grid.Column = "1"
+                                Source = "{Binding LockedImageName}"
+                                HorizontalOptions = "Center" />
+
+                            <Image
+                                Grid.Row = "0"
+                                Grid.Column = "2"
+                                Source = "{Binding OpenImageName}"
+                                HorizontalOptions = "Center" />
+
+                        </Grid>
+                        
+					</ViewCell>
 
 				</DataTemplate>
 

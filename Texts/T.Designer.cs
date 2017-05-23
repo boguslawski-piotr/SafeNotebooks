@@ -65,15 +65,21 @@ namespace SafeNotebooks.Texts {
             }
         }
         
-        internal static string Unlock {
+        internal static string OK {
             get {
-                return ResourceManager.GetString("Unlock", resourceCulture);
+                return ResourceManager.GetString("OK", resourceCulture);
             }
         }
         
         internal static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        internal static string Unlock {
+            get {
+                return ResourceManager.GetString("Unlock", resourceCulture);
             }
         }
         

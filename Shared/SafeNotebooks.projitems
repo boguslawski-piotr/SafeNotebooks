@@ -30,11 +30,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Notebook.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Page.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Note.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Item.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Data.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Notebook.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Page.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Note.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Item.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NotebooksManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsWnd.xaml.cs">
       <DependentUpon>SettingsWnd.xaml</DependentUpon>
     </Compile>
@@ -51,10 +51,14 @@
       <DependentUpon>MainWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NotebooksManagerUI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\INotebooksManagerUI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NotebooksStorage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Exceptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NoteType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Data\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Resources\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Notebooks\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)License.md" />

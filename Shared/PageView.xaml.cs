@@ -12,7 +12,7 @@ namespace SafeNotebooks
         {
             InitializeComponent();
 
-            App.Data.PageSelected += (sender, page) => ShowSelectedPage();
+            App.NotebooksManager.PageSelected += (sender, page) => ShowSelectedPage();
 
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
             //ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) => App.Data.SelectNote((Note)e.Item);
@@ -45,16 +45,16 @@ namespace SafeNotebooks
 
         void ShowSelectedPage()
         {
-            if (App.Data.SelectedPage != null)
+            if (App.NotebooksManager.SelectedPage != null)
             {
                 BatchBegin();
 
                 AppBar.IsVisible = true;
 
-                SelectedPageName.Text = App.Data.SelectedPage.DisplayName;
-                SelectedPageParentName.Text = $"{T.Localized("in")} {App.Data.SelectedPage.Parent.DisplayName}";
+                SelectedPageName.Text = App.NotebooksManager.SelectedPage.NameForLists;
+                SelectedPageParentName.Text = $"{T.Localized("in")} {App.NotebooksManager.SelectedPage.Notebook?.NameForLists}, {App.NotebooksManager.SelectedPage.Notebook?.Storage?.Name}";
 
-                ListCtl.ItemsSource = App.Data.SelectedPage.Notes;
+                ListCtl.ItemsSource = App.NotebooksManager.SelectedPage.Notes;
                 ListCtl.IsVisible = true;
 
                 FavoriteNewBtn.Text = T.Localized("New") + ": " + "@Note@"; // TODO: get favorite item type name from page
@@ -74,6 +74,7 @@ namespace SafeNotebooks
 
         void BackBtn_Clicked(object sender, System.EventArgs e)
         {
+            ListCtl.ItemsSource = null;
             MainWnd.Current.NotebooksViewIsVisible = true;
         }
 
@@ -98,7 +99,7 @@ namespace SafeNotebooks
 
         async void NewBtn_Clicked(object sender, System.EventArgs e)
         {
-            string rc = await Application.Current.MainPage.DisplayActionSheet(T.Localized("SelectAndNew"), T.Localized("Cancel"), null, "Note", "Task", "Account", "Identity");
+            string rc = await Application.Current.MainPage.DisplayActionSheet(T.Localized("SelectAndNew"), T.Localized("Cancel"), null, "Note", "Checklist", "Secret");
             New(rc);
         }
 
@@ -107,15 +108,11 @@ namespace SafeNotebooks
             New("Note");
         }
 
-        void New(string what)
+        async void New(string what)
         {
-            //Application.Current.MainPage.DisplayAlert("Create new", what, "Cancel");
-            Note note = new Note()
-            {
-                Name = DateTime.Now.ToString()
-            };
-
-            App.Data.SelectedPage.AddNote(note);
+            Note o = await App.NotebooksManager.SelectedPage.NewNoteAsync();
+            if(o != null)
+    			App.NotebooksManager.SelectNoteAsync(o);
         }
 
         void SortBtn_Clicked(object sender, System.EventArgs e)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Linq;
 using pbXNet;
 using pbXSecurity;
 using Xamarin.Forms;
@@ -18,57 +19,77 @@ namespace SafeNotebooks
 
         //
 
-        static Lazy<Data> _Data = new Lazy<Data>(() => new Data());
-        public static Data Data
-        {
-            get { return _Data.Value; }
-        }
-
-        //
-
         static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new AesCryptographer(), new Settings.Storage()));
-        public static ISecretsManager SecretsManager
-        {
-            get { return _SecretsManager.Value; }
-        }
+        public static ISecretsManager SecretsManager => _SecretsManager.Value;
 
-        private Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
-        private UnlockWnd UnlockWnd
-        {
-            get { return _UnlockWnd.Value; }
-        }
+        static Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
+        static UnlockWnd UnlockWnd => _UnlockWnd.Value;
 
         //
 
-        async void Tests()
+        static Lazy<NotebooksManager> _DataManager = new Lazy<NotebooksManager>(() => new NotebooksManager(App.Name));
+		public static NotebooksManager NotebooksManager => _DataManager.Value;
+
+        static Lazy<NotebooksManagerUI> _DataManagerUI = new Lazy<NotebooksManagerUI>(() => new NotebooksManagerUI());
+		public static NotebooksManagerUI DataManagerUI => _DataManagerUI.Value;
+
+		//
+
+		async void Tests()
         {
-			await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
+			//***
+			
+            string obs = "Ala ma kota";
+            string obo = Obfuscator.Obfuscate(obs);
+            string obd = Obfuscator.DeObfuscate(obo);
+
+            //***
+
             //await SecretsManager.DeletePasswordAsync(App.Name);
+            //await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
+			//await SecretsManager.DeletePasswordAsync(App.Name);
 
-			DeviceFileSystem fs = new DeviceFileSystem();
-			await fs.SetCurrentDirectoryAsync("a");
-            IFileSystem fsc = await fs.MakeCopyAsync();
-			await fs.SetCurrentDirectoryAsync("..");
+			//***
+			
+            //DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Personal);
+            //try
+            //{
+            //    string fn = "O-" + pbXNet.Tools.CreateGuid() + "-" + pbXNet.Tools.CreateGuid() + "-" + pbXNet.Tools.CreateGuid() + "-1";
+            //    await fs.WriteTextAsync(fn, "1");
+            //    string d = await fs.ReadTextAsync(fn);
+            //    Debug.WriteLine(d);
+            //}
+            //catch (Exception e)
+            //{
+            //    Debug.WriteLine(e.ToString());
+            //}
 
-            IEnumerable<string> d = await fs.GetDirectoriesAsync();
-			IEnumerable<string> f = await fs.GetFilesAsync();
+            //DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Personal);
+			//await fs.SetCurrentDirectoryAsync("a");
+			//IFileSystem fsc = await fs.MakeCopyAsync();
+			//await fs.SetCurrentDirectoryAsync("..");
 
-            bool de = await fs.DirectoryExistsAsync(".config");
+			//IEnumerable<string> d = await fs.GetDirectoriesAsync();
+			//IEnumerable<string> f = await fs.GetFilesAsync();
 
-            await fs.WriteTextAsync("ala", "jakiś tekst");
+			//bool de = await fs.DirectoryExistsAsync(".config");
 
-            bool fe = await fs.FileExistsAsync("ala");
+			//await fs.WriteTextAsync("ala", "jakiś tekst");
 
-            try
-            {
-                string tt = await fs.ReadTextAsync("ala");
-            }
-            catch { }
+			//bool fe = await fs.FileExistsAsync("ala");
 
-            await fs.CreateDirectoryAsync("dir1");
+			//try
+			//{
+			//    string tt = await fs.ReadTextAsync("ala");
+			//}
+			//catch { }
 
-			var tests = new AesCryptographerTests();
-			tests.BasicEncryptDecrypt();
+			//await fs.CreateDirectoryAsync("dir1");
+
+			//***
+
+			//var tests = new AesCryptographerTests();
+			//tests.BasicEncryptDecrypt();
 		}
 
         void InitializeLocalization()
@@ -96,19 +117,18 @@ namespace SafeNotebooks
             MainPage = new MainWnd();
         }
 
+
         protected override void OnStart()
         {
             Debug.WriteLine("OnStart");
 
-            Data.SecretsManager = SecretsManager;
-
-            if (App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin)
+            if (UnlockWnd.UnlockingNeeded)
             {
-                UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
 
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    UnlockWnd.UnlockingMode();
+                    UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
+                    UnlockWnd.SetUnlockingMode();
                     await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
                 });
             }
@@ -133,34 +153,29 @@ namespace SafeNotebooks
             ContinueOnStart();
         }
 
-        void ContinueOnStart()
+        async void ContinueOnStart()
         {
             Debug.WriteLine("ContinueOnStart");
 
-            // TODO: prepare available FileSystems (with logins)
-            // TODO: pass FileSystems to data
+            // Prepare available file systems
+            // TODO: prepare available FileSystems other that device file system (with logins, etc.)
+
+            foreach(DeviceFileSystemRoot root in  DeviceFileSystem.AvailableRootsForEndUser)
+                NotebooksManager.AddFileSystem(new DeviceFileSystem(root));
 
 
-            // TODO: load data (minimum set -> global data settings, list of notebooks (minimum data))
-            // TODO: restore last selections (with unlocking if necessary)
+			// Prepare DataManager
 
-            //await MainPage.DisplayAlert("settings...", ttt, "cancel");
-            Notebook n = new Notebook()
-            {
-                Name = "Notebook " + App.Data.Notebooks.Count
-            };
-            App.Data.Notebooks.Add(n);
-            App.Data.SelectNotebook(n);
+			NotebooksManager.SecretsManager = SecretsManager;
+            NotebooksManager.UI = DataManagerUI;
 
-            Page p = new Page()
-            {
-                Name = "Page _"
-            };
-            n.AddPage(p);
-            //App.Data.SelectPage(p);
-            App.Data.SelectPage(null);
-            //await MainPage.DisplayAlert("settings... 2", ttt, "cancel");
-        }
+            //
+
+            await App.NotebooksManager.LoadNotebooksAsync(App.Settings.TryToUnlockItemChildren);
+
+			// TODO: restore last selections (with unlocking if necessary)
+			//await App.DataManager.SelectNotebookAsync(n);
+		}
 
 
         protected override void OnSleep()
@@ -187,7 +202,7 @@ namespace SafeNotebooks
             // Show lock screen in order to hide data in task manager
             Device.BeginInvokeOnMainThread(async () =>
             {
-                UnlockWnd.SplashMode();
+                UnlockWnd.SetSplashMode();
                 await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
             });
             //await Task.Delay(5000);
@@ -202,12 +217,11 @@ namespace SafeNotebooks
             if (UnlockWnd.State != UnlockWnd.TState.Splash)
                 return;
 
-            if (App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin)
+            if (UnlockWnd.UnlockingNeeded)
             {
-                UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
-
                 Device.BeginInvokeOnMainThread(() =>
                 {
+                    UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
                     UnlockWnd.TryToUnlock();
                 });
             }
@@ -227,7 +241,7 @@ namespace SafeNotebooks
             ContinueOnResume();
         }
 
-        void ContinueOnResume()
+        async void ContinueOnResume()
         {
             Debug.WriteLine("ContinueOnResume");
 

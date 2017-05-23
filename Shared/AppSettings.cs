@@ -16,18 +16,19 @@ namespace SafeNotebooks
                 get { return CrossSettings.Current; }
             }
 
+
             public class Storage : IStorage<string>
             {
-                public async Task StoreAsync(string id, string data)
-                {
-                    Current.AddOrUpdateValue<string>(id, data);
-                }
+                public string Id => "2b60a5af8f5e4fa4be62cb05bacbdf2b";
 
-                public async Task<bool> ExistsAsync(string id)
-                {
-                    return Current.Contains(id);
-                }
+                public string Name => T.Localized("Settings");
 
+				public async Task StoreAsync(string id, string data) => Current.AddOrUpdateValue<string>(id, data);
+
+                public async Task<bool> ExistsAsync(string id) => Current.Contains(id);
+
+				public async Task DiscardAsync(string id) => Current.Remove(id);
+				
                 public async Task<string> GetACopyAsync(string id)
                 {
                     string rc = null;
@@ -42,31 +43,35 @@ namespace SafeNotebooks
                     await DiscardAsync(id);
                     return data;
                 }
-
-                public async Task DiscardAsync(string id)
-                {
-                    Current.Remove(id);
-                }
             }
 
-            // Security
 
-            const string UnlockUsingDeviceOwnerAuthenticationKey = "_uus";
+            // Security settings
+
+            const string UnlockUsingDeviceOwnerAuthenticationKey = "_uudoa";
             static readonly bool UnlockUsingDeviceOwnerAuthenticationDefault = false;
             const string UnlockUsingPinKey = "_uup";
-            static readonly bool UnlockUsingPinDefault = true;
+            static readonly bool UnlockUsingPinDefault = false;
+			const string TryToUnlockItemChildrenKey = "_ttuic";
+			static readonly bool TryToUnlockItemChildrenDefault = false;
 
-            public static bool UnlockUsingDeviceOwnerAuthentication
+			public static bool UnlockUsingDeviceOwnerAuthentication
             {
-                get { return Current.GetValueOrDefault<bool>(UnlockUsingDeviceOwnerAuthenticationKey, UnlockUsingDeviceOwnerAuthenticationDefault); }
-                set { Current.AddOrUpdateValue<bool>(UnlockUsingDeviceOwnerAuthenticationKey, value); }
+                get => Current.GetValueOrDefault<bool>(UnlockUsingDeviceOwnerAuthenticationKey, UnlockUsingDeviceOwnerAuthenticationDefault);
+                set => Current.AddOrUpdateValue<bool>(UnlockUsingDeviceOwnerAuthenticationKey, value);
             }
 
             public static bool UnlockUsingPin
             {
-                get { return Current.GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault); }
-                set { Current.AddOrUpdateValue<bool>(UnlockUsingPinKey, value); }
+                get => Current.GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault);
+                set => Current.AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
             }
-        }
+		
+            public static bool TryToUnlockItemChildren
+			{
+				get => Current.GetValueOrDefault<bool>(TryToUnlockItemChildrenKey, TryToUnlockItemChildrenDefault);
+				set => Current.AddOrUpdateValue<bool>(TryToUnlockItemChildrenKey, value);
+			}
+		}
     }
 }

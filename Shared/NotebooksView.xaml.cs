@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using pbXForms;
 using pbXNet;
 using Xamarin.Forms;
@@ -12,19 +13,22 @@ namespace SafeNotebooks
         {
             InitializeComponent();
 
-            App.Data.NotebookSelected += (sender, notebook) => ShowSelectedNotebook();
+            App.NotebooksManager.NotebookSelected += (sender, notebook) => ShowSelectedNotebook();
+            App.NotebooksManager.NotebookLoaded += NotebookLoaded;
+            App.NotebooksManager.PageLoaded += PageLoaded;
 
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
 
             ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) =>
             {
                 if (e.Item is Notebook)
-                    App.Data.SelectNotebook((Notebook)e.Item);
+                    App.NotebooksManager.SelectNotebookAsync((Notebook)e.Item, App.Settings.TryToUnlockItemChildren);
                 else
-                    App.Data.SelectPage((Page)e.Item);
+                    App.NotebooksManager.SelectPageAsync((Page)e.Item, App.Settings.TryToUnlockItemChildren);
             };
 
-			ShowSelectedNotebook();
+
+            ShowSelectedNotebook();
         }
 
         protected override void ContinueOnSizeAllocated(double width, double height)
@@ -37,7 +41,7 @@ namespace SafeNotebooks
         {
             BatchBegin();
 
-            if (App.Data.SelectedNotebook == null)
+            if (App.NotebooksManager.SelectedNotebook == null)
             {
                 BackBtn.IsVisible = false;
 
@@ -45,9 +49,9 @@ namespace SafeNotebooks
 
                 SelectedNotebookBar.IsVisible = false;
 
-                ListCtl.ItemsSource = App.Data.Notebooks;
+                ListCtl.ItemsSource = App.NotebooksManager.Notebooks;
 
-                NewBtn.Text = T.Localized("NewNotebook"); 
+                NewBtn.Text = T.Localized("NewNotebook");
             }
             else
             {
@@ -57,14 +61,32 @@ namespace SafeNotebooks
 
                 SelectedNotebookBar.IsVisible = true;
 
-                ListCtl.ItemsSource = App.Data.SelectedNotebook.Pages;
+                ListCtl.ItemsSource = App.NotebooksManager.SelectedNotebook.Pages;
 
-                SelectedNotebookName.Text = App.Data.SelectedNotebook.DisplayName;
+                SelectedNotebookName.Text = App.NotebooksManager.SelectedNotebook.NameForLists;
 
                 NewBtn.Text = T.Localized("NewPage");
-			}
+            }
 
             BatchCommit();
+        }
+
+        void RefreshListCtl()
+        {
+            // TODO: How to refresh ListView in a more elegant way?
+            var l = ListCtl.ItemsSource;
+            ListCtl.ItemsSource = null;
+            ListCtl.ItemsSource = l;
+        }
+
+        void NotebookLoaded(object sender, Notebook notebook)
+        {
+            RefreshListCtl();
+        }
+
+        void PageLoaded(object sender, Page page)
+        {
+            RefreshListCtl();
         }
 
         //
@@ -80,58 +102,48 @@ namespace SafeNotebooks
         }
 
 
-		void BackBtn_Clicked(object sender, System.EventArgs e)
-		{
-			App.Data.SelectNotebook(null);
-		}
+        void BackBtn_Clicked(object sender, System.EventArgs e)
+        {
+            App.NotebooksManager.SelectNotebookAsync(null, false);
+        }
 
-		void EditBtn_Clicked(object sender, System.EventArgs e)
-		{
-			Application.Current.MainPage.DisplayAlert("Edit...", "Enable multiple items edit/delete mode?", "Cancel");
-		}
+        void EditBtn_Clicked(object sender, System.EventArgs e)
+        {
+            Application.Current.MainPage.DisplayAlert("Edit...", "Enable multiple items edit/delete mode?", "Cancel");
+        }
 
-		
+
         async void EditItemBtn_Clicked(object sender, System.EventArgs e)
         {
             Item item = (Item)(sender as MenuItem).CommandParameter;
-            await Application.Current.MainPage.DisplayAlert("Edit", item.ToString(), "Cancel");
+            await Application.Current.MainPage.DisplayAlert("Edit", item.NameForLists, "Cancel");
         }
 
-		async void MoveItemBtn_Clicked(object sender, System.EventArgs e)
-		{
-			Item item = (Item)(sender as MenuItem).CommandParameter;
-			await Application.Current.MainPage.DisplayAlert("Move", item.ToString(), "Cancel");
-		}
-		
+        async void MoveItemBtn_Clicked(object sender, System.EventArgs e)
+        {
+            Item item = (Item)(sender as MenuItem).CommandParameter;
+            await Application.Current.MainPage.DisplayAlert("Move", item.NameForLists, "Cancel");
+        }
+
         async void DeleteItemBtn_Clicked(object sender, System.EventArgs e)
         {
             Item item = (Item)(sender as MenuItem).CommandParameter;
-            await Application.Current.MainPage.DisplayAlert("Delete", item.ToString(), "Cancel");
+            await Application.Current.MainPage.DisplayAlert("Delete", item.NameForLists, "Cancel");
         }
 
-        void NewBtn_Clicked(object sender, System.EventArgs e)
+        async void NewBtn_Clicked(object sender, System.EventArgs e)
         {
-            if (App.Data.SelectedNotebook == null)
+            if (App.NotebooksManager.SelectedNotebook == null)
             {
-                Notebook n = new Notebook()
-                {
-                    Name = T.Localized("Notebook") + " " + App.Data.Notebooks.Count
-                };
-
-                App.Data.Notebooks.Add(n);
-
-                App.Data.SelectNotebook(n);
+                Notebook n = await App.NotebooksManager.NewNotebookAsync();
+                if (n != null)
+                    App.NotebooksManager.SelectNotebookAsync(n, App.Settings.TryToUnlockItemChildren);
             }
             else
             {
-                Page p = new Page()
-                {
-                    Name = T.Localized("Page") + " " + App.Data.SelectedNotebook.Pages.Count
-                };
-
-                App.Data.SelectedNotebook.AddPage(p);
-
-                App.Data.SelectPage(p);
+                Page p = await App.NotebooksManager.SelectedNotebook.NewPageAsync();
+                if (p != null)
+                    App.NotebooksManager.SelectPageAsync(p, App.Settings.TryToUnlockItemChildren);
             }
         }
 

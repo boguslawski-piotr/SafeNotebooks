@@ -24,11 +24,14 @@
     <value>in</value>
   </data>
 	
-  <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Unlock</value>
   </data>
   <data name="New" xml:space="preserve">
     <value>Add</value>

@@ -191,6 +191,16 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_more_horiz.png" />
     <AndroidResource Include="Resources\values-pl\strings.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_lock_outline.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_lock_outline.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_lock_outline.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_lock_outline.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_lock_outline.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_chevron_right.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_chevron_right.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_chevron_right.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_chevron_right.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_chevron_right.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">
