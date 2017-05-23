@@ -295,7 +295,7 @@ namespace SafeNotebooks
 
                 DeserializeNotEncryptedData(_ned);
 
-                if (!IsSecured || tryToUnlock)
+                if (tryToUnlock || !IsSecured || (!ThisIsSecured && Parent.DataIsAvailable))
                 {
                     string _d = d.Substring(_nedEnd + 1);
 

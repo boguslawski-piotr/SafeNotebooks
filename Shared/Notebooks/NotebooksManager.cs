@@ -9,54 +9,9 @@ namespace SafeNotebooks
 {
     public class NotebooksManager
     {
-        public string Id { get; }
-
-        public NotebooksManager(string id)
-        {
-            Id = id;
-        }
-
         public ISecretsManager SecretsManager { get; set; }
 
         public INotebooksManagerUI UI { get; set; }
-
-        //
-
-        protected IList<IFileSystem> FileSystems = new List<IFileSystem>();
-
-        public void AddFileSystem(IFileSystem fs)
-        {
-            FileSystems.Add(fs);
-        }
-
-        async Task<IFileSystem> SelectFileSystemAsync()
-        {
-            if (FileSystems.Count <= 0)
-            {
-                return new DeviceFileSystem(DeviceFileSystemRoot.Personal);
-            }
-            else if (FileSystems.Count == 1)
-            {
-                return FileSystems[0];
-            }
-
-            return await UI?.SelectFileSystemAsync(FileSystems);
-        }
-
-        protected IDictionary<string, NotebooksStorage> Storages = new Dictionary<string, NotebooksStorage>();
-
-        async Task<NotebooksStorage> GetStorageAsync(IFileSystem fs)
-        {
-            if (Storages.ContainsKey(fs.Id))
-                return Storages[fs.Id];
-
-            NotebooksStorage storage = new NotebooksStorage(Id, fs);
-            await storage.InitializeAsync();
-
-            Storages[fs.Id] = storage;
-            return storage;
-        }
-
 
         //
 
@@ -73,9 +28,7 @@ namespace SafeNotebooks
 
             await item.InitializePasswordAsync(rc.passwd);
 
-            // Save 
             await item.BatchCommitAsync(true);
-
             return true;
         }
 
@@ -85,8 +38,8 @@ namespace SafeNotebooks
 			if (list.Count > 0)
 				return;
 			
-            IEnumerable<string> noteIds = await forWhom.Storage.FindIdsAsync(pattern);
-            foreach (var id in noteIds)
+            IEnumerable<string> ids = await forWhom.Storage.FindIdsAsync(pattern);
+            foreach (var id in ids)
             {
                 T item = new T() { NotebooksManager = this };
                 await item.OpenAsync(forWhom, id, tryToUnlock);
@@ -98,7 +51,7 @@ namespace SafeNotebooks
 
 		public ObservableCollection<Notebook> Notebooks { get; private set; } = new ObservableCollection<Notebook>();
 
-        public async Task LoadNotebooksAsync(bool tryToUnlock)
+        public async Task LoadNotebooksAsync(IEnumerable<ISearchableStorage<string>> storages, bool tryToUnlock)
         {
             //
 
@@ -108,10 +61,8 @@ namespace SafeNotebooks
             // Load notebooks from all available file systems
 
             string pattern = Notebook.IdForStoragePrefix + "\\w*";
-            foreach (var fs in FileSystems)
+            foreach (var storage in storages)
             {
-                NotebooksStorage storage = await GetStorageAsync(fs);
-
 				IEnumerable<string> notebookIds = await storage.FindIdsAsync(pattern);
                 foreach (var id in notebookIds)
                 {
@@ -127,13 +78,9 @@ namespace SafeNotebooks
             //Notebooks.Sort((v) => v.DisplayName);
         }
 
-        public async Task<Notebook> NewNotebookAsync()
+        public async Task<Notebook> NewNotebookAsync(ISearchableStorage<string> storage)
         {
-            IFileSystem fs = await SelectFileSystemAsync();
-            if (fs == null)
-                return null;
-
-            Notebook notebook = new Notebook() { NotebooksManager = this, Storage = await GetStorageAsync(fs) };
+            Notebook notebook = new Notebook() { NotebooksManager = this, Storage = storage };
             if (!await NewItemHelperAsync(notebook, null))
                 return null;
 

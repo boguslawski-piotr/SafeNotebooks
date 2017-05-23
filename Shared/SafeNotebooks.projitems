@@ -53,9 +53,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NotebooksManagerUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\INotebooksManagerUI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NotebooksStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NoteType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoragesManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Notebooks\" />

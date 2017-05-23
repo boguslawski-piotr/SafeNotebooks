@@ -25,13 +25,16 @@ namespace SafeNotebooks
         static Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
         static UnlockWnd UnlockWnd => _UnlockWnd.Value;
 
-        //
+		//
 
-        static Lazy<NotebooksManager> _DataManager = new Lazy<NotebooksManager>(() => new NotebooksManager(App.Name));
-		public static NotebooksManager NotebooksManager => _DataManager.Value;
+		static Lazy<StoragesManager> _StoragesManager = new Lazy<StoragesManager>(() => new StoragesManager());
+		public static StoragesManager StoragesManager => _StoragesManager.Value;
 
-        static Lazy<NotebooksManagerUI> _DataManagerUI = new Lazy<NotebooksManagerUI>(() => new NotebooksManagerUI());
-		public static NotebooksManagerUI DataManagerUI => _DataManagerUI.Value;
+        static Lazy<NotebooksManager> _NotebooksManager = new Lazy<NotebooksManager>(() => new NotebooksManager());
+		public static NotebooksManager NotebooksManager => _NotebooksManager.Value;
+
+        static Lazy<NotebooksManagerUI> _NotebooksManagerUI = new Lazy<NotebooksManagerUI>(() => new NotebooksManagerUI());
+        public static NotebooksManagerUI NotebooksManagerUI => _NotebooksManagerUI.Value;
 
 		//
 
@@ -157,21 +160,18 @@ namespace SafeNotebooks
         {
             Debug.WriteLine("ContinueOnStart");
 
-            // Prepare available file systems
-            // TODO: prepare available FileSystems other that device file system (with logins, etc.)
+            // Prepare available file systems/storages
 
-            foreach(DeviceFileSystemRoot root in  DeviceFileSystem.AvailableRootsForEndUser)
-                NotebooksManager.AddFileSystem(new DeviceFileSystem(root));
-
+            await StoragesManager.InitializeAsync();
 
 			// Prepare DataManager
 
 			NotebooksManager.SecretsManager = SecretsManager;
-            NotebooksManager.UI = DataManagerUI;
+            NotebooksManager.UI = NotebooksManagerUI;
 
             //
 
-            await App.NotebooksManager.LoadNotebooksAsync(App.Settings.TryToUnlockItemChildren);
+            await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemChildren);
 
 			// TODO: restore last selections (with unlocking if necessary)
 			//await App.DataManager.SelectNotebookAsync(n);
@@ -199,7 +199,7 @@ namespace SafeNotebooks
             //Data.SelectPage(null, false);
 
 
-            // Show lock screen in order to hide data in task manager
+            // Show lock screen in order to hide data in system task manager
             Device.BeginInvokeOnMainThread(async () =>
             {
                 UnlockWnd.SetSplashMode();
@@ -249,8 +249,6 @@ namespace SafeNotebooks
             {
                 await Application.Current.MainPage.Navigation.PopModalAsync(false);
             });
-
-            // TODO: if data was not locked in OnSleep restore previously selected data
         }
 
     }

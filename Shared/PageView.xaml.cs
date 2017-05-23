@@ -17,7 +17,7 @@ namespace SafeNotebooks
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
             //ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) => App.Data.SelectNote((Note)e.Item);
 
-            //NoDataUI();
+            NoDataUI();
         }
 
         protected override void ContinueOnSizeAllocated(double width, double height)

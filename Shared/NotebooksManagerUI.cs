@@ -30,24 +30,6 @@ namespace SafeNotebooks
         }
 
 
-		public async Task<IFileSystem> SelectFileSystemAsync(IEnumerable<IFileSystem> fileSystems)
-		{
-            string fsName = await App.Current.MainPage.DisplayActionSheet("Where do you want to store the newly created notebook?", // TODO: localization
-                                                                          T.Localized("Cancel"), 
-                                                                          null, 
-                                                                          fileSystems.Select((fs1) => fs1.Name).ToArray());
-
-            try
-            {
-                return fileSystems.First((fs2) => fs2.Name == fsName);
-            }
-            catch
-            {
-                return null;
-            }
-		}
-
-
         static int xxx = 0;
 
         public async Task<(bool, string)> EditItemAsync(Item item)

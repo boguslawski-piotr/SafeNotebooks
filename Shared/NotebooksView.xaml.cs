@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
 using Xamarin.Forms;
@@ -18,7 +19,6 @@ namespace SafeNotebooks
             App.NotebooksManager.PageLoaded += PageLoaded;
 
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
-
             ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) =>
             {
                 if (e.Item is Notebook)
@@ -26,7 +26,6 @@ namespace SafeNotebooks
                 else
                     App.NotebooksManager.SelectPageAsync((Page)e.Item, App.Settings.TryToUnlockItemChildren);
             };
-
 
             ShowSelectedNotebook();
         }
@@ -75,8 +74,10 @@ namespace SafeNotebooks
         {
             // TODO: How to refresh ListView in a more elegant way?
             var l = ListCtl.ItemsSource;
+            ListCtl.BeginRefresh();
             ListCtl.ItemsSource = null;
             ListCtl.ItemsSource = l;
+            ListCtl.EndRefresh();
         }
 
         void NotebookLoaded(object sender, Notebook notebook)
@@ -131,14 +132,37 @@ namespace SafeNotebooks
             await Application.Current.MainPage.DisplayAlert("Delete", item.NameForLists, "Cancel");
         }
 
-        async void NewBtn_Clicked(object sender, System.EventArgs e)
+
+		//
+
+        public async Task<StorageOnFileSystem<string>> SelectStorageUIAsync(IEnumerable<StorageOnFileSystem<string>> storages)
+		{
+			string fsName = await App.Current.MainPage.DisplayActionSheet("Where do you want to store the notebook?", // TODO: localization
+																		  T.Localized("Cancel"),
+																		  null,
+                                                                          storages.Select((storage1) => storage1.Name).ToArray());
+			try
+			{
+                return storages.First((storage2) => storage2.Name == fsName);
+			}
+			catch
+			{
+				return null;
+			}
+		}
+
+		async void NewBtn_Clicked(object sender, System.EventArgs e)
         {
             if (App.NotebooksManager.SelectedNotebook == null)
             {
-                Notebook n = await App.NotebooksManager.NewNotebookAsync();
-                if (n != null)
-                    App.NotebooksManager.SelectNotebookAsync(n, App.Settings.TryToUnlockItemChildren);
-            }
+                StorageOnFileSystem<string> storage = await App.StoragesManager.SelectStorageAsync(SelectStorageUIAsync);
+				if (storage != null)
+				{
+					Notebook n = await App.NotebooksManager.NewNotebookAsync(storage);
+					if (n != null)
+						App.NotebooksManager.SelectNotebookAsync(n, App.Settings.TryToUnlockItemChildren);
+				}
+			}
             else
             {
                 Page p = await App.NotebooksManager.SelectedNotebook.NewPageAsync();
