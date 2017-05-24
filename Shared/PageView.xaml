@@ -5,22 +5,20 @@
     xmlns:pbXForms = "clr-namespace:pbXForms"
     xmlns:T = "clr-namespace:pbXForms"
     xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.PageView">
+    x:Class = "SafeNotebooks.PageView"
+    BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}">
 
     <pbXForms:ContentViewEx.AppBarContent>
 
         <pbXForms:FlatButton
             x:Name = "BackBtn"
+            IsVisible = "true"
             Image = "ic_arrow_back.png"
             Clicked = "BackBtn_Clicked" />
 
         <StackLayout
-            Orientation = "Vertical"
-            VerticalOptions = "CenterAndExpand"
-            HorizontalOptions = "FillAndExpand"
-            Padding = "0"
-            Margin = "0"
-            Spacing = "0">
+            x:Name = "SelectedPageBar"
+            Style = "{StaticResource stVerticalNoSpaces}">
 
             <Label
                 x:Name = "SelectedPageName"
@@ -45,11 +43,6 @@
             Image = "ic_mode_edit.png"
             Clicked = "EditBtn_Clicked" />
 
-        <pbXForms:FlatButton
-            x:Name = "SearchBtn"
-            Image = "ic_search.png"
-            Clicked = "SearchBtn_Clicked" />
-        
     </pbXForms:ContentViewEx.AppBarContent>
 
     <pbXForms:ContentViewEx.ViewContent>
@@ -61,61 +54,101 @@
             SeparatorColor = "{StaticResource ListItemDividerColor}"
             ItemTemplate = "{DynamicResource ItemListViewItemTemlate}">
 
+            <ListView.Header>
+
+                <StackLayout
+                    x:Name = "SearchBar"
+                    Style = "{StaticResource stHorizontalNoSpaces}"
+                    Padding = "{StaticResource SearchBarPadding}">
+
+                    <Entry
+                        x:Name = "SearchQuery"
+                        TextChanged = "SearchQuery_TextChanged"
+                        Focused = "SearchQuery_Focused"
+                        Unfocused = "SearchQuery_Unfocused"
+                        Placeholder = "{T:Localized SearchQueryPlaceholder}"
+                        HorizontalTextAlignment = "Center"
+                        BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
+                        HorizontalOptions = "FillAndExpand" />
+
+                    <pbXForms:FlatButton
+                        x:Name = "CancelSearchBtn"
+                        IsVisible = "false"
+                        HeightRequest = "{x:Static pbXForms:Metrics.IconHeight}"
+                        Image = "ic_close.png"
+                        Clicked = "CancelSearchBtn_Clicked" />
+
+                </StackLayout>
+
+            </ListView.Header>
+
         </ListView>
+
+        <StackLayout
+            x:Name = "NoUIBar"
+            Style = "{StaticResource stVerticalNoSpaces}">
+
+            <Image
+                x:Name = "Logo"
+                WidthRequest = "112"
+                HeightRequest = "112"
+                Aspect = "AspectFit"
+                Margin = "20, 0, 20, 20"
+                Source = "icon.png" />
+
+            <Label
+                x:Name = "NoUIText"
+                Text = "Witamy w programie Bezpieczne Notatniki"
+                HorizontalOptions = "Center"
+                VerticalOptions = "CenterAndExpand" />
+            <Label
+                Margin="20"
+                x:Name = "NoUIText2"
+                Text = "Możesz w nim bezpiecznie trzymać wszystkie swoje sekrety :)"
+                HorizontalOptions = "Center"
+                HorizontalTextAlignment="Center"
+                VerticalOptions = "CenterAndExpand" />
+
+        </StackLayout>
 
     </pbXForms:ContentViewEx.ViewContent>
 
     <pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
         <StaticResourceExtension
-            Key = "PageViewToolBarBackgroundColor" />
+            Key = "ListOfNotesToolBarBackgroundColor" />
 
     </pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
     <pbXForms:ContentViewEx.ToolBarContent>
 
-        <pbXForms:FlatButton
-            HorizontalOptions = "Start"
-            Image = "" />
-        
-<!--        <Label
-            HorizontalOptions = "FillAndExpand" />
--->
-        <Label
-            HorizontalOptions = "FillAndExpand" />
+        <pbXForms:ToolBarGridLayout>
 
-        <Label
-            HorizontalOptions = "FillAndExpand" />
+            <pbXForms:FlatButton
+                Grid.Column = "0"
+                HorizontalOptions = "Fill"
+                Image = "ic_sort.png"
+                Clicked = "SortBtn_Clicked" />
 
-        <pbXForms:FlatButton
-            x:Name = "FavoriteNewBtn"
-            WidthRequest = "-1"
-            HorizontalOptions = "FillAndExpand"
-            Text = "@New: Note@"
-            FontAttributes = "Bold"
-            TextColor = "{StaticResource AccentTextColor}"
-            Clicked = "FavoriteNewBtn_Clicked" />
+            <pbXForms:FlatButton
+                Grid.Column = "1"
+                HorizontalOptions = "Fill"
+                Image = "ic_add_circle_outline.png"
+                Clicked = "NewBtn_Clicked" />
 
-        <pbXForms:FlatButton
-            WidthRequest = "-1"
-            HorizontalOptions = "FillAndExpand"
-            Text = "{T:Localized SelectAndNew}"
-            TextColor = "{StaticResource ToolBarTextColor}"
-            Clicked = "NewBtn_Clicked" />
+            <pbXForms:FlatButton
+                Grid.Column = "2"
+                x:Name = "OKBtn"
+                Image = "ic_add_circle.png"
+                Clicked = "FavoriteNewBtn_Clicked" />
 
-        <Label
-            HorizontalOptions = "FillAndExpand" />
+            <pbXForms:FlatButton
+                Grid.Column = "3"
+                x:Name = "EditItemsBtn"
+                Image = "ic_transform.png.png"
+                Clicked = "EditItemsBtn_Clicked" />
 
-        <Label
-            HorizontalOptions = "FillAndExpand" />
-
-        <Label
-            HorizontalOptions = "FillAndExpand" />
-
-        <pbXForms:FlatButton
-            HorizontalOptions="End"
-            Image="ic_sort.png"
-            Clicked="SortBtn_Clicked" />
+        </pbXForms:ToolBarGridLayout>
 
     </pbXForms:ContentViewEx.ToolBarContent>
 

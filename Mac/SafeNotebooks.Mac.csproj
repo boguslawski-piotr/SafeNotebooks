@@ -124,6 +124,11 @@
     <BundleResource Include="Resources\pl.lproj\InfoPlist.strings" />
     <BundleResource Include="Resources\ic_lock_outline.png" />
     <BundleResource Include="Resources\ic_chevron_right.png" />
+    <BundleResource Include="Resources\ic_close.png" />
+    <BundleResource Include="Resources\ic_done.png" />
+    <BundleResource Include="Resources\ic_add_circle.png" />
+    <BundleResource Include="Resources\ic_add_circle_outline.png" />
+    <BundleResource Include="Resources\ic_transform.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">

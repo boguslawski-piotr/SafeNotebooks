@@ -1,24 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using pbXNet;
 using pbXSecurity;
 
 namespace SafeNotebooks
 {
-    public class Notebook : Item
+    public class ItemWChildren<T> : Item where T: Item
     {
-        public ObservableCollection<Page> Pages { get; private set; } = new ObservableCollection<Page>();
+        protected IList<T> _Items = new List<T>();
+		public ObservableCollection<T> Items { get; protected set; } = new ObservableCollection<T>();
 
+        public void AddItem(T item)
+        {
+            _Items.Add(item);
+        }
+
+		public void Sort()
+		{
+			// TODO: sortowanie zapamietaniem wyboru
+			Items = new ObservableCollection<T>(_Items.OrderBy((v) => v.NameForLists));
+
+            NotebooksManager.OnItemItemsSorted(this);
+            //NotebooksSorted?.Invoke(this, this);
+		}
+
+	}
+
+    public class Notebook : ItemWChildren<Page>
+    {
         public async Task<Page> NewPageAsync()
         {
             Page page = new Page() { NotebooksManager = NotebooksManager };
             if (!await NotebooksManager.NewItemHelperAsync(page, this))
                 return null;
 
-            Pages.Add(page);
-            // sort pages
+            AddItem(page);
+            Sort();
 
             return page;
         }
@@ -26,8 +46,10 @@ namespace SafeNotebooks
         public async Task AddPageAsync(Page page)
         {
             await page.ChangeParentAsync(this);
-            Pages.Add(page);
-        }
+
+            AddItem(page);
+			Sort();
+		}
 
         //
 
@@ -41,9 +63,12 @@ namespace SafeNotebooks
                 return false;
 
             string pattern = Page.IdForStoragePrefix + Id + "-\\w*";
-            await NotebooksManager.LoadChildrenForItemHelperAsync<Page>(this, Pages, pattern, tryToUnlockChildren);
+            bool anyPageLoaded = await NotebooksManager.LoadChildrenForItemHelperAsync<Page>(this, pattern, tryToUnlockChildren);
 
-            NotebooksManager.NotebookLoadedAsync(this);
+			if (anyPageLoaded)
+				Sort();
+
+            NotebooksManager.OnNotebookLoaded(this, anyPageLoaded);
             return true;
         }
 

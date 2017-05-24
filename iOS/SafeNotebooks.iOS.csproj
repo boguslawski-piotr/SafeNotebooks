@@ -175,6 +175,21 @@
     <BundleResource Include="Resources\ic_chevron_right%402x.png" />
     <BundleResource Include="Resources\ic_chevron_right%403x.png" />
     <BundleResource Include="Resources\ic_chevron_right.png" />
+    <BundleResource Include="Resources\ic_close%402x.png" />
+    <BundleResource Include="Resources\ic_close%403x.png" />
+    <BundleResource Include="Resources\ic_close.png" />
+    <BundleResource Include="Resources\ic_done%402x.png" />
+    <BundleResource Include="Resources\ic_done%403x.png" />
+    <BundleResource Include="Resources\ic_done.png" />
+    <BundleResource Include="Resources\ic_add_circle_outline%402x.png" />
+    <BundleResource Include="Resources\ic_add_circle_outline%403x.png" />
+    <BundleResource Include="Resources\ic_add_circle_outline.png" />
+    <BundleResource Include="Resources\ic_add_circle.png" />
+    <BundleResource Include="Resources\ic_add_circle%402x.png" />
+    <BundleResource Include="Resources\ic_add_circle%403x.png" />
+    <BundleResource Include="Resources\ic_transform%402x.png" />
+    <BundleResource Include="Resources\ic_transform%403x.png" />
+    <BundleResource Include="Resources\ic_transform.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">

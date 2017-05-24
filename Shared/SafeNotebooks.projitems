@@ -56,6 +56,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NoteType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StoragesManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewsCommonLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Notebooks\" />

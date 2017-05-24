@@ -137,6 +137,12 @@ namespace SafeNotebooks.Texts {
             }
         }
         
+        internal static string SearchQueryPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchQueryPlaceholder", resourceCulture);
+            }
+        }
+        
         internal static string AuthenticateDeviceOwnerReason {
             get {
                 return ResourceManager.GetString("AuthenticateDeviceOwnerReason", resourceCulture);

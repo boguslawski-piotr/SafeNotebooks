@@ -17,7 +17,7 @@ namespace SafeNotebooks
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
             //ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) => App.Data.SelectNote((Note)e.Item);
 
-            NoDataUI();
+            NoUI();
         }
 
         protected override void ContinueOnSizeAllocated(double width, double height)
@@ -29,7 +29,7 @@ namespace SafeNotebooks
             SelectedPageParentName.Margin = new Thickness(m, 0, 0, 0);
         }
 
-        void NoDataUI()
+        void NoUI()
         {
             BatchBegin();
 
@@ -37,6 +37,7 @@ namespace SafeNotebooks
 
 			ListCtl.IsVisible = false;
 			ListCtl.ItemsSource = null;
+            NoUIBar.IsVisible = true;
 
             ToolBar.IsVisible = false;
 
@@ -54,12 +55,11 @@ namespace SafeNotebooks
                 SelectedPageName.Text = App.NotebooksManager.SelectedPage.NameForLists;
                 SelectedPageParentName.Text = $"{T.Localized("in")} {App.NotebooksManager.SelectedPage.Notebook?.NameForLists}, {App.NotebooksManager.SelectedPage.Notebook?.Storage?.Name}";
 
-                ListCtl.ItemsSource = App.NotebooksManager.SelectedPage.Notes;
+                ListCtl.ItemsSource = App.NotebooksManager.SelectedPage.Items;
                 ListCtl.IsVisible = true;
+                NoUIBar.IsVisible = false;
 
-                FavoriteNewBtn.Text = T.Localized("New") + ": " + "@Note@"; // TODO: get favorite item type name from page
-
-                ToolBar.IsVisible = true;
+				ToolBar.IsVisible = true;
 
                 MainWnd.Current.NotebooksViewIsVisible = false;
 
@@ -67,7 +67,7 @@ namespace SafeNotebooks
             }
             else
             {
-                NoDataUI();
+                NoUI();
                 MainWnd.Current.NotebooksViewIsVisible = true;
             }
         }
@@ -84,12 +84,34 @@ namespace SafeNotebooks
 			App.NotebooksManager.SelectedPage?.EditAsync();
 		}
 
-		void SearchBtn_Clicked(object sender, System.EventArgs e)
+
+		void SearchQuery_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
 		{
-			Application.Current.MainPage.DisplayAlert("Search...", "Window for search in all data.", "Cancel");
+			ViewsCommonLogic.SearchQuery_Focused(SearchBar, SearchQuery, CancelSearchBtn);
 		}
 
-        async void NewBtn_Clicked(object sender, System.EventArgs e)
+		void SearchQuery_Unfocused(object sender, Xamarin.Forms.FocusEventArgs e)
+		{
+			ViewsCommonLogic.SearchQuery_Unfocused(SearchBar, SearchQuery, CancelSearchBtn);
+		}
+
+		void SearchQuery_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+		{
+			//throw new NotImplementedException();
+		}
+
+		void CancelSearchBtn_Clicked(object sender, System.EventArgs e)
+		{
+			ViewsCommonLogic.CancelSearchBtn_Clicked(SearchBar, SearchQuery, CancelSearchBtn);
+		}
+
+
+		void SortBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Sort", "Select sort for current view (ask for default?)", "Cancel");
+		}
+
+		async void NewBtn_Clicked(object sender, System.EventArgs e)
         {
             string rc = await Application.Current.MainPage.DisplayActionSheet(T.Localized("SelectAndNew"), T.Localized("Cancel"), null, "Note", "Checklist", "Secret");
             New(rc);
@@ -103,15 +125,18 @@ namespace SafeNotebooks
         async void New(string what)
         {
             Note o = await App.NotebooksManager.SelectedPage.NewNoteAsync();
-            if(o != null)
-    			App.NotebooksManager.SelectNoteAsync(o);
+            if (o != null)
+            {
+                App.NotebooksManager.SelectNoteAsync(o);
+                ListCtl.ScrollTo(o, ScrollToPosition.MakeVisible, true);
+            }
         }
 
-        void SortBtn_Clicked(object sender, System.EventArgs e)
-        {
-            //Application.Current.MainPage.DisplayAlert("Sort", "Select sort for current view (ask for default?)", "Cancel");
-            Application.Current.MainPage.Navigation.PushModalAsync(new UnlockWnd(), false);
-        }
+        void EditItemsBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Application.Current.MainPage.DisplayAlert("Edit items...", "edit multiple items", "Cancel");
+		}
 
-    }
+
+	}
 }

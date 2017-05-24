@@ -1,34 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pbXForms:ContentPageEx
-	xmlns="http://xamarin.com/schemas/2014/forms"
-	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:pbXForms="clr-namespace:pbXForms"
-    xmlns:T="clr-namespace:pbXForms"
-	x:Class="SafeNotebooks.SettingsWnd">
+    xmlns = "http://xamarin.com/schemas/2014/forms"
+    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pbXForms = "clr-namespace:pbXForms"
+    xmlns:T = "clr-namespace:pbXForms"
+    x:Class = "SafeNotebooks.SettingsWnd"
+    BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}">
 
-	<pbXForms:ContentPageEx.AppBarContent>
+    <pbXForms:ContentPageEx.AppBarContent>
 
-		<pbXForms:FlatButton
-			x:Name="BackBtn"
-			Image="ic_arrow_back.png"
-			WidthRequest="{x:Static pbXForms:Metrics.TouchTargetHeight}"
-			Clicked="BackBtn_Clicked" />
+        <pbXForms:FlatButton
+            x:Name = "BackBtn"
+            IsVisible = "false"
+            Image = "ic_arrow_back.png"
+            WidthRequest = "{x:Static pbXForms:Metrics.TouchTargetHeight}"
+            Clicked = "BackBtn_Clicked" />
 
-		<Label
-			Text="{T:Localized Settings}"
-			TextColor="{StaticResource AppBarTextColor}"
-			VerticalOptions="Center"
-			HorizontalOptions="FillAndExpand" />
+        <StackLayout
+            x:Name = "CaptionBar"
+            Style = "{StaticResource stVerticalNoSpaces}">
 
-	</pbXForms:ContentPageEx.AppBarContent>
+            <Label
+                Text = "{T:Localized AppName}"
+                FontAttributes = "Bold"
+                LineBreakMode = "MiddleTruncation"
+                TextColor = "{StaticResource AccentTextColor}"
+                VerticalOptions = "Center"
+                HorizontalOptions = "FillAndExpand" />
 
-	<pbXForms:ContentPageEx.PageContent>
+            <Label
+                Text = "{T:Localized Settings}"
+                FontSize = "Micro"
+                TextColor = "{StaticResource ListItemDetailColor}"
+                VerticalOptions = "Center"
+                HorizontalOptions = "FillAndExpand" />
 
-		<Label
-			Text="Settings..."
-			VerticalOptions="CenterAndExpand"
-			HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
 
-	</pbXForms:ContentPageEx.PageContent>
+    </pbXForms:ContentPageEx.AppBarContent>
+
+    <pbXForms:ContentPageEx.PageContent>
+
+        <Label
+            Text = "Settings..."
+            VerticalOptions = "CenterAndExpand"
+            HorizontalOptions = "CenterAndExpand" />
+
+    </pbXForms:ContentPageEx.PageContent>
+
+    <pbXForms:ContentPageEx.ToolBarBackgroundColor>
+
+        <StaticResourceExtension
+            Key = "ListOfNotesToolBarBackgroundColor" />
+
+    </pbXForms:ContentPageEx.ToolBarBackgroundColor>
+
+    <pbXForms:ContentPageEx.ToolBarContent>
+
+        <pbXForms:ToolBarGridLayout>
+
+            <pbXForms:FlatButton
+                Grid.Column = "0"
+                x:Name = "OKBtn"
+                HorizontalOptions = "Fill"
+                Image = "ic_done.png" />
+
+            <pbXForms:FlatButton
+                Grid.Column = "1"
+                x:Name = "CancelBtn"
+                HorizontalOptions = "Fill"
+                Image = "ic_close.png"
+                Clicked = "CancelBtn_Clicked" />
+
+        </pbXForms:ToolBarGridLayout>
+
+    </pbXForms:ContentPageEx.ToolBarContent>
 
 </pbXForms:ContentPageEx>

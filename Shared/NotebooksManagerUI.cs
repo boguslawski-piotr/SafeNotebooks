@@ -30,16 +30,18 @@ namespace SafeNotebooks
         }
 
 
-        static int xxx = 0;
-
         public async Task<(bool, string)> EditItemAsync(Item item)
         {
             await App.Current.MainPage.DisplayAlert("New/Edit", $"{item.GetType().Name}", T.Localized("OK"), T.Localized("Cancel"));
-			
-			item.Nick = $"{item.GetType().Name} Nick " + xxx++;
-            item.Name = $"{item.GetType().Name} " + xxx++;
+
+            int lll = App.Settings.Current.GetValueOrDefault("lll", 1);
+
+            item.Nick = $"{item.GetType().Name} Nick " + lll;
+            item.Name = $"{item.GetType().Name} " + lll++;
 			//item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
-			//item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+			item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+
+            App.Settings.Current.AddOrUpdateValue("lll", lll);
 
             return (true, "123");
         }

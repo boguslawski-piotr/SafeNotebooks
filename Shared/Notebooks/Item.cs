@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Newtonsoft.Json;
@@ -10,7 +12,7 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public class Item : Observable
+    public class Item : BindableObject
     {
         public Item()
         {
@@ -78,20 +80,20 @@ namespace SafeNotebooks
         public string Nick
         {
             get => nedata.Nick;
-            set => Set(ref nedata.Nick, value);
+            set => SetValue(ref nedata.Nick, value);
         }
 
         public CKeyLifeTime ThisCKeyLifeTime
         {
             get => nedata.CKeyLifeTime;
             // TODO: changing ThisCKeyLifeTime needs additional action like for example: decrypt this and all children, invalidate keys, etc. -> should be rethought more thoroughly
-            set => Set(ref nedata.CKeyLifeTime, value);
+            set => SetValue(ref nedata.CKeyLifeTime, value);
         }
 
         byte[] IV
         {
             get => nedata.IV ?? Parent?.IV;
-            set => Set(ref nedata.IV, value);
+            set => SetValue(ref nedata.IV, value);
         }
 
         public bool ThisIsSecured => ThisCKeyLifeTime != CKeyLifeTime.Undefined;
@@ -116,49 +118,74 @@ namespace SafeNotebooks
         public string Name
         {
             get => data.Name;
-            set => Set(ref data.Name, value);
+            set => SetValue(ref data.Name, value);
         }
 
-        public virtual string NameForLists => DataIsAvailable ? Name : Nick;
+        public static readonly BindableProperty NameForListsProperty = BindableProperty.Create("NameForLists", typeof(string), typeof(string), null,
+            propertyChanged: (bo, o, n) => { });
+
+        public virtual string NameForLists
+        {
+            get => DataIsAvailable ? Name : Nick;
+            set => SetValue(NameForListsProperty, value);
+        }
 
         public string Detail
         {
             get => data.Detail;
-            set => Set(ref data.Detail, value);
+            set => SetValue(ref data.Detail, value);
         }
 
-        public virtual string DetailForLists => DataIsAvailable ? Detail : "";
+		public static readonly BindableProperty DetailForListsProperty = BindableProperty.Create("DetailForLists", typeof(string), typeof(string), null,
+			propertyChanged: (bo, o, n) => { });
+		
+        public virtual string DetailForLists
+        {
+            get => DataIsAvailable ? Detail : "";
+            set => SetValue(DetailForListsProperty, value);
+        }
 
-        public virtual string LockedImageName => !DataIsAvailable ? NotebooksManager.UI.LockedImageName : "";
+        public static readonly BindableProperty LockedImageNameProperty = BindableProperty.Create("LockedImageName", typeof(string), typeof(string), null,
+            propertyChanged: (bo, o, n) => { ((Item)bo).NameForLists = (string)n; ((Item)bo).DetailForLists = (string)n; });
 
+        public virtual string LockedImageName
+        {
+            get => !DataIsAvailable ? NotebooksManager.UI.LockedImageName : "";
+            set => SetValue(LockedImageNameProperty, value);
+        }
 
-		//
+		
+        //
+
+		protected override void OnPropertyChanged(string propertyName)
+		{
+            string[] propertiesForBindableHack = { "NameForLists", "DetailForLists", "LockedImageName", };
+
+            if(!propertiesForBindableHack.Any((n) => n == propertyName))
+                Touch();
+
+            base.OnPropertyChanged(propertyName);
+		}
+		
+
+        //
 
 		public bool Modified
-		{
-			get;
-			protected set;
-		}
+        {
+            get;
+            protected set;
+        }
 
-		public virtual void Touch()
-		{
-			Modified = true;
-			ModifiedOn = DateTime.UtcNow;
-		}
+        public virtual void Touch()
+        {
+            Modified = true;
+            ModifiedOn = DateTime.UtcNow;
+        }
 
-		public virtual Task TouchAsync()
-		{
-			Touch();
-			return Task.FromResult(true);
-		}
-
-
-		//
-
-		protected override void OnPropertyChanged(string name)
+        public virtual Task TouchAsync()
         {
             Touch();
-            base.OnPropertyChanged(name);
+            return Task.FromResult(true);
         }
 
 
@@ -304,8 +331,15 @@ namespace SafeNotebooks
 
                     JObject g = JObject.Parse("{" + _d + "}");
                     Deserialize(g);
+
+                    LockedImageName = "u";
+                }
+                else
+                {
+                    LockedImageName = "l";
                 }
 
+                NotebooksManager.OnItemOpened(this);
                 return true;
             }
             catch (NotebooksException dmex)
@@ -354,6 +388,7 @@ namespace SafeNotebooks
 
                 Modified = false;
 
+                NotebooksManager.OnItemSaved(this);
                 return true;
             }
             catch (NotebooksException dmex)
@@ -445,5 +480,19 @@ namespace SafeNotebooks
             BatchEnd();
             await SaveAsync(forceSave);
         }
-    }
+
+
+		//
+
+        protected void SetValue<T>(ref T storage, T value, [CallerMemberName]string name = null)
+		{
+			if (Equals(storage, value))
+			{
+				return;
+			}
+
+			storage = value;
+			OnPropertyChanged(name);
+		}
+	}
 }

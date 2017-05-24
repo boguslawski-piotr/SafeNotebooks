@@ -62,6 +62,10 @@
   <data name="NewPage" xml:space="preserve">
     <value>Dodaj Stronę</value>
   </data>
+
+  <data name="SearchQueryPlaceholder" xml:space="preserve">
+    <value>puknij tu aby szukać</value>
+  </data>
 	
   <data name="AuthenticateDeviceOwnerReason" xml:space="preserve">
     <value>Aplikacja musi Cię rozpoznać, ponieważ taka opcja została ustawiona w ustawieniach.</value>

@@ -1,19 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using pbXForms;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace SafeNotebooks
 {
-	//[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class SettingsWnd : pbXForms.ContentPageEx
+    //[XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class SettingsWnd : pbXForms.ContentPageEx
 	{
         public SettingsWnd()
 		{
 			InitializeComponent();
+            LayoutAppBar();
 		}
 
-		void BackBtn_Clicked(object sender, System.EventArgs e)
+        void LayoutAppBar()
+        {
+            CaptionBar.Margin = new Thickness(BackBtn.IsVisible ? 0 : Metrics.ScreenEdgeMargin, 0, 0, 0);
+		}
+
+		void CancelBtn_Clicked(object sender, System.EventArgs e)
+		{
+			Navigation.PopModalAsync();
+		}
+
+        void BackBtn_Clicked(object sender, System.EventArgs e)
 		{
 			Navigation.PopModalAsync();
 		}

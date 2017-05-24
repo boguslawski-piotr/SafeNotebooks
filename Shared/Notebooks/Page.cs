@@ -7,13 +7,11 @@ using Newtonsoft.Json.Linq;
 
 namespace SafeNotebooks
 {
-    public class Page : Item
+    public class Page : ItemWChildren<Note>
     {
         public Notebook Notebook => Parent as Notebook;
 
         //
-
-        public ObservableCollection<Note> Notes { get; private set; } = new ObservableCollection<Note>();
 
         public async Task<Note> NewNoteAsync()
         {
@@ -21,17 +19,19 @@ namespace SafeNotebooks
             if (!await NotebooksManager.NewItemHelperAsync(note, this))
                 return null;
 
-            Notes.Add(note);
-            // sort notes
+			AddItem(note);
+			Sort();
 
-            return note;
+			return note;
         }
 
         public async Task AddNoteAsync(Note note)
         {
             await note.ChangeParentAsync(this);
-            Notes.Add(note);
-        }
+		
+            AddItem(note);
+			Sort();
+		}
 
 
         //
@@ -77,9 +77,12 @@ namespace SafeNotebooks
                 return false;
 
             string pattern = Note.IdForStoragePrefix + Notebook.Id + "-" + Id + "-\\w*";
-            await NotebooksManager.LoadChildrenForItemHelperAsync<Note>(this, Notes, pattern, tryToUnlockChildren);
+            bool anyNoteLoaded = await NotebooksManager.LoadChildrenForItemHelperAsync<Note>(this, pattern, tryToUnlockChildren);
 
-			NotebooksManager.PageLoadedAsync(this);
+            //if(anyNoteLoaded)
+                Sort();
+
+			NotebooksManager.OnPageLoaded(this, anyNoteLoaded);
 			return true;
 		}
 

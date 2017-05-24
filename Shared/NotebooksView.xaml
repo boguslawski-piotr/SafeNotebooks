@@ -17,12 +17,7 @@
 
         <StackLayout
             x:Name = "SelectedNotebookBar"
-            Orientation = "Vertical"
-            VerticalOptions = "CenterAndExpand"
-            HorizontalOptions = "FillAndExpand"
-            Padding = "0"
-            Margin = "0"
-            Spacing = "0">
+            Style = "{StaticResource stVerticalNoSpaces}">
 
             <Label
                 x:Name = "SelectedNotebookName"
@@ -60,38 +55,46 @@
             Image = "ic_mode_edit.png"
             Clicked = "EditBtn_Clicked" />
 
-        <pbXForms:FlatButton
-            x:Name = "SearchBtn"
-            Image = "ic_search.png"
-            Clicked = "SearchBtn_Clicked" />
-
     </pbXForms:ContentViewEx.AppBarContent>
 
     <pbXForms:ContentViewEx.ViewContent>
 
         <ListView
             x:Name = "ListCtl"
+
             RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
             BackgroundColor = "{StaticResource NotebooksListBackgroundColor}"
             SeparatorColor = "{StaticResource ListItemDividerColor}"
             ItemTemplate = "{DynamicResource ItemListViewItemTemlate}">
 
-            <!--            <ListView.Header>
+            <ListView.Header>
 
                 <StackLayout
-                    Padding = "16,4,16,8"
-                    Orientation = "Horizontal">
+                    x:Name = "SearchBar"
+                    Style = "{StaticResource stHorizontalNoSpaces}"
+                    Padding = "{StaticResource SearchBarPadding}">
 
                     <Entry
-                        Placeholder="tutaj wpisz swoje zapytanie"
-                        HorizontalTextAlignment="Center"
+                        x:Name = "SearchQuery"
+                        TextChanged = "SearchQuery_TextChanged"
+                        Focused = "SearchQuery_Focused"
+                        Unfocused = "SearchQuery_Unfocused"
+                        Placeholder = "{T:Localized SearchQueryPlaceholder}"
+                        HorizontalTextAlignment = "Center"
                         BackgroundColor = "{StaticResource NotebooksListBackgroundColor}"
                         HorizontalOptions = "FillAndExpand" />
+
+                    <pbXForms:FlatButton
+                        x:Name = "CancelSearchBtn"
+                        IsVisible = "false"
+                        HeightRequest = "{x:Static pbXForms:Metrics.IconHeight}"
+                        Image = "ic_close.png"
+                        Clicked = "CancelSearchBtn_Clicked" />
 
                 </StackLayout>
 
             </ListView.Header>
-            -->
+
         </ListView>
 
     </pbXForms:ContentViewEx.ViewContent>
@@ -99,29 +102,33 @@
     <pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
         <StaticResourceExtension
-            Key = "NotebooksViewToolBarBackgroundColor" />
+            Key = "NotebooksToolBarBackgroundColor" />
 
     </pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
     <pbXForms:ContentViewEx.ToolBarContent>
 
-        <pbXForms:FlatButton
-            HorizontalOptions = "Start"
-            x:Name = "SortBtn"
-            Image = "ic_sort.png"
-            Clicked = "SortBtn_Clicked" />
+        <pbXForms:ToolBarGridLayout>
 
-        <pbXForms:FlatButton
-            x:Name = "NewBtn"
-            HorizontalOptions = "CenterAndExpand"
-            WidthRequest = "-1"
-            Text = ""
-            TextColor = "{StaticResource AccentTextColor}"
-            Clicked = "NewBtn_Clicked" />
+            <pbXForms:FlatButton
+                Grid.Column = "0"
+                x:Name = "SortBtn"
+                Image = "ic_sort.png"
+                Clicked = "SortBtn_Clicked" />
 
-        <pbXForms:FlatButton
-            HorizontalOptions = "End"
-            Image = "" />
+            <pbXForms:FlatButton
+                Grid.Column = "1"
+                x:Name = "NewBtn"
+                Image = "ic_add_circle.png"
+                Clicked = "NewBtn_Clicked" />
+
+            <pbXForms:FlatButton
+                Grid.Column = "2"
+                x:Name = "EditItemsBtn"
+                Image = "ic_transform.png"
+                Clicked = "EditItemsBtn_Clicked" />
+
+        </pbXForms:ToolBarGridLayout>
 
     </pbXForms:ContentViewEx.ToolBarContent>
 

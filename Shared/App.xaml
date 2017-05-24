@@ -17,13 +17,17 @@
 			<Color x:Key="AppBarBackgroundColor">#81C784</Color>
 			<Color x:Key="AppBarTextColor">#000000</Color>
 
-            <Color x:Key="ToolBarBackgroundColor">#E8F5E9</Color>
-            <Color x:Key="NotebooksViewToolBarBackgroundColor">#E8F5E9</Color>
-            <Color x:Key="PageViewToolBarBackgroundColor">#ffffff</Color>
-			<Color x:Key="ToolBarTextColor">#000000</Color>
+            <Color x:Key="ToolBarBackgroundColor">#ffffff</Color>
+            <Color x:Key="ToolBarTextColor">#000000</Color>
 
-			<Color x:Key="NotebooksListBackgroundColor">#E8F5E9</Color>
-			<Color x:Key="ListOfNotesBackgroundColor">#ffffff</Color>
+            <Color x:Key="NotebooksListBackgroundColor">#DCEADD</Color>
+            <Color x:Key="NotebooksToolBarBackgroundColor">#DCEADD</Color>
+
+            <Color x:Key="PagesListBackgroundColor">#E8F5E9</Color>
+            <Color x:Key="PagesToolBarBackgroundColor">#E8F5E9</Color>
+
+			<Color x:Key="ListOfNotesBackgroundColor">#F0FCF0</Color>
+            <Color x:Key="ListOfNotesToolBarBackgroundColor">#F0FCF0</Color>
 
 			<!-- ANDROID: When modifying this value you must also remember to update the "colorAccent" value in the "Resources/Values/styles.xml" file. -->
 			<Color x:Key="AccentTextColor">#E65100</Color>
@@ -32,30 +36,46 @@
 			<Color x:Key="ListItemDetailColor">#4c000000</Color>			
 			<Color x:Key="ListItemDividerColor">#C8E6C9</Color>			
 
+
+            <Style x:Key="stVerticalNoSpaces" TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Vertical" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />                
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />                
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Spacing" Value="0" />
+            </Style>
+            <Style x:Key="stHorizontalNoSpaces" TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />                
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />                
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Spacing" Value="0" />
+            </Style>
+
+            
+            <Thickness x:Key="SearchBarPadding" Top="8" Bottom="4" Right="{x:Static pbXForms:Metrics.ScreenEdgeMargin}" Left="{x:Static pbXForms:Metrics.ScreenEdgeMargin}" />
             <Thickness x:Key="ItemListViewItemGridPadding" Right="{x:Static pbXForms:Metrics.ButtonItemsSpacing}" />
+
             
             <DataTemplate x:Key="ItemListViewItemTemlate">
-
                 <ViewCell>
 
                     <ViewCell.ContextActions>
-
                         <MenuItem
                             Command="{Binding EditItemCommand}"
                             CommandParameter = "{Binding .}"
                             Text = "{T:Localized Edit}" />
-
                         <MenuItem
                             Command="{Binding MoveItemCommand}"
                             CommandParameter = "{Binding .}"
                             Text = "{T:Localized Move}" />
-
                         <MenuItem
                             Command="{Binding DeleteItemCommand}"
                             CommandParameter = "{Binding .}"
                             IsDestructive = "True"
                             Text = "{T:Localized Delete}" />
-
                     </ViewCell.ContextActions>
 
                     <Grid
@@ -111,7 +131,6 @@
                     </Grid>
 
                 </ViewCell>
-
             </DataTemplate>            
             
 		</ResourceDictionary>

@@ -63,6 +63,10 @@
     <value>Add Page</value>
   </data>
 
+  <data name="SearchQueryPlaceholder" xml:space="preserve">
+    <value>tap here to search</value>
+  </data>
+	
   <data name="AuthenticateDeviceOwnerReason" xml:space="preserve">
     <value>The application must recognize you as such an option has been set in the settings.</value>
   </data>
