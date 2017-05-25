@@ -14,8 +14,13 @@ namespace SafeNotebooks
 
         Task<(bool, string)> EditItemAsync(Item item);
 
-        // Images for listviews
+        // For listviews
 
-        string LockedImageName { get; }
+        string LockedImageNameForLists { get; }
+		double LockedImageWidthForLists { get; }
+
+		string SelectedImageNameForLists { get; }
+		string UnselectedImageNameForLists { get; }
+        double SelectedUnselectedImageWidthForLists { get; }
 	}
 }

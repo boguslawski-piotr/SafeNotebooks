@@ -27,42 +27,13 @@ namespace SafeNotebooks
             App.NotebooksManager.PagesSorted += PagesSorted;
             App.NotebooksManager.PageLoaded += PageLoaded;
 
-            ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
-            ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) =>
-            {
-                if (e.Item is Notebook)
-                    App.NotebooksManager.SelectNotebookAsync((Notebook)e.Item, App.Settings.TryToUnlockItemChildren);
-                else
-                    App.NotebooksManager.SelectPageAsync((Page)e.Item, App.Settings.TryToUnlockItemChildren);
-            };
+            ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
+            ListCtl.ItemTapped += ListCtl_ItemTapped;
         }
 
         protected override void ContinueOnSizeAllocated(double width, double height)
         {
         }
-
-        void ListCtlScrollTo(Item item)
-        {
-            ListCtl.ScrollTo(item, ScrollToPosition.Center, false);
-        }
-
-        void ListCtlSetItemsSource(IEnumerable l)
-        {
-            ListCtl.BeginRefresh();
-
-            IEnumerator e = l.GetEnumerator();
-            e.Reset();
-            object o = null;
-            if (e.MoveNext())
-                o = e.Current;
-
-            ListCtl.ItemsSource = l;
-
-            if (o != null)
-                ListCtl.ScrollTo(o, ScrollToPosition.Start, false);
-
-            ListCtl.EndRefresh();
-		}
 
 
         //
@@ -97,8 +68,8 @@ namespace SafeNotebooks
             {
                 BackBtn.IsVisible = false;
 
-                AppTitle.IsVisible = true;
                 AppTitle.Margin = new Thickness(Metrics.ScreenEdgeMargin, 0, 0, 0);
+                AppTitle.IsVisible = true;
 
                 EditBtn.IsVisible = false;
                 SettingsBtn.IsVisible = true;
@@ -108,10 +79,10 @@ namespace SafeNotebooks
                 ListCtl.BackgroundColor = (Color)App.Current.Resources["NotebooksListBackgroundColor"]; ;
                 ToolBar.BackgroundColor = (Color)App.Current.Resources["NotebooksToolBarBackgroundColor"]; ;
 
-                ListCtlSetItemsSource(App.NotebooksManager.Notebooks);
+                ViewsCommonLogic.ListViewSetItemsSource(ListCtl, App.NotebooksManager.ObservableItems);
 
                 if (App.NotebooksManager.PreviouslySelectedNotebook != null)
-                    ListCtlScrollTo(App.NotebooksManager.PreviouslySelectedNotebook);
+                    ViewsCommonLogic.ListViewScrollTo(ListCtl, App.NotebooksManager.PreviouslySelectedNotebook);
             }
             else
             {
@@ -123,28 +94,20 @@ namespace SafeNotebooks
                 EditBtn.IsVisible = true;
                 SettingsBtn.IsVisible = false;
 
-                SelectedNotebookBar.IsVisible = true;
                 SelectedNotebookName.Text = App.NotebooksManager.SelectedNotebook.NameForLists;
                 SelectedNotebookStorageName.Text = App.NotebooksManager.SelectedNotebook.Storage?.Name;
+                SelectedNotebookBar.IsVisible = true;
 
                 ListCtl.BackgroundColor = (Color)App.Current.Resources["PagesListBackgroundColor"];
                 ToolBar.BackgroundColor = (Color)App.Current.Resources["PagesToolBarBackgroundColor"];
 
-                ListCtlSetItemsSource(App.NotebooksManager.SelectedNotebook.Items);
+                ViewsCommonLogic.ListViewSetItemsSource(ListCtl, App.NotebooksManager.SelectedNotebook.ObservableItems);
 
-                Page pageToScroll = null;
                 if (App.NotebooksManager.SelectedPage != null && App.NotebooksManager.SelectedPage.Notebook == App.NotebooksManager.SelectedNotebook)
-                    pageToScroll = App.NotebooksManager.SelectedPage;
-                //else
-                //{
-                //    if(App.NotebooksManager.SelectedNotebook.Items != null && App.NotebooksManager.SelectedNotebook.Items.Count > 0)
-                //        pageToScroll = App.NotebooksManager.SelectedNotebook.Items?.First();
-                //}
-                if (pageToScroll != null)
-                    ListCtlScrollTo(pageToScroll);
+                    ViewsCommonLogic.ListViewScrollTo(ListCtl, App.NotebooksManager.SelectedPage);
             }
 
-
+            SearchBar.BackgroundColor = ListCtl.BackgroundColor;
             SearchQuery.BackgroundColor = ListCtl.BackgroundColor;
 
             BatchCommit();
@@ -155,13 +118,35 @@ namespace SafeNotebooks
 
         void PagesSorted(object sender, Notebook notebook)
         {
-            Device.BeginInvokeOnMainThread(() => ListCtlSetItemsSource(App.NotebooksManager.SelectedNotebook?.Items));
+            Device.BeginInvokeOnMainThread(() => ViewsCommonLogic.ListViewSetItemsSource(ListCtl, App.NotebooksManager.SelectedNotebook?.ObservableItems));
         }
 
-		void PageLoaded(object sender, Page page)
-		{
-		}
-		
+        void PageLoaded(object sender, Page page)
+        {
+        }
+
+
+        //
+
+        void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is Notebook notebook)
+            {
+                if (App.NotebooksManager.SelectModeForItemsEnabled)
+                    notebook.IsSelected = !notebook.IsSelected;
+                else
+                    App.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemChildren);
+            }
+            else
+            {
+                Page page = (Page)e.Item;
+                if (page.Notebook.SelectModeForItemsEnabled)
+                    page.IsSelected = !page.IsSelected;
+                else
+                    App.NotebooksManager.SelectPageAsync(page, App.Settings.TryToUnlockItemChildren);
+            }
+        }
+
 
         //
 
@@ -204,8 +189,40 @@ namespace SafeNotebooks
 
         async void SortBtn_Clicked(object sender, System.EventArgs e)
         {
-            await Application.Current.MainPage.DisplayActionSheet("Sort...", T.Localized("Cancel"), null, "Name", "Name (descending)", "Date", "Date (descending)", "Color", "Priority");
-        }
+            //string[] cs = { "#ffff0000", "#ff008000", "#80ff0000", "#80008000", "#40ff0000", "#40008000", };
+            //foreach (var c in cs)
+            //{
+            //    Notebook n = await App.NotebooksManager.NewNotebookAsync(App.StoragesManager.Storages.First());
+            //    n.Color = Color.FromHex(c);
+            //    await n.SaveAsync();
+            //}
+            //App.NotebooksManager.SortNotebooks();
+
+            ItemWithItems.SortParameters sortParams = null;
+            string title;
+
+            if (App.NotebooksManager.SelectedNotebook == null)
+            {
+                sortParams = App.NotebooksManager.SortParameters;
+                title = "Jak chcesz sortować notatniki?"; // TODO: localization
+            }
+            else
+            {
+                sortParams = App.NotebooksManager.SelectedNotebook.SortParameters;
+                title = "Jak chcesz sortować strony?"; // TODO: localization
+            }
+
+            ChooseSortDlg d = new ChooseSortDlg(title, sortParams);
+
+            d.Cancel += async (s, cp) => await App.MainWnd.NavigationEx.PopModalAsync();
+            d.OK += async (object s, EventArgs op) =>
+            {
+                await App.MainWnd.NavigationEx.PopModalAsync();
+                App.NotebooksManager.SortItems();
+            };
+
+            await App.MainWnd.NavigationEx.PushModalAsync(d, DeviceEx.Orientation == DeviceOrientation.Landscape ? NavigationEx.ModalPosition.BottomLeft : NavigationEx.ModalPosition.BottomCenter);
+		}
 
 
         async Task<StorageOnFileSystem<string>> SelectStorageUIAsync(IEnumerable<StorageOnFileSystem<string>> storages)
@@ -233,10 +250,7 @@ namespace SafeNotebooks
                 {
                     Notebook n = await App.NotebooksManager.NewNotebookAsync(storage);
                     if (n != null)
-                    {
                         App.NotebooksManager.SelectNotebookAsync(n, App.Settings.TryToUnlockItemChildren);
-                        //ListCtl.ScrollTo(n, ScrollToPosition.MakeVisible, true);
-                    }
                 }
             }
             else
@@ -245,7 +259,7 @@ namespace SafeNotebooks
                 if (p != null)
                 {
                     await App.NotebooksManager.SelectPageAsync(p, App.Settings.TryToUnlockItemChildren);
-                    Device.BeginInvokeOnMainThread(() => ListCtlScrollTo(p));
+                    Device.BeginInvokeOnMainThread(() => ViewsCommonLogic.ListViewScrollTo(ListCtl, p));
                 }
             }
         }
@@ -253,7 +267,11 @@ namespace SafeNotebooks
 
         void EditItemsBtn_Clicked(object sender, System.EventArgs e)
         {
-            Application.Current.MainPage.DisplayAlert("Edit items...", "edit multiple items", "Cancel");
+            //Application.Current.MainPage.DisplayAlert("Edit items...", "edit multiple items", "Cancel");
+            if (App.NotebooksManager.SelectedNotebook == null)
+                App.NotebooksManager.SelectModeForItemsEnabled = !App.NotebooksManager.SelectModeForItemsEnabled;
+            else
+                App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled;
         }
 
     }

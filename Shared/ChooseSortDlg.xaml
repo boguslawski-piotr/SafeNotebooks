@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView
+    xmlns = "http://xamarin.com/schemas/2014/forms"
+    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pbXForms = "clr-namespace:pbXForms"
+    xmlns:T = "clr-namespace:pbXForms"
+    xmlns:local = "clr-namespace:SafeNotebooks"
+    x:Class = "SafeNotebooks.ChooseSortDlg"
+    BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
+    Padding = "{x:Static pbXForms:Metrics.ScreenEdgePadding}">
+
+    <ContentView.Content>
+
+        <StackLayout
+            MinimumWidthRequest = "240"
+            Style = "{StaticResource stVerticalNoSpaces}">
+
+            <Label
+                x:Name = "Title"
+                Margin = "0,0,0,16"
+                VerticalOptions = "CenterAndExpand"
+                Text = "" />
+
+            <pbXForms:FlatButton
+                x:Name = "ByDateBtn"
+                Text = "Po dacie modyfikacji"
+                LineBreakMode = "TailTruncation"
+                FontSize = "Medium"
+                Clicked = "ByDate_Clicked" />
+
+            <pbXForms:FlatButton
+                x:Name = "ByNameBtn"
+                Text = "Po nazwie"
+                LineBreakMode = "TailTruncation"
+                FontSize = "Medium"
+                Clicked = "ByName_Clicked" />
+
+            <pbXForms:FlatButton
+                x:Name = "ByColorBtn"
+                Text = "Kolorami"
+                LineBreakMode = "TailTruncation"
+                FontSize = "Medium"
+                Clicked = "ByColor_Clicked" />
+
+            <StackLayout
+                Padding = "0,16,0,16"
+                Spacing = "8"
+                HorizontalOptions = "CenterAndExpand"
+                Style = "{StaticResource stHorizontalNoSpaces}">
+
+                <Label
+                    VerticalTextAlignment = "Center"
+                    FontSize = "Micro"
+                    Text = "Malejąco" />
+
+                <Switch
+                    x:Name = "Descending" />
+
+            </StackLayout>
+
+            <pbXForms:FlatButton
+                Text = "{T:Localized Cancel}"
+                HeightRequest = "36"
+                FontSize = "Micro"
+                Clicked = "Cancel_Clicked" />
+
+        </StackLayout>
+
+    </ContentView.Content>
+
+</ContentView>

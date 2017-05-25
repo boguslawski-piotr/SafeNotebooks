@@ -8,48 +8,12 @@ using pbXSecurity;
 
 namespace SafeNotebooks
 {
-    public class ItemWChildren<T> : Item where T: Item
+    public class Notebook : ItemWithItems<Page>
     {
-        protected IList<T> _Items = new List<T>();
-		public ObservableCollection<T> Items { get; protected set; } = new ObservableCollection<T>();
+        //
 
-        public void AddItem(T item)
-        {
-            _Items.Add(item);
-        }
+        public override string DetailForLists => $"{ModifiedOn.ToLocalTime().ToString()}, {Storage?.Name}";
 
-		public void Sort()
-		{
-			// TODO: sortowanie zapamietaniem wyboru
-			Items = new ObservableCollection<T>(_Items.OrderBy((v) => v.NameForLists));
-
-            NotebooksManager.OnItemItemsSorted(this);
-            //NotebooksSorted?.Invoke(this, this);
-		}
-
-	}
-
-    public class Notebook : ItemWChildren<Page>
-    {
-        public async Task<Page> NewPageAsync()
-        {
-            Page page = new Page() { NotebooksManager = NotebooksManager };
-            if (!await NotebooksManager.NewItemHelperAsync(page, this))
-                return null;
-
-            AddItem(page);
-            Sort();
-
-            return page;
-        }
-
-        public async Task AddPageAsync(Page page)
-        {
-            await page.ChangeParentAsync(this);
-
-            AddItem(page);
-			Sort();
-		}
 
         //
 
@@ -65,8 +29,8 @@ namespace SafeNotebooks
             string pattern = Page.IdForStoragePrefix + Id + "-\\w*";
             bool anyPageLoaded = await NotebooksManager.LoadChildrenForItemHelperAsync<Page>(this, pattern, tryToUnlockChildren);
 
-			if (anyPageLoaded)
-				Sort();
+            if (anyPageLoaded)
+                SortItems();
 
             NotebooksManager.OnNotebookLoaded(this, anyPageLoaded);
             return true;
@@ -75,7 +39,33 @@ namespace SafeNotebooks
 
         //
 
-        public override string DetailForLists => $"{Storage?.Name}, {ModifiedOn.ToLocalTime().ToString()}";
+        public async Task<Page> NewPageAsync()
+        {
+            Page page = new Page() { NotebooksManager = NotebooksManager };
+            if (!await NotebooksManager.NewItemHelperAsync(page, this))
+                return null;
 
+            AddItem(page);
+            SortItems();
+
+            return page;
+        }
+
+        public async Task AddPageAsync(Page page)
+        {
+            await page.ChangeParentAsync(this);
+
+            AddItem(page);
+            SortItems();
+        }
+
+
+        //
+
+        public override void SortItems()
+        {
+            base.SortItems();
+            NotebooksManager.OnPagesSorted(this);
+        }
     }
 }

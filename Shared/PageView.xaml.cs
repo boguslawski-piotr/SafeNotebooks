@@ -55,7 +55,7 @@ namespace SafeNotebooks
                 SelectedPageName.Text = App.NotebooksManager.SelectedPage.NameForLists;
                 SelectedPageParentName.Text = $"{T.Localized("in")} {App.NotebooksManager.SelectedPage.Notebook?.NameForLists}, {App.NotebooksManager.SelectedPage.Notebook?.Storage?.Name}";
 
-                ListCtl.ItemsSource = App.NotebooksManager.SelectedPage.Items;
+                ListCtl.ItemsSource = App.NotebooksManager.SelectedPage.ObservableItems;
                 ListCtl.IsVisible = true;
                 NoUIBar.IsVisible = false;
 
@@ -134,7 +134,7 @@ namespace SafeNotebooks
 
         void EditItemsBtn_Clicked(object sender, System.EventArgs e)
 		{
-			Application.Current.MainPage.DisplayAlert("Edit items...", "edit multiple items", "Cancel");
+			Application.Current.MainPage.DisplayAlert("Edit items...", "edit multiple items", "OK", "Cancel");
 		}
 
 

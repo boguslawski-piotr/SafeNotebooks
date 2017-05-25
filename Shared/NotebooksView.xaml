@@ -17,6 +17,7 @@
 
         <StackLayout
             x:Name = "SelectedNotebookBar"
+            IsVisible="false"
             Style = "{StaticResource stVerticalNoSpaces}">
 
             <Label
@@ -40,7 +41,7 @@
         <Label
             x:Name = "AppTitle"
             Text = "{T:Localized AppName}"
-            FontAttributes = "Bold"
+            FontSize="Large"
             TextColor = "{StaticResource AccentTextColor}"
             VerticalOptions = "Center"
             HorizontalOptions = "FillAndExpand" />
@@ -52,6 +53,7 @@
 
         <pbXForms:FlatButton
             x:Name = "EditBtn"
+            IsVisible="false"
             Image = "ic_mode_edit.png"
             Clicked = "EditBtn_Clicked" />
 

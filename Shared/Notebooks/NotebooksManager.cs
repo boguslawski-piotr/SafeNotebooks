@@ -8,44 +8,32 @@ using pbXSecurity;
 
 namespace SafeNotebooks
 {
-    public class NotebooksManager
+    public class NotebooksManager : ItemWithItems<Notebook>
     {
         public ISecretsManager SecretsManager { get; set; }
         public INotebooksManagerUI UI { get; set; }
 
-
-        //
-
-        public void OnItemOpened(Item item)
+        public NotebooksManager()
         {
+            NewAsync(null);
         }
 
-		public void OnItemSaved(Item item)
-		{
-		}
-
-        public void OnItemItemsSorted(Item item)
-        {
-            if (item is Notebook)
-                OnPagesSorted((Notebook)item);
-            else if (item is Page)
-                OnNotesSorted((Page)item);
-        }
 
         //
-
-		protected IList<Notebook> _Notebooks = new List<Notebook>();
-		public ObservableCollection<Notebook> Notebooks { get; private set; } = new ObservableCollection<Notebook>();
 
 		public event EventHandler<NotebooksManager> NotebooksLoadingBegun;
 		public event EventHandler<NotebooksManager> NotebooksLoaded;
 
 		public async Task LoadNotebooksAsync(IEnumerable<ISearchableStorage<string>> storages, bool tryToUnlock)
         {
-            //
+            // Prepare
 
             await SelectNotebookAsync(null, false);
-            _Notebooks.Clear();
+
+            Items.Clear();
+            if(ObservableItems != null)
+                ObservableItems.Clear();
+
             NotebooksLoadingBegun.Invoke(this, this);
 
             // Load notebooks from all available storages
@@ -59,51 +47,58 @@ namespace SafeNotebooks
                     Notebook notebook = new Notebook() { NotebooksManager = this, Storage = storage };
                     await notebook.OpenAsync(null, id, tryToUnlock); 
 
-                    _Notebooks.Add(notebook);
+                    AddItem(notebook);
                 }
             }
 
-            SortNotebooks();
-
+            if(Items.Count > 0)
+                SortItems();
+            
             NotebooksLoaded?.Invoke(this, this);
         }
 
-        public async Task RefreshNotebooksAsync(IEnumerable<ISearchableStorage<string>> storages, bool tryToUnlock)
+		
+        public override void SortItems()
         {
-			await SelectNotebookAsync(null, false);
+			// TODO: sortowanie notebooks, pages, notes z zapamietaniem wyboru
+            base.SortItems();
+
+            OnNotebooksSorted();
 		}
+
+        public void SortNotebooks() => SortItems();
 
 		public event EventHandler<NotebooksManager> NotebooksSorted;
 		
-        public void SortNotebooks()
-        {
-			// TODO: sortowanie notebooks, pages, notes z zapamietaniem wyboru
-			Notebooks = new ObservableCollection<Notebook>(_Notebooks.OrderBy((v) => v.NameForLists));
-
-            NotebooksSorted?.Invoke(this, this);
+        public void OnNotebooksSorted()
+		{
+			NotebooksSorted?.Invoke(this, this);
 		}
 
+		
         public async Task<Notebook> NewNotebookAsync(ISearchableStorage<string> storage)
         {
             Notebook notebook = new Notebook() { NotebooksManager = this, Storage = storage };
             if (!await NewItemHelperAsync(notebook, null))
                 return null;
 
-			_Notebooks.Add(notebook);
+			AddItem(notebook);
 
-            SortNotebooks();
+            SortItems();
 
 			return notebook;
         }
 
-		public event EventHandler<Notebook> NotebookLoaded;
+		
+        public event EventHandler<Notebook> NotebookLoaded;
 
 		public void OnNotebookLoaded(Notebook notebook, bool anyPageLoaded)
 		{
 			NotebookLoaded?.Invoke(this, notebook);
 		}
 
-		public Notebook PreviouslySelectedNotebook { get; private set; }
+		
+        public Notebook PreviouslySelectedNotebook { get; private set; }
 		public Notebook SelectedNotebook { get; private set; }
 
         public event EventHandler<Notebook> NotebookSelected;
@@ -183,6 +178,17 @@ namespace SafeNotebooks
 
 		//
 
+		public void OnItemOpened(Item item)
+		{
+		}
+
+		public void OnItemSaved(Item item)
+		{
+		}
+
+
+        //
+
 		public async Task<bool> NewItemHelperAsync(Item item, Item parent)
 		{
 			await item.NewAsync(parent);
@@ -203,7 +209,7 @@ namespace SafeNotebooks
 		/// <summary>
 		/// Returns true if any item was opened/loaded, false otherwise
 		/// </summary>
-		public async Task<bool> LoadChildrenForItemHelperAsync<T>(ItemWChildren<T> forWhom, string pattern, bool tryToUnlock) where T : Item, new()
+		public async Task<bool> LoadChildrenForItemHelperAsync<T>(ItemWithItems<T> forWhom, string pattern, bool tryToUnlock) where T : Item, new()
 		{
 			// TODO: dodac doczytywanie/kasowanie jezeli to co w pamieci nie zgadza sie z tym co na dysku -> synchronizacja
 			if (forWhom.Items.Count > 0)

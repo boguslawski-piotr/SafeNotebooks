@@ -7,31 +7,9 @@ using Newtonsoft.Json.Linq;
 
 namespace SafeNotebooks
 {
-    public class Page : ItemWChildren<Note>
+    public class Page : ItemWithItems<Note>
     {
         public Notebook Notebook => Parent as Notebook;
-
-        //
-
-        public async Task<Note> NewNoteAsync()
-        {
-            Note note = new Note() { NotebooksManager = NotebooksManager };
-            if (!await NotebooksManager.NewItemHelperAsync(note, this))
-                return null;
-
-			AddItem(note);
-			Sort();
-
-			return note;
-        }
-
-        public async Task AddNoteAsync(Note note)
-        {
-            await note.ChangeParentAsync(this);
-		
-            AddItem(note);
-			Sort();
-		}
 
 
         //
@@ -76,19 +54,46 @@ namespace SafeNotebooks
             if (!await base.LoadAsync(true))
                 return false;
 
-            string pattern = Note.IdForStoragePrefix + Notebook.Id + "-" + Id + "-\\w*";
+			string pattern = Note.IdForStoragePrefix + Id + "-\\w*";
             bool anyNoteLoaded = await NotebooksManager.LoadChildrenForItemHelperAsync<Note>(this, pattern, tryToUnlockChildren);
 
-            //if(anyNoteLoaded)
-                Sort();
+            if(anyNoteLoaded)
+                SortItems();
 
 			NotebooksManager.OnPageLoaded(this, anyNoteLoaded);
 			return true;
 		}
 
 
+		//
+
+		public async Task<Note> NewNoteAsync()
+		{
+			Note note = new Note() { NotebooksManager = NotebooksManager };
+			if (!await NotebooksManager.NewItemHelperAsync(note, this))
+				return null;
+
+			AddItem(note);
+			SortItems();
+
+			return note;
+		}
+
+		public async Task AddNoteAsync(Note note)
+		{
+			await note.ChangeParentAsync(this);
+
+			AddItem(note);
+			SortItems();
+		}
+
+
         //
 
-        public override string DetailForLists => $"{Storage?.Name}, {ModifiedOn.ToLocalTime().ToString()}";
+		public override void SortItems()
+		{
+			base.SortItems();
+            NotebooksManager.OnNotesSorted(this);
+		}
     }
 }

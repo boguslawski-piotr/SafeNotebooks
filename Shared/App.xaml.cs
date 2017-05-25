@@ -25,6 +25,8 @@ namespace SafeNotebooks
             }
         }
 
+        public static MainWnd MainWnd;
+
         // Settings in AppSettings.cs
 
         //
@@ -127,7 +129,9 @@ namespace SafeNotebooks
             Tests();
 
             InitializeComponent();
+
             MainPage = new MainWnd();
+            MainWnd = (MainWnd) MainPage;
         }
 
 

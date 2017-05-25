@@ -9,14 +9,14 @@ namespace SafeNotebooks
 		public Page Page => Parent as Page;
 		public Notebook Notebook => Page.Notebook;
 
-		//public ISearchableStorage<Attachment> AttachmentsStorage { get; set; }
+        //public ISearchableStorage<Attachment> AttachmentsStorage { get; set; }
 
-		
-        //
 
-        public const string IdForStoragePrefix = "O-";
+		//
 
-		public override string IdForStorage => IdForStoragePrefix + Notebook?.Id + "-" + Page?.Id + "-" + base.IdForStorage;
+		public const string IdForStoragePrefix = "O-";
+
+		public override string IdForStorage => IdForStoragePrefix + Page?.Id + "-" + base.IdForStorage;
 
         public override async Task NewAsync(Item parent)
         {
@@ -35,6 +35,5 @@ namespace SafeNotebooks
 
         //
 
-        public override string DetailForLists => $"{ModifiedOn.ToLocalTime().ToString()}";
 	}
 }

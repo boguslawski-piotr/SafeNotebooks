@@ -4,24 +4,38 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using pbXForms;
 using pbXNet;
 using pbXSecurity;
+
+#if !NOT_XAMARIN_FORMS
 using Xamarin.Forms;
+#endif
 
 namespace SafeNotebooks
 {
-    public class Item : BindableObject
+    public class Item : BindableObject, IDisposable
     {
         public Item()
         {
-            EditItemCommand = new Command(ExecuteEditItemCommand, CanExecuteEditMoveDelete);
-            MoveItemCommand = new Command(ExecuteMoveItemCommand, CanExecuteEditMoveDelete);
-            DeleteItemCommand = new Command(ExecuteDeleteItemCommand, CanExecuteEditMoveDelete);
+            InitalizeCommands();
         }
+		
+        public virtual void Dispose()
+		{
+            nedata = null;
+            if (data != null)
+            {
+                data.Name = null;
+                data.Detail = null;
+                data = null;
+            }
+		}
 
-        public NotebooksManager NotebooksManager { get; set; }
+		public NotebooksManager NotebooksManager { get; set; }
 
         ISearchableStorage<string> _Storage;
         public ISearchableStorage<string> Storage
@@ -40,8 +54,8 @@ namespace SafeNotebooks
             if (Parent == newParent)
                 return;
 
-            // TODO: ChangeParent: load all data, delete old file, save (-> Page should override this and do it for all Notes)
-            Parent = newParent;
+			// TODO: ChangeParent: changing Parent needs additional action like for example: decrypt this and all children, invalidate keys, etc. -> should be rethought more thoroughly
+			Parent = newParent;
         }
 
 
@@ -52,6 +66,7 @@ namespace SafeNotebooks
             public string Id;
             public DateTime CreatedOn;
             public DateTime ModifiedOn;
+            public string Color = "#00ffffff";
             public string Nick;
             public CKeyLifeTime CKeyLifeTime;
             public byte[] IV;
@@ -61,7 +76,7 @@ namespace SafeNotebooks
 
         public string Id
         {
-            get => nedata.Id;
+            get => nedata?.Id;
             private set => nedata.Id = value;
         }
 
@@ -74,13 +89,39 @@ namespace SafeNotebooks
         public DateTime ModifiedOn
         {
             get => nedata.ModifiedOn;
-            private set => nedata.ModifiedOn = value;
+            private set {
+                nedata.ModifiedOn = value;
+                DetailForLists = DetailForLists + value.ToLocalTime().ToString();
+            }
         }
 
-        public string Nick
+		public Color Color
+		{
+            get => Color.FromHex(nedata.Color);
+			set {
+                SetValue(ref nedata.Color, value.ToHex());
+				ColorForLists = value;
+			}
+		}
+		
+        public string ComparableColor => nedata.Color;
+
+		public static readonly BindableProperty ColorForListsProperty = BindableProperty.Create("ColorForLists", typeof(Color), typeof(Item), Color.Transparent);
+
+		public Color ColorForLists
+		{
+			get => Color;
+			set => SetValue(ColorForListsProperty, value);
+		}
+
+		public string Nick
         {
-            get => nedata.Nick;
-            set => SetValue(ref nedata.Nick, value);
+            get => nedata?.Nick;
+            set {
+                SetValue(ref nedata.Nick, value);
+                if (!DataIsAvailable)
+                    NameForLists = value;
+            }
         }
 
         public CKeyLifeTime ThisCKeyLifeTime
@@ -118,11 +159,13 @@ namespace SafeNotebooks
         public string Name
         {
             get => data.Name;
-            set => SetValue(ref data.Name, value);
+            set {
+                SetValue(ref data.Name, value);
+                NameForLists = value;
+            }
         }
 
-        public static readonly BindableProperty NameForListsProperty = BindableProperty.Create("NameForLists", typeof(string), typeof(string), null,
-            propertyChanged: (bo, o, n) => { });
+        public static readonly BindableProperty NameForListsProperty = BindableProperty.Create("NameForLists", typeof(string), typeof(Item));
 
         public virtual string NameForLists
         {
@@ -133,44 +176,106 @@ namespace SafeNotebooks
         public string Detail
         {
             get => data.Detail;
-            set => SetValue(ref data.Detail, value);
+            set {
+                SetValue(ref data.Detail, value);
+                DetailForLists = value;
+            }
         }
 
-		public static readonly BindableProperty DetailForListsProperty = BindableProperty.Create("DetailForLists", typeof(string), typeof(string), null,
-			propertyChanged: (bo, o, n) => { });
-		
+        public static readonly BindableProperty DetailForListsProperty = BindableProperty.Create("DetailForLists", typeof(string), typeof(Item));
+
         public virtual string DetailForLists
         {
-            get => DataIsAvailable ? Detail : "";
+            get => ModifiedOn.ToLocalTime().ToString() + (DataIsAvailable && !string.IsNullOrEmpty(Detail) ? ", " + Detail : "");
             set => SetValue(DetailForListsProperty, value);
         }
 
-        public static readonly BindableProperty LockedImageNameProperty = BindableProperty.Create("LockedImageName", typeof(string), typeof(string), null,
-            propertyChanged: (bo, o, n) => { ((Item)bo).NameForLists = (string)n; ((Item)bo).DetailForLists = (string)n; });
+        public static readonly BindableProperty LockedImageNameForListsProperty = BindableProperty.Create("LockedImageNameForLists", typeof(string), typeof(Item));
 
-        public virtual string LockedImageName
+        public virtual string LockedImageNameForLists
         {
-            get => !DataIsAvailable ? NotebooksManager.UI.LockedImageName : "";
-            set => SetValue(LockedImageNameProperty, value);
+            get => !DataIsAvailable ? NotebooksManager.UI.LockedImageNameForLists : "";
+            set => SetValue(LockedImageNameForListsProperty, value);
         }
 
-		
+        public static readonly BindableProperty LockedImageWidthForListsProperty = BindableProperty.Create("LockedImageWidthForLists", typeof(double), typeof(Item), 0d);
+
+        public virtual double LockedImageWidthForLists
+        {
+            get => !DataIsAvailable ? NotebooksManager.UI.LockedImageWidthForLists : 0;
+            set => SetValue(LockedImageWidthForListsProperty, value);
+        }
+
+
         //
 
-		protected override void OnPropertyChanged(string propertyName)
-		{
-            string[] propertiesForBindableHack = { "NameForLists", "DetailForLists", "LockedImageName", };
+        bool _SelectModeEnabled;
+        public virtual bool SelectModeEnabled
+        {
+            get => _SelectModeEnabled;
+            set {
+                _SelectModeEnabled = value;
+                SelectedUnselectedImageNameForLists = _SelectModeEnabled ? "e" : "d";
+                SelectedUnselectedImageWidthForLists = _SelectModeEnabled ? 1 : 0;
+            }
+        }
 
-            if(!propertiesForBindableHack.Any((n) => n == propertyName))
+        bool _IsSelected;
+        public bool IsSelected
+        {
+            get => _IsSelected;
+            set {
+                _IsSelected = value;
+                SelectedUnselectedImageNameForLists = _IsSelected ? "s" : "u";
+                SelectedUnselectedImageWidthForLists = _IsSelected ? 2 : 3;
+            }
+        }
+
+        public static readonly BindableProperty SelectedUnselectedImageNameForListsProperty = BindableProperty.Create("SelectedUnselectedImageNameForLists", typeof(string), typeof(Item));
+
+        public virtual string SelectedUnselectedImageNameForLists
+        {
+            get {
+                if (SelectModeEnabled)
+                    return IsSelected ? NotebooksManager.UI.SelectedImageNameForLists : NotebooksManager.UI.UnselectedImageNameForLists;
+                else
+                    return "";
+            }
+            set => SetValue(SelectedUnselectedImageNameForListsProperty, value);
+        }
+
+        public static readonly BindableProperty SelectedUnselectedImageWidthForListsProperty = BindableProperty.Create("SelectedUnselectedImageWidthForLists", typeof(double), typeof(Item), -1d);
+
+        public virtual double SelectedUnselectedImageWidthForLists
+        {
+            get {
+                if (SelectModeEnabled)
+                    return NotebooksManager.UI.SelectedUnselectedImageWidthForLists;
+                else
+                    return 0;
+            }
+            set => SetValue(SelectedUnselectedImageWidthForListsProperty, value);
+        }
+
+
+        //
+
+        protected override void OnPropertyChanged(string propertyName)
+        {
+            string[] propertiesForBindableHack = {
+                "ColorForLists", "NameForLists", "DetailForLists", "LockedImageNameForLists", "LockedImageWidthForLists", "SelectedUnselectedImageNameForLists", "SelectedUnselectedImageWidthForLists",
+            };
+
+            if (!propertiesForBindableHack.Any((n) => n == propertyName))
                 Touch();
 
             base.OnPropertyChanged(propertyName);
-		}
-		
+        }
+
 
         //
 
-		public bool Modified
+        public bool Modified
         {
             get;
             protected set;
@@ -332,11 +437,13 @@ namespace SafeNotebooks
                     JObject g = JObject.Parse("{" + _d + "}");
                     Deserialize(g);
 
-                    LockedImageName = "u";
+                    NameForLists = Name;
+                    DetailForLists = Detail;
+                    LockedImageNameForLists = "u";
                 }
                 else
                 {
-                    LockedImageName = "l";
+                    LockedImageNameForLists = "l";
                 }
 
                 NotebooksManager.OnItemOpened(this);
@@ -410,12 +517,22 @@ namespace SafeNotebooks
 
         //
 
-        public ICommand EditItemCommand { private set; get; }
-        public ICommand MoveItemCommand { private set; get; }
-        public ICommand DeleteItemCommand { private set; get; }
+        public ICommand EditItemCommand { get; private set; }
+        public ICommand MoveItemCommand { get; private set; }
+        public ICommand DeleteItemCommand { get; private set; }
+        public ICommand SelectUnselectItemCommand { get; private set; }
+
+        void InitalizeCommands()
+        {
+            EditItemCommand = new Command(ExecuteEditItemCommand, CanExecuteEditMoveDelete);
+            MoveItemCommand = new Command(ExecuteMoveItemCommand, CanExecuteEditMoveDelete);
+            DeleteItemCommand = new Command(ExecuteDeleteItemCommand, CanExecuteEditMoveDelete);
+            SelectUnselectItemCommand = new Command(ExecuteSelectUnselectItemCommand, CanExecuteSelectUnselectItemCommand);
+        }
 
         public virtual async Task EditAsync()
         {
+            // TODO: should ask for a password is locked
             await NotebooksManager.UI.EditItemAsync(this);
         }
 
@@ -436,6 +553,7 @@ namespace SafeNotebooks
 
         public virtual async Task DeleteAsync()
         {
+            // TODO: should ask for a password is locked
             await App.Current.MainPage.DisplayAlert("Delete", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
         }
 
@@ -446,8 +564,21 @@ namespace SafeNotebooks
 
         protected virtual bool CanExecuteEditMoveDelete(object sender)
         {
+            return true;
+            //Item item = (Item)sender;
+            //return item != null ? item.DataIsAvailable : false;
+        }
+
+        protected virtual void ExecuteSelectUnselectItemCommand(object sender)
+        {
             Item item = (Item)sender;
-            return item != null ? item.DataIsAvailable : false;
+            if (item != null)
+                item.IsSelected = !item.IsSelected;
+        }
+
+        protected virtual bool CanExecuteSelectUnselectItemCommand(object sender)
+        {
+            return true;
         }
 
 
@@ -482,17 +613,18 @@ namespace SafeNotebooks
         }
 
 
-		//
+        //
 
         protected void SetValue<T>(ref T storage, T value, [CallerMemberName]string name = null)
-		{
-			if (Equals(storage, value))
-			{
-				return;
-			}
+        {
+            if (Equals(storage, value))
+            {
+                return;
+            }
 
-			storage = value;
-			OnPropertyChanged(name);
-		}
-	}
+            storage = value;
+            OnPropertyChanged(name);
+        }
+
+    }
 }

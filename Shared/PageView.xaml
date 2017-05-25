@@ -59,7 +59,8 @@
                 <StackLayout
                     x:Name = "SearchBar"
                     Style = "{StaticResource stHorizontalNoSpaces}"
-                    Padding = "{StaticResource SearchBarPadding}">
+                    Padding = "{StaticResource SearchBarPadding}"
+                    BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}">
 
                     <Entry
                         x:Name = "SearchQuery"
@@ -98,11 +99,14 @@
 
             <Label
                 x:Name = "NoUIText"
+                Margin="20, 0, 20, 0"
                 Text = "Witamy w programie Bezpieczne Notatniki"
                 HorizontalOptions = "Center"
+                HorizontalTextAlignment="Center"
                 VerticalOptions = "CenterAndExpand" />
+            
             <Label
-                Margin="20"
+                Margin="30, 20, 30, 20"
                 x:Name = "NoUIText2"
                 Text = "Możesz w nim bezpiecznie trzymać wszystkie swoje sekrety :)"
                 HorizontalOptions = "Center"
@@ -145,7 +149,7 @@
             <pbXForms:FlatButton
                 Grid.Column = "3"
                 x:Name = "EditItemsBtn"
-                Image = "ic_transform.png.png"
+                Image = "ic_transform.png"
                 Clicked = "EditItemsBtn_Clicked" />
 
         </pbXForms:ToolBarGridLayout>

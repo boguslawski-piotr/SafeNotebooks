@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using pbXForms;
 using pbXNet;
 using Xamarin.Forms;
@@ -28,6 +30,36 @@ namespace SafeNotebooks
 		{
 			SearchQuery.Text = "";
 			SearchQuery.Unfocus();
+		}
+
+
+        public static void ListViewScrollTo(ListView ListCtl, Item item)
+		{
+			ListCtl.ScrollTo(item, ScrollToPosition.Center, false);
+		}
+
+		public static void ListViewSetItemsSource(ListView ListCtl, IEnumerable l)
+		{
+			if (l == null)
+			{
+				ListCtl.ItemsSource = l;
+				return;
+			}
+
+			ListCtl.BeginRefresh();
+
+			IEnumerator e = l.GetEnumerator();
+			e.Reset();
+			object o = null;
+			if (e.MoveNext())
+				o = e.Current;
+
+			ListCtl.ItemsSource = l;
+
+			if (o != null)
+				ListCtl.ScrollTo(o, ScrollToPosition.Start, false);
+
+			ListCtl.EndRefresh();
 		}
 	}
 
