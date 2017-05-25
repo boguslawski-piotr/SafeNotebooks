@@ -129,6 +129,8 @@
     <BundleResource Include="Resources\ic_settings.png" />
     <BundleResource Include="Resources\ic_sort.png" />
     <BundleResource Include="Resources\ic_transform.png" />
+    <BundleResource Include="Resources\ic_radio_button_checked.png" />
+    <BundleResource Include="Resources\ic_radio_button_unchecked.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">

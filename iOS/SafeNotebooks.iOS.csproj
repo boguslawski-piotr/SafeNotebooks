@@ -190,11 +190,11 @@
     <BundleResource Include="Resources\ic_transform%402x.png" />
     <BundleResource Include="Resources\ic_transform%403x.png" />
     <BundleResource Include="Resources\ic_transform.png" />
-    <BundleResource Include="Resources\ic_radio_button_unchecked_2x.png" />
-    <BundleResource Include="Resources\ic_radio_button_unchecked_3x.png" />
+    <BundleResource Include="Resources\ic_radio_button_unchecked%402x.png" />
+    <BundleResource Include="Resources\ic_radio_button_unchecked%403x.png" />
     <BundleResource Include="Resources\ic_radio_button_unchecked.png" />
-    <BundleResource Include="Resources\ic_radio_button_checked_2x.png" />
-    <BundleResource Include="Resources\ic_radio_button_checked_3x.png" />
+    <BundleResource Include="Resources\ic_radio_button_checked%402x.png" />
+    <BundleResource Include="Resources\ic_radio_button_checked%403x.png" />
     <BundleResource Include="Resources\ic_radio_button_checked.png" />
   </ItemGroup>
   <ItemGroup>
