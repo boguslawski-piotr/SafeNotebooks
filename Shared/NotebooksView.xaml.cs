@@ -187,7 +187,7 @@ namespace SafeNotebooks
         }
 
 
-        async void SortBtn_Clicked(object sender, System.EventArgs e)
+		async void SortBtn_Clicked(object sender, System.EventArgs e)
         {
             //string[] cs = { "#ffff0000", "#ff008000", "#80ff0000", "#80008000", "#40ff0000", "#40008000", };
             //foreach (var c in cs)
@@ -213,7 +213,7 @@ namespace SafeNotebooks
             }
 
             SortParametersDlg d = new SortParametersDlg(title, sortParams);
-            bool rc = await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d, DeviceEx.Orientation == DeviceOrientation.Landscape ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter);
+			bool rc = await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d, DeviceEx.Orientation == DeviceOrientation.Landscape ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter);
             if (rc)
             {
                 if (App.NotebooksManager.SelectedNotebook == null)
@@ -275,12 +275,24 @@ namespace SafeNotebooks
 
         void EditItemsBtn_Clicked(object sender, System.EventArgs e)
         {
-            //Application.Current.MainPage.DisplayAlert("Edit items...", "edit multiple items", "Cancel");
-            if (App.NotebooksManager.SelectedNotebook == null)
+            Test();
+            return;
+
+			if (App.NotebooksManager.SelectedNotebook == null)
                 App.NotebooksManager.SelectModeForItemsEnabled = !App.NotebooksManager.SelectModeForItemsEnabled;
             else
                 App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled;
         }
 
-    }
+		ModalContentView d1;
+
+        async Task Test()
+        {
+			if (d1 == null)
+				d1 = new NotebooksView();
+			MainWnd.Current.ModalViewsManager.NavDrawerWidth = MainWnd.Current.IsSplitView ? MainWnd.Current.MasterViewActualWidth : 0;
+			MainWnd.Current.ModalViewsManager.NavDrawerRelativeWidth = 0.8;
+			await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d1, ModalViewsManager.ModalPosition.NavDrawer);
+		}
+	}
 }

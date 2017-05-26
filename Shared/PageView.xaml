@@ -49,6 +49,7 @@
 
         <ListView
             x:Name = "ListCtl"
+            IsVisible="true"
             RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
             BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
             SeparatorColor = "{StaticResource ListItemDividerColor}"
@@ -87,6 +88,7 @@
 
         <StackLayout
             x:Name = "NoUIBar"
+            IsVisible="false"
             Style = "{StaticResource stVerticalNoSpaces}">
 
             <Image

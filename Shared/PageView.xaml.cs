@@ -54,17 +54,16 @@ namespace SafeNotebooks
             {
                 BatchBegin();
 
-                NoUIBar.IsVisible = false;
-                
                 AppBar.IsVisible = true;
 
                 SelectedPageName.Text = App.NotebooksManager.SelectedPage.NameForLists;
                 SelectedPageParentName.Text = $"{T.Localized("in")} {App.NotebooksManager.SelectedPage.Notebook?.NameForLists}, {App.NotebooksManager.SelectedPage.Notebook?.Storage?.Name}";
 
                 ListCtl.ItemsSource = App.NotebooksManager.SelectedPage.ObservableItems;
-                ListCtl.IsVisible = true;
+				ListCtl.IsVisible = true;
+				NoUIBar.IsVisible = false;
 
-                ToolBar.IsVisible = true;
+				ToolBar.IsVisible = true;
 
 				BatchCommit();
 				
