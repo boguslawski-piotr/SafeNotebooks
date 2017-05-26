@@ -375,14 +375,16 @@ namespace SafeNotebooks
 
         //
 
+        const string NotEncyptedDataEndMarker = "72d26030-0d4d-4625-b6e8-785de17db815";
+
         protected virtual string SerializeNotEncryptedData()
         {
-            return JsonConvert.SerializeObject(nedata, pbXNet.Settings.JsonSerializer);
+            return "'ned':" + JsonConvert.SerializeObject(nedata, pbXNet.Settings.JsonSerializer);
         }
 
-        protected virtual void DeserializeNotEncryptedData(string ned)
+        protected virtual void DeserializeNotEncryptedData(JObject d)
         {
-            nedata = JsonConvert.DeserializeObject<NotEncryptedData>(ned, pbXNet.Settings.JsonSerializer);
+            nedata = JsonConvert.DeserializeObject<NotEncryptedData>(d["ned"].ToString(), pbXNet.Settings.JsonSerializer);
         }
 
         protected virtual string Serialize()
@@ -423,14 +425,15 @@ namespace SafeNotebooks
 
                 //d = Obfuscator.DeObfuscate(d);
 
-                int _nedEnd = d.IndexOf('}');
-                string _ned = d.Substring(0, _nedEnd + 1);
+                int _nedEnd = d.IndexOf(NotEncyptedDataEndMarker, StringComparison.Ordinal);
+                string _ned = d.Substring(0, _nedEnd);
 
-                DeserializeNotEncryptedData(_ned);
+                JObject neg = JObject.Parse("{" + _ned + "}");
+                DeserializeNotEncryptedData(neg);
 
                 if (tryToUnlock || !IsSecured || (!ThisIsSecured && Parent.DataIsAvailable))
                 {
-                    string _d = d.Substring(_nedEnd + 1);
+                    string _d = d.Substring(_nedEnd + NotEncyptedDataEndMarker.Length);
 
                     _d = await DecryptAsync(_d);
 
@@ -481,10 +484,9 @@ namespace SafeNotebooks
             {
                 string ned = SerializeNotEncryptedData();
                 string d = Serialize();
-
                 string ed = await EncryptAsync(d);
 
-                d = ned + ed;
+                d = ned + NotEncyptedDataEndMarker + ed;
 
                 //d = Obfuscator.Obfuscate(d);
 
@@ -514,10 +516,15 @@ namespace SafeNotebooks
             }
         }
 
+        public virtual async Task<bool> SaveAllAsync(bool force = false)
+        {
+            return true;
+        }
 
-        //
 
-        public ICommand EditItemCommand { get; private set; }
+		//
+
+		public ICommand EditItemCommand { get; private set; }
         public ICommand MoveItemCommand { get; private set; }
         public ICommand DeleteItemCommand { get; private set; }
         public ICommand SelectUnselectItemCommand { get; private set; }
