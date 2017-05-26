@@ -187,7 +187,7 @@ namespace SafeNotebooks
         }
 
 
-		async void SortBtn_Clicked(object sender, System.EventArgs e)
+        async void SortBtn_Clicked(object sender, System.EventArgs e)
         {
             //string[] cs = { "#ffff0000", "#ff008000", "#80ff0000", "#80008000", "#40ff0000", "#40008000", };
             //foreach (var c in cs)
@@ -275,24 +275,28 @@ namespace SafeNotebooks
 
         void EditItemsBtn_Clicked(object sender, System.EventArgs e)
         {
-            Test();
-            return;
+            //Test();
+            //return;
 
-			if (App.NotebooksManager.SelectedNotebook == null)
+            if (App.NotebooksManager.SelectedNotebook == null)
                 App.NotebooksManager.SelectModeForItemsEnabled = !App.NotebooksManager.SelectModeForItemsEnabled;
             else
                 App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled;
         }
 
-		ModalContentView d1;
-
+        ModalContentView d1;
+        //SortParametersDlg d1;
         async Task Test()
         {
-			if (d1 == null)
-				d1 = new NotebooksView();
-			MainWnd.Current.ModalViewsManager.NavDrawerWidth = MainWnd.Current.IsSplitView ? MainWnd.Current.MasterViewActualWidth : 0;
-			MainWnd.Current.ModalViewsManager.NavDrawerRelativeWidth = 0.8;
-			await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d1, ModalViewsManager.ModalPosition.NavDrawer);
-		}
-	}
+            ItemWithItems.SortParameters sortParams = App.NotebooksManager.SortParameters;
+            if (d1 == null)
+                d1 = new NotebooksView();
+			//d1 = new SortParametersDlg("", sortParams);
+
+            MainWnd.Current.ModalViewsManager.NavDrawerWidthInLandscape = MainWnd.Current.MasterViewWidthInSplitView;
+            MainWnd.Current.ModalViewsManager.NavDrawerRelativeWidth = 0.8;
+
+            await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d1, ModalViewsManager.ModalPosition.NavDrawer);
+        }
+    }
 }
