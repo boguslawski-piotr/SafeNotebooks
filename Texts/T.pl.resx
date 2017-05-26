@@ -55,6 +55,12 @@
   <data name="Page" xml:space="preserve">
     <value>Strona</value>
   </data>
+  <data name="Notebooks" xml:space="preserve">
+    <value>Notatniki</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>Strony</value>
+  </data>
 
   <data name="NewNotebook" xml:space="preserve">
     <value>Dodaj Notatnik</value>
@@ -75,6 +81,26 @@
   </data>
   <data name="PinPlaceholder" xml:space="preserve">
     <value>wprowadź swój pin</value>
+  </data>
+
+  <data name="WhereStoreNotebook" xml:space="preserve">
+    <value>Gdzie chcesz umieścić notatnik?</value>
+  </data>
+
+  <data name="HowToSort" xml:space="preserve">
+    <value>Jak chcesz sortować</value>
+  </data>
+  <data name="Descending" xml:space="preserve">
+    <value>Malejąco</value>
+  </data>
+  <data name="SortByColor" xml:space="preserve">
+    <value>Kolorami</value>
+  </data>
+  <data name="SortByName" xml:space="preserve">
+    <value>Po nazwie</value>
+  </data>
+  <data name="SortByDate" xml:space="preserve">
+    <value>Po dacie modyfikacji</value>
   </data>
 	
 </root>

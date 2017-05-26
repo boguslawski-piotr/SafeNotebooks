@@ -125,6 +125,18 @@ namespace SafeNotebooks.Texts {
             }
         }
         
+        internal static string Notebooks {
+            get {
+                return ResourceManager.GetString("Notebooks", resourceCulture);
+            }
+        }
+        
+        internal static string Pages {
+            get {
+                return ResourceManager.GetString("Pages", resourceCulture);
+            }
+        }
+        
         internal static string NewNotebook {
             get {
                 return ResourceManager.GetString("NewNotebook", resourceCulture);
@@ -158,6 +170,42 @@ namespace SafeNotebooks.Texts {
         internal static string PinPlaceholder {
             get {
                 return ResourceManager.GetString("PinPlaceholder", resourceCulture);
+            }
+        }
+        
+        internal static string WhereStoreNotebook {
+            get {
+                return ResourceManager.GetString("WhereStoreNotebook", resourceCulture);
+            }
+        }
+        
+        internal static string HowToSort {
+            get {
+                return ResourceManager.GetString("HowToSort", resourceCulture);
+            }
+        }
+        
+        internal static string Descending {
+            get {
+                return ResourceManager.GetString("Descending", resourceCulture);
+            }
+        }
+        
+        internal static string SortByColor {
+            get {
+                return ResourceManager.GetString("SortByColor", resourceCulture);
+            }
+        }
+        
+        internal static string SortByName {
+            get {
+                return ResourceManager.GetString("SortByName", resourceCulture);
+            }
+        }
+        
+        internal static string SortByDate {
+            get {
+                return ResourceManager.GetString("SortByDate", resourceCulture);
             }
         }
     }

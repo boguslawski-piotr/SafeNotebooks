@@ -42,6 +42,7 @@
             x:Name = "AppTitle"
             Text = "{T:Localized AppName}"
             FontSize="Large"
+            LineBreakMode="HeadTruncation"
             TextColor = "{StaticResource AccentTextColor}"
             VerticalOptions = "Center"
             HorizontalOptions = "FillAndExpand" />

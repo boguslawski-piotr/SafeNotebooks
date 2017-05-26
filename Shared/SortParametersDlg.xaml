@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentView
+<pbXForms:ModalContentView
     xmlns = "http://xamarin.com/schemas/2014/forms"
     xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pbXForms = "clr-namespace:pbXForms"
     xmlns:T = "clr-namespace:pbXForms"
     xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.ChooseSortDlg"
+    x:Class = "SafeNotebooks.SortParametersDlg"
     BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
     Padding = "{x:Static pbXForms:Metrics.ScreenEdgePadding}">
 
@@ -23,21 +23,21 @@
 
             <pbXForms:FlatButton
                 x:Name = "ByDateBtn"
-                Text = "Po dacie modyfikacji"
+                Text = "{T:Localized SortByDate}"
                 LineBreakMode = "TailTruncation"
                 FontSize = "Medium"
                 Clicked = "ByDate_Clicked" />
 
             <pbXForms:FlatButton
                 x:Name = "ByNameBtn"
-                Text = "Po nazwie"
+                Text = "{T:Localized SortByName}"
                 LineBreakMode = "TailTruncation"
                 FontSize = "Medium"
                 Clicked = "ByName_Clicked" />
 
             <pbXForms:FlatButton
                 x:Name = "ByColorBtn"
-                Text = "Kolorami"
+                Text = "{T:Localized SortByColor}"
                 LineBreakMode = "TailTruncation"
                 FontSize = "Medium"
                 Clicked = "ByColor_Clicked" />
@@ -50,8 +50,8 @@
 
                 <Label
                     VerticalTextAlignment = "Center"
-                    FontSize = "Micro"
-                    Text = "Malejąco" />
+                    Text = "{T:Localized Descending}"
+                    FontSize = "Small" />
 
                 <Switch
                     x:Name = "Descending" />
@@ -61,11 +61,11 @@
             <pbXForms:FlatButton
                 Text = "{T:Localized Cancel}"
                 HeightRequest = "36"
-                FontSize = "Micro"
+                FontSize = "Small"
                 Clicked = "Cancel_Clicked" />
 
         </StackLayout>
 
     </ContentView.Content>
 
-</ContentView>
+</pbXForms:ModalContentView>

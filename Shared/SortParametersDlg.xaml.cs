@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using Xamarin.Forms;
+﻿using pbXForms;
 
 namespace SafeNotebooks
 {
-    public partial class ChooseSortDlg : ContentView
+    public partial class SortParametersDlg : ModalContentView
     {
         public ItemWithItems.SortParameters SortParams;
 
-        public ChooseSortDlg()
+        public SortParametersDlg()
         {
 			SortParams = new ItemWithItems.SortParameters();
 			Initialize();
 		}
 
-        public ChooseSortDlg(string title, ItemWithItems.SortParameters sortParams = null)
+        public SortParametersDlg(string title, ItemWithItems.SortParameters sortParams = null)
         {
             SortParams = sortParams ?? new ItemWithItems.SortParameters();
-
             Initialize();
-
             Title.Text = title;
         }
 
@@ -34,39 +30,36 @@ namespace SafeNotebooks
 			if (SortParams.Descending) Descending.IsToggled = true;
         }
 
-        public event EventHandler OK;
-        public event EventHandler Cancel;
-
         void Cancel_Clicked(object sender, System.EventArgs e)
         {
-            Cancel?.Invoke(this, null);
+            OnCancel();
         }
 
-        void _OK()
+        public override void OnOK()
         {
             SortParams.Descending = Descending.IsToggled;
-            OK?.Invoke(this, null);
+            base.OnOK();
         }
 
         void ByDate_Clicked(object sender, System.EventArgs e)
         {
             SortParams.Clear();
             SortParams.ByDate = true;
-            _OK();
+            OnOK();
         }
 
         void ByName_Clicked(object sender, System.EventArgs e)
         {
             SortParams.Clear();
             SortParams.ByName = true;
-            _OK();
+            OnOK();
         }
 
         void ByColor_Clicked(object sender, System.EventArgs e)
         {
             SortParams.Clear();
             SortParams.ByColor = true;
-            _OK();
+            OnOK();
         }
     }
 }

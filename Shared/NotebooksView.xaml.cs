@@ -199,35 +199,35 @@ namespace SafeNotebooks
             //App.NotebooksManager.SortNotebooks();
 
             ItemWithItems.SortParameters sortParams = null;
-            string title;
+            string title = T.Localized("HowToSort");
 
             if (App.NotebooksManager.SelectedNotebook == null)
             {
                 sortParams = App.NotebooksManager.SortParameters;
-                title = "Jak chcesz sortować notatniki?"; // TODO: localization
+                title += " " + T.Localized("Notebooks") + "?";
             }
             else
             {
                 sortParams = App.NotebooksManager.SelectedNotebook.SortParameters;
-                title = "Jak chcesz sortować strony?"; // TODO: localization
+                title += " " + T.Localized("Pages") + "?";
             }
 
-            ChooseSortDlg d = new ChooseSortDlg(title, sortParams);
-
-            d.Cancel += async (s, cp) => await App.MainWnd.NavigationEx.PopModalAsync();
-            d.OK += async (object s, EventArgs op) =>
+            SortParametersDlg d = new SortParametersDlg(title, sortParams);
+            bool rc = await App.MainWnd.ModalViewsManager.DisplayModalAsync(d, DeviceEx.Orientation == DeviceOrientation.Landscape ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter);
+            if (rc)
             {
-                await App.MainWnd.NavigationEx.PopModalAsync();
-                App.NotebooksManager.SortItems();
-            };
-
-            await App.MainWnd.NavigationEx.PushModalAsync(d, DeviceEx.Orientation == DeviceOrientation.Landscape ? NavigationEx.ModalPosition.BottomLeft : NavigationEx.ModalPosition.BottomCenter);
-		}
+                if (App.NotebooksManager.SelectedNotebook == null)
+                    App.NotebooksManager.SortItems();
+                else
+                    App.NotebooksManager.SelectedNotebook.SortItems();
+            }
+        }
 
 
         async Task<StorageOnFileSystem<string>> SelectStorageUIAsync(IEnumerable<StorageOnFileSystem<string>> storages)
         {
-            string fsName = await App.Current.MainPage.DisplayActionSheet("Where do you want to store the notebook?", // TODO: localization
+            // TODO: do zmiany na wlasny dialog (modal view)
+            string fsName = await App.Current.MainPage.DisplayActionSheet(T.Localized("WhereStoreNotebook"),
                                                                           T.Localized("Cancel"),
                                                                           null,
                                                                           storages.Select((storage1) => storage1.Name).ToArray());

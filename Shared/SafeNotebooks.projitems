@@ -25,7 +25,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainWnd.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ChooseSortDlg.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SortParametersDlg.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -61,8 +61,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)StoragesManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewsCommonLogic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\ItemWithItems.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ChooseSortDlg.xaml.cs">
-      <DependentUpon>ChooseSortDlg.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)SortParametersDlg.xaml.cs">
+      <DependentUpon>SortParametersDlg.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

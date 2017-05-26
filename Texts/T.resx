@@ -55,6 +55,12 @@
   <data name="Page" xml:space="preserve">
     <value>Page</value>
   </data>
+  <data name="Notebooks" xml:space="preserve">
+    <value>Notebooks</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>Pages</value>
+  </data>
 	
   <data name="NewNotebook" xml:space="preserve">
     <value>Add Notebook</value>
@@ -77,5 +83,24 @@
     <value>enter your pin</value>
   </data>
 	
+  <data name="WhereStoreNotebook" xml:space="preserve">
+    <value>Where do you want to store the notebook?</value>
+  </data>
+
+  <data name="HowToSort" xml:space="preserve">
+    <value>How do you want to sort</value>
+  </data>
+  <data name="Descending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="SortByColor" xml:space="preserve">
+    <value>By colors</value>
+  </data>
+  <data name="SortByName" xml:space="preserve">
+    <value>By name</value>
+  </data>
+  <data name="SortByDate" xml:space="preserve">
+    <value>By modified date</value>
+  </data>
 	
 </root>
