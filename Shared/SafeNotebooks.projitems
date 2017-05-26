@@ -64,6 +64,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SortParametersDlg.xaml.cs">
       <DependentUpon>SortParametersDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Notebooks\" />

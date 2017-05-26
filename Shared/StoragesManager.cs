@@ -13,6 +13,13 @@ namespace SafeNotebooks
         protected IDictionary<string, StorageOnFileSystem<string>> _storages = new Dictionary<string, StorageOnFileSystem<string>>();
         public IEnumerable<StorageOnFileSystem<string>> Storages => _storages?.Values;
 
+        string Id;
+
+        public StoragesManager(string id)
+        {
+            Id = id;
+        }
+
         public async Task InitializeAsync()
         {
             foreach (DeviceFileSystemRoot root in DeviceFileSystem.AvailableRootsForEndUser)
@@ -38,7 +45,7 @@ namespace SafeNotebooks
 
 		protected async Task<StorageOnFileSystem<string>> NewStorageAsync(IFileSystem fs)
 		{
-			StorageOnFileSystem<string> storage = new StorageOnFileSystem<string>(App.Name, fs);
+			StorageOnFileSystem<string> storage = new StorageOnFileSystem<string>(Id, fs);
 			await storage.InitializeAsync();
 			return storage;
 		}

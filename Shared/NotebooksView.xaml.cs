@@ -198,7 +198,7 @@ namespace SafeNotebooks
             //}
             //App.NotebooksManager.SortNotebooks();
 
-            ItemWithItems.SortParameters sortParams = null;
+            ItemWithItems.SortParameters sortParams;
             string title = T.Localized("HowToSort");
 
             if (App.NotebooksManager.SelectedNotebook == null)
@@ -213,13 +213,21 @@ namespace SafeNotebooks
             }
 
             SortParametersDlg d = new SortParametersDlg(title, sortParams);
-            bool rc = await App.MainWnd.ModalViewsManager.DisplayModalAsync(d, DeviceEx.Orientation == DeviceOrientation.Landscape ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter);
+            bool rc = await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d, DeviceEx.Orientation == DeviceOrientation.Landscape ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter);
             if (rc)
             {
                 if (App.NotebooksManager.SelectedNotebook == null)
+                {
+                    App.NotebooksManager.SortParameters = d.SortParams;
                     App.NotebooksManager.SortItems();
+                }
                 else
+                {
+                    App.NotebooksManager.SelectedNotebook.SortParameters = d.SortParams;
                     App.NotebooksManager.SelectedNotebook.SortItems();
+                }
+
+                await App.NotebooksManager.SaveAllAsync();
             }
         }
 

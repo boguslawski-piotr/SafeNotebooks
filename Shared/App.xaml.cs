@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Linq;
 using pbXNet;
 using pbXSecurity;
 using Xamarin.Forms;
-using System.Windows.Input;
 
 //[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
@@ -19,17 +17,11 @@ namespace SafeNotebooks
             get {
                 string name = typeof(App).GetTypeInfo().Assembly.ManifestModule.Name;
                 int firstDot = name.IndexOf('.');
-                if(firstDot > 0)
+                if (firstDot > 0)
                     name = name.Substring(0, firstDot);
-				return name;
+                return name;
             }
         }
-
-        public static MainWnd MainWnd;
-
-        // Settings in AppSettings.cs
-
-        //
 
         static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new AesCryptographer(), new Settings.Storage()));
         public static ISecretsManager SecretsManager => _SecretsManager.Value;
@@ -37,77 +29,21 @@ namespace SafeNotebooks
         static Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
         static UnlockWnd UnlockWnd => _UnlockWnd.Value;
 
-		//
+        static Lazy<StoragesManager> _StoragesManager = new Lazy<StoragesManager>(() => new StoragesManager(App.Name));
+        public static StoragesManager StoragesManager => _StoragesManager.Value;
 
-		static Lazy<StoragesManager> _StoragesManager = new Lazy<StoragesManager>(() => new StoragesManager());
-		public static StoragesManager StoragesManager => _StoragesManager.Value;
-
-        static Lazy<NotebooksManager> _NotebooksManager = new Lazy<NotebooksManager>(() => new NotebooksManager());
-		public static NotebooksManager NotebooksManager => _NotebooksManager.Value;
+        static Lazy<NotebooksManager> _NotebooksManager = new Lazy<NotebooksManager>(() => new NotebooksManager(App.Name));
+        public static NotebooksManager NotebooksManager => _NotebooksManager.Value;
 
         static Lazy<NotebooksManagerUI> _NotebooksManagerUI = new Lazy<NotebooksManagerUI>(() => new NotebooksManagerUI());
         public static NotebooksManagerUI NotebooksManagerUI => _NotebooksManagerUI.Value;
 
+		// Settings in AppSettings.cs
+
+
 		//
 
-		async void Tests()
-        {
-			//***
-			
-            string obs = "Ala ma kota";
-            string obo = Obfuscator.Obfuscate(obs);
-            string obd = Obfuscator.DeObfuscate(obo);
-
-            //***
-
-            //await SecretsManager.DeletePasswordAsync(App.Name);
-            //await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
-			//await SecretsManager.DeletePasswordAsync(App.Name);
-
-			//***
-			
-            //DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Personal);
-            //try
-            //{
-            //    string fn = "O-" + pbXNet.Tools.CreateGuid() + "-" + pbXNet.Tools.CreateGuid() + "-" + pbXNet.Tools.CreateGuid() + "-1";
-            //    await fs.WriteTextAsync(fn, "1");
-            //    string d = await fs.ReadTextAsync(fn);
-            //    Debug.WriteLine(d);
-            //}
-            //catch (Exception e)
-            //{
-            //    Debug.WriteLine(e.ToString());
-            //}
-
-            //DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Personal);
-			//await fs.SetCurrentDirectoryAsync("a");
-			//IFileSystem fsc = await fs.MakeCopyAsync();
-			//await fs.SetCurrentDirectoryAsync("..");
-
-			//IEnumerable<string> d = await fs.GetDirectoriesAsync();
-			//IEnumerable<string> f = await fs.GetFilesAsync();
-
-			//bool de = await fs.DirectoryExistsAsync(".config");
-
-			//await fs.WriteTextAsync("ala", "jakiś tekst");
-
-			//bool fe = await fs.FileExistsAsync("ala");
-
-			//try
-			//{
-			//    string tt = await fs.ReadTextAsync("ala");
-			//}
-			//catch { }
-
-			//await fs.CreateDirectoryAsync("dir1");
-
-			//***
-
-			//var tests = new AesCryptographerTests();
-			//tests.BasicEncryptDecrypt();
-		}
-
-        void InitializeLocalization()
+		void InitializeLocalization()
         {
             LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Texts).GetTypeInfo().Assembly);
         }
@@ -126,14 +62,17 @@ namespace SafeNotebooks
             InitializeLocalization();
             InitializeSecrets();
 
+#if DEBUG
             Tests();
+#endif
 
             InitializeComponent();
 
             MainPage = new MainWnd();
-            MainWnd = (MainWnd) MainPage;
         }
 
+
+        //
 
         protected override void OnStart()
         {
@@ -141,7 +80,6 @@ namespace SafeNotebooks
 
             if (UnlockWnd.UnlockingNeeded)
             {
-
                 Device.BeginInvokeOnMainThread(async () =>
                 {
                     UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
@@ -151,7 +89,7 @@ namespace SafeNotebooks
             }
             else
             {
-                ContinueOnStart();
+                ContinueOnStartAsync();
             }
         }
 
@@ -161,16 +99,19 @@ namespace SafeNotebooks
 
             UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
 
-            await Task.Delay(500); // give a little time for everything to be done in case there was no action on the UnlockWnd window displayed during OnStart execution
+			// Give a little time for everything to be done in case there was 
+            // no action on the UnlockWnd window displayed during OnStart execution.
+			await Task.Delay(500); 
+
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await Application.Current.MainPage.Navigation.PopModalAsync(false);
             });
 
-            ContinueOnStart();
+            ContinueOnStartAsync();
         }
 
-        async void ContinueOnStart()
+        async Task ContinueOnStartAsync()
         {
             Debug.WriteLine("ContinueOnStart");
 
@@ -178,19 +119,32 @@ namespace SafeNotebooks
 
             await StoragesManager.InitializeAsync();
 
-			// Prepare DataManager
+            // Prepare Notebooks Manager
 
 			NotebooksManager.SecretsManager = SecretsManager;
             NotebooksManager.UI = NotebooksManagerUI;
+            await NotebooksManager.InitializeAsync();
 
-            //
+			// Prepare background tasks
+			
+            bool SaveAllModifiedData()
+            {
+                Task.WhenAny(NotebooksManager.SaveAllAsync());
+                return true;
+            }
 
-            await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemChildren);
+            Device.StartTimer(TimeSpan.FromMinutes(1), SaveAllModifiedData);
+
+			// Load available notebooks
+
+			await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemChildren);
 
 			// TODO: restore last selections (with unlocking if necessary)
 			//await App.DataManager.SelectNotebookAsync(n);
 		}
 
+
+        //
 
         protected override void OnSleep()
         {
@@ -222,6 +176,8 @@ namespace SafeNotebooks
             //await Task.Delay(5000);
         }
 
+
+        //
 
         protected override void OnResume()
         {
@@ -255,7 +211,7 @@ namespace SafeNotebooks
             ContinueOnResume();
         }
 
-        async void ContinueOnResume()
+        void ContinueOnResume()
         {
             Debug.WriteLine("ContinueOnResume");
 

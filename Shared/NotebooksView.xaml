@@ -64,7 +64,6 @@
 
         <ListView
             x:Name = "ListCtl"
-
             RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
             BackgroundColor = "{StaticResource NotebooksListBackgroundColor}"
             SeparatorColor = "{StaticResource ListItemDividerColor}"

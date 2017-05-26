@@ -125,6 +125,12 @@ namespace SafeNotebooks.Texts {
             }
         }
         
+        internal static string Note {
+            get {
+                return ResourceManager.GetString("Note", resourceCulture);
+            }
+        }
+        
         internal static string Notebooks {
             get {
                 return ResourceManager.GetString("Notebooks", resourceCulture);
@@ -134,6 +140,12 @@ namespace SafeNotebooks.Texts {
         internal static string Pages {
             get {
                 return ResourceManager.GetString("Pages", resourceCulture);
+            }
+        }
+        
+        internal static string Notes {
+            get {
+                return ResourceManager.GetString("Notes", resourceCulture);
             }
         }
         

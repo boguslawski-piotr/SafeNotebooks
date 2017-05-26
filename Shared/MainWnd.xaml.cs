@@ -13,8 +13,9 @@ namespace SafeNotebooks
         public MainWnd()
         {
             Current = this;
+
             InitializeComponent();
-            NotebooksViewIsVisible = true;
+            InitializeViews();
         }
 
         //

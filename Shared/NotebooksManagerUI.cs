@@ -44,7 +44,7 @@ namespace SafeNotebooks
             if (lll % 2 == 0)
                 item.Detail = "alaal sksi dkd dkkfir fkfir fkdid dkdkf";
 			//item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
-			item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+			//item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
 
             App.Settings.Current.AddOrUpdateValue("lll", lll);
 
@@ -59,6 +59,6 @@ namespace SafeNotebooks
 
         public string SelectedImageNameForLists { get; } = "ic_radio_button_checked.png";
 		public string UnselectedImageNameForLists { get; } = "ic_radio_button_unchecked.png";
-        public double SelectedUnselectedImageWidthForLists { get; } = Metrics.IconHeight;
+        public double SelectedUnselectedImageWidthForLists { get; } = Metrics.SmallIconHeight;
 	}
 }

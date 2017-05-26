@@ -55,11 +55,17 @@
   <data name="Page" xml:space="preserve">
     <value>Page</value>
   </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
   <data name="Notebooks" xml:space="preserve">
     <value>Notebooks</value>
   </data>
   <data name="Pages" xml:space="preserve">
     <value>Pages</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Notes</value>
   </data>
 	
   <data name="NewNotebook" xml:space="preserve">

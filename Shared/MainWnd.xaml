@@ -8,8 +8,8 @@
 
 	<pbXForms:MasterDetailPageEx.Views>
 
-		<local:NotebooksView />
 
+        <local:NotebooksView />
 		<local:PageView />
 
 	</pbXForms:MasterDetailPageEx.Views>

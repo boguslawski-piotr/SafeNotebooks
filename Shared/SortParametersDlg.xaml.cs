@@ -8,13 +8,12 @@ namespace SafeNotebooks
 
         public SortParametersDlg()
         {
-			SortParams = new ItemWithItems.SortParameters();
 			Initialize();
 		}
 
-        public SortParametersDlg(string title, ItemWithItems.SortParameters sortParams = null)
+        public SortParametersDlg(string title, ItemWithItems.SortParameters sortParams)
         {
-            SortParams = sortParams ?? new ItemWithItems.SortParameters();
+            SortParams = sortParams;
             Initialize();
             Title.Text = title;
         }
@@ -28,7 +27,9 @@ namespace SafeNotebooks
 			if (SortParams.ByDate) ByDateBtn.Image = selImg;
 			if (SortParams.ByColor) ByColorBtn.Image = selImg;
 			if (SortParams.Descending) Descending.IsToggled = true;
-        }
+
+			SortParams.Clear();
+		}
 
         void Cancel_Clicked(object sender, System.EventArgs e)
         {
@@ -43,21 +44,18 @@ namespace SafeNotebooks
 
         void ByDate_Clicked(object sender, System.EventArgs e)
         {
-            SortParams.Clear();
             SortParams.ByDate = true;
             OnOK();
         }
 
         void ByName_Clicked(object sender, System.EventArgs e)
         {
-            SortParams.Clear();
             SortParams.ByName = true;
             OnOK();
         }
 
         void ByColor_Clicked(object sender, System.EventArgs e)
         {
-            SortParams.Clear();
             SortParams.ByColor = true;
             OnOK();
         }

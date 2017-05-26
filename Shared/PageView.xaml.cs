@@ -13,11 +13,12 @@ namespace SafeNotebooks
             InitializeComponent();
 
             App.NotebooksManager.PageSelected += (sender, page) => ShowSelectedPage();
+            App.NotebooksManager.NotesSorted += NotesSorted;
 
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null;
-            //ListCtl.ItemTapped += (object sender, ItemTappedEventArgs e) => App.Data.SelectNote((Note)e.Item);
+			ListCtl.ItemTapped += ListCtl_ItemTapped;
 
-            NoUI();
+			//NoUI();
         }
 
         protected override void ContinueOnSizeAllocated(double width, double height)
@@ -27,6 +28,9 @@ namespace SafeNotebooks
             double m = !BackBtn.IsVisible ? Metrics.ScreenEdgeMargin : 0;
             SelectedPageName.Margin = new Thickness(m, 0, 0, 0);
             SelectedPageParentName.Margin = new Thickness(m, 0, 0, 0);
+
+            if (MainWnd.Current.IsSplitView && App.NotebooksManager.SelectedPage == null)
+                NoUI();
         }
 
         void NoUI()
@@ -35,8 +39,8 @@ namespace SafeNotebooks
 
             AppBar.IsVisible = false;
 
-			ListCtl.IsVisible = false;
-			ListCtl.ItemsSource = null;
+            ListCtl.IsVisible = false;
+            ListCtl.ItemsSource = null;
             NoUIBar.IsVisible = true;
 
             ToolBar.IsVisible = false;
@@ -50,6 +54,8 @@ namespace SafeNotebooks
             {
                 BatchBegin();
 
+                NoUIBar.IsVisible = false;
+                
                 AppBar.IsVisible = true;
 
                 SelectedPageName.Text = App.NotebooksManager.SelectedPage.NameForLists;
@@ -57,13 +63,12 @@ namespace SafeNotebooks
 
                 ListCtl.ItemsSource = App.NotebooksManager.SelectedPage.ObservableItems;
                 ListCtl.IsVisible = true;
-                NoUIBar.IsVisible = false;
 
-				ToolBar.IsVisible = true;
+                ToolBar.IsVisible = true;
 
+				BatchCommit();
+				
                 MainWnd.Current.NotebooksViewIsVisible = false;
-
-                BatchCommit();
             }
             else
             {
@@ -72,46 +77,74 @@ namespace SafeNotebooks
             }
         }
 
+        void NotesSorted(object sender, Page page)
+        {
+            Device.BeginInvokeOnMainThread(() => ViewsCommonLogic.ListViewSetItemsSource(ListCtl, App.NotebooksManager.SelectedPage?.ObservableItems));
+        }
+
+
+        void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            Note note = (Note)e.Item;
+            if (note.Page.SelectModeForItemsEnabled)
+                note.IsSelected = !note.IsSelected;
+            else
+                App.NotebooksManager.SelectNoteAsync(note, App.Settings.TryToUnlockItemChildren);
+        }
+
 
         void BackBtn_Clicked(object sender, System.EventArgs e)
         {
-            ListCtl.ItemsSource = null;
             MainWnd.Current.NotebooksViewIsVisible = true;
         }
 
         void EditBtn_Clicked(object sender, System.EventArgs e)
         {
-			App.NotebooksManager.SelectedPage?.EditAsync();
-		}
+            App.NotebooksManager.SelectedPage?.EditAsync();
+        }
 
 
-		void SearchQuery_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
-		{
-			ViewsCommonLogic.SearchQuery_Focused(SearchBar, SearchQuery, CancelSearchBtn);
-		}
+        void SearchQuery_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
+        {
+            ViewsCommonLogic.SearchQuery_Focused(SearchBar, SearchQuery, CancelSearchBtn);
+        }
 
-		void SearchQuery_Unfocused(object sender, Xamarin.Forms.FocusEventArgs e)
-		{
-			ViewsCommonLogic.SearchQuery_Unfocused(SearchBar, SearchQuery, CancelSearchBtn);
-		}
+        void SearchQuery_Unfocused(object sender, Xamarin.Forms.FocusEventArgs e)
+        {
+            ViewsCommonLogic.SearchQuery_Unfocused(SearchBar, SearchQuery, CancelSearchBtn);
+        }
 
-		void SearchQuery_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
-		{
-			//throw new NotImplementedException();
-		}
+        void SearchQuery_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
 
-		void CancelSearchBtn_Clicked(object sender, System.EventArgs e)
-		{
-			ViewsCommonLogic.CancelSearchBtn_Clicked(SearchBar, SearchQuery, CancelSearchBtn);
-		}
+        void CancelSearchBtn_Clicked(object sender, System.EventArgs e)
+        {
+            ViewsCommonLogic.CancelSearchBtn_Clicked(SearchBar, SearchQuery, CancelSearchBtn);
+        }
 
 
-		void SortBtn_Clicked(object sender, System.EventArgs e)
-		{
-			Application.Current.MainPage.DisplayAlert("Sort", "Select sort for current view (ask for default?)", "Cancel");
-		}
+        async void SortBtn_Clicked(object sender, System.EventArgs e)
+        {
+            if (App.NotebooksManager.SelectedPage == null)
+                return;
 
-		async void NewBtn_Clicked(object sender, System.EventArgs e)
+            ItemWithItems.SortParameters sortParams = App.NotebooksManager.SelectedPage.SortParameters;
+            string title = T.Localized("HowToSort") + " " + T.Localized("Notes") + "?";
+
+            SortParametersDlg d = new SortParametersDlg(title, sortParams);
+            bool rc = await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d, ModalViewsManager.ModalPosition.BottomCenter);
+            if (rc)
+            {
+                App.NotebooksManager.SelectedPage.SortParameters = d.SortParams;
+                App.NotebooksManager.SelectedPage.SortItems();
+
+                await App.NotebooksManager.SaveAllAsync();
+            }
+        }
+
+        async void NewBtn_Clicked(object sender, System.EventArgs e)
         {
             string rc = await Application.Current.MainPage.DisplayActionSheet(T.Localized("SelectAndNew"), T.Localized("Cancel"), null, "Note", "Checklist", "Secret");
             New(rc);
@@ -133,10 +166,11 @@ namespace SafeNotebooks
         }
 
         void EditItemsBtn_Clicked(object sender, System.EventArgs e)
-		{
-			Application.Current.MainPage.DisplayAlert("Edit items...", "edit multiple items", "OK", "Cancel");
-		}
+        {
+            if (App.NotebooksManager.SelectedPage != null)
+                App.NotebooksManager.SelectedPage.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedPage.SelectModeForItemsEnabled;
+        }
 
 
-	}
+    }
 }

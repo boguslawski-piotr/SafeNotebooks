@@ -20,8 +20,8 @@
             <Color x:Key="ToolBarBackgroundColor">#ffffff</Color>
             <Color x:Key="ToolBarTextColor">#000000</Color>
 
-            <Color x:Key="NotebooksListBackgroundColor">#DCEADD</Color>
-            <Color x:Key="NotebooksToolBarBackgroundColor">#DCEADD</Color>
+            <Color x:Key="NotebooksListBackgroundColor">#E8F5E9</Color>
+            <Color x:Key="NotebooksToolBarBackgroundColor">#E8F5E9</Color>
 
             <Color x:Key="PagesListBackgroundColor">#E8F5E9</Color>
             <Color x:Key="PagesToolBarBackgroundColor">#E8F5E9</Color>
