@@ -138,8 +138,6 @@ namespace SafeNotebooks
             {
                 App.NotebooksManager.SelectedPage.SortParameters = d.SortParams;
                 App.NotebooksManager.SelectedPage.SortItems();
-
-                await App.NotebooksManager.SaveAllAsync();
             }
         }
 
@@ -159,8 +157,8 @@ namespace SafeNotebooks
             Note o = await App.NotebooksManager.SelectedPage.NewNoteAsync();
             if (o != null)
             {
-                App.NotebooksManager.SelectNoteAsync(o);
-                ListCtl.ScrollTo(o, ScrollToPosition.MakeVisible, true);
+                await App.NotebooksManager.SelectNoteAsync(o);
+                Device.BeginInvokeOnMainThread(() => ViewsCommonLogic.ListViewScrollTo(ListCtl, o));
             }
         }
 

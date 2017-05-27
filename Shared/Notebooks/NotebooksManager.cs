@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using pbXNet;
 using pbXSecurity;
@@ -17,25 +19,24 @@ namespace SafeNotebooks
 
         public NotebooksManager(string id)
         {
-			NotebooksManager = this;
-			Storage = new StorageOnFileSystem<string>(id, new DeviceFileSystem(DeviceFileSystemRoot.Config));
+            NotebooksManager = this;
+            Storage = new StorageOnFileSystem<string>(id, new DeviceFileSystem(DeviceFileSystemRoot.Config));
         }
 
         public async Task InitializeAsync()
         {
-            await ((StorageOnFileSystem < string > )Storage).InitializeAsync();
+            await ((StorageOnFileSystem<string>)Storage).InitializeAsync();
+
             if (await Storage.ExistsAsync(IdForStorage))
                 await OpenAsync(null, IdForStorage, false);
             else
-            {
-                await NewAsync(null);
-                await SaveAsync(true);
-            }
-		}
+                New(null);
+        }
 
-		//
 
-		public event EventHandler<NotebooksManager> NotebooksLoadingBegun;
+        //
+
+        public event EventHandler<NotebooksManager> NotebooksLoadingBegun;
         public event EventHandler<NotebooksManager> NotebooksLoaded;
 
         public async Task LoadNotebooksAsync(IEnumerable<ISearchableStorage<string>> storages, bool tryToUnlock)
@@ -60,7 +61,6 @@ namespace SafeNotebooks
                 {
                     Notebook notebook = new Notebook() { NotebooksManager = this, Storage = storage };
                     await notebook.OpenAsync(null, id, tryToUnlock);
-
                     AddItem(notebook);
                 }
             }
@@ -74,9 +74,7 @@ namespace SafeNotebooks
 
         public override void SortItems()
         {
-            // TODO: sortowanie notebooks, pages, notes z zapamietaniem wyboru
             base.SortItems();
-
             OnNotebooksSorted();
         }
 
@@ -97,7 +95,6 @@ namespace SafeNotebooks
                 return null;
 
             AddItem(notebook);
-
             SortItems();
 
             return notebook;
@@ -192,6 +189,36 @@ namespace SafeNotebooks
 
         //
 
+        Object _saveAllModifiedDataTaskRunningLock = new Object();
+        volatile bool _saveAllModifiedDataTaskRunning = false;
+
+        async Task SaveAllModifiedDataTask()
+        {
+            //Debug.WriteLine($"NotebooksManager: SaveAllModifiedDataTask: started at {DateTime.Now.ToString("HH: mm:ss.ffff")}");
+
+            await Task.Delay(1000);
+            await NotebooksManager.SaveAllAsync();
+
+            lock (_saveAllModifiedDataTaskRunningLock)
+            {
+                _saveAllModifiedDataTaskRunning = false;
+            }
+
+            //Debug.WriteLine($"NotebooksManager: SaveAllModifiedDataTask: ended at {DateTime.Now.ToString("HH: mm:ss.ffff")}");
+		}
+
+        public void OnItemModifiedOnChanged(Item item)
+        {
+            if (_saveAllModifiedDataTaskRunning)
+                return;
+            lock (_saveAllModifiedDataTaskRunningLock)
+            {
+                Task.Run(SaveAllModifiedDataTask);
+                _saveAllModifiedDataTaskRunning = true;
+            }
+            // TODO: fire event
+        }
+
         public void OnItemOpened(Item item)
         {
         }
@@ -205,7 +232,7 @@ namespace SafeNotebooks
 
         public async Task<bool> NewItemHelperAsync(Item item, Item parent)
         {
-            await item.NewAsync(parent);
+            item.New(parent);
 
             item.BatchBegin();
 
@@ -216,7 +243,7 @@ namespace SafeNotebooks
 
             await item.InitializePasswordAsync(rc.passwd);
 
-            await item.BatchCommitAsync(true);
+            item.BatchEnd();
             return true;
         }
 

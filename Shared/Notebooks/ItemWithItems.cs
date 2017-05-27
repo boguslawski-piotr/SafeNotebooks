@@ -8,49 +8,10 @@ using Newtonsoft.Json.Linq;
 
 namespace SafeNotebooks
 {
-    public static class ItemWithItems
-    {
-        public static SortParameters DefaultSortParameters = new SortParameters(false, false, true, false);
-
-        public struct SortParameters
-        {
-            public bool ByName;
-            public bool ByDate;
-            public bool ByColor;
-            public bool Descending;
-
-            public SortParameters(bool byName, bool byDate, bool byColor, bool descending)
-            {
-                ByName = byName;
-                ByDate = byDate;
-                ByColor = byColor;
-                Descending = descending;
-            }
-
-            public void Clear()
-            {
-                ByName = ByDate = ByColor = false;
-            }
-        }
-    }
-
     public class ItemWithItems<T> : Item where T : Item
     {
         public IList<T> Items { get; protected set; } = new List<T>();
-        public ObservableCollection<T> ObservableItems { get; protected set; } //= new ObservableCollection<T>();
-
-        public override void Dispose()
-        {
-            ObservableItems.Clear();
-            ObservableItems = null;
-            Items.Clear();
-            Items = null;
-            iwidata = null;
-            base.Dispose();
-        }
-
-
-        //
+        public ObservableCollection<T> ObservableItems { get; protected set; }
 
         class IWIData
         {
@@ -62,13 +23,38 @@ namespace SafeNotebooks
         public ItemWithItems.SortParameters SortParameters
         {
             get => iwidata.SortParameters;
-            set => SetValue(ref iwidata.SortParameters, value); // TODO: to nie powinno skutkowac zmiana daty modyfikacji w Parent
+            set {
+                if (!Equals(iwidata.SortParameters, value))
+                {
+                    iwidata.SortParameters = value;
+                    Touch(false);
+                }
+			}
         }
 
+		bool _SelectModeForItemsEnabled;
+		public virtual bool SelectModeForItemsEnabled
+		{
+			get => _SelectModeForItemsEnabled;
+			set {
+				_SelectModeForItemsEnabled = value;
+				if (ObservableItems != null)
+					foreach (var item in ObservableItems)
+						item.SelectModeEnabled = value;
+			}
+		}
 
-        //
+		public override void Dispose()
+		{
+			ObservableItems.Clear();
+			ObservableItems = null;
+			Items.Clear();
+			Items = null;
+			iwidata = null;
+			base.Dispose();
+		}
 
-        protected override string SerializeNotEncryptedData()
+		protected override string SerializeNotEncryptedData()
         {
             return base.SerializeNotEncryptedData() +
                 ",'iwid':" + JsonConvert.SerializeObject(iwidata, pbXNet.Settings.JsonSerializer);
@@ -80,21 +66,19 @@ namespace SafeNotebooks
             iwidata = JsonConvert.DeserializeObject<IWIData>(d["iwid"].ToString(), pbXNet.Settings.JsonSerializer);
         }
 
-
-        //
-
-        public override async Task NewAsync(Item parent)
+        protected override void InternalNew()
         {
-            iwidata = new IWIData()
+			iwidata = new IWIData()
             {
                 SortParameters = ItemWithItems.DefaultSortParameters
             };
-            await base.NewAsync(parent);
+
+            base.InternalNew();
         }
 
         public override async Task<bool> SaveAllAsync(bool force = false)
 		{
-            if (!await SaveAsync(force))
+            if (!await base.SaveAllAsync(force))
                 return false;
             foreach (var i in Items)
                 if (!await i.SaveAllAsync(force))
@@ -106,21 +90,6 @@ namespace SafeNotebooks
         {
             item.SelectModeEnabled = SelectModeForItemsEnabled;
             Items.Add(item);
-        }
-
-
-        //
-
-        bool _SelectModeForItemsEnabled;
-        public virtual bool SelectModeForItemsEnabled
-        {
-            get => _SelectModeForItemsEnabled;
-            set {
-                _SelectModeForItemsEnabled = value;
-                if (ObservableItems != null)
-                    foreach (var item in ObservableItems)
-                        item.SelectModeEnabled = value;
-            }
         }
 
         public virtual void SortItems()
@@ -145,4 +114,30 @@ namespace SafeNotebooks
         }
 
     }
+
+    public static class ItemWithItems
+	{
+		public static SortParameters DefaultSortParameters = new SortParameters(false, false, true, false);
+
+		public struct SortParameters
+		{
+			public bool ByName;
+			public bool ByDate;
+			public bool ByColor;
+			public bool Descending;
+
+			public SortParameters(bool byName, bool byDate, bool byColor, bool descending)
+			{
+				ByName = byName;
+				ByDate = byDate;
+				ByColor = byColor;
+				Descending = descending;
+			}
+
+			public void Clear()
+			{
+				ByName = ByDate = ByColor = false;
+			}
+		}
+	}
 }

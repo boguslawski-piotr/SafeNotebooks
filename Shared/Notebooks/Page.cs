@@ -11,20 +11,23 @@ namespace SafeNotebooks
     {
         public Notebook Notebook => Parent as Notebook;
 
+		public const string IdForStoragePrefix = "P-";
+		public override string IdForStorage => IdForStoragePrefix + Notebook?.Id + "-" + base.IdForStorage;
 
-        //
-
-        class PageData
+		class PageData
         {
             public NoteType DefaultNoteType = NoteType.Note;
         }
 
         PageData pdata;
 
+        public override void Dispose()
+        {
+            pdata = null;
+			base.Dispose();
+		}
 
-        //
-
-        protected override string Serialize()
+		protected override string Serialize()
         {
             return base.Serialize() +
                 ",'pd':" + JsonConvert.SerializeObject(pdata, pbXNet.Settings.JsonSerializer);
@@ -36,22 +39,15 @@ namespace SafeNotebooks
             pdata = JsonConvert.DeserializeObject<PageData>(d["pd"].ToString(), pbXNet.Settings.JsonSerializer);
         }
 
-
-        //
-
-        public const string IdForStoragePrefix = "P-";
-
-        public override string IdForStorage => IdForStoragePrefix + Notebook?.Id + "-" + base.IdForStorage;
-
-        public override async Task NewAsync(Item parent)
+        protected override void InternalNew()
         {
             pdata = new PageData();
-            await base.NewAsync(parent);
+            base.InternalNew();
         }
 
-        public override async Task<bool> LoadAsync(bool tryToUnlockChildren)
+        protected override async Task<bool> InternalLoadAsync(bool tryToUnlockChildren)
         {
-            if (!await base.LoadAsync(true))
+            if (!await base.InternalLoadAsync(true))
                 return false;
 
 			string pattern = Note.IdForStoragePrefix + Id + "-\\w*";
@@ -63,9 +59,6 @@ namespace SafeNotebooks
 			NotebooksManager.OnPageLoaded(this, anyNoteLoaded);
 			return true;
 		}
-
-
-		//
 
 		public async Task<Note> NewNoteAsync()
 		{
@@ -86,9 +79,6 @@ namespace SafeNotebooks
 			AddItem(note);
 			SortItems();
 		}
-
-
-        //
 
 		public override void SortItems()
 		{

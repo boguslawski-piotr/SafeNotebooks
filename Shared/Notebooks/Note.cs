@@ -9,31 +9,19 @@ namespace SafeNotebooks
 		public Page Page => Parent as Page;
 		public Notebook Notebook => Page.Notebook;
 
-        //public ISearchableStorage<Attachment> AttachmentsStorage { get; set; }
-
-
-		//
-
 		public const string IdForStoragePrefix = "O-";
-
 		public override string IdForStorage => IdForStoragePrefix + Page?.Id + "-" + base.IdForStorage;
 
-        public override async Task NewAsync(Item parent)
+        //public ISearchableStorage<Attachment> AttachmentsStorage { get; set; }
+
+		public override void Dispose()
         {
-            await base.NewAsync(parent);
+            base.Dispose();
         }
 
-        //     protected override string Serialize()
-        //     {
-        //         string d = base.Serialize();
-
-        ////d += ",'d2':" + JsonConvert.SerializeObject(data, pbXNet.Settings.Json);
-
-        //return d;
-        //}
-
-
-        //
-
+        protected override void InternalNew()
+        {
+            base.InternalNew();
+        }
 	}
 }

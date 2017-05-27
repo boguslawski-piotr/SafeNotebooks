@@ -127,13 +127,6 @@ namespace SafeNotebooks
 
 			// Prepare background tasks
 			
-            bool SaveAllModifiedData()
-            {
-                Task.WhenAny(NotebooksManager.SaveAllAsync());
-                return true;
-            }
-
-            Device.StartTimer(TimeSpan.FromMinutes(1), SaveAllModifiedData);
 
 			// Load available notebooks
 

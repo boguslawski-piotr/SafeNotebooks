@@ -10,20 +10,15 @@ namespace SafeNotebooks
 {
     public class Notebook : ItemWithItems<Page>
     {
-        //
-
         public override string DetailForLists => $"{ModifiedOn.ToLocalTime().ToString()}, {Storage?.Name}";
-
-
-        //
 
         public const string IdForStoragePrefix = "N-";
 
         public override string IdForStorage => IdForStoragePrefix + base.IdForStorage;
 
-        public override async Task<bool> LoadAsync(bool tryToUnlockChildren)
+        protected override async Task<bool> InternalLoadAsync(bool tryToUnlockChildren)
         {
-            if (!await base.LoadAsync(true))
+            if (!await base.InternalLoadAsync(true))
                 return false;
 
             string pattern = Page.IdForStoragePrefix + Id + "-\\w*";
@@ -35,9 +30,6 @@ namespace SafeNotebooks
             NotebooksManager.OnNotebookLoaded(this, anyPageLoaded);
             return true;
         }
-
-
-        //
 
         public async Task<Page> NewPageAsync()
         {
@@ -58,9 +50,6 @@ namespace SafeNotebooks
             AddItem(page);
             SortItems();
         }
-
-
-        //
 
         public override void SortItems()
         {

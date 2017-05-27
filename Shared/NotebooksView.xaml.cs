@@ -226,8 +226,6 @@ namespace SafeNotebooks
                     App.NotebooksManager.SelectedNotebook.SortParameters = d.SortParams;
                     App.NotebooksManager.SelectedNotebook.SortItems();
                 }
-
-                await App.NotebooksManager.SaveAllAsync();
             }
         }
 

@@ -19,23 +19,7 @@ namespace SafeNotebooks
 {
     public class Item : BindableObject, IDisposable
     {
-        public Item()
-        {
-            InitalizeCommands();
-        }
-		
-        public virtual void Dispose()
-		{
-            nedata = null;
-            if (data != null)
-            {
-                data.Name = null;
-                data.Detail = null;
-                data = null;
-            }
-		}
-
-		public NotebooksManager NotebooksManager { get; set; }
+        public NotebooksManager NotebooksManager { get; set; }
 
         ISearchableStorage<string> _Storage;
         public ISearchableStorage<string> Storage
@@ -44,22 +28,15 @@ namespace SafeNotebooks
             set => _Storage = value;
         }
 
-
-        // 
-
         protected Item Parent { get; private set; }
 
         public virtual async Task ChangeParentAsync(Item newParent)
         {
-            if (Parent == newParent)
-                return;
-
 			// TODO: ChangeParent: changing Parent needs additional action like for example: decrypt this and all children, invalidate keys, etc. -> should be rethought more thoroughly
-			Parent = newParent;
+			if (Parent == newParent)
+                return;
+            Parent = newParent;
         }
-
-
-        //
 
         public class NotEncryptedData
         {
@@ -89,32 +66,53 @@ namespace SafeNotebooks
         public DateTime ModifiedOn
         {
             get => nedata.ModifiedOn;
-            private set {
-                nedata.ModifiedOn = value;
-                DetailForLists = DetailForLists + value.ToLocalTime().ToString();
-            }
         }
 
-		public Color Color
+        public bool Modified { get; protected set; }
+
+		public virtual void Touch(bool withParent = true)
 		{
-            get => Color.FromHex(nedata.Color);
-			set {
-                SetValue(ref nedata.Color, value.ToHex());
-				ColorForLists = value;
+			nedata.ModifiedOn = DateTime.UtcNow;
+			Modified = true;
+
+            if(withParent)
+			    TouchParent();
+			if (!BatchInProgress)
+				NotebooksManager.OnItemModifiedOnChanged(this);
+
+			// Xamarin.Forms binding system support
+			DetailForLists = DetailForLists + nedata.ModifiedOn.ToLocalTime().ToString();
+		}
+
+		protected virtual void TouchParent()
+		{
+			if (Parent != null)
+			{
+				Parent.Touch();
+				Parent.TouchParent();
 			}
 		}
 		
+        public Color Color
+        {
+            get => Color.FromHex(nedata.Color);
+            set {
+                SetValue(ref nedata.Color, value.ToHex());
+                ColorForLists = value;
+            }
+        }
+
         public string ComparableColor => nedata.Color;
 
-		public static readonly BindableProperty ColorForListsProperty = BindableProperty.Create("ColorForLists", typeof(Color), typeof(Item), Color.Transparent);
+        public static readonly BindableProperty ColorForListsProperty = BindableProperty.Create("ColorForLists", typeof(Color), typeof(Item), Color.Transparent);
 
-		public Color ColorForLists
-		{
-			get => Color;
-			set => SetValue(ColorForListsProperty, value);
-		}
+        public Color ColorForLists
+        {
+            get => Color;
+            set => SetValue(ColorForListsProperty, value);
+        }
 
-		public string Nick
+        public string Nick
         {
             get => nedata?.Nick;
             set {
@@ -142,9 +140,6 @@ namespace SafeNotebooks
         public CKeyLifeTime CKeyLifeTime => (ThisIsSecured || Parent == null) ? ThisCKeyLifeTime : Parent.CKeyLifeTime;
 
         public bool IsSecured => (ThisIsSecured || Parent == null) ? ThisIsSecured : Parent.IsSecured;
-
-
-        //
 
         public class Data
         {
@@ -206,9 +201,6 @@ namespace SafeNotebooks
             set => SetValue(LockedImageWidthForListsProperty, value);
         }
 
-
-        //
-
         bool _SelectModeEnabled;
         public virtual bool SelectModeEnabled
         {
@@ -257,13 +249,12 @@ namespace SafeNotebooks
             set => SetValue(SelectedUnselectedImageWidthForListsProperty, value);
         }
 
-
-        //
-
         protected override void OnPropertyChanged(string propertyName)
         {
             string[] propertiesForBindableHack = {
-                "ColorForLists", "NameForLists", "DetailForLists", "LockedImageNameForLists", "LockedImageWidthForLists", "SelectedUnselectedImageNameForLists", "SelectedUnselectedImageWidthForLists",
+                "ColorForLists", "NameForLists", "DetailForLists", 
+                "LockedImageNameForLists", "LockedImageWidthForLists", 
+                "SelectedUnselectedImageNameForLists", "SelectedUnselectedImageWidthForLists",
             };
 
             if (!propertiesForBindableHack.Any((n) => n == propertyName))
@@ -275,102 +266,21 @@ namespace SafeNotebooks
 
         //
 
-        public bool Modified
-        {
-            get;
-            protected set;
-        }
+        public Item()
+		{
+			InitalizeCommands();
+		}
 
-        public virtual void Touch()
-        {
-            Modified = true;
-            ModifiedOn = DateTime.UtcNow;
-        }
-
-        public virtual Task TouchAsync()
-        {
-            Touch();
-            return Task.FromResult(true);
-        }
-
-
-        //
-
-        public virtual Item ObjectFotCKey => (ThisIsSecured || Parent == null) ? this : Parent?.ObjectFotCKey;
-
-        public virtual string IdForCKey => ObjectFotCKey?.Id;
-
-        public virtual async Task InitializePasswordAsync(string passwd)
-        {
-            // If user decided to secure this item with a password
-            if (ThisIsSecured && !string.IsNullOrEmpty(passwd))
-            {
-                // Create ckey (in repository) for future use
-                // Ignore the result because it is not needed here
-                await CreateCKeyAsync(passwd);
-            }
-        }
-
-        public virtual async Task<byte[]> CreateCKeyAsync(string passwd)
-        {
-            if (string.IsNullOrEmpty(passwd))
-            {
-                passwd = await NotebooksManager.UI?.GetPasswordAsync(ObjectFotCKey, IV == null);
-                if (passwd == null)
-                    throw new NotebooksException(NotebooksException.ErrorCode.PasswordNotGiven);
-            }
-
-            if (IV == null)
-                IV = NotebooksManager.SecretsManager.GenerateIV();
-
-            return await NotebooksManager.SecretsManager.CreateCKeyAsync(IdForCKey, CKeyLifeTime, passwd);
-        }
-
-        public virtual async Task<byte[]> GetCKeyAsync()
-        {
-            byte[] ckey = await NotebooksManager.SecretsManager.GetCKeyAsync(IdForCKey);
-            if (ckey == null)
-                ckey = await CreateCKeyAsync(null);
-
-            return ckey;
-        }
-
-        protected virtual async Task<string> EncryptAsync(string d)
-        {
-            if (IsSecured)
-            {
-                byte[] ckey = await GetCKeyAsync();
-                return await NotebooksManager.SecretsManager.EncryptAsync(d, ckey, IV);
-            }
-            return d;
-        }
-
-        protected virtual async Task<string> DecryptAsync(string d)
-        {
-            if (IsSecured)
-            {
-                byte[] ckey = await GetCKeyAsync();
-                try
-                {
-                    d = await NotebooksManager.SecretsManager.DecryptAsync(d, ckey, IV);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"SafeNotebooks:Item: DecryptAsync: error: {ex.Message}");
-                    return null;
-                }
-
-                if (string.IsNullOrEmpty(d))
-                {
-                    // Most likely, a bad password has been entered 
-                    // To be safe delete ckey from repository in order to give a chance to ask again
-                    await NotebooksManager.SecretsManager.DeleteCKeyAsync(IdForCKey);
-                    throw new NotebooksException(NotebooksException.ErrorCode.BadPassword);
-                }
-            }
-
-            return d;
-        }
+		public virtual void Dispose()
+		{
+			nedata = null;
+			if (data != null)
+			{
+				data.Name = null;
+				data.Detail = null;
+				data = null;
+			}
+		}
 
 
         //
@@ -402,69 +312,103 @@ namespace SafeNotebooks
 
         public virtual string IdForStorage => Id;
 
-        public virtual async Task NewAsync(Item parent)
+        public Item New(Item parent)
+        {
+			Parent = parent;
+			
+            BatchBegin();
+            try
+            {
+                InternalNew();
+            }
+            finally
+            {
+                BatchEnd();
+            }
+
+            return this;
+        }
+
+        protected virtual void InternalNew()
         {
             nedata = new NotEncryptedData();
             data = new Data();
 
-            Parent = parent;
             Id = pbXNet.Tools.CreateGuid();
 
-            CreatedOn = DateTime.UtcNow;
-            ModifiedOn = CreatedOn;
+            Touch();
+			CreatedOn = ModifiedOn;
         }
 
-        public virtual async Task<bool> OpenAsync(Item parent, string id, bool tryToUnlock)
+		async Task<bool> Execute(Task<bool> c)
+        {
+			BatchBegin();
+			try
+			{
+                return await c;
+			}
+			catch (NotebooksException dmex)
+			{
+				await NotebooksManager.UI?.DisplayError(dmex.Err);
+				return false;
+			}
+			catch (Exception ex)
+			{
+				await NotebooksManager.UI?.DisplayError(ex.Message);
+				return false;
+			}
+			finally
+			{
+				BatchEnd();
+			}
+        }
+
+        public async Task<bool> OpenAsync(Item parent, string id, bool tryToUnlock)
         {
             Parent = parent;
-
-            // OpenAsync -> loads minimum data or none
-            try
-            {
-                string d = await Storage?.GetACopyAsync(id);
-
-                //d = Obfuscator.DeObfuscate(d);
-
-                int _nedEnd = d.IndexOf(NotEncyptedDataEndMarker, StringComparison.Ordinal);
-                string _ned = d.Substring(0, _nedEnd);
-
-                JObject neg = JObject.Parse("{" + _ned + "}");
-                DeserializeNotEncryptedData(neg);
-
-                if (tryToUnlock || !IsSecured || (!ThisIsSecured && Parent.DataIsAvailable))
-                {
-                    string _d = d.Substring(_nedEnd + NotEncyptedDataEndMarker.Length);
-
-                    _d = await DecryptAsync(_d);
-
-                    JObject g = JObject.Parse("{" + _d + "}");
-                    Deserialize(g);
-
-                    NameForLists = Name;
-                    DetailForLists = Detail;
-                    LockedImageNameForLists = "u";
-                }
-                else
-                {
-                    LockedImageNameForLists = "l";
-                }
-
-                NotebooksManager.OnItemOpened(this);
-                return true;
-            }
-            catch (NotebooksException dmex)
-            {
-                await NotebooksManager.UI?.DisplayError(dmex.Err);
-                return false;
-            }
-            catch (Exception ex)
-            {
-                await NotebooksManager.UI?.DisplayError(ex.Message);
-                return false;
-            }
+			return await Execute(InternalOpenAsync(id, tryToUnlock));
         }
 
-        public virtual async Task<bool> LoadAsync(bool tryToUnlockChildren)
+        protected virtual async Task<bool> InternalOpenAsync(string id, bool tryToUnlock)
+        {
+            string d = await Storage?.GetACopyAsync(id);
+            //d = Obfuscator.DeObfuscate(d);
+
+            int _nedEnd = d.IndexOf(NotEncyptedDataEndMarker, StringComparison.Ordinal);
+            string _ned = d.Substring(0, _nedEnd);
+
+            JObject neg = JObject.Parse("{" + _ned + "}");
+            DeserializeNotEncryptedData(neg);
+
+            if (tryToUnlock || !IsSecured || (!ThisIsSecured && Parent.DataIsAvailable))
+            {
+                string _d = d.Substring(_nedEnd + NotEncyptedDataEndMarker.Length);
+
+                _d = await DecryptAsync(_d);
+
+                JObject g = JObject.Parse("{" + _d + "}");
+                Deserialize(g);
+
+                // Xamarin.Forms binding system support
+                NameForLists = Name;
+                DetailForLists = Detail;
+                LockedImageNameForLists = "u";
+            }
+            else
+            {
+                LockedImageNameForLists = "l";
+            }
+
+            NotebooksManager.OnItemOpened(this);
+            return true;
+        }
+
+        public async Task<bool> LoadAsync(bool tryToUnlockChildren)
+        {
+            return await Execute(InternalLoadAsync(tryToUnlockChildren));
+        }
+
+        protected virtual async Task<bool> InternalLoadAsync(bool tryToUnlockChildren)
         {
             if (!DataIsAvailable)
             {
@@ -474,55 +418,58 @@ namespace SafeNotebooks
             return true;
         }
 
-        public virtual async Task<bool> SaveAsync(bool force = false)
+        public async Task<bool> SaveAsync(bool force = false)
         {
-            if ((!Modified && !force) || _batchMode)
+            if ((!Modified && !force) || BatchInProgress)
                 return true;
 
-            BatchBegin();
-            try
-            {
-                string ned = SerializeNotEncryptedData();
-                string d = Serialize();
-                string ed = await EncryptAsync(d);
-
-                d = ned + NotEncyptedDataEndMarker + ed;
-
-                //d = Obfuscator.Obfuscate(d);
-
-                await Storage?.StoreAsync(IdForStorage, d);
-
-                if (Modified && Parent != null)
-                    await Parent.TouchAsync();  // to update ModifiedOn, TODO: is this really neccessary?
-
-                Modified = false;
-
-                NotebooksManager.OnItemSaved(this);
-                return true;
-            }
-            catch (NotebooksException dmex)
-            {
-                await NotebooksManager.UI?.DisplayError(dmex.Err);
-                return false;
-            }
-            catch (Exception ex)
-            {
-                await NotebooksManager.UI?.DisplayError(ex.Message);
-                return false;
-            }
-            finally
-            {
-                BatchEnd();
-            }
+            return await Execute(InternalSaveAsync(force));
         }
 
-        public virtual async Task<bool> SaveAllAsync(bool force = false)
+        protected virtual async Task<bool> InternalSaveAsync(bool force = false)
         {
-            return true;
+            Debug.WriteLine($"SafeNotebooks: Item: InternalSaveAsync: for {GetType().FullName}: {Id}");
+
+            string ned = SerializeNotEncryptedData();
+			string d = Serialize();
+			string ed = await EncryptAsync(d);
+
+			d = ned + NotEncyptedDataEndMarker + ed;
+			//d = Obfuscator.Obfuscate(d);
+			await Storage?.StoreAsync(IdForStorage, d);
+
+			Modified = false;
+
+			NotebooksManager.OnItemSaved(this);
+			return true;
+		}
+
+		public virtual async Task<bool> SaveAllAsync(bool force = false)
+        {
+            return await SaveAsync(force);
         }
 
 
 		//
+
+		public virtual async Task EditAsync()
+		{
+			// TODO: should ask for a password is locked
+			await NotebooksManager.UI.EditItemAsync(this);
+		}
+
+		public virtual async Task MoveAsync()
+		{
+			await App.Current.MainPage.DisplayAlert("Move", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
+		}
+
+		public virtual async Task DeleteAsync()
+		{
+			// TODO: should ask for a password is locked
+			await App.Current.MainPage.DisplayAlert("Delete", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
+		}
+
+        // Xamarin.Forms support
 
 		public ICommand EditItemCommand { get; private set; }
         public ICommand MoveItemCommand { get; private set; }
@@ -537,90 +484,131 @@ namespace SafeNotebooks
             SelectUnselectItemCommand = new Command(ExecuteSelectUnselectItemCommand, CanExecuteSelectUnselectItemCommand);
         }
 
-        public virtual async Task EditAsync()
-        {
-            // TODO: should ask for a password is locked
-            await NotebooksManager.UI.EditItemAsync(this);
-        }
+		protected virtual bool CanExecuteEditMoveDelete(object sender) => true;
+		protected virtual void ExecuteEditItemCommand(object sender) => ((Item)sender)?.EditAsync();
+        protected virtual void ExecuteMoveItemCommand(object sender) => ((Item)sender)?.MoveAsync();
+        protected virtual void ExecuteDeleteItemCommand(object sender) => ((Item)sender)?.DeleteAsync();
 
-        void ExecuteEditItemCommand(object sender)
-        {
-            ((Item)sender)?.EditAsync();
-        }
-
-        public virtual async Task MoveAsync()
-        {
-            await App.Current.MainPage.DisplayAlert("Move", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
-        }
-
-        void ExecuteMoveItemCommand(object sender)
-        {
-            ((Item)sender)?.MoveAsync();
-        }
-
-        public virtual async Task DeleteAsync()
-        {
-            // TODO: should ask for a password is locked
-            await App.Current.MainPage.DisplayAlert("Delete", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
-        }
-
-        protected virtual void ExecuteDeleteItemCommand(object sender)
-        {
-            ((Item)sender)?.DeleteAsync();
-        }
-
-        protected virtual bool CanExecuteEditMoveDelete(object sender)
-        {
-            return true;
-            //Item item = (Item)sender;
-            //return item != null ? item.DataIsAvailable : false;
-        }
-
-        protected virtual void ExecuteSelectUnselectItemCommand(object sender)
+		protected virtual bool CanExecuteSelectUnselectItemCommand(object sender) => true;
+		protected virtual void ExecuteSelectUnselectItemCommand(object sender)
         {
             Item item = (Item)sender;
             if (item != null)
                 item.IsSelected = !item.IsSelected;
         }
 
-        protected virtual bool CanExecuteSelectUnselectItemCommand(object sender)
-        {
-            return true;
-        }
 
+		//
+
+		public virtual Item ObjectFotCKey => (ThisIsSecured || Parent == null) ? this : Parent?.ObjectFotCKey;
+
+		public virtual string IdForCKey => ObjectFotCKey?.Id;
+
+		public virtual async Task InitializePasswordAsync(string passwd)
+		{
+			// If user decided to secure this item with a password
+			if (ThisIsSecured && !string.IsNullOrEmpty(passwd))
+			{
+				// Create ckey (in repository) for future use
+				// Ignore the result because it is not needed here
+				await CreateCKeyAsync(passwd);
+			}
+		}
+
+		public virtual async Task<byte[]> CreateCKeyAsync(string passwd)
+		{
+			if (string.IsNullOrEmpty(passwd))
+			{
+				passwd = await NotebooksManager.UI?.GetPasswordAsync(ObjectFotCKey, IV == null);
+				if (passwd == null)
+					throw new NotebooksException(NotebooksException.ErrorCode.PasswordNotGiven);
+			}
+
+			if (IV == null)
+				IV = NotebooksManager.SecretsManager.GenerateIV();
+
+			return await NotebooksManager.SecretsManager.CreateCKeyAsync(IdForCKey, CKeyLifeTime, passwd);
+		}
+
+		public virtual async Task<byte[]> GetCKeyAsync()
+		{
+			byte[] ckey = await NotebooksManager.SecretsManager.GetCKeyAsync(IdForCKey);
+			if (ckey == null)
+				ckey = await CreateCKeyAsync(null);
+
+			return ckey;
+		}
+
+		protected virtual async Task<string> EncryptAsync(string d)
+		{
+			if (IsSecured)
+			{
+				byte[] ckey = await GetCKeyAsync();
+				return await NotebooksManager.SecretsManager.EncryptAsync(d, ckey, IV);
+			}
+
+			return d;
+		}
+
+		protected virtual async Task<string> DecryptAsync(string d)
+		{
+			if (IsSecured)
+			{
+				byte[] ckey = await GetCKeyAsync();
+				try
+				{
+					d = await NotebooksManager.SecretsManager.DecryptAsync(d, ckey, IV);
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine($"SafeNotebooks: Item: DecryptAsync: error: {ex.Message}");
+					return null;
+				}
+
+				if (string.IsNullOrEmpty(d))
+				{
+					// Most likely, a bad password has been entered 
+					// To be safe delete ckey from repository in order to give a chance to ask again
+					await NotebooksManager.SecretsManager.DeleteCKeyAsync(IdForCKey);
+					throw new NotebooksException(NotebooksException.ErrorCode.BadPassword);
+				}
+			}
+
+			return d;
+		}
+		
 
         //
 
-        bool _batchMode;
-        Object _batchModeLock = new Object();
+		volatile int _batchCounter = 0;
+        Object _batchCounterLock = new Object();
+
+        public virtual bool BatchInProgress => _batchCounter > 0;
 
         public virtual void BatchBegin()
         {
-            lock (_batchModeLock)
+            lock (_batchCounterLock)
             {
-                _batchMode = true;
+                _batchCounter++;
+                if (Parent != null)
+                    Parent.BatchBegin();
             }
         }
 
-        protected virtual void BatchEnd()
+        public virtual void BatchEnd()
         {
-            lock (_batchModeLock)
+            lock (_batchCounterLock)
             {
-                _batchMode = false;
+                Debug.Assert(_batchCounter > 0);
+                _batchCounter--;
+
+                if (Parent != null)
+					Parent.BatchEnd();
+
+				if(Modified && _batchCounter == 0)
+                    NotebooksManager.OnItemModifiedOnChanged(this);
             }
         }
-
-        public virtual async Task BatchCommitAsync(bool forceSave = false)
-        {
-            if (!_batchMode)
-                return;
-
-            BatchEnd();
-            await SaveAsync(forceSave);
-        }
-
-
-        //
 
         protected void SetValue<T>(ref T storage, T value, [CallerMemberName]string name = null)
         {
