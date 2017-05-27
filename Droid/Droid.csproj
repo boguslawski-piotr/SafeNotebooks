@@ -240,16 +240,16 @@
   <ItemGroup>
     <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">
       <Project>{BD23F900-50B7-4714-98C1-D1A192C1E939}</Project>
-      <Name>SafeNotebooks.Texts</Name>
+      <Name>Texts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\values-pl\" />
   </ItemGroup>
+  <Import Project="..\Shared\SafeNotebooks.Shared.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.Shared.projitems')" />
   <Import Project="..\..\pbXNet\pbXNet.projitems" Label="Shared" Condition="Exists('..\..\pbXNet\pbXNet.projitems')" />
   <Import Project="..\..\pbXSecurity\pbXSecurity.projitems" Label="Shared" Condition="Exists('..\..\pbXSecurity\pbXSecurity.projitems')" />
   <Import Project="..\..\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbXForms\pbXForms.projitems')" />
-  <Import Project="..\Shared\SafeNotebooks.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets')" />
   <Import Project="..\packages\Xamarin.Forms.2.3.4.224\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.4.224\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
