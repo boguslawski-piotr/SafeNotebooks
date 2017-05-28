@@ -15,11 +15,18 @@ namespace SafeNotebooks
         public static string Name
         {
             get {
-                string name = typeof(App).GetTypeInfo().Assembly.ManifestModule.Name;
-                int firstDot = name.IndexOf('.');
-                if (firstDot > 0)
-                    name = name.Substring(0, firstDot);
-                return name;
+                try
+                {
+                    string name = typeof(App).GetTypeInfo().Assembly.ManifestModule.Name;
+                    int firstDot = name.IndexOf('.');
+                    if (firstDot > 0)
+                        name = name.Substring(0, firstDot);
+                    return name;
+                }
+                catch
+                {
+                    return "Safe Notebooks";
+                }
             }
         }
 
