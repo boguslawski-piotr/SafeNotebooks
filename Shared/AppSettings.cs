@@ -23,9 +23,11 @@ namespace SafeNotebooks
 
                 public string Name => T.Localized("Settings");
 
-				public async Task StoreAsync(string id, string data) => Current.AddOrUpdateValue<string>(id, data);
+                public async Task StoreAsync(string id, string data, DateTime modifiedOn) => Current.AddOrUpdateValue<string>(id, data);
 
                 public async Task<bool> ExistsAsync(string id) => Current.Contains(id);
+
+                public async Task<DateTime> GetModifiedOnAsync(string id) => DateTime.UtcNow; // TODO: obsluzyc GetModifiedOnAsync
 
 				public async Task DiscardAsync(string id) => Current.Remove(id);
 				
