@@ -45,7 +45,7 @@ namespace SafeNotebooks
 
 		void InitializeLocalization()
         {
-            LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Texts).GetTypeInfo().Assembly);
+            LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly);
         }
 
         async Task InitializeSecrets()

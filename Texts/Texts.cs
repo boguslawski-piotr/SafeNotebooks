@@ -1,9 +1,9 @@
 ﻿using System;
 namespace SafeNotebooks.Texts
 {
-    public class Texts
+    public class Dummy
     {
-        public Texts()
+        public Dummy()
         {
         }
     }

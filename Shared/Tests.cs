@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using pbXNet;
 using pbXSecurity;
 using Plugin.Settings;
@@ -10,13 +11,36 @@ namespace SafeNotebooks
 {
     public partial class App : Application
     {
+        //public class SampleData
+        //{
+        //    public string Id;
+        //    public DateTime CreatedOn;
+        //    public DateTime ModifiedOn;
+        //    public Color Color = Color.Transparent;
+        //    public string Nick;
+        //    public CKeyLifeTime CKeyLifeTime;
+        //    public byte[] IV;
+        //}
+
         async void Tests()
         {
             //***
 
-            string obs = "Ala ma kota";
-            string obo = Obfuscator.Obfuscate(obs);
-            string obd = Obfuscator.DeObfuscate(obo);
+            //SampleData dd = new SampleData();
+            //dd.Color = Color.Red;
+            //string d = JsonConvert.SerializeObject(dd);
+            //SampleData ddd = JsonConvert.DeserializeObject<SampleData>(d);
+
+            //Color c = Color.Red;
+            //string d = JsonConvert.SerializeObject(c);
+            //Color cd = JsonConvert.DeserializeObject<Color>(d);
+
+
+            //***
+
+            //string obs = "Ala ma kota";
+            //string obo = Obfuscator.Obfuscate(obs);
+            //string obd = Obfuscator.DeObfuscate(obo);
 
             //***
 

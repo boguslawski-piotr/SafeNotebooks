@@ -133,7 +133,7 @@
     <BundleResource Include="Resources\ic_radio_button_unchecked.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Texts\SafeNotebooks.Texts.csproj">
+    <ProjectReference Include="..\Texts\Texts.csproj">
       <Project>{BD23F900-50B7-4714-98C1-D1A192C1E939}</Project>
       <Name>Texts</Name>
     </ProjectReference>
