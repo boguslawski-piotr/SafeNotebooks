@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -23,38 +25,32 @@ namespace SafeNotebooks
         public ItemWithItems.SortParameters SortParameters
         {
             get => iwidata.SortParameters;
-            set {
-                if (!Equals(iwidata.SortParameters, value))
-                {
-                    iwidata.SortParameters = value;
-                    Touch(false);
-                }
-			}
+            set => SetValue(ref iwidata.SortParameters, value, false);
         }
 
-		bool _SelectModeForItemsEnabled;
-		public virtual bool SelectModeForItemsEnabled
-		{
-			get => _SelectModeForItemsEnabled;
-			set {
-				_SelectModeForItemsEnabled = value;
-				if (ObservableItems != null)
-					foreach (var item in ObservableItems)
-						item.SelectModeEnabled = value;
-			}
-		}
+        bool _SelectModeForItemsEnabled;
+        public virtual bool SelectModeForItemsEnabled
+        {
+            get => _SelectModeForItemsEnabled;
+            set {
+                _SelectModeForItemsEnabled = value;
+                if (ObservableItems != null)
+                    foreach (var item in ObservableItems)
+                        item.SelectModeEnabled = value;
+            }
+        }
 
-		public override void Dispose()
-		{
-			ObservableItems.Clear();
-			ObservableItems = null;
-			Items.Clear();
-			Items = null;
-			iwidata = null;
-			base.Dispose();
-		}
+        public override void Dispose()
+        {
+            ObservableItems.Clear();
+            ObservableItems = null;
+            Items.Clear();
+            Items = null;
+            iwidata = null;
+            base.Dispose();
+        }
 
-		protected override string SerializeNotEncryptedData()
+        protected override string SerializeNotEncryptedData()
         {
             return base.SerializeNotEncryptedData() +
                 ",'iwid':" + JsonConvert.SerializeObject(iwidata, pbXNet.Settings.JsonSerializer);
@@ -68,7 +64,7 @@ namespace SafeNotebooks
 
         protected override void InternalNew()
         {
-			iwidata = new IWIData()
+            iwidata = new IWIData()
             {
                 SortParameters = ItemWithItems.DefaultSortParameters
             };
@@ -77,16 +73,16 @@ namespace SafeNotebooks
         }
 
         public override async Task<bool> SaveAllAsync(bool force = false)
-		{
+        {
             if (!await base.SaveAllAsync(force))
                 return false;
             foreach (var i in Items)
                 if (!await i.SaveAllAsync(force))
                     return false;
             return true;
-		}
+        }
 
-		public void AddItem(T item)
+        public void AddItem(T item)
         {
             item.SelectModeEnabled = SelectModeForItemsEnabled;
             Items.Add(item);
@@ -116,28 +112,28 @@ namespace SafeNotebooks
     }
 
     public static class ItemWithItems
-	{
-		public static SortParameters DefaultSortParameters = new SortParameters(false, false, true, false);
+    {
+        public static SortParameters DefaultSortParameters = new SortParameters(false, false, true, false);
 
-		public struct SortParameters
-		{
-			public bool ByName;
-			public bool ByDate;
-			public bool ByColor;
-			public bool Descending;
+        public struct SortParameters
+        {
+            public bool ByName;
+            public bool ByDate;
+            public bool ByColor;
+            public bool Descending;
 
-			public SortParameters(bool byName, bool byDate, bool byColor, bool descending)
-			{
-				ByName = byName;
-				ByDate = byDate;
-				ByColor = byColor;
-				Descending = descending;
-			}
+            public SortParameters(bool byName, bool byDate, bool byColor, bool descending)
+            {
+                ByName = byName;
+                ByDate = byDate;
+                ByColor = byColor;
+                Descending = descending;
+            }
 
-			public void Clear()
-			{
-				ByName = ByDate = ByColor = false;
-			}
-		}
-	}
+            public void Clear()
+            {
+                ByName = ByDate = ByColor = false;
+            }
+        }
+    }
 }

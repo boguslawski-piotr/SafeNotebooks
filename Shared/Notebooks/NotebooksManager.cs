@@ -108,7 +108,6 @@ namespace SafeNotebooks
             NotebookLoaded?.Invoke(this, notebook);
         }
 
-
         public Notebook PreviouslySelectedNotebook { get; private set; }
         public Notebook SelectedNotebook { get; private set; }
 
@@ -189,8 +188,8 @@ namespace SafeNotebooks
 
         //
 
-        Object _saveAllModifiedDataTaskRunningLock = new Object();
-        volatile bool _saveAllModifiedDataTaskRunning = false;
+        Object _saveAllTaskRunningLock = new Object();
+        volatile bool _saveAllTaskRunning = false;
 
         async Task SaveAllModifiedDataTask()
         {
@@ -199,9 +198,9 @@ namespace SafeNotebooks
             await Task.Delay(1000);
             await NotebooksManager.SaveAllAsync();
 
-            lock (_saveAllModifiedDataTaskRunningLock)
+            lock (_saveAllTaskRunningLock)
             {
-                _saveAllModifiedDataTaskRunning = false;
+                _saveAllTaskRunning = false;
             }
 
             //Debug.WriteLine($"NotebooksManager: SaveAllModifiedDataTask: ended at {DateTime.Now.ToString("HH: mm:ss.ffff")}");
@@ -209,12 +208,12 @@ namespace SafeNotebooks
 
         public void OnItemModifiedOnChanged(Item item)
         {
-            if (_saveAllModifiedDataTaskRunning)
+            if (_saveAllTaskRunning)
                 return;
-            lock (_saveAllModifiedDataTaskRunningLock)
+            lock (_saveAllTaskRunningLock)
             {
                 Task.Run(SaveAllModifiedDataTask);
-                _saveAllModifiedDataTaskRunning = true;
+                _saveAllTaskRunning = true;
             }
             // TODO: fire event
         }
@@ -236,7 +235,7 @@ namespace SafeNotebooks
 
             item.BatchBegin();
 
-            // Allow user to edit notebook data
+            // Allow user to edit data
             (bool ok, string passwd) rc = await UI.EditItemAsync(item);
             if (!rc.ok)
                 return false;
@@ -257,16 +256,26 @@ namespace SafeNotebooks
                 return false;
 
             IEnumerable<string> ids = await forWhom.Storage.FindIdsAsync(pattern);
-            bool rc = false;
+
+            //ParallelLoopResult rc = Parallel.ForEach(ids, async (id) =>
+            //{
+            //    T item = new T() { NotebooksManager = this };
+            //    await item.OpenAsync(forWhom, id, tryToUnlock);
+            //    forWhom.AddItem(item);
+            //});
+            //await Task.Run(() =>
+            //{
+            //    while (!rc.IsCompleted) { }
+            //});
+
             foreach (var id in ids)
             {
                 T item = new T() { NotebooksManager = this };
                 await item.OpenAsync(forWhom, id, tryToUnlock);
                 forWhom.AddItem(item);
-                rc = true;
             }
 
-            return rc;
+            return forWhom.Items.Count > 0;
         }
     }
 }

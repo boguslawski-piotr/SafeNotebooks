@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -70,29 +71,6 @@ namespace SafeNotebooks
 
         public bool Modified { get; protected set; }
 
-		public virtual void Touch(bool withParent = true)
-		{
-			nedata.ModifiedOn = DateTime.UtcNow;
-			Modified = true;
-
-            if(withParent)
-			    TouchParent();
-			if (!BatchInProgress)
-				NotebooksManager.OnItemModifiedOnChanged(this);
-
-			// Xamarin.Forms binding system support
-			DetailForLists = DetailForLists + nedata.ModifiedOn.ToLocalTime().ToString();
-		}
-
-		protected virtual void TouchParent()
-		{
-			if (Parent != null)
-			{
-				Parent.Touch();
-				Parent.TouchParent();
-			}
-		}
-		
         public Color Color
         {
             get => Color.FromHex(nedata.Color);
@@ -249,24 +227,41 @@ namespace SafeNotebooks
             set => SetValue(SelectedUnselectedImageWidthForListsProperty, value);
         }
 
-        protected override void OnPropertyChanged(string propertyName)
-        {
-            string[] propertiesForBindableHack = {
-                "ColorForLists", "NameForLists", "DetailForLists", 
-                "LockedImageNameForLists", "LockedImageWidthForLists", 
-                "SelectedUnselectedImageNameForLists", "SelectedUnselectedImageWidthForLists",
-            };
+        protected void SetValue<T>(ref T storage, T value, bool touchWithParent = true, [CallerMemberName]string name = null)
+		{
+			if (Equals(storage, value))
+				return;
 
-            if (!propertiesForBindableHack.Any((n) => n == propertyName))
-                Touch();
+			storage = value;
+			Touch(touchWithParent);
+			
+            base.OnPropertyChanged(name);
+		}
 
-            base.OnPropertyChanged(propertyName);
-        }
+		public virtual void Touch(bool withParent = true)
+		{
+			nedata.ModifiedOn = DateTime.UtcNow;
+			Modified = true;
+
+			if (withParent)
+				TouchParent();
+			if (!BatchInProgress)
+				NotebooksManager.OnItemModifiedOnChanged(this);
+
+			// Xamarin.Forms binding system support
+			DetailForLists = DetailForLists + nedata.ModifiedOn.ToLocalTime().ToString();
+		}
+
+		protected virtual void TouchParent()
+		{
+			if (Parent != null)
+				Parent.Touch();
+		}
 
 
-        //
+		//
 
-        public Item()
+		public Item()
 		{
 			InitalizeCommands();
 		}
@@ -284,8 +279,6 @@ namespace SafeNotebooks
 
 
         //
-
-        const string NotEncyptedDataEndMarker = "72d26030-0d4d-4625-b6e8-785de17db815";
 
         protected virtual string SerializeNotEncryptedData()
         {
@@ -363,7 +356,9 @@ namespace SafeNotebooks
 			}
         }
 
-        public async Task<bool> OpenAsync(Item parent, string id, bool tryToUnlock)
+		const string NotEncyptedDataEndMarker = "72d26030-0d4d-4625-b6e8-785de17db815";
+
+		public async Task<bool> OpenAsync(Item parent, string id, bool tryToUnlock)
         {
             Parent = parent;
 			return await Execute(InternalOpenAsync(id, tryToUnlock));
@@ -372,7 +367,7 @@ namespace SafeNotebooks
         protected virtual async Task<bool> InternalOpenAsync(string id, bool tryToUnlock)
         {
             string d = await Storage?.GetACopyAsync(id);
-            //d = Obfuscator.DeObfuscate(d);
+            d = Obfuscator.DeObfuscate(d);
 
             int _nedEnd = d.IndexOf(NotEncyptedDataEndMarker, StringComparison.Ordinal);
             string _ned = d.Substring(0, _nedEnd);
@@ -430,13 +425,20 @@ namespace SafeNotebooks
         {
             Debug.WriteLine($"SafeNotebooks: Item: InternalSaveAsync: for {GetType().FullName}: {Id}");
 
+            DateTime modifiedOn = await Storage?.GetModifiedOnAsync(IdForStorage);
+            if (modifiedOn > nedata.ModifiedOn)
+            {
+                throw new Exception($"SafeNotebooks: Item: InternalSaveAsync: {GetType().FullName}: {Id}: modified date in storage is newer than modified date in memory!");
+                // TODO: obsluzyc problem gdy dane zapisane sa nowsze niz te, ktore chcemy zapisac
+            }
+
             string ned = SerializeNotEncryptedData();
 			string d = Serialize();
 			string ed = await EncryptAsync(d);
 
 			d = ned + NotEncyptedDataEndMarker + ed;
-			//d = Obfuscator.Obfuscate(d);
-			await Storage?.StoreAsync(IdForStorage, d);
+			d = Obfuscator.Obfuscate(d);
+            await Storage?.StoreAsync(IdForStorage, d, nedata.ModifiedOn);
 
 			Modified = false;
 
@@ -469,7 +471,7 @@ namespace SafeNotebooks
 			await App.Current.MainPage.DisplayAlert("Delete", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
 		}
 
-        // Xamarin.Forms support
+		// Xamarin.Forms binding system support
 
 		public ICommand EditItemCommand { get; private set; }
         public ICommand MoveItemCommand { get; private set; }
@@ -581,7 +583,7 @@ namespace SafeNotebooks
         //
 
 		volatile int _batchCounter = 0;
-        Object _batchCounterLock = new Object();
+        readonly Object _batchCounterLock = new Object();
 
         public virtual bool BatchInProgress => _batchCounter > 0;
 
@@ -608,17 +610,6 @@ namespace SafeNotebooks
 				if(Modified && _batchCounter == 0)
                     NotebooksManager.OnItemModifiedOnChanged(this);
             }
-        }
-
-        protected void SetValue<T>(ref T storage, T value, [CallerMemberName]string name = null)
-        {
-            if (Equals(storage, value))
-            {
-                return;
-            }
-
-            storage = value;
-            OnPropertyChanged(name);
         }
 
     }

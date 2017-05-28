@@ -43,10 +43,11 @@ namespace SafeNotebooks
             item.Name = $"{item.GetType().Name} " + lll++;
             if (lll % 2 == 0)
                 item.Detail = "alaal sksi dkd dkkfir fkfir fkdid dkdkf";
-			//item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
-			//item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+            //item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
+            //item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+            //item.ThisCKeyLifeTime = CKeyLifeTime.OneTime;
 
-            App.Settings.Current.AddOrUpdateValue("lll", lll);
+			App.Settings.Current.AddOrUpdateValue("lll", lll);
 
             return (true, "123");
         }
