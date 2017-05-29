@@ -20,6 +20,13 @@ namespace SafeNotebooks
             Id = id;
         }
 
+        public static async Task<StoragesManager> NewAsync(string id)
+        {
+            StoragesManager m = new StoragesManager(id);
+            await m.InitializeAsync();
+            return m;
+        }
+
         public async Task InitializeAsync()
         {
             foreach (DeviceFileSystemRoot root in DeviceFileSystem.AvailableRootsForEndUser)
@@ -45,8 +52,7 @@ namespace SafeNotebooks
 
 		protected async Task<StorageOnFileSystem<string>> NewStorageAsync(IFileSystem fs)
 		{
-			StorageOnFileSystem<string> storage = new StorageOnFileSystem<string>(Id, fs);
-			await storage.InitializeAsync();
+            StorageOnFileSystem<string> storage = await StorageOnFileSystem<string>.NewAsync(Id, fs);
 			return storage;
 		}
 
