@@ -10,7 +10,8 @@
 
 
         <local:NotebooksView />
-		<local:PageView />
+		<local:PageView x:Name="vPage" />
+        <local:TestView x:Name="vTest" />
 
 	</pbXForms:MasterDetailPageEx.Views>
 

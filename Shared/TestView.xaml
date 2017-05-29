@@ -5,7 +5,8 @@
     xmlns:pbXForms = "clr-namespace:pbXForms"
     xmlns:T = "clr-namespace:pbXForms"
     xmlns:local = "clr-namespace:SafeNotebooks"
-	x:Class = "SafeNotebooks.TestView">
+	x:Class = "SafeNotebooks.TestView"
+    BackgroundColor="Fuchsia">
 
 	<ContentView.Content>
 
@@ -14,6 +15,9 @@
             <Label Text="to jest test!!!" />
             <Label Text="to jest test!!!" />
             <Label Text="to jest test!!!" />
+            <Button Text="back" Clicked="Hide_Clicked" />
+            <Button Text="master show" Clicked="MS_Clicked" />
+            <Button Text="master hide" Clicked="MH_Clicked" />
         </StackLayout>
 
 	</ContentView.Content>

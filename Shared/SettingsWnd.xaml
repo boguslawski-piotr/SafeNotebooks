@@ -43,23 +43,27 @@
 
         <Label
             Text = "Settings..."
-            TextColor="#ffff0000"
+            TextColor = "#ffff0000"
             HorizontalOptions = "CenterAndExpand" />
+
         <Label
             Text = "Settings..."
-            TextColor="#80ff0000"
+            TextColor = "#80ff0000"
             HorizontalOptions = "CenterAndExpand" />
+
         <Label
             Text = "Settings..."
-            TextColor="#ff0080ff"
+            TextColor = "#ff0080ff"
             HorizontalOptions = "CenterAndExpand" />
+
         <Label
             Text = "Settings..."
-            TextColor="#40008000"
+            TextColor = "#40008000"
             HorizontalOptions = "CenterAndExpand" />
+
         <Label
             Text = "Settings..."
-            TextColor="#00000000"
+            TextColor = "#00000000"
             HorizontalOptions = "CenterAndExpand" />
 
     </pbXForms:ContentPageEx.PageContent>
@@ -79,7 +83,8 @@
                 Grid.Column = "0"
                 x:Name = "OKBtn"
                 HorizontalOptions = "Fill"
-                Image = "ic_done.png" />
+                Image = "ic_done.png"
+                Clicked = "OKBtn_Clicked" />
 
             <pbXForms:FlatButton
                 Grid.Column = "1"

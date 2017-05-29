@@ -213,7 +213,7 @@ namespace SafeNotebooks
             }
 
             SortParametersDlg d = new SortParametersDlg(title, sortParams);
-			bool rc = await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d, DeviceEx.Orientation == DeviceOrientation.Landscape ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter);
+            bool rc = await MainWnd.Current.ModalViewsManager.DisplayModalAsync(d, MainWnd.Current.IsSplitView ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter);
             if (rc)
             {
                 if (App.NotebooksManager.SelectedNotebook == null)

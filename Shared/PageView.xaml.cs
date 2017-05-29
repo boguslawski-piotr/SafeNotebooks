@@ -67,12 +67,12 @@ namespace SafeNotebooks
 
 				BatchCommit();
 				
-                MainWnd.Current.NotebooksViewIsVisible = false;
+                MainWnd.Current.ShowDetailViewAsync(this, MasterDetailPageEx.ViewsSwitchingAnimation.LeftToRight);
             }
             else
             {
                 NoUI();
-                MainWnd.Current.NotebooksViewIsVisible = true;
+                MainWnd.Current.ShowMasterViewAsync();
             }
         }
 
@@ -88,13 +88,16 @@ namespace SafeNotebooks
             if (note.Page.SelectModeForItemsEnabled)
                 note.IsSelected = !note.IsSelected;
             else
-                App.NotebooksManager.SelectNoteAsync(note, App.Settings.TryToUnlockItemChildren);
+            {
+                MainWnd.Current.ShowDetailViewAsync<TestView>("vTest", MasterDetailPageEx.ViewsSwitchingAnimation.RightToLeft);
+                //App.NotebooksManager.SelectNoteAsync(note, App.Settings.TryToUnlockItemChildren);
+            }
         }
 
 
         void BackBtn_Clicked(object sender, System.EventArgs e)
         {
-            MainWnd.Current.NotebooksViewIsVisible = true;
+            MainWnd.Current.ShowMasterViewAsync();
         }
 
         void EditBtn_Clicked(object sender, System.EventArgs e)

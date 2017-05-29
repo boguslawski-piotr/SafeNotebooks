@@ -15,19 +15,7 @@ namespace SafeNotebooks
             Current = this;
 
             InitializeComponent();
-            InitializeViews();
-        }
-
-        //
-
-        public bool NotebooksViewIsVisible
-        {
-            get {
-                return MasterViewIsVisible;
-            }
-            set {
-                MasterViewIsVisible = value;
-            }
+			InitializeViews();
         }
     }
 }
