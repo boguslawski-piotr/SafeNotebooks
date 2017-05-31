@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using pbXNet;
 using Plugin.Settings;
@@ -11,41 +12,47 @@ namespace SafeNotebooks
     {
         public static class Settings
         {
-            public static ISettings Current
-            {
-                get { return CrossSettings.Current; }
-            }
-
-
-            public class Storage : IStorage<string>
+            public class Storage : ISearchableStorage<string>
             {
                 public string Id => "2b60a5af8f5e4fa4be62cb05bacbdf2b";
 
                 public string Name => T.Localized("Settings");
 
-                public async Task StoreAsync(string id, string data, DateTime modifiedOn) => Current.AddOrUpdateValue<string>(id, data);
+                public async Task StoreAsync(string id, string data, DateTime modifiedOn) => Current.Impl.AddOrUpdateValue<string>(id, data);
 
-                public async Task<bool> ExistsAsync(string id) => Current.Contains(id);
+                public async Task<bool> ExistsAsync(string id) => Current.Impl.Contains(id);
 
-                public async Task<DateTime> GetModifiedOnAsync(string id) => DateTime.UtcNow; // TODO: obsluzyc GetModifiedOnAsync
+                public async Task<DateTime> GetModifiedOnAsync(string id) => DateTime.MinValue; // TODO: obsluzyc GetModifiedOnAsync
 
-				public async Task DiscardAsync(string id) => Current.Remove(id);
+				public async Task DiscardAsync(string id) => Current.Impl.Remove(id);
 				
                 public async Task<string> GetACopyAsync(string id)
                 {
                     string rc = null;
-                    if (Current.Contains(id))
-                        rc = Current.GetValueOrDefault<string>(id, "");
+                    if (Current.Impl.Contains(id))
+                        rc = Current.Impl.GetValueOrDefault<string>(id, "");
                     return rc;
                 }
 
                 public async Task<string> RetrieveAsync(string id)
                 {
                     string data = await GetACopyAsync(id);
-                    await DiscardAsync(id);
+                    if(data != null)
+                        await DiscardAsync(id);
                     return data;
                 }
+
+                public Task<IEnumerable<string>> FindIdsAsync(string pattern)
+                {
+                    throw new NotImplementedException();
+                }
             }
+
+            public static class Current
+            {
+				internal static ISettings Impl => CrossSettings.Current;
+				public static ISearchableStorage<string> Storage = new Storage();
+			}
 
 
             // Security settings
@@ -59,20 +66,20 @@ namespace SafeNotebooks
 
 			public static bool UnlockUsingDeviceOwnerAuthentication
             {
-                get => Current.GetValueOrDefault<bool>(UnlockUsingDeviceOwnerAuthenticationKey, UnlockUsingDeviceOwnerAuthenticationDefault);
-                set => Current.AddOrUpdateValue<bool>(UnlockUsingDeviceOwnerAuthenticationKey, value);
+                get => Current.Impl.GetValueOrDefault<bool>(UnlockUsingDeviceOwnerAuthenticationKey, UnlockUsingDeviceOwnerAuthenticationDefault);
+                set => Current.Impl.AddOrUpdateValue<bool>(UnlockUsingDeviceOwnerAuthenticationKey, value);
             }
 
             public static bool UnlockUsingPin
             {
-                get => Current.GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault);
-                set => Current.AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
+                get => Current.Impl.GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault);
+                set => Current.Impl.AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
             }
 		
             public static bool TryToUnlockItemChildren
 			{
-				get => Current.GetValueOrDefault<bool>(TryToUnlockItemChildrenKey, TryToUnlockItemChildrenDefault);
-				set => Current.AddOrUpdateValue<bool>(TryToUnlockItemChildrenKey, value);
+				get => Current.Impl.GetValueOrDefault<bool>(TryToUnlockItemChildrenKey, TryToUnlockItemChildrenDefault);
+				set => Current.Impl.AddOrUpdateValue<bool>(TryToUnlockItemChildrenKey, value);
 			}
 		}
     }

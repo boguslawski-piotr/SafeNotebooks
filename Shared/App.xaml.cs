@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
+using pbXForms;
 using pbXNet;
 using pbXSecurity;
 using Xamarin.Forms;
@@ -30,7 +31,7 @@ namespace SafeNotebooks
             }
         }
 
-        static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new AesCryptographer(), new Settings.Storage()));
+        static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new AesCryptographer(), Settings.Current.Storage));
         public static ISecretsManager SecretsManager => _SecretsManager.Value;
 
         static Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
@@ -39,11 +40,8 @@ namespace SafeNotebooks
         static Lazy<StoragesManager> _StoragesManager = new Lazy<StoragesManager>(() => new StoragesManager(App.Name));
         public static StoragesManager StoragesManager => _StoragesManager.Value;
 
-        static Lazy<NotebooksManager> _NotebooksManager = new Lazy<NotebooksManager>(() => new NotebooksManager(App.Name));
+        static Lazy<NotebooksManager> _NotebooksManager = new Lazy<NotebooksManager>(() => new NotebooksManager());
         public static NotebooksManager NotebooksManager => _NotebooksManager.Value;
-
-        static Lazy<NotebooksManagerUI> _NotebooksManagerUI = new Lazy<NotebooksManagerUI>(() => new NotebooksManagerUI());
-        public static NotebooksManagerUI NotebooksManagerUI => _NotebooksManagerUI.Value;
 
 		// Settings in AppSettings.cs
 
@@ -55,28 +53,17 @@ namespace SafeNotebooks
             LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly);
         }
 
-        async Task InitializeSecrets()
-        {
-            // TODO: Potential security hole -> should be rethought more thoroughly
-            //if (!await SecretsManager.PasswordExistsAsync(App.Name))
-            //{
-            //    Settings.UnlockUsingPin = false;
-            //}
-        }
-
         public App()
         {
             InitializeLocalization();
-            InitializeSecrets();
-
-#if DEBUG
-            Tests();
-#endif
-
             InitializeComponent();
 
-            MainPage = new MainWnd();
-        }
+#if DEBUG
+			Tests();
+#endif
+
+			MainPage = new MainWnd();
+		}
 
 
         //
@@ -129,8 +116,8 @@ namespace SafeNotebooks
             // Prepare Notebooks Manager
 
 			NotebooksManager.SecretsManager = SecretsManager;
-            NotebooksManager.UI = NotebooksManagerUI;
-            await NotebooksManager.InitializeAsync();
+            NotebooksManager.UI = new NotebooksManagerUI();
+            await NotebooksManager.InitializeAsync(Settings.Current.Storage);
 
 			// Prepare background tasks
 			
@@ -139,7 +126,7 @@ namespace SafeNotebooks
 
 			await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemChildren);
 
-			// TODO: restore last selections (with unlocking if necessary)
+            // TODO: restore last selections (with unlocking if necessary)
 			//await App.DataManager.SelectNotebookAsync(n);
 		}
 
@@ -221,5 +208,52 @@ namespace SafeNotebooks
             });
         }
 
-    }
+
+		//
+
+		Layout<View> SearchBar;
+		Entry SearchQuery;
+		FlatButton CancelSearchBtn;
+		
+        void GetSearchBarFromEntry(object sender)
+        {
+			SearchQuery = sender as Entry;
+			SearchBar = SearchQuery.Parent as Layout<View>;
+			CancelSearchBtn = SearchBar.Children[1] as FlatButton;
+		}
+
+        void SearchQuery_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
+		{
+            GetSearchBarFromEntry(sender);
+            BaseView.SearchQuery_Focused(SearchBar, SearchQuery, CancelSearchBtn);
+		}
+
+		void SearchQuery_Unfocused(object sender, Xamarin.Forms.FocusEventArgs e)
+		{
+			GetSearchBarFromEntry(sender);
+			BaseView.SearchQuery_Unfocused(SearchBar, SearchQuery, CancelSearchBtn);
+		}
+
+		void SearchQuery_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+		{
+            Element parent = (sender as Element).Parent;
+            while (parent != null)
+            {
+                if(parent is BaseView view) {
+                    view.SearchQuery_TextChanged((sender as Entry).Text);
+                    return;
+                }
+                parent = parent.Parent;
+            }
+		}
+
+		void CancelSearchBtn_Clicked(object sender, System.EventArgs e)
+		{
+			CancelSearchBtn = sender as FlatButton;
+			SearchBar = CancelSearchBtn.Parent as Layout<View>;
+			SearchQuery = SearchBar.Children[0] as Entry;
+			BaseView.CancelSearchBtn_Clicked(SearchBar, SearchQuery, CancelSearchBtn);
+		}
+
+	}
 }

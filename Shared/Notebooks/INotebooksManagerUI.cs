@@ -7,8 +7,8 @@ namespace SafeNotebooks
 {
 	public interface INotebooksManagerUI
 	{
-		Task DisplayError(NotebooksException.ErrorCode err);
-		Task DisplayError(string message);
+		Task DisplayError(NotebooksException ex);
+		Task DisplayError(Exception ex);
 
 		Task<string> GetPasswordAsync(Item item, bool passwordForTheFirstTime);
 

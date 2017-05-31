@@ -31,6 +31,9 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)TestView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)NotebookView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -62,7 +65,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NoteType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StoragesManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewsCommonLogic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\ItemWithItems.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SortParametersDlg.xaml.cs">
       <DependentUpon>SortParametersDlg.xaml</DependentUpon>
@@ -71,6 +73,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)TestView.xaml.cs">
       <DependentUpon>TestView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)NotebookView.xaml.cs">
+      <DependentUpon>NotebookView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)BaseView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Notebooks\" />

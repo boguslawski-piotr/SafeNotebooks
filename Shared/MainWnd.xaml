@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pbXForms:MasterDetailPageEx
-	xmlns="http://xamarin.com/schemas/2014/forms"
-	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:pbXForms="clr-namespace:pbXForms"
-	xmlns:local="clr-namespace:SafeNotebooks"
-	x:Class="SafeNotebooks.MainWnd">
+    xmlns = "http://xamarin.com/schemas/2014/forms"
+    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pbXForms = "clr-namespace:pbXForms"
+    xmlns:local = "clr-namespace:SafeNotebooks"
+    x:Class = "SafeNotebooks.MainWnd">
 
-	<pbXForms:MasterDetailPageEx.Views>
-
+    <pbXForms:MasterDetailPageEx.MasterViews>
 
         <local:NotebooksView />
-		<local:PageView x:Name="vPage" />
-        <local:TestView x:Name="vTest" />
 
-	</pbXForms:MasterDetailPageEx.Views>
+        <local:NotebookView />
+
+    </pbXForms:MasterDetailPageEx.MasterViews>
+
+    <pbXForms:MasterDetailPageEx.DetailViews>
+
+        <local:PageView />
+
+        <local:TestView />
+
+    </pbXForms:MasterDetailPageEx.DetailViews>
 
 </pbXForms:MasterDetailPageEx>

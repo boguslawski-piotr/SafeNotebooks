@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
 using Xamarin.Forms;
@@ -10,6 +11,8 @@ namespace SafeNotebooks
     {
         public static MainWnd Current { get; set; }
 
+        NotebooksView notebooksView;
+
         public MainWnd()
         {
             Current = this;
@@ -17,5 +20,5 @@ namespace SafeNotebooks
             InitializeComponent();
 			InitializeViews();
         }
-    }
+	}
 }

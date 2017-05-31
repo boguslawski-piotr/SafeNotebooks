@@ -5,24 +5,41 @@
     xmlns:pbXForms = "clr-namespace:pbXForms"
     xmlns:T = "clr-namespace:pbXForms"
     xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.NotebooksView">
+    x:Class = "SafeNotebooks.NotebookView">
 
     <pbXForms:ContentViewEx.AppBarContent>
 
-        <Label
-            x:Name = "AppTitle"
-            Text = "{T:Localized AppName}"
-            Margin = "{x:Static pbXForms:Metrics.ScreenEdgeLeftPadding}"
-            FontSize = "Large"
-            LineBreakMode = "HeadTruncation"
-            TextColor = "{StaticResource AccentTextColor}"
-            VerticalOptions = "Center"
-            HorizontalOptions = "FillAndExpand" />
+        <pbXForms:FlatButton
+            x:Name = "BackBtn"
+            Image = "ic_arrow_back.png"
+            Clicked = "BackBtn_Clicked" />
+
+        <StackLayout
+            x:Name = "SelectedNotebookBar"
+            Style = "{StaticResource stVerticalNoSpaces}">
+
+            <Label
+                x:Name = "SelectedNotebookName"
+                Text = ""
+                TextColor = "{StaticResource AppBarTextColor}"
+                LineBreakMode = "MiddleTruncation"
+                VerticalOptions = "Center"
+                HorizontalOptions = "FillAndExpand" />
+
+            <Label
+                x:Name = "SelectedNotebookStorageName"
+                Text = ""
+                FontSize = "Micro"
+                TextColor = "{StaticResource ListItemDetailColor}"
+                LineBreakMode = "MiddleTruncation"
+                VerticalOptions = "Center" />
+
+        </StackLayout>
 
         <pbXForms:FlatButton
-            x:Name = "SettingsBtn"
-            Image = "ic_settings.png"
-            Clicked = "SettingsBtn_Clicked" />
+            x:Name = "EditBtn"
+            Image = "ic_mode_edit.png"
+            Clicked = "EditBtn_Clicked" />
 
     </pbXForms:ContentViewEx.AppBarContent>
 
@@ -37,7 +54,7 @@
                 AbsoluteLayout.LayoutFlags = "SizeProportional"
                 AbsoluteLayout.LayoutBounds = "0,0,1,1"
                 RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
-                BackgroundColor = "{StaticResource NotebooksListBackgroundColor}"
+                BackgroundColor = "{StaticResource PagesListBackgroundColor}"
                 SeparatorColor = "{StaticResource ListItemDividerColor}"
                 HeaderTemplate = "{DynamicResource SearchBarTemplate}"
                 Header = " "
@@ -61,7 +78,7 @@
     <pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
         <StaticResourceExtension
-            Key = "NotebooksToolBarBackgroundColor" />
+            Key = "PagesToolBarBackgroundColor" />
 
     </pbXForms:ContentViewEx.ToolBarBackgroundColor>
 

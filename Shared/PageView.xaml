@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pbXForms:ContentViewEx
+<local:BaseView
     xmlns = "http://xamarin.com/schemas/2014/forms"
     xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pbXForms = "clr-namespace:pbXForms"
@@ -47,75 +47,68 @@
 
     <pbXForms:ContentViewEx.ViewContent>
 
-        <ListView
-            x:Name = "ListCtl"
-            IsVisible="true"
-            RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
-            BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
-            SeparatorColor = "{StaticResource ListItemDividerColor}"
-            ItemTemplate = "{DynamicResource ItemListViewItemTemlate}">
+        <AbsoluteLayout
+            VerticalOptions = "FillAndExpand"
+            HorizontalOptions = "FillAndExpand">
 
-            <ListView.Header>
+            <ListView
+                x:Name = "ListCtl"
+                IsVisible = "true"
+                AbsoluteLayout.LayoutFlags = "SizeProportional"
+                AbsoluteLayout.LayoutBounds = "0,0,1,1"
+                RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
+                BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
+                SeparatorColor = "{StaticResource ListItemDividerColor}"
+                HeaderTemplate = "{DynamicResource SearchBarTemplate}"
+                Header = " "
+                ItemTemplate = "{DynamicResource ItemListViewItemTemlate}">
 
-                <StackLayout
-                    x:Name = "SearchBar"
-                    Style = "{StaticResource stHorizontalNoSpaces}"
-                    Padding = "{StaticResource SearchBarPadding}"
-                    BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}">
+            </ListView>
 
-                    <Entry
-                        x:Name = "SearchQuery"
-                        TextChanged = "SearchQuery_TextChanged"
-                        Focused = "SearchQuery_Focused"
-                        Unfocused = "SearchQuery_Unfocused"
-                        Placeholder = "{T:Localized SearchQueryPlaceholder}"
-                        HorizontalTextAlignment = "Center"
-                        BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
-                        HorizontalOptions = "FillAndExpand" />
+            <StackLayout
+                x:Name = "NoUIBar"
+                IsVisible = "false"
+                AbsoluteLayout.LayoutFlags = "SizeProportional"
+                AbsoluteLayout.LayoutBounds = "0,0,1,1"
+                Style = "{StaticResource stVerticalNoSpaces}">
 
-                    <pbXForms:FlatButton
-                        x:Name = "CancelSearchBtn"
-                        IsVisible = "false"
-                        HeightRequest = "{x:Static pbXForms:Metrics.IconHeight}"
-                        Image = "ic_close.png"
-                        Clicked = "CancelSearchBtn_Clicked" />
+                <Image
+                    x:Name = "Logo"
+                    WidthRequest = "112"
+                    HeightRequest = "112"
+                    Aspect = "AspectFit"
+                    Margin = "20, 0, 20, 20"
+                    Source = "icon.png" />
 
-                </StackLayout>
+                <Label
+                    x:Name = "NoUIText"
+                    Margin = "20, 0, 20, 0"
+                    Text = "Witamy w programie Bezpieczne Notatniki"
+                    HorizontalOptions = "Center"
+                    HorizontalTextAlignment = "Center"
+                    VerticalOptions = "CenterAndExpand" />
 
-            </ListView.Header>
+                <Label
+                    Margin = "30, 20, 30, 20"
+                    x:Name = "NoUIText2"
+                    Text = "Możesz w nim bezpiecznie trzymać wszystkie swoje sekrety :)"
+                    HorizontalOptions = "Center"
+                    HorizontalTextAlignment = "Center"
+                    VerticalOptions = "CenterAndExpand" />
 
-        </ListView>
+            </StackLayout>
 
-        <StackLayout
-            x:Name = "NoUIBar"
-            IsVisible="false"
-            Style = "{StaticResource stVerticalNoSpaces}">
+            <ActivityIndicator
+                x:Name = "AI"
+                IsVisible = "false"
+                AbsoluteLayout.LayoutFlags = "SizeProportional"
+                AbsoluteLayout.LayoutBounds = "0,0,1,1"
+                VerticalOptions = "FillAndExpand"
+                HorizontalOptions = "FillAndExpand"
+                WidthRequest = "50"
+                HeightRequest = "50" />
 
-            <Image
-                x:Name = "Logo"
-                WidthRequest = "112"
-                HeightRequest = "112"
-                Aspect = "AspectFit"
-                Margin = "20, 0, 20, 20"
-                Source = "icon.png" />
-
-            <Label
-                x:Name = "NoUIText"
-                Margin="20, 0, 20, 0"
-                Text = "Witamy w programie Bezpieczne Notatniki"
-                HorizontalOptions = "Center"
-                HorizontalTextAlignment="Center"
-                VerticalOptions = "CenterAndExpand" />
-            
-            <Label
-                Margin="30, 20, 30, 20"
-                x:Name = "NoUIText2"
-                Text = "Możesz w nim bezpiecznie trzymać wszystkie swoje sekrety :)"
-                HorizontalOptions = "Center"
-                HorizontalTextAlignment="Center"
-                VerticalOptions = "CenterAndExpand" />
-
-        </StackLayout>
+        </AbsoluteLayout>
 
     </pbXForms:ContentViewEx.ViewContent>
 
@@ -158,4 +151,4 @@
 
     </pbXForms:ContentViewEx.ToolBarContent>
 
-</pbXForms:ContentViewEx>
+</local:BaseView>

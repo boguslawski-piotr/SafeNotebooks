@@ -21,6 +21,7 @@ namespace SafeNotebooks
 	
         void MS_Clicked(object sender, System.EventArgs e)
 		{
+            MainWnd.Current.ShowMasterViewAsync<NotebookView>( MasterDetailPageEx.ViewsSwitchingAnimation.LeftToRight);
             MainWnd.Current.MasterViewIsVisible = true;
 		}
 

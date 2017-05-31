@@ -7,25 +7,55 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using pbXNet;
 
 namespace SafeNotebooks
 {
-    public class ItemWithItems<T> : Item where T : Item
+    public class ItemWithItems : Item
     {
-        public IList<T> Items { get; protected set; } = new List<T>();
-        public ObservableCollection<T> ObservableItems { get; protected set; }
+        public List<Item> Items { get; protected set; }
+
+        public ObservableCollection<Item> ObservableItems { get; protected set; }
+		protected void CreateObservableItems(IEnumerable<Item> l)
+		{
+			ObservableItems = new ObservableCollection<Item>(l);
+			NotebooksManager?.OnItemObservableItemsCreated(this);
+		}
+
+		public struct SortParameters
+        {
+            public bool ByName;
+            public bool ByDate;
+            public bool ByColor;
+            public bool Descending;
+
+            public SortParameters(bool byName, bool byDate, bool byColor, bool descending)
+            {
+                ByName = byName;
+                ByDate = byDate;
+                ByColor = byColor;
+                Descending = descending;
+            }
+
+            public void Clear()
+            {
+                ByName = ByDate = ByColor = false;
+            }
+        }
+
+        public static readonly SortParameters DefaultSortParams = new SortParameters(false, false, true, false);
 
         class IWIData
         {
-            public ItemWithItems.SortParameters SortParameters = new ItemWithItems.SortParameters();
+            public SortParameters SortParams = DefaultSortParams;
         }
 
         IWIData iwidata;
 
-        public ItemWithItems.SortParameters SortParameters
+        public SortParameters SortParams
         {
-            get => iwidata.SortParameters;
-            set => SetValue(ref iwidata.SortParameters, value, false);
+            get => iwidata.SortParams;
+            set => SetValue(ref iwidata.SortParams, value, false);
         }
 
         bool _SelectModeForItemsEnabled;
@@ -42,9 +72,9 @@ namespace SafeNotebooks
 
         public override void Dispose()
         {
-            ObservableItems.Clear();
+            ObservableItems?.Clear();
             ObservableItems = null;
-            Items.Clear();
+            Items?.Clear();
             Items = null;
             iwidata = null;
             base.Dispose();
@@ -64,11 +94,7 @@ namespace SafeNotebooks
 
         protected override void InternalNew()
         {
-            iwidata = new IWIData()
-            {
-                SortParameters = ItemWithItems.DefaultSortParameters
-            };
-
+            iwidata = new IWIData();
             base.InternalNew();
         }
 
@@ -76,64 +102,49 @@ namespace SafeNotebooks
         {
             if (!await base.SaveAllAsync(force))
                 return false;
-            foreach (var i in Items)
-                if (!await i.SaveAllAsync(force))
-                    return false;
+            if (Items != null)
+            {
+                foreach (var i in Items)
+                    if (!await i.SaveAllAsync(force))
+                        return false;
+            }
             return true;
         }
 
-        public void AddItem(T item)
+        object addItemLock = new object();
+
+        public void AddItem(Item item)
         {
             item.SelectModeEnabled = SelectModeForItemsEnabled;
-            Items.Add(item);
+            lock (addItemLock)
+            {
+                if (Items == null)
+                    Items = new List<Item>();
+                
+                Items.Add(item);
+
+                // This is only for UI to show loading/adding in bulk progress...
+                if (ObservableItems == null)
+                    CreateObservableItems(Items);
+                else
+                    ObservableItems.Add(item);
+            }
+
+            NotebooksManager?.OnItemAdded(item, this);
         }
 
         public virtual void SortItems()
         {
-            Func<T, object> f = (v) => v.ComparableColor; ;
-            bool desc = SortParameters.Descending;
+            bool desc = SortParams.Descending;
+            Comparison<Item> f = (x, y) => (desc ? 1 : -1) * x.ComparableColor.CompareTo(y.ComparableColor);
 
-            if (SortParameters.ByColor)
-                desc = !desc; // for colors reverse order
-            else if (SortParameters.ByName)
-                f = (v) => v.NameForLists;
-            else if (SortParameters.ByDate)
-                f = (v) => v.ModifiedOn;
+            if (SortParams.ByName)
+                f = (x, y) => (desc ? -1 : 1) * x.NameForLists.CompareTo(y.NameForLists);
+            else if (SortParams.ByDate)
+                f = (x, y) => (desc ? -1 : 1) * (x.ModifiedOn > y.ModifiedOn ? 1 : x.ModifiedOn < y.ModifiedOn ? -1 : 0);
 
-            IOrderedEnumerable<T> l = null;
-            if (desc)
-                l = Items.OrderByDescending(f).ThenBy((v) => v.NameForLists);
-            else
-                l = Items.OrderBy(f).ThenBy((v) => v.NameForLists);
-
-            ObservableItems = new ObservableCollection<T>(l);
-        }
-
-    }
-
-    public static class ItemWithItems
-    {
-        public static SortParameters DefaultSortParameters = new SortParameters(false, false, true, false);
-
-        public struct SortParameters
-        {
-            public bool ByName;
-            public bool ByDate;
-            public bool ByColor;
-            public bool Descending;
-
-            public SortParameters(bool byName, bool byDate, bool byColor, bool descending)
-            {
-                ByName = byName;
-                ByDate = byDate;
-                ByColor = byColor;
-                Descending = descending;
-            }
-
-            public void Clear()
-            {
-                ByName = ByDate = ByColor = false;
-            }
+            ObservableItems?.Sort(f);
+            NotebooksManager?.OnItemObservableItemsSorted(this);
         }
     }
 }

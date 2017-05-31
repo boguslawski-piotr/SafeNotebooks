@@ -11,22 +11,24 @@ namespace SafeNotebooks
 {
     public class NotebooksManagerUI : INotebooksManagerUI
     {
-        public async Task DisplayError(NotebooksException.ErrorCode err)
+        public async Task DisplayError(NotebooksException ex)
         {
-            string message = $"DataManagerException:Err {err}"; // TODO: wyciagac komunikaty bledow z zasobow
-            await DisplayError(message);
+            string message = $"DataManagerException:Err {ex.Err}"; // TODO: wyciagac komunikaty bledow z zasobow
+            await DisplayError(new Exception(message));
         }
 
-        public async Task DisplayError(string message)
+        public async Task DisplayError(Exception ex)
         {
-			await App.Current.MainPage.DisplayAlert("Error", message, T.Localized("Cancel"));
-		}
-		
+            await Task.Run(() =>
+                Device.BeginInvokeOnMainThread(async () => await App.Current.MainPage.DisplayAlert(T.Localized("Error"), ex.Message, T.Localized("Cancel")))
+            );
+        }
+
 
         public async Task<string> GetPasswordAsync(Item item, bool passwordForTheFirstTime)
         {
-			// TODO: UI powinno sprawdzac poprawnosc hasla -> wykorzystac SecretsManager -> Basic authentication based on passwords
-			//await App.Current.MainPage.DisplayAlert("Password", $"is needed for: {item.Nick}; first: {passwordForTheFirstTime}", T.Localized("Cancel"));
+            // TODO: UI powinno sprawdzac poprawnosc hasla -> wykorzystac SecretsManager -> Basic authentication based on passwords
+            //await App.Current.MainPage.DisplayAlert("Password", $"is needed for: {item.Nick}; first: {passwordForTheFirstTime}", T.Localized("Cancel"));
             return "123";
             //return null;
         }
@@ -34,9 +36,10 @@ namespace SafeNotebooks
 
         public async Task<(bool, string)> EditItemAsync(Item item)
         {
-            //await App.Current.MainPage.DisplayAlert("New/Edit", $"{item.GetType().Name}", T.Localized("OK"), T.Localized("Cancel"));
+            //if (!await Application.Current.MainPage.DisplayAlert("New/Edit", $"{item.GetType().Name}", T.Localized("OK"), T.Localized("Cancel")))
+                //return (false, "");
 
-            int lll = App.Settings.Current.GetValueOrDefault("lll", 1);
+            int lll = App.Settings.Current.Impl.GetValueOrDefault("lll", 1);
 
             //item.Color = Color.FromHex("#800000ff");
             item.Nick = $"{item.GetType().Name} Nick " + lll;
@@ -47,7 +50,7 @@ namespace SafeNotebooks
             //item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
             //item.ThisCKeyLifeTime = CKeyLifeTime.OneTime;
 
-			App.Settings.Current.AddOrUpdateValue("lll", lll);
+            App.Settings.Current.Impl.AddOrUpdateValue("lll", lll);
 
             return (true, "123");
         }
@@ -59,7 +62,7 @@ namespace SafeNotebooks
         public double LockedImageWidthForLists { get; } = Metrics.SmallIconHeight;
 
         public string SelectedImageNameForLists { get; } = "ic_radio_button_checked.png";
-		public string UnselectedImageNameForLists { get; } = "ic_radio_button_unchecked.png";
+        public string UnselectedImageNameForLists { get; } = "ic_radio_button_unchecked.png";
         public double SelectedUnselectedImageWidthForLists { get; } = Metrics.SmallIconHeight;
-	}
+    }
 }

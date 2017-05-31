@@ -77,6 +77,12 @@ namespace SafeNotebooks.Texts {
             }
         }
         
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
         internal static string Unlock {
             get {
                 return ResourceManager.GetString("Unlock", resourceCulture);
