@@ -11,8 +11,6 @@ namespace SafeNotebooks
     {
         public static MainWnd Current { get; set; }
 
-        NotebooksView notebooksView;
-
         public MainWnd()
         {
             Current = this;
