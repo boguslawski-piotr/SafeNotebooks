@@ -207,53 +207,5 @@ namespace SafeNotebooks
                 await Application.Current.MainPage.Navigation.PopModalAsync(false);
             });
         }
-
-
-		//
-
-		Layout<View> SearchBar;
-		Entry SearchQuery;
-		FlatButton CancelSearchBtn;
-		
-        void GetSearchBarFromEntry(object sender)
-        {
-			SearchQuery = sender as Entry;
-			SearchBar = SearchQuery.Parent as Layout<View>;
-			CancelSearchBtn = SearchBar.Children[1] as FlatButton;
-		}
-
-        void SearchQuery_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
-		{
-            GetSearchBarFromEntry(sender);
-            BaseView.SearchQuery_Focused(SearchBar, SearchQuery, CancelSearchBtn);
-		}
-
-		void SearchQuery_Unfocused(object sender, Xamarin.Forms.FocusEventArgs e)
-		{
-			GetSearchBarFromEntry(sender);
-			BaseView.SearchQuery_Unfocused(SearchBar, SearchQuery, CancelSearchBtn);
-		}
-
-		void SearchQuery_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
-		{
-            Element parent = (sender as Element).Parent;
-            while (parent != null)
-            {
-                if(parent is BaseView view) {
-                    view.SearchQuery_TextChanged((sender as Entry).Text);
-                    return;
-                }
-                parent = parent.Parent;
-            }
-		}
-
-		void CancelSearchBtn_Clicked(object sender, System.EventArgs e)
-		{
-			CancelSearchBtn = sender as FlatButton;
-			SearchBar = CancelSearchBtn.Parent as Layout<View>;
-			SearchQuery = SearchBar.Children[0] as Entry;
-			BaseView.CancelSearchBtn_Clicked(SearchBar, SearchQuery, CancelSearchBtn);
-		}
-
 	}
 }

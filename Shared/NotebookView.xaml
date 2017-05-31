@@ -56,9 +56,9 @@
                 RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
                 BackgroundColor = "{StaticResource PagesListBackgroundColor}"
                 SeparatorColor = "{StaticResource ListItemDividerColor}"
-                HeaderTemplate = "{DynamicResource SearchBarTemplate}"
+                HeaderTemplate = "{StaticResource SearchBarTemplate}"
                 Header = " "
-                ItemTemplate = "{DynamicResource ItemListViewItemTemlate}">
+                ItemTemplate = "{StaticResource ItemListViewItemTemlate}">
 
             </ListView>
 

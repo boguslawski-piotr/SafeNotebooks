@@ -34,6 +34,9 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)NotebookView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)BaseView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -76,7 +79,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)NotebookView.xaml.cs">
       <DependentUpon>NotebookView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)BaseView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseView.xaml.cs">
+      <DependentUpon>BaseView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Notebooks\" />

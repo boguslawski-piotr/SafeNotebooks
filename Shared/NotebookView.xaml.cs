@@ -132,7 +132,7 @@ namespace SafeNotebooks
 
         //
 
-		public override void SearchQuery_TextChanged(string text)
+		public override void SearchQueryChanged(string text)
 		{
 		}
 
