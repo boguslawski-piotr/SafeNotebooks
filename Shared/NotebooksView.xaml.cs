@@ -33,6 +33,16 @@ namespace SafeNotebooks
             InitializeSearchBarFor(ListCtl);
         }
 
+        protected override void ContinueOnSizeAllocated(double width, double height)
+        {
+            base.ContinueOnSizeAllocated(width, height);
+            if (MainWnd.Current.IsSplitView)
+            {
+                AppTitle.FontSize = Device.GetNamedSize(NamedSize.Medium, AppTitle);
+            }
+            else
+				AppTitle.FontSize = Device.GetNamedSize(NamedSize.Large, AppTitle);
+		}
 
         //
 
@@ -75,7 +85,7 @@ namespace SafeNotebooks
 
         async Task SelectNotebook(Notebook notebook)
 		{
-            await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.RightToLeft, notebook);
+            await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, notebook);
 			await App.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemChildren);
 		}
 

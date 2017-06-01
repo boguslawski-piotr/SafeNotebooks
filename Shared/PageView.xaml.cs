@@ -124,7 +124,7 @@ namespace SafeNotebooks
                 note.IsSelected = !note.IsSelected;
             else
             {
-                MainWnd.Current.ShowDetailViewAsync<TestView>(MasterDetailPageEx.ViewsSwitchingAnimation.RightToLeft);
+                MainWnd.Current.ShowDetailViewAsync<TestView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward);
                 //App.NotebooksManager.SelectNoteAsync(note, App.Settings.TryToUnlockItemChildren);
             }
         }
@@ -134,7 +134,7 @@ namespace SafeNotebooks
 
         async void BackBtn_Clicked(object sender, System.EventArgs e)
         {
-            await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.LeftToRight, App.NotebooksManager.SelectedNotebook);
+            await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back, App.NotebooksManager.SelectedNotebook);
 		}
 
         void EditBtn_Clicked(object sender, System.EventArgs e)

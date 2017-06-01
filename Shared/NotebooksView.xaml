@@ -20,7 +20,7 @@
             VerticalOptions = "Center"
             HorizontalOptions = "FillAndExpand" />
 
-        <pbXForms:FlatButton
+        <pbXForms:PIButton
             x:Name = "SettingsBtn"
             Image = "ic_settings.png"
             Clicked = "SettingsBtn_Clicked" />
@@ -55,24 +55,37 @@
 
     <pbXForms:ContentViewEx.ToolBarContent>
 
-        <pbXForms:ToolBarGridLayout>
+        <pbXForms:ToolBarGridLayout ColumnSpacing="24">
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 Grid.Column = "0"
                 x:Name = "SortBtn"
+                ContentLayout="Bottom,0"
                 Image = "ic_sort.png"
+                Text = "Sortuj"
+                FontSize = "Micro"
+                WidthRequest = "-1"
                 Clicked = "SortBtn_Clicked" />
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 Grid.Column = "1"
                 x:Name = "NewBtn"
+                ContentLayout="Bottom,0"
                 Image = "ic_add_circle.png"
+                Text = "Dodaj"
+                FontSize = "Micro"
+                TextColor = "{StaticResource AccentTextColor}"
+                WidthRequest = "-1"
                 Clicked = "NewBtn_Clicked" />
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 Grid.Column = "2"
                 x:Name = "EditItemsBtn"
+                ContentLayout="Bottom,0"
                 Image = "ic_transform.png"
+                Text = "Edytuj"
+                FontSize = "Micro"
+                WidthRequest = "-1"
                 Clicked = "EditItemsBtn_Clicked" />
 
         </pbXForms:ToolBarGridLayout>

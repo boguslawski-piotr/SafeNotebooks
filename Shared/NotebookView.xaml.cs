@@ -99,7 +99,7 @@ namespace SafeNotebooks
 
         async Task SelectPage(Page page)
         {
-            await MainWnd.Current.ShowDetailViewAsync<PageView>(MasterDetailPageEx.ViewsSwitchingAnimation.RightToLeft, page);
+            await MainWnd.Current.ShowDetailViewAsync<PageView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, page);
             await App.NotebooksManager.SelectPageAsync(page, App.Settings.TryToUnlockItemChildren);
         }
 
@@ -121,7 +121,7 @@ namespace SafeNotebooks
 
         async void BackBtn_Clicked(object sender, System.EventArgs e)
         {
-            await MainWnd.Current.ShowMasterViewAsync<NotebooksView>(MasterDetailPageEx.ViewsSwitchingAnimation.LeftToRight);
+            await MainWnd.Current.ShowMasterViewAsync<NotebooksView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back);
         }
 
         void EditBtn_Clicked(object sender, System.EventArgs e)

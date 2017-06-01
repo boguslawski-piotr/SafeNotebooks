@@ -44,13 +44,13 @@ namespace SafeNotebooks
 
 		Layout<View> _SearchBar;
         Entry _SearchQuery;
-        FlatButton _CancelSearchBtn;
+        PIButton _CancelSearchBtn;
 
         protected void InitializeSearchBarFor(ListView ListCtl)
         {
             _SearchBar = ListCtl.HeaderElement as Layout<View>;
             _SearchQuery = _SearchBar.Children[0] as Entry;
-            _CancelSearchBtn = _SearchBar.Children[1] as FlatButton;
+            _CancelSearchBtn = _SearchBar.Children[1] as PIButton;
 
             if (_SearchBar == null || _SearchQuery == null || _CancelSearchBtn == null)
                 throw new Exception("BaseView: SearchBar is NOT constructed correctly.");
