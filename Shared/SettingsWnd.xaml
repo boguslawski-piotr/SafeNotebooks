@@ -5,7 +5,7 @@
     xmlns:pbXForms = "clr-namespace:pbXForms"
     xmlns:T = "clr-namespace:pbXForms"
     x:Class = "SafeNotebooks.SettingsWnd"
-    BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}">
+    BackgroundColor = "{StaticResource PageBackgroundColor}">
 
     <pbXForms:ContentPageEx.AppBarContent>
 
@@ -67,13 +67,6 @@
             HorizontalOptions = "CenterAndExpand" />
 
     </pbXForms:ContentPageEx.PageContent>
-
-    <pbXForms:ContentPageEx.ToolBarBackgroundColor>
-
-        <StaticResourceExtension
-            Key = "ListOfNotesToolBarBackgroundColor" />
-
-    </pbXForms:ContentPageEx.ToolBarBackgroundColor>
 
     <pbXForms:ContentPageEx.ToolBarContent>
 

@@ -14,11 +14,6 @@ namespace SafeNotebooks
 
         //public ISearchableStorage<Attachment> AttachmentsStorage { get; set; }
 
-		public override void Dispose()
-        {
-            base.Dispose();
-        }
-
         protected override void InternalNew()
         {
             base.InternalNew();

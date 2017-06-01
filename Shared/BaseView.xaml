@@ -55,20 +55,22 @@
 
                 <ViewCell>
 
-                    <!--                
-TODO: zglosic ten problem do ekipy Xamarin.Forms!                    
                     <ViewCell.ContextActions>
                         <MenuItem
-                            Command="{Binding MoveItemCommand}"
+                            Clicked="EditItem_Clicked"
+                            CommandParameter = "{Binding .}"
+                            Text = "{T:Localized Edit}" />
+                        <MenuItem
+                            Clicked="MoveItem_Clicked"
                             CommandParameter = "{Binding .}"
                             Text = "{T:Localized Move}" />
                         <MenuItem
-                            Command="{Binding DeleteItemCommand}"
+                            Clicked="DeleteItem_Clicked"
                             CommandParameter = "{Binding .}"
                             IsDestructive = "True"
                             Text = "{T:Localized Delete}" />
                     </ViewCell.ContextActions>
--->
+
                     <StackLayout
                         Grid.Row = "0"
                         Grid.Column = "0"
@@ -76,7 +78,7 @@ TODO: zglosic ten problem do ekipy Xamarin.Forms!
                         Style = "{StaticResource stHorizontalNoSpaces}">
 
                         <pbXForms:ImageEx
-                            Command = "{Binding SelectUnselectItemCommand}"
+                            Clicked="SelectUnselectItem_Clicked"
                             CommandParameter = "{Binding .}"
                             Source = "{Binding SelectedUnselectedImageNameForLists}"
                             WidthRequest = "{Binding SelectedUnselectedImageWidthForLists}"

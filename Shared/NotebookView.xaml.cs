@@ -54,7 +54,7 @@ namespace SafeNotebooks
 
         void ItemObservableItemsCreated(object sender, ItemWithItems forWhom)
         {
-            if (forWhom is Notebook notebook && ListCtl.ItemsSource != notebook.ObservableItems)
+            if (forWhom is Notebook notebook)
                 Device.BeginInvokeOnMainThread(() => ListCtl.ItemsSource = notebook.ObservableItems);
         }
 

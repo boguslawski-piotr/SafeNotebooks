@@ -8,6 +8,8 @@
     x:Class="SafeNotebooks.App">
 	<Application.Resources>
 		<ResourceDictionary>
+
+            <!-- COLORS -->
             
 			<!-- ANDROID: When modifying this value you must also remember to update the "colorPrimaryDark" value in the "Resources/Values/styles.xml" file. -->
 			<Color x:Key="StatusBarBackgroundColor">#4CAF50</Color>
@@ -16,17 +18,13 @@
 			<Color x:Key="AppBarBackgroundColor">#81C784</Color>
 			<Color x:Key="AppBarTextColor">#000000</Color>
 
-            <Color x:Key="ToolBarBackgroundColor">#ffffff</Color>
-            <Color x:Key="ToolBarTextColor">#000000</Color>
+            <Style TargetType="pbXForms:AppBarLayout">
+                <Setter Property="BackgroundColor" Value="{StaticResource AppBarBackgroundColor}" />
+            </Style>
 
-            <Color x:Key="NotebooksListBackgroundColor">#E8F5E9</Color>
-            <Color x:Key="NotebooksToolBarBackgroundColor">#E8F5E9</Color>
-
-            <Color x:Key="PagesListBackgroundColor">#E8F5E9</Color>
-            <Color x:Key="PagesToolBarBackgroundColor">#E8F5E9</Color>
-
-			<Color x:Key="ListOfNotesBackgroundColor">#F0FCF0</Color>
-            <Color x:Key="ListOfNotesToolBarBackgroundColor">#F0FCF0</Color>
+            <Color x:Key="NotebooksBackgroundColor">#E0EDE1</Color>
+            <Color x:Key="NotebookBackgroundColor">#E8F5E9</Color>
+			<Color x:Key="PageBackgroundColor">#F0FCF0</Color>
 
 			<!-- ANDROID: When modifying this value you must also remember to update the "colorAccent" value in the "Resources/Values/styles.xml" file. -->
 			<Color x:Key="AccentTextColor">#E65100</Color>
@@ -35,6 +33,8 @@
 			<Color x:Key="ListItemDetailColor">#4c000000</Color>			
 			<Color x:Key="ListItemDividerColor">#C8E6C9</Color>			
 
+
+            <!-- CONTROL STYLES -->
 
             <Style x:Key="stVerticalNoSpaces" TargetType="StackLayout">
                 <Setter Property="Orientation" Value="Vertical" />
@@ -54,9 +54,16 @@
                 <Setter Property="Spacing" Value="0" />
             </Style>
 
-            
- 
-            
+            <Style TargetType="ActivityIndicator">
+                <Setter Property="IsVisible" Value="false" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />                
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />                
+                <Setter Property="AbsoluteLayout.LayoutFlags" Value="SizeProportional" />
+                <Setter Property="AbsoluteLayout.LayoutBounds" Value="0,0,1,1" />
+                <Setter Property="WidthRequest" Value="50" />
+                <Setter Property="HeightRequest" Value="50" />
+            </Style>
+
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

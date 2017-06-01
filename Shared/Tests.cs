@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using pbXForms;
 using pbXNet;
 using pbXSecurity;
 using Plugin.Settings;
@@ -24,6 +25,10 @@ namespace SafeNotebooks
 
         async void Tests()
         {
+            //***
+
+            //string s = DeviceEx.Id;
+
             //***
 
             //SampleData dd = new SampleData();

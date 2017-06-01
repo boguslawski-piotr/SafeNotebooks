@@ -6,7 +6,7 @@
     xmlns:T = "clr-namespace:pbXForms"
     xmlns:local = "clr-namespace:SafeNotebooks"
     x:Class = "SafeNotebooks.PageView"
-    BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}">
+    BackgroundColor = "{StaticResource PageBackgroundColor}">
 
     <pbXForms:ContentViewEx.AppBarContent>
 
@@ -57,7 +57,7 @@
                 AbsoluteLayout.LayoutFlags = "SizeProportional"
                 AbsoluteLayout.LayoutBounds = "0,0,1,1"
                 RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
-                BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
+                BackgroundColor = "{StaticResource PageBackgroundColor}"
                 SeparatorColor = "{StaticResource ListItemDividerColor}"
                 HeaderTemplate = "{StaticResource SearchBarTemplate}"
                 Header = " "
@@ -99,25 +99,11 @@
             </StackLayout>
 
             <ActivityIndicator
-                x:Name = "AI"
-                IsVisible = "false"
-                AbsoluteLayout.LayoutFlags = "SizeProportional"
-                AbsoluteLayout.LayoutBounds = "0,0,1,1"
-                VerticalOptions = "FillAndExpand"
-                HorizontalOptions = "FillAndExpand"
-                WidthRequest = "50"
-                HeightRequest = "50" />
+                x:Name = "AI" />
 
         </AbsoluteLayout>
 
     </pbXForms:ContentViewEx.ViewContent>
-
-    <pbXForms:ContentViewEx.ToolBarBackgroundColor>
-
-        <StaticResourceExtension
-            Key = "ListOfNotesToolBarBackgroundColor" />
-
-    </pbXForms:ContentViewEx.ToolBarBackgroundColor>
 
     <pbXForms:ContentViewEx.ToolBarContent>
 

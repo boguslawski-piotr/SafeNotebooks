@@ -70,15 +70,6 @@ namespace SafeNotebooks
             }
         }
 
-        public override void Dispose()
-        {
-            ObservableItems?.Clear();
-            ObservableItems = null;
-            Items?.Clear();
-            Items = null;
-            iwidata = null;
-            base.Dispose();
-        }
 
         protected override string SerializeNotEncryptedData()
         {
@@ -136,10 +127,16 @@ namespace SafeNotebooks
         public virtual void SortItems()
         {
             bool desc = SortParams.Descending;
-            Comparison<Item> f = (x, y) => (desc ? 1 : -1) * x.ComparableColor.CompareTo(y.ComparableColor);
+            Comparison<Item> f = (x, y) =>
+            {
+                int cc = (desc ? 1 : -1) * string.Compare(x.ComparableColor, y.ComparableColor, StringComparison.Ordinal);
+                if (cc == 0)
+                    cc = (desc ? -1 : 1) * string.Compare(x.NameForLists, y.NameForLists, StringComparison.CurrentCulture);
+                return cc;
+            };
 
             if (SortParams.ByName)
-                f = (x, y) => (desc ? -1 : 1) * x.NameForLists.CompareTo(y.NameForLists);
+                f = (x, y) => (desc ? -1 : 1) * string.Compare(x.NameForLists, y.NameForLists, StringComparison.CurrentCulture);
             else if (SortParams.ByDate)
                 f = (x, y) => (desc ? -1 : 1) * (x.ModifiedOn > y.ModifiedOn ? 1 : x.ModifiedOn < y.ModifiedOn ? -1 : 0);
 

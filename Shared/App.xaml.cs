@@ -7,6 +7,7 @@ using pbXForms;
 using pbXNet;
 using pbXSecurity;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 //[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks

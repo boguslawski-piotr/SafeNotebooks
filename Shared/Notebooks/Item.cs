@@ -18,7 +18,7 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public class Item : BindableObject, IDisposable
+    public class Item : BindableObject
     {
         public NotebooksManager NotebooksManager { get; set; }
 
@@ -247,18 +247,7 @@ namespace SafeNotebooks
 
         public Item()
         {
-            InitalizeCommands();
-        }
-
-        public virtual void Dispose()
-        {
-            nedata = null;
-            if (data != null)
-            {
-                data.Name = null;
-                data.Detail = null;
-                data = null;
-            }
+            //InitalizeCommands();
         }
 
 
@@ -436,31 +425,31 @@ namespace SafeNotebooks
 
         // Xamarin.Forms binding system support
 
-        public ICommand EditItemCommand { get; private set; }
-        public ICommand MoveItemCommand { get; private set; }
-        public ICommand DeleteItemCommand { get; private set; }
-        public ICommand SelectUnselectItemCommand { get; private set; }
+        //public ICommand EditItemCommand { get; private set; }
+        //public ICommand MoveItemCommand { get; private set; }
+        //public ICommand DeleteItemCommand { get; private set; }
+        //public ICommand SelectUnselectItemCommand { get; private set; }
 
-        void InitalizeCommands()
-        {
-            EditItemCommand = new Command(ExecuteEditItemCommand, CanExecuteEditMoveDelete);
-            MoveItemCommand = new Command(ExecuteMoveItemCommand, CanExecuteEditMoveDelete);
-            DeleteItemCommand = new Command(ExecuteDeleteItemCommand, CanExecuteEditMoveDelete);
-            SelectUnselectItemCommand = new Command(ExecuteSelectUnselectItemCommand, CanExecuteSelectUnselectItemCommand);
-        }
+        //void InitalizeCommands()
+        //{
+        //    EditItemCommand = new Command(ExecuteEditItemCommand, CanExecuteEditMoveDelete);
+        //    MoveItemCommand = new Command(ExecuteMoveItemCommand, CanExecuteEditMoveDelete);
+        //    DeleteItemCommand = new Command(ExecuteDeleteItemCommand, CanExecuteEditMoveDelete);
+        //    SelectUnselectItemCommand = new Command(ExecuteSelectUnselectItemCommand, CanExecuteSelectUnselectItemCommand);
+        //}
 
-        protected virtual bool CanExecuteEditMoveDelete(object sender) => true;
-        protected virtual void ExecuteEditItemCommand(object sender) => ((Item)sender)?.EditAsync();
-        protected virtual void ExecuteMoveItemCommand(object sender) => ((Item)sender)?.MoveAsync();
-        protected virtual void ExecuteDeleteItemCommand(object sender) => ((Item)sender)?.DeleteAsync();
+        //protected virtual bool CanExecuteEditMoveDelete(object sender) => true;
+        //protected virtual void ExecuteEditItemCommand(object sender) => ((Item)sender)?.EditAsync();
+        //protected virtual void ExecuteMoveItemCommand(object sender) => ((Item)sender)?.MoveAsync();
+        //protected virtual void ExecuteDeleteItemCommand(object sender) => ((Item)sender)?.DeleteAsync();
 
-        protected virtual bool CanExecuteSelectUnselectItemCommand(object sender) => true;
-        protected virtual void ExecuteSelectUnselectItemCommand(object sender)
-        {
-            Item item = (Item)sender;
-            if (item != null)
-                item.IsSelected = !item.IsSelected;
-        }
+        //protected virtual bool CanExecuteSelectUnselectItemCommand(object sender) => true;
+        //protected virtual void ExecuteSelectUnselectItemCommand(object sender)
+        //{
+        //    Item item = (Item)sender;
+        //    if (item != null)
+        //        item.IsSelected = !item.IsSelected;
+        //}
 
 
         //

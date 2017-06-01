@@ -62,7 +62,7 @@ namespace SafeNotebooks
 
         void ItemObservableItemsCreated(object sender, ItemWithItems forWhom)
         {
-            if (forWhom is Page page && ListCtl.ItemsSource != page.ObservableItems)
+            if (forWhom is Page page)
                 Device.BeginInvokeOnMainThread(() => ListCtl.ItemsSource = page.ObservableItems);
         }
 

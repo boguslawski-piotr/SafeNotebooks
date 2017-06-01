@@ -6,7 +6,7 @@
     xmlns:T = "clr-namespace:pbXForms"
     xmlns:local = "clr-namespace:SafeNotebooks"
     x:Class = "SafeNotebooks.SortParametersDlg"
-    BackgroundColor = "{StaticResource ListOfNotesBackgroundColor}"
+    BackgroundColor = "{StaticResource PageBackgroundColor}"
     Padding = "{x:Static pbXForms:Metrics.ScreenEdgePadding}">
 
     <ContentView.Content>

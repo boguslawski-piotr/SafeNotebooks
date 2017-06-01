@@ -15,26 +15,34 @@ namespace SafeNotebooks
         }
 
 
-        //
+		//
 
-        protected async void SortBtn_Clicked(string title, ItemWithItems item, ListView ListCtl, bool detailView = false)
-        {
-            if (item == null)
-                return;
+		public void SelectUnselectItem_Clicked(object sender, System.EventArgs e)
+		{
+			if ((sender as ImageEx).CommandParameter is Item item)
+				item.IsSelected = !item.IsSelected;
+		}
 
-            SortParametersDlg dlg = new SortParametersDlg(T.Localized("HowToSort") + " " + title + "?", item.SortParams);
-            if (await MainWnd.Current.ModalManager.DisplayModalAsync(dlg, MainWnd.Current.IsSplitView && !detailView ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter))
-            {
-                item.SortParams = dlg.SortParams;
-                item.SortItems();
-                Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollToFirst(ListCtl));
-            }
-        }
+		public void EditItem_Clicked(object sender, System.EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
 
+		public void MoveItem_Clicked(object sender, System.EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
 
-        //
+		public async void DeleteItem_Clicked(object sender, System.EventArgs e)
+		{
+			if ((sender as MenuItem).CommandParameter is Item item)
+				await item.DeleteAsync();
+		}
+		
 
-        Layout<View> _SearchBar;
+		//
+
+		Layout<View> _SearchBar;
         Entry _SearchQuery;
         FlatButton _CancelSearchBtn;
 
@@ -82,9 +90,26 @@ namespace SafeNotebooks
         }
 
 
+		//
+
+		protected async void SortBtn_Clicked(string title, ItemWithItems item, ListView ListCtl, bool detailView = false)
+		{
+			if (item == null)
+				return;
+
+			SortParametersDlg dlg = new SortParametersDlg(T.Localized("HowToSort") + " " + title + "?", item.SortParams);
+			if (await MainWnd.Current.ModalManager.DisplayModalAsync(dlg, MainWnd.Current.IsSplitView && !detailView ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter))
+			{
+				item.SortParams = dlg.SortParams;
+				item.SortItems();
+				Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollToFirst(ListCtl));
+			}
+		}
+		
+
         //
 
-        public static void ListViewScrollTo(ListView ListCtl, Item item)
+		public static void ListViewScrollTo(ListView ListCtl, Item item)
         {
             ListCtl.ScrollTo(item, ScrollToPosition.Center, false);
         }

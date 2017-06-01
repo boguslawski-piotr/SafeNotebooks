@@ -21,13 +21,7 @@ namespace SafeNotebooks
 
         PageData pdata;
 
-        public override void Dispose()
-        {
-            pdata = null;
-			base.Dispose();
-		}
-
-		protected override string Serialize()
+        protected override string Serialize()
         {
             return base.Serialize() +
                 ",'pd':" + JsonConvert.SerializeObject(pdata, pbXNet.Settings.JsonSerializer);
