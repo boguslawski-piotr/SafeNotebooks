@@ -30,7 +30,6 @@ namespace Mac
 				Y = settings.IntForKey(wt),
 				X = settings.IntForKey(wl)
 			};
-            topleft.X = topleft.Y = 0;
 
 			CGSize size = new CGSize()
 			{
