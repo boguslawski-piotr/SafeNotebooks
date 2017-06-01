@@ -79,14 +79,14 @@ namespace SafeNotebooks
 
 		async void RefreshNotebooks()
 		{
-			await App.NotebooksManager.LoadNotebooksAsync(App.StoragesManager.Storages, App.Settings.TryToUnlockItemChildren);
+			await App.NotebooksManager.LoadNotebooksAsync(App.StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
 			Device.BeginInvokeOnMainThread(ListCtl.EndRefresh);
 		}
 
         async Task SelectNotebook(Notebook notebook)
 		{
             await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, notebook);
-			await App.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemChildren);
+			await App.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
 		}
 
 		async void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)

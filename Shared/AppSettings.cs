@@ -59,10 +59,12 @@ namespace SafeNotebooks
 
             const string UnlockUsingDeviceOwnerAuthenticationKey = "_uudoa";
             static readonly bool UnlockUsingDeviceOwnerAuthenticationDefault = false;
+
             const string UnlockUsingPinKey = "_uup";
             static readonly bool UnlockUsingPinDefault = false;
-			const string TryToUnlockItemChildrenKey = "_ttuic";
-			static readonly bool TryToUnlockItemChildrenDefault = false;
+
+            const string TryToUnlockItemItemsKey = "_ttuii";
+            static readonly bool TryToUnlockItemItemsDefault = false;
 
 			public static bool UnlockUsingDeviceOwnerAuthentication
             {
@@ -76,10 +78,10 @@ namespace SafeNotebooks
                 set => Current.Impl.AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
             }
 		
-            public static bool TryToUnlockItemChildren
+            public static bool TryToUnlockItemItems
 			{
-				get => Current.Impl.GetValueOrDefault<bool>(TryToUnlockItemChildrenKey, TryToUnlockItemChildrenDefault);
-				set => Current.Impl.AddOrUpdateValue<bool>(TryToUnlockItemChildrenKey, value);
+				get => Current.Impl.GetValueOrDefault<bool>(TryToUnlockItemItemsKey, TryToUnlockItemItemsDefault);
+				set => Current.Impl.AddOrUpdateValue<bool>(TryToUnlockItemItemsKey, value);
 			}
 		}
     }

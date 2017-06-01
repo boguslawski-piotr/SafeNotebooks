@@ -56,6 +56,10 @@ namespace SafeNotebooks
 
         public App()
         {
+            // TODO: do wywalenia!
+            SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
+			// ***
+
             InitializeLocalization();
             InitializeComponent();
 
@@ -125,7 +129,7 @@ namespace SafeNotebooks
 
 			// Load available notebooks
 
-			await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemChildren);
+			await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
 
             // TODO: restore last selections (with unlocking if necessary)
 			//await App.DataManager.SelectNotebookAsync(n);
