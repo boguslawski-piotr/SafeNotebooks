@@ -18,9 +18,14 @@ namespace SafeNotebooks
 
         public TState State = TState.Splash;
 
+        PINBehavior TruePIN;
+
         public UnlockWnd()
         {
             InitializeComponent();
+
+            TruePIN = new PINBehavior();
+            _PIN.Behaviors.Add(TruePIN);
         }
 
         protected override void OnAppearing()
@@ -32,14 +37,14 @@ namespace SafeNotebooks
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            PK_Focused(this, new FocusEventArgs(PIN, PIN.IsFocused));
+            PIN_Focused(this, new FocusEventArgs(_PIN, _PIN.IsFocused));
         }
 
         public void SetSplashMode()
         {
             State = TState.Splash;
-            PIN.IsVisible = false;
-            PK_Focused(this, new FocusEventArgs(PIN, false));
+            _PIN.IsVisible = false;
+            PIN_Focused(this, new FocusEventArgs(_PIN, false));
         }
 
         public bool UnlockingNeeded
@@ -58,71 +63,73 @@ namespace SafeNotebooks
 
             if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
             {
-                if (RuntimePlatformTryToUnlock())
+                if (TryToUnlockUsingDeviceOwnerAuthentication())
                 {
                     return;
                 };
             }
 
-            CrossPlatformTryToUnlock();
+            TryToUnlockUsingPin();
         }
 
         public event EventHandler UnlockedCorrectly = null;
 
         //
 
-        bool RuntimePlatformTryToUnlock()
+        bool TryToUnlockUsingDeviceOwnerAuthentication()
         {
-            return App.SecretsManager.AuthenticateDeviceOwner(T.Localized("AuthenticateDeviceOwnerReason"), _RuntimePlatformUnlockedCorrectly, _RuntimePlatformNotUnlocked);
+            return App.SecretsManager.AuthenticateDeviceOwner(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDeviceOwnerAuthentication, OnNotUnlockedUsingDeviceOwnerAuthentication);
         }
 
-        void _RuntimePlatformUnlockedCorrectly()
+        void OnUnlockedCorrectlyUsingDeviceOwnerAuthentication()
         {
-            CrossPlatformTryToUnlock();
-        }
+            TryToUnlockUsingPin();
+		}
 
-        void _RuntimePlatformNotUnlocked(string Error)
+        void OnNotUnlockedUsingDeviceOwnerAuthentication(string error)
         {
             State = TState.Locked;
         }
 
-        void CrossPlatformTryToUnlock()
+        void TryToUnlockUsingPin()
         {
             if (App.Settings.UnlockUsingPin)
             {
                 SetUnlockingMode();
 
-                PIN.IsVisible = true;
-                PIN.Focus();
+                _PIN.IsVisible = true;
+                _PIN.Focus();
             }
             else
-                _UnlockedCorrectly();
+                OnUnlockedCorrectly();
         }
 
-        async Task CrossPlatformCheckPK()
+        async Task CheckPIN()
         {
-            string _PIN = PIN.Text ?? "";
-            PIN.Text = "";
-
-            if (await App.SecretsManager.ComparePasswordAsync(App.Name, _PIN))
+            if (await App.SecretsManager.ComparePasswordAsync(App.Name, TruePIN.Text ?? ""))
             {
-				_UnlockedCorrectly();
+                OnUnlockedCorrectly();
             }
             else
             {
-                PIN.Focus();
-                await PIN.ScaleTo(0.3); // TODO: zrobić animację wstrząśnięcia ;)
-				await PIN.ScaleTo(1);
+                Color textColor = _PIN.TextColor;
+                _PIN.TextColor = Color.Red;
+                await _PIN.ScaleTo(0.3);
+                await _PIN.ScaleTo(1);
+                _PIN.TextColor = textColor;
+                _PIN.Focus();
             }
+
+            _PIN.Text = "";
         }
 
-        void _UnlockedCorrectly()
+        void OnUnlockedCorrectly()
         {
             State = TState.Unlocked;
             UnlockedCorrectly?.Invoke(this, null);
         }
 
-        void _NotUnlocked()
+        void OnNotUnlocked()
         {
             State = TState.Locked;
         }
@@ -131,22 +138,22 @@ namespace SafeNotebooks
 
         void UnlockBtn_Clicked(object sender, System.EventArgs e)
         {
-            if (PIN.IsVisible)
+            if (_PIN.IsVisible)
             {
-                CrossPlatformCheckPK();
+                CheckPIN();
             }
             else
                 TryToUnlock();
         }
 
-        void PK_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
+        void PIN_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
         {
             if (Device.Idiom == TargetIdiom.Desktop)
                 return;
 
-			BatchBegin();
+            BatchBegin();
 
-			if (e.IsFocused)
+            if (e.IsFocused)
             {
                 _View.VerticalOptions = LayoutOptions.FillAndExpand;
                 _View.Padding = new Thickness(0,
@@ -155,22 +162,22 @@ namespace SafeNotebooks
                                                     : Metrics.AppBarHeightPortrait / (Device.RuntimePlatform == Device.iOS ? 1 : 2)),
                                                0,
                                                0);
-            	Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;
+                _Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;
             }
             else
             {
                 _View.VerticalOptions = LayoutOptions.CenterAndExpand;
                 _View.Padding = new Thickness(0);
-				Logo.IsVisible = true;
+                _Logo.IsVisible = true;
             }
 
-			BatchCommit();
+            BatchCommit();
         }
 
-        void PK_Completed(object sender, System.EventArgs e)
+        void PIN_Completed(object sender, System.EventArgs e)
         {
-            if (!string.IsNullOrEmpty(PIN.Text))
-                CrossPlatformCheckPK();
+            if (!string.IsNullOrEmpty(_PIN.Text))
+                CheckPIN();
         }
 
     }
