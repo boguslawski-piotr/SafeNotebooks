@@ -20,13 +20,6 @@
 												<action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem" />
 											</connections>
 										</menuItem>
-										<menuItem isSeparatorItem="YES" id="VOq-y0-SEH" />
-										<menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW" />
-										<menuItem isSeparatorItem="YES" id="wFC-TO-SCJ" />
-										<menuItem title="Services" id="NMo-om-nkz">
-											<modifierMask key="keyEquivalentModifierMask" />
-											<menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5" />
-										</menuItem>
 										<menuItem isSeparatorItem="YES" id="4je-JR-u6R" />
 										<menuItem title="Hide Safe Notebooks" keyEquivalent="h" id="Olw-nP-bQN">
 											<connections>
@@ -55,18 +48,7 @@
 								</menu>
 							</menuItem>
 
-							<menuItem title="Help" id="wpr-3q-Mcd">
-								<modifierMask key="keyEquivalentModifierMask" />
-								<menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
-									<items>
-										<menuItem title="Safe Notebooks Help" keyEquivalent="?" id="FKE-Sm-Kum">
-											<connections>
-												<action selector="showHelp:" target="Ady-hI-5gd" id="y7X-2Q-9no" />
-											</connections>
-										</menuItem>
-									</items>
-								</menu>
-							</menuItem>
+
 						</items>
 					</menu>
 					<connections>
