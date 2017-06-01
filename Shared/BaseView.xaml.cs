@@ -19,7 +19,7 @@ namespace SafeNotebooks
 
 		public void SelectUnselectItem_Clicked(object sender, System.EventArgs e)
 		{
-			if ((sender as ImageEx).CommandParameter is Item item)
+			if ((sender as ImageEx)?.CommandParameter is Item item)
 				item.IsSelected = !item.IsSelected;
 		}
 
@@ -35,7 +35,7 @@ namespace SafeNotebooks
 
 		public async void DeleteItem_Clicked(object sender, System.EventArgs e)
 		{
-			if ((sender as MenuItem).CommandParameter is Item item)
+			if ((sender as MenuItem)?.CommandParameter is Item item)
 				await item.DeleteAsync();
 		}
 		

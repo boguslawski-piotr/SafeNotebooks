@@ -35,7 +35,7 @@
                         HorizontalTextAlignment = "Center"
                         HorizontalOptions = "FillAndExpand" />
 
-                    <pbXForms:FlatButton
+                    <pbXForms:PIButton
                         x:Name = "CancelSearchBtn"
                         IsVisible = "false"
                         HeightRequest = "{x:Static pbXForms:Metrics.IconHeight}"
