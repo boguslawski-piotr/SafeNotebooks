@@ -6,13 +6,14 @@
     xmlns:T = "clr-namespace:pbXForms"
     xmlns:local = "clr-namespace:SafeNotebooks"
 	x:Class = "SafeNotebooks.TestView"
-    BackgroundColor="Fuchsia">
+    BackgroundColor="Fuchsia"
+    BindingContext="{x:Static local:TestView.Model}">
 
 	<ContentView.Content>
 
         <StackLayout Style="{StaticResource stVerticalNoSpaces}">
-            <Label Text="to jest test!!!" />
-            <Label Text="to jest test!!!" />
+            <Label Text="{Binding ModelTestProperty}" />
+            <Label Text="{x:Static local:TestView.TestProperty}" />
             <Label Text="to jest test!!!" />
             <Label Text="to jest test!!!" />
             <Button Text="back" Clicked="Hide_Clicked" />
