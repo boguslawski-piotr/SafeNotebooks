@@ -158,7 +158,8 @@ namespace SafeNotebooks
 
         void EditItemsBtn_Clicked(object sender, System.EventArgs e)
         {
-            App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled;
+            if(App.NotebooksManager.SelectedNotebook != null)
+                App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled;
         }
     }
 }
