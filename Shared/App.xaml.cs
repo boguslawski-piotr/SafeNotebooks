@@ -44,12 +44,12 @@ namespace SafeNotebooks
         static Lazy<NotebooksManager> _NotebooksManager = new Lazy<NotebooksManager>(() => new NotebooksManager());
         public static NotebooksManager NotebooksManager => _NotebooksManager.Value;
 
-		// Settings in AppSettings.cs
+        // Settings in AppSettings.cs
 
 
-		//
+        //
 
-		void InitializeLocalization()
+        void InitializeLocalization()
         {
             LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly);
         }
@@ -58,17 +58,17 @@ namespace SafeNotebooks
         {
             // TODO: do wywalenia!
             SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
-			// ***
+            // ***
 
             InitializeLocalization();
             InitializeComponent();
 
 #if DEBUG
-			Tests();
+            Tests();
 #endif
 
-			MainPage = new MainWnd();
-		}
+            MainPage = new MainWnd();
+        }
 
 
         //
@@ -98,9 +98,9 @@ namespace SafeNotebooks
 
             UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
 
-			// Give a little time for everything to be done in case there was 
+            // Give a little time for everything to be done in case there was 
             // no action on the UnlockWnd window displayed during OnStart execution.
-			await Task.Delay(500); 
+            await Task.Delay(500);
 
             Device.BeginInvokeOnMainThread(async () =>
             {
@@ -120,20 +120,20 @@ namespace SafeNotebooks
 
             // Prepare Notebooks Manager
 
-			NotebooksManager.SecretsManager = SecretsManager;
+            NotebooksManager.SecretsManager = SecretsManager;
             NotebooksManager.UI = new NotebooksManagerUI();
             await NotebooksManager.InitializeAsync(Settings.Current.Storage);
 
-			// Prepare background tasks
-			
+            // Prepare background tasks
 
-			// Load available notebooks
 
-			await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
+            // Load available notebooks
+
+            await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
 
             // TODO: restore last selections (with unlocking if necessary)
-			//await App.DataManager.SelectNotebookAsync(n);
-		}
+            //await App.DataManager.SelectNotebookAsync(n);
+        }
 
 
         //
@@ -212,5 +212,5 @@ namespace SafeNotebooks
                 await Application.Current.MainPage.Navigation.PopModalAsync(false);
             });
         }
-	}
+    }
 }
