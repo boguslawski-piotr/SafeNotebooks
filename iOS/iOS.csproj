@@ -7,7 +7,7 @@
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>SafeNotebooks.iOS</RootNamespace>
-    <AssemblyName>SafeNotebooks.iOS</AssemblyName>
+    <AssemblyName>Safe Notebooks</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <ReleaseVersion>1.0.0</ReleaseVersion>
@@ -31,9 +31,10 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
     <CodesignEntitlements></CodesignEntitlements>
+<MtouchFloat32>true</MtouchFloat32>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType></DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -46,9 +47,10 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType></DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -62,6 +64,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <CodesignEntitlements></CodesignEntitlements>
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
+<MtouchUseLlvm>true</MtouchUseLlvm>
+<MtouchFloat32>true</MtouchFloat32>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>

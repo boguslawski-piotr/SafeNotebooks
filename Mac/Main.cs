@@ -1,6 +1,6 @@
 ﻿using AppKit;
 
-namespace Mac
+namespace SafeNotebooks.macOS
 {
     static class MainClass
     {

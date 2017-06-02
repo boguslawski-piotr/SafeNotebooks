@@ -10,7 +10,7 @@ using System.Reflection;
 using CoreGraphics;
 using Newtonsoft.Json;
 
-namespace Mac
+namespace SafeNotebooks.macOS
 {
     [Register("AppDelegate")]
 	public class AppDelegate : FormsApplicationDelegate
