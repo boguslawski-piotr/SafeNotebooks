@@ -32,70 +32,74 @@ namespace SafeNotebooks
             }
         }
 
-        static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new AesCryptographer(), Settings.Current.Storage));
-        public static ISecretsManager SecretsManager => _SecretsManager.Value;
 
-        static Lazy<StoragesManager> _StoragesManager = new Lazy<StoragesManager>(() => new StoragesManager(App.Name));
-        public static StoragesManager StoragesManager => _StoragesManager.Value;
+        ISecretsManager _SecretsManager;
+        public static ISecretsManager SecretsManager => (Application.Current as App)._SecretsManager;
 
-        static Lazy<NotebooksManager> _NotebooksManager = new Lazy<NotebooksManager>(() => new NotebooksManager());
-        public static NotebooksManager NotebooksManager => _NotebooksManager.Value;
+        StoragesManager _StoragesManager = new StoragesManager(App.Name);
+        public static StoragesManager StoragesManager => (Application.Current as App)._StoragesManager;
+
+        NotebooksManager _NotebooksManager = new NotebooksManager();
+        public static NotebooksManager NotebooksManager => (Application.Current as App)._NotebooksManager;
 
         // Settings in AppSettings.cs
 
 
         //
 
+        UnlockWnd UnlockWnd;
+
+        static DateTime _startTime = DateTime.Now;
+        TimeSpan _timeFromStart => DateTime.Now - _startTime;
+
         void InitializeLocalization()
         {
+            LocalizationManager.AddResource("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly, true);
             LocalizationManager.AddResource("pbXNet.Texts.T", typeof(pbXNet.LocalizationManager).GetTypeInfo().Assembly);
-            LocalizationManager.AddResource("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly);
+        }
+
+        void InitializeSecretsManager()
+        {
+            if (_SecretsManager != null)
+                return;
+
+            _SecretsManager = new SecretsManager(App.Name, new AesCryptographer(), Settings.Current.Storage);
+
+            // TODO: do wywalenia!
+            _SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
+            // ***
         }
 
         public App()
         {
-            // TODO: do wywalenia!
-            SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
-            // ***
+            Debug.WriteLine($"App constructor: {_timeFromStart}");
 
             InitializeLocalization();
+
+            InitializeSecretsManager();
+
             InitializeComponent();
 
 #if DEBUG
             Tests();
 #endif
-
-            MainPage = new MainWnd();
         }
 
-
-        //
-
-        static Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
-        static UnlockWnd UnlockWnd => _UnlockWnd.Value;
-
-        protected override void OnStart()
+        protected override async void OnStart()
         {
-            Debug.WriteLine("OnStart");
+            Debug.WriteLine($"OnStart: {_timeFromStart}");
 
-            if (UnlockWnd.UnlockingNeeded)
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
-                    UnlockWnd.SetUnlockingMode();
-                    await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
-                });
-            }
-            else
-            {
-                ContinueOnStartAsync();
-            }
+            MainPage = new MainWnd();
+
+            UnlockWnd = new UnlockWnd();
+            UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
+            UnlockWnd.SetUnlockingMode();
+            await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
         }
 
         async void UnlockedCorrectlyInOnStart(object sender, EventArgs e)
         {
-            Debug.WriteLine("UnlockedCorrectlyInOnStart");
+            Debug.WriteLine($"UnlockedCorrectlyInOnStart: {_timeFromStart}");
 
             UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
 
@@ -103,21 +107,25 @@ namespace SafeNotebooks
             // no action on the UnlockWnd window displayed during OnStart execution.
             await Task.Delay(500);
 
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                await Application.Current.MainPage.Navigation.PopModalAsync(false);
-            });
+            //Device.BeginInvokeOnMainThread(async () =>
+            //{
+            await Application.Current.MainPage.Navigation.PopModalAsync(true);
+            UnlockWnd = null;
+            //});
 
             ContinueOnStartAsync();
         }
 
         async Task ContinueOnStartAsync()
         {
-            Debug.WriteLine("ContinueOnStart");
+            Debug.WriteLine($"ContinueOnStart: {_timeFromStart}");
 
             // Prepare available file systems/storages
 
-            await StoragesManager.InitializeAsync();
+            if (SecretsManager == null)
+                InitializeSecretsManager();
+
+            await _StoragesManager.InitializeAsync();
 
             // Prepare Notebooks Manager
 
@@ -125,47 +133,41 @@ namespace SafeNotebooks
             NotebooksManager.UI = new NotebooksManagerUI();
             await NotebooksManager.InitializeAsync(Settings.Current.Storage);
 
-            //
-
-            // Load available notebooks
+            // Load/reload available notebooks
 
             await App.NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
 
             // TODO: restore last selections (with unlocking if necessary)
             //await App.DataManager.SelectNotebookAsync(n);
+
+            Debug.WriteLine($"ContinueOnStart: END: {_timeFromStart}");
         }
 
 
         //
 
-        protected override void OnSleep()
+        protected override async void OnSleep()
         {
             Debug.WriteLine("OnSleep");
 
             // Do not do anything if unlocking is in progress (app loses focus because system needs to show some dialogs)
-            if (UnlockWnd.State == UnlockWnd.TState.Unlocking)
-                return;
-            IEnumerator<Xamarin.Forms.Page> ModalPages = MainPage.Navigation.ModalStack.GetEnumerator();
-            ModalPages.Reset();
-            while (ModalPages.MoveNext())
+            if (UnlockWnd != null)
             {
-                if (ModalPages.Current == UnlockWnd)
+                if (UnlockWnd.State == UnlockWnd.TState.Unlocking)
+                {
+                    Debug.WriteLine("OnSleep: did nothing");
                     return;
+                }
             }
-
 
             // TODO: if user want to: lock all data and clear all forms (unselect)
             //Data.SelectNotebook(null, false);
             //Data.SelectPage(null, false);
 
-
             // Show lock screen in order to hide data in system task manager
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                UnlockWnd.SetSplashMode();
-                await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
-            });
-            //await Task.Delay(5000);
+            UnlockWnd = new UnlockWnd();
+            UnlockWnd.SetSplashMode();
+            await MainPage.Navigation.PushModalAsync(UnlockWnd, false);
         }
 
 
@@ -176,22 +178,14 @@ namespace SafeNotebooks
             Debug.WriteLine("OnResume");
 
             // Do not do anything if not unlocked
-            if (UnlockWnd.State != UnlockWnd.TState.Splash)
+            if (UnlockWnd == null || UnlockWnd.State != UnlockWnd.TState.Splash)
+            {
+                Debug.WriteLine("OnResume: did nothing");
                 return;
-
-            if (UnlockWnd.UnlockingNeeded)
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
-                    UnlockWnd.TryToUnlock();
-                });
-            }
-            else
-            {
-                ContinueOnResume();
             }
 
+            UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
+            UnlockWnd.TryToUnlock();
         }
 
         void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
@@ -199,18 +193,18 @@ namespace SafeNotebooks
             Debug.WriteLine("UnlockedCorrectlyInOnResume");
 
             UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
-
-            ContinueOnResume();
+            ContinueOnResumeAsync();
         }
 
-        void ContinueOnResume()
+        async Task ContinueOnResumeAsync()
         {
             Debug.WriteLine("ContinueOnResume");
 
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                await Application.Current.MainPage.Navigation.PopModalAsync(false);
-            });
+            //Device.BeginInvokeOnMainThread(async () =>
+            //{
+            await Application.Current.MainPage.Navigation.PopModalAsync(true);
+            UnlockWnd = null;
+            //});
         }
     }
 }
