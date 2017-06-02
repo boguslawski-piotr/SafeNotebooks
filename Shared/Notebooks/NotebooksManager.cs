@@ -167,11 +167,20 @@ namespace SafeNotebooks
             //Debug.WriteLine($"NotebooksManager: SaveAllModifiedDataTask: started at {DateTime.Now.ToString("HH: mm:ss.ffff")}");
 
             await Task.Delay(1000);
-            await NotebooksManager.SaveAllAsync();
-
-            lock (_saveAllTaskRunningLock)
+            try
             {
-                _saveAllTaskRunning = false;
+                await NotebooksManager.SaveAllAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"NotebooksManager: SaveAllTasks: error: {ex.Message}");
+            }
+            finally
+            {
+                lock (_saveAllTaskRunningLock)
+                {
+                    _saveAllTaskRunning = false;
+                }
             }
 
             //Debug.WriteLine($"NotebooksManager: SaveAllModifiedDataTask: ended at {DateTime.Now.ToString("HH: mm:ss.ffff")}");
@@ -291,32 +300,35 @@ namespace SafeNotebooks
                 storage = forWhom.Storage;
 
             IEnumerable<string> idsInStorage = await storage.FindIdsAsync(pattern);
-            foreach (var idInStorage in idsInStorage)
+            if (idsInStorage != null)
             {
-                T item = (T)forWhom.Items?.Find((i) => i.IdForStorage == idInStorage);
-                if (item == null)
+                foreach (var idInStorage in idsInStorage)
                 {
-                    tasks.Add(CreateItemAsync(idInStorage));
-                    tasksExecuted++;
-                }
-                else
-                {
-                    if (await storage.GetModifiedOnAsync(IdForStorage) > item.ModifiedOn)
+                    T item = (T)forWhom.Items?.Find((i) => i.IdForStorage == idInStorage);
+                    if (item == null)
                     {
-                        tasks.Add(ReloadItemAsync(item));
+                        tasks.Add(CreateItemAsync(idInStorage));
                         tasksExecuted++;
                     }
-                }
+                    else
+                    {
+                        if (await storage.GetModifiedOnAsync(IdForStorage) > item.ModifiedOn)
+                        {
+                            tasks.Add(ReloadItemAsync(item));
+                            tasksExecuted++;
+                        }
+                    }
 
-                if (tasks.Count > 50)
-                {
-                    await Task.WhenAll(tasks);
-                    tasks.Clear();
+                    if (tasks.Count > 50)
+                    {
+                        await Task.WhenAll(tasks);
+                        tasks.Clear();
 
-                    // Give a little time for UI to refresh content
-                    await Task.Delay(25);
+                        // Give a little time for UI to refresh content
+                        await Task.Delay(25);
+                    }
                 }
-			}
+            }
 
             if (tasks.Count > 0)
                 await Task.WhenAll(tasks);

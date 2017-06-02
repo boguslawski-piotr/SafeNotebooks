@@ -16,13 +16,14 @@ namespace SafeNotebooks
         public List<Item> Items { get; protected set; }
 
         public ObservableCollection<Item> ObservableItems { get; protected set; }
-		protected void CreateObservableItems(IEnumerable<Item> l)
-		{
-			ObservableItems = new ObservableCollection<Item>(l);
-			NotebooksManager?.OnItemObservableItemsCreated(this);
-		}
 
-		public struct SortParameters
+        protected void CreateObservableItems(IEnumerable<Item> l)
+        {
+            ObservableItems = new ObservableCollection<Item>(l);
+            NotebooksManager?.OnItemObservableItemsCreated(this);
+        }
+
+        public struct SortParameters
         {
             public bool ByName;
             public bool ByDate;
@@ -70,7 +71,6 @@ namespace SafeNotebooks
             }
         }
 
-
         protected override string SerializeNotEncryptedData()
         {
             return base.SerializeNotEncryptedData() +
@@ -95,7 +95,7 @@ namespace SafeNotebooks
                 return false;
             if (Items != null)
             {
-                foreach (var i in Items)
+                foreach (var i in Items.ToList())
                     if (!await i.SaveAllAsync(force))
                         return false;
             }
@@ -111,7 +111,7 @@ namespace SafeNotebooks
             {
                 if (Items == null)
                     Items = new List<Item>();
-                
+
                 Items.Add(item);
 
                 // This is only for UI to show loading/adding in bulk progress...

@@ -17,9 +17,9 @@ namespace SafeNotebooks
         {
             InitializeComponent();
 
-			MainWnd.Current.MasterViewWillBeShown += MasterViewWillBeShown;
+            MainWnd.Current.MasterViewWillBeShown += MasterViewWillBeShown;
 
-			App.NotebooksManager.NotebooksAreStartingToLoad += NotebooksAreStartingToLoad;
+            App.NotebooksManager.NotebooksAreStartingToLoad += NotebooksAreStartingToLoad;
             App.NotebooksManager.NotebooksLoaded += NotebooksLoaded;
 
             App.NotebooksManager.ItemObservableItemsCreated += ObservableItemsCreated;
@@ -41,16 +41,16 @@ namespace SafeNotebooks
                 AppTitle.FontSize = Device.GetNamedSize(NamedSize.Medium, AppTitle);
             }
             else
-				AppTitle.FontSize = Device.GetNamedSize(NamedSize.Large, AppTitle);
-		}
+                AppTitle.FontSize = Device.GetNamedSize(NamedSize.Large, AppTitle);
+        }
 
         //
 
         void MasterViewWillBeShown(object sender, (View view, object param) e)
         {
-            if(e.view == this)
+            if (e.view == this)
                 Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, App.NotebooksManager.SelectedNotebook));
-		}
+        }
 
         void NotebooksAreStartingToLoad(object sender, EventArgs ea)
         {
@@ -75,21 +75,21 @@ namespace SafeNotebooks
         }
 
 
-		//
+        //
 
-		async void RefreshNotebooks()
-		{
-			await App.NotebooksManager.LoadNotebooksAsync(App.StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
-			Device.BeginInvokeOnMainThread(ListCtl.EndRefresh);
-		}
+        async void RefreshNotebooks()
+        {
+            await App.NotebooksManager.LoadNotebooksAsync(App.StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
+            Device.BeginInvokeOnMainThread(ListCtl.EndRefresh);
+        }
 
         async Task SelectNotebook(Notebook notebook)
-		{
+        {
             await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, notebook);
-			await App.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
-		}
+            await App.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
+        }
 
-		async void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
+        async void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item is Notebook notebook)
             {
@@ -156,7 +156,7 @@ namespace SafeNotebooks
             StorageOnFileSystem<string> storage = await App.StoragesManager.SelectStorageAsync(SelectStorageUIAsync);
             if (storage != null)
             {
-                //for (int i = 0; i < 100; i++)
+                //for (int i = 0; i < 200; i++)
                 //{
                 //    await App.NotebooksManager.NewNotebookAsync(storage);
                 //}
@@ -164,7 +164,7 @@ namespace SafeNotebooks
                 if (notebook != null)
                 {
                     Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, notebook));
-					await SelectNotebook(notebook);
+                    await SelectNotebook(notebook);
                 }
             }
         }

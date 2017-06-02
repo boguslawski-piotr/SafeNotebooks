@@ -35,9 +35,6 @@ namespace SafeNotebooks
         static Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new AesCryptographer(), Settings.Current.Storage));
         public static ISecretsManager SecretsManager => _SecretsManager.Value;
 
-        static Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
-        static UnlockWnd UnlockWnd => _UnlockWnd.Value;
-
         static Lazy<StoragesManager> _StoragesManager = new Lazy<StoragesManager>(() => new StoragesManager(App.Name));
         public static StoragesManager StoragesManager => _StoragesManager.Value;
 
@@ -51,7 +48,8 @@ namespace SafeNotebooks
 
         void InitializeLocalization()
         {
-            LocalizationManager.AddResources("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly);
+            LocalizationManager.AddResource("pbXNet.Texts.T", typeof(pbXNet.LocalizationManager).GetTypeInfo().Assembly);
+            LocalizationManager.AddResource("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly);
         }
 
         public App()
@@ -72,6 +70,9 @@ namespace SafeNotebooks
 
 
         //
+
+        static Lazy<UnlockWnd> _UnlockWnd = new Lazy<UnlockWnd>(() => new UnlockWnd());
+        static UnlockWnd UnlockWnd => _UnlockWnd.Value;
 
         protected override void OnStart()
         {
@@ -124,8 +125,7 @@ namespace SafeNotebooks
             NotebooksManager.UI = new NotebooksManagerUI();
             await NotebooksManager.InitializeAsync(Settings.Current.Storage);
 
-            // Prepare background tasks
-
+            //
 
             // Load available notebooks
 

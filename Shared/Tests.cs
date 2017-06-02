@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using pbXForms;
@@ -12,34 +13,16 @@ namespace SafeNotebooks
 {
     public partial class App : Application
     {
-        //public class SampleData
-        //{
-        //    public string Id;
-        //    public DateTime CreatedOn;
-        //    public DateTime ModifiedOn;
-        //    public Color Color = Color.Transparent;
-        //    public string Nick;
-        //    public CKeyLifeTime CKeyLifeTime;
-        //    public byte[] IV;
-        //}
-
         async void Tests()
         {
+            //foreach (var folder in Enum.GetValues(typeof(Environment.SpecialFolder)))
+            //{
+            //    Debug.WriteLine("{0}={1}", folder, System.Environment.GetFolderPath((Environment.SpecialFolder)folder));
+            //}
+
             //***
 
             //string s = DeviceEx.Id;
-
-            //***
-
-            //SampleData dd = new SampleData();
-            //dd.Color = Color.Red;
-            //string d = JsonConvert.SerializeObject(dd);
-            //SampleData ddd = JsonConvert.DeserializeObject<SampleData>(d);
-
-            //Color c = Color.Red;
-            //string d = JsonConvert.SerializeObject(c);
-            //Color cd = JsonConvert.DeserializeObject<Color>(d);
-
 
             //***
 
