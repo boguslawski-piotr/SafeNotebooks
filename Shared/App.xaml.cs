@@ -75,9 +75,7 @@ namespace SafeNotebooks
             Debug.WriteLine($"App constructor: {_timeFromStart}");
 
             InitializeLocalization();
-
             InitializeSecretsManager();
-
             InitializeComponent();
 
 #if DEBUG
@@ -107,11 +105,8 @@ namespace SafeNotebooks
             // no action on the UnlockWnd window displayed during OnStart execution.
             await Task.Delay(500);
 
-            //Device.BeginInvokeOnMainThread(async () =>
-            //{
             await Application.Current.MainPage.Navigation.PopModalAsync(true);
             UnlockWnd = null;
-            //});
 
             ContinueOnStartAsync();
         }
@@ -188,23 +183,20 @@ namespace SafeNotebooks
             UnlockWnd.TryToUnlock();
         }
 
-        void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
+        async void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
         {
             Debug.WriteLine("UnlockedCorrectlyInOnResume");
 
             UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
+            await Application.Current.MainPage.Navigation.PopModalAsync(true);
+            UnlockWnd = null;
+
             ContinueOnResumeAsync();
         }
 
         async Task ContinueOnResumeAsync()
         {
             Debug.WriteLine("ContinueOnResume");
-
-            //Device.BeginInvokeOnMainThread(async () =>
-            //{
-            await Application.Current.MainPage.Navigation.PopModalAsync(true);
-            UnlockWnd = null;
-            //});
         }
     }
 }
