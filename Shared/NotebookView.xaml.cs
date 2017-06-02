@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using pbXForms;
@@ -119,9 +119,14 @@ namespace SafeNotebooks
 
         //
 
-        async void BackBtn_Clicked(object sender, System.EventArgs e)
+        public override async void OnSwipeLeftToRight()
         {
             await MainWnd.Current.ShowMasterViewAsync<NotebooksView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back);
+        }
+
+        void BackBtn_Clicked(object sender, System.EventArgs e)
+        {
+            OnSwipeLeftToRight();
         }
 
         void EditBtn_Clicked(object sender, System.EventArgs e)
@@ -132,16 +137,16 @@ namespace SafeNotebooks
 
         //
 
-		public override void SearchQueryChanged(string text)
-		{
-		}
+        public override void SearchQueryChanged(string text)
+        {
+        }
 
 
         //
 
-		void SortBtn_Clicked(object sender, System.EventArgs e)
+        void SortBtn_Clicked(object sender, System.EventArgs e)
         {
-			base.SortBtn_Clicked(T.Localized("Pages"), App.NotebooksManager.SelectedNotebook, ListCtl);
+            base.SortBtn_Clicked(T.Localized("Pages"), App.NotebooksManager.SelectedNotebook, ListCtl);
         }
 
 
@@ -158,7 +163,7 @@ namespace SafeNotebooks
 
         void EditItemsBtn_Clicked(object sender, System.EventArgs e)
         {
-            if(App.NotebooksManager.SelectedNotebook != null)
+            if (App.NotebooksManager.SelectedNotebook != null)
                 App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled;
         }
     }

@@ -20,10 +20,10 @@ namespace SafeNotebooks
             App.NotebooksManager.PageSelected += PageSelected;
 
             ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
-			ListCtl.ItemTapped += ListCtl_ItemTapped;
+            ListCtl.ItemTapped += ListCtl_ItemTapped;
 
             InitializeSearchBarFor(ListCtl);
-		}
+        }
 
         protected override void ContinueOnSizeAllocated(double width, double height)
         {
@@ -132,10 +132,16 @@ namespace SafeNotebooks
 
         //
 
-        async void BackBtn_Clicked(object sender, System.EventArgs e)
+        public override async void OnSwipeLeftToRight()
         {
-            await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back, App.NotebooksManager.SelectedNotebook);
-		}
+            if (!MainWnd.Current.IsSplitView)
+                await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back, App.NotebooksManager.SelectedNotebook);
+        }
+
+        void BackBtn_Clicked(object sender, System.EventArgs e)
+        {
+            OnSwipeLeftToRight();
+        }
 
         void EditBtn_Clicked(object sender, System.EventArgs e)
         {
@@ -143,18 +149,18 @@ namespace SafeNotebooks
         }
 
 
-		//
+        //
 
-		public override void SearchQueryChanged(string text)
-		{
-		}
+        public override void SearchQueryChanged(string text)
+        {
+        }
 
-		
+
         //
 
         void SortBtn_Clicked(object sender, System.EventArgs e)
         {
-			base.SortBtn_Clicked(T.Localized("Notes"), App.NotebooksManager.SelectedPage, ListCtl, true);
+            base.SortBtn_Clicked(T.Localized("Notes"), App.NotebooksManager.SelectedPage, ListCtl, true);
         }
 
         async void NewBtn_Clicked(object sender, System.EventArgs e)
