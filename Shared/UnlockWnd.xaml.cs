@@ -47,7 +47,7 @@ namespace SafeNotebooks
             PIN_Focused(this, new FocusEventArgs(_PIN, false));
         }
 
-        public bool UnlockingNeeded
+        public static bool UnlockingNeeded
         {
             get { return App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin; }
         }
@@ -84,7 +84,7 @@ namespace SafeNotebooks
         void OnUnlockedCorrectlyUsingDeviceOwnerAuthentication()
         {
             TryToUnlockUsingPin();
-		}
+        }
 
         void OnNotUnlockedUsingDeviceOwnerAuthentication(string error)
         {

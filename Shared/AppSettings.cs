@@ -24,8 +24,8 @@ namespace SafeNotebooks
 
                 public async Task<DateTime> GetModifiedOnAsync(string id) => DateTime.MinValue; // TODO: obsluzyc GetModifiedOnAsync
 
-				public async Task DiscardAsync(string id) => Current.Impl.Remove(id);
-				
+                public async Task DiscardAsync(string id) => Current.Impl.Remove(id);
+
                 public async Task<string> GetACopyAsync(string id)
                 {
                     string rc = null;
@@ -37,7 +37,7 @@ namespace SafeNotebooks
                 public async Task<string> RetrieveAsync(string id)
                 {
                     string data = await GetACopyAsync(id);
-                    if(data != null)
+                    if (data != null)
                         await DiscardAsync(id);
                     return data;
                 }
@@ -50,9 +50,9 @@ namespace SafeNotebooks
 
             public static class Current
             {
-				internal static ISettings Impl => CrossSettings.Current;
-				public static ISearchableStorage<string> Storage = new Storage();
-			}
+                internal static ISettings Impl => CrossSettings.Current;
+                public static ISearchableStorage<string> Storage = new Storage();
+            }
 
 
             // Security settings
@@ -66,7 +66,7 @@ namespace SafeNotebooks
             const string TryToUnlockItemItemsKey = "_ttuii";
             static readonly bool TryToUnlockItemItemsDefault = false;
 
-			public static bool UnlockUsingDeviceOwnerAuthentication
+            public static bool UnlockUsingDeviceOwnerAuthentication
             {
                 get => Current.Impl.GetValueOrDefault<bool>(UnlockUsingDeviceOwnerAuthenticationKey, UnlockUsingDeviceOwnerAuthenticationDefault);
                 set => Current.Impl.AddOrUpdateValue<bool>(UnlockUsingDeviceOwnerAuthenticationKey, value);
@@ -77,12 +77,12 @@ namespace SafeNotebooks
                 get => Current.Impl.GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault);
                 set => Current.Impl.AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
             }
-		
+
             public static bool TryToUnlockItemItems
-			{
-				get => Current.Impl.GetValueOrDefault<bool>(TryToUnlockItemItemsKey, TryToUnlockItemItemsDefault);
-				set => Current.Impl.AddOrUpdateValue<bool>(TryToUnlockItemItemsKey, value);
-			}
-		}
+            {
+                get => Current.Impl.GetValueOrDefault<bool>(TryToUnlockItemItemsKey, TryToUnlockItemItemsDefault);
+                set => Current.Impl.AddOrUpdateValue<bool>(TryToUnlockItemItemsKey, value);
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace SafeNotebooks
             Current = this;
 
             InitializeComponent();
-			InitializeViews();
+            InitializeViews();
         }
-	}
+    }
 }

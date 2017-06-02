@@ -48,15 +48,15 @@ namespace SafeNotebooks
         {
             NotebooksAreStartingToLoad?.Invoke(this, null);
 
-			string pattern = Notebook.IdForStoragePrefix + "\\w*";
-			IList<Task> tasks = new List<Task>();
-			bool anyNotebookLoaded = false;
+            string pattern = Notebook.IdForStoragePrefix + "\\w*";
+            IList<Task> tasks = new List<Task>();
+            bool anyNotebookLoaded = false;
 
             async Task LoadNotebooksFromStorageAsync(ISearchableStorage<string> storage)
             {
                 anyNotebookLoaded |= await LoadItemsForItemAsync<Notebook>(this, pattern, tryToUnlock, storage);
                 await Task.Delay(300);
-			}
+            }
 
             foreach (var storage in storages)
             {
@@ -65,7 +65,7 @@ namespace SafeNotebooks
 
             if (tasks.Count > 0)
                 await Task.WhenAll(tasks);
-            
+
             if (anyNotebookLoaded)
                 SortItems();
 
@@ -332,7 +332,7 @@ namespace SafeNotebooks
 
             if (tasks.Count > 0)
                 await Task.WhenAll(tasks);
-            
+
             //Debug.WriteLine($"NotebooksManager: LoadItemsForItemAsync: execute time {(DateTime.Now - s).Duration()}");
             return tasksExecuted > 0;
         }
