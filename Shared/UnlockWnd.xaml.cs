@@ -6,179 +6,204 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public partial class UnlockWnd : ContentPage
-    {
-        public enum TState
-        {
-            Splash,
-            Unlocking,
-            Unlocked,
-            Locked,
-        }
+	public partial class UnlockWnd : ContentPage
+	{
+		public enum TState
+		{
+			Splash,
+			Unlocking,
+			Unlocked,
+			Locked,
+		}
 
-        public TState State = TState.Splash;
+		public TState State = TState.Splash;
 
-        PINBehavior TruePIN;
+		PINBehavior TruePIN;
 
-        public UnlockWnd()
-        {
-            InitializeComponent();
+		public UnlockWnd()
+		{
+			InitializeComponent();
 
-            TruePIN = new PINBehavior();
-            _PIN.Behaviors.Add(TruePIN);
-        }
+			TruePIN = new PINBehavior();
+			_PIN.Behaviors.Add(TruePIN);
+		}
 
-        protected override void OnAppearing()
-        {
-            if (State == TState.Unlocking)
-                TryToUnlock();
-        }
+		protected override void OnAppearing()
+		{
+			if (State == TState.Unlocking)
+				TryToUnlock();
+		}
 
-        protected override void OnSizeAllocated(double width, double height)
-        {
-            base.OnSizeAllocated(width, height);
-            PIN_Focused(this, new FocusEventArgs(_PIN, _PIN.IsFocused));
-        }
+		protected override void OnSizeAllocated(double width, double height)
+		{
+			base.OnSizeAllocated(width, height);
+			PIN_Focused(this, new FocusEventArgs(_PIN, _PIN.IsFocused));
+		}
 
-        public void SetSplashMode()
-        {
-            State = TState.Splash;
-            _PIN.IsVisible = false;
-            PIN_Focused(this, new FocusEventArgs(_PIN, false));
-        }
+		public void SetSplashMode()
+		{
+			State = TState.Splash;
 
-        public static bool UnlockingNeeded
-        {
-            get { return App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin; }
-        }
+			_Message.Text = "";
+			_Message.IsVisible = false;
+			_PIN.IsVisible = false;
+			_UnlockOrCancelBtn.IsVisible = false;
+			PIN_Focused(this, new FocusEventArgs(_PIN, false));
+		}
 
-        public void SetUnlockingMode()
-        {
-            State = TState.Unlocking;
-        }
+		public static bool UnlockingNeeded
+		{
+			get { return App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin; }
+		}
 
-        public void TryToUnlock()
-        {
-            SetUnlockingMode();
+		public void SetUnlockingMode()
+		{
+			State = TState.Unlocking;
 
-            if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
-            {
-                if (TryToUnlockUsingDeviceOwnerAuthentication())
-                {
-                    return;
-                };
-            }
+			_Message.Text = "";
+			_Message.IsVisible = false;
+			_UnlockOrCancelBtn.Text = "";
+			_UnlockOrCancelBtn.IsVisible = false;
+		}
 
-            TryToUnlockUsingPin();
-        }
+		public void TryToUnlock()
+		{
+			SetUnlockingMode();
 
-        public event EventHandler UnlockedCorrectly = null;
+			if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
+			{
+				if (TryToUnlockUsingDeviceOwnerAuthentication())
+				{
+					_Message.IsVisible = true;
+					if (App.SecretsManager.DeviceOwnerAuthenticationWithBiometricsAvailable)
+						_Message.Text = "Scan your fingerprint...";
+					else
+						_Message.Text = "Enter your pasword/PIN...";
+					return;
+				};
+			}
 
-        //
+			TryToUnlockUsingPin();
+		}
 
-        bool TryToUnlockUsingDeviceOwnerAuthentication()
-        {
-            return App.SecretsManager.AuthenticateDeviceOwner(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDeviceOwnerAuthentication, OnNotUnlockedUsingDeviceOwnerAuthentication);
-        }
+		public event EventHandler UnlockedCorrectly = null;
 
-        void OnUnlockedCorrectlyUsingDeviceOwnerAuthentication()
-        {
-            TryToUnlockUsingPin();
-        }
+		//
 
-        void OnNotUnlockedUsingDeviceOwnerAuthentication(string error)
-        {
-            State = TState.Locked;
-        }
+		bool TryToUnlockUsingDeviceOwnerAuthentication()
+		{
+			return App.SecretsManager.AuthenticateDeviceOwner(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDeviceOwnerAuthentication, OnNotUnlockedUsingDeviceOwnerAuthentication);
+		}
 
-        void TryToUnlockUsingPin()
-        {
-            if (App.Settings.UnlockUsingPin)
-            {
-                SetUnlockingMode();
+		void OnUnlockedCorrectlyUsingDeviceOwnerAuthentication()
+		{
+			TryToUnlockUsingPin();
+		}
 
-                _PIN.IsVisible = true;
-                _PIN.Focus();
-            }
-            else
-                OnUnlockedCorrectly();
-        }
+		void OnNotUnlockedUsingDeviceOwnerAuthentication(string error, bool hint)
+		{
+			State = TState.Locked;
 
-        async Task CheckPIN()
-        {
-            if (await App.SecretsManager.ComparePasswordAsync(App.Name, TruePIN.Text ?? ""))
-            {
-                OnUnlockedCorrectly();
-            }
-            else
-            {
-                Color textColor = _PIN.TextColor;
-                _PIN.TextColor = Color.Red;
-                await _PIN.ScaleTo(0.3);
-                await _PIN.ScaleTo(1);
-                _PIN.TextColor = textColor;
-                _PIN.Focus();
-            }
+			_Message.Text = error;
+			if (!hint)
+			{
+				_UnlockOrCancelBtn.Text = "Try again";
+				_UnlockOrCancelBtn.IsVisible = true;
+			}
+		}
 
-            _PIN.Text = "";
-        }
+		void TryToUnlockUsingPin()
+		{
+			if (App.Settings.UnlockUsingPin)
+			{
+				SetUnlockingMode();
 
-        void OnUnlockedCorrectly()
-        {
-            State = TState.Unlocked;
-            UnlockedCorrectly?.Invoke(this, null);
-        }
+				_Message.Text = "";
+				_Message.IsVisible = false;
+				_UnlockOrCancelBtn.Text = T.Localized("Unlock");
+				_UnlockOrCancelBtn.IsVisible = true;
+				_PIN.IsVisible = true;
+				_PIN.Focus();
+			}
+			else
+				OnUnlockedCorrectly();
+		}
 
-        void OnNotUnlocked()
-        {
-            State = TState.Locked;
-        }
+		async Task CheckPIN()
+		{
+			if (await App.SecretsManager.ComparePasswordAsync(App.Name, TruePIN.Text ?? ""))
+			{
+				OnUnlockedCorrectly();
+			}
+			else
+			{
+				Color textColor = _PIN.TextColor;
+				_PIN.TextColor = Color.Red;
+				await _PIN.ScaleTo(0.3);
+				await _PIN.ScaleTo(1);
+				_PIN.TextColor = textColor;
+				_PIN.Focus();
+			}
 
-        //
+			_PIN.Text = "";
+		}
 
-        void UnlockBtn_Clicked(object sender, System.EventArgs e)
-        {
-            if (_PIN.IsVisible)
-            {
-                CheckPIN();
-            }
-            else
-                TryToUnlock();
-        }
+		void OnUnlockedCorrectly()
+		{
+			State = TState.Unlocked;
+			UnlockedCorrectly?.Invoke(this, null);
+		}
 
-        void PIN_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
-        {
-            if (Device.Idiom == TargetIdiom.Desktop)
-                return;
+		void OnNotUnlocked()
+		{
+			State = TState.Locked;
+		}
 
-            BatchBegin();
+		//
 
-            if (e.IsFocused)
-            {
-                _View.VerticalOptions = LayoutOptions.FillAndExpand;
-                _View.Padding = new Thickness(0,
-                                               (DeviceEx.Orientation == DeviceOrientation.Landscape
-                                                    ? Metrics.AppBarHeightLandscape / (Device.Idiom == TargetIdiom.Tablet ? 1 : 4)
-                                                    : Metrics.AppBarHeightPortrait / (Device.RuntimePlatform == Device.iOS ? 1 : 2)),
-                                               0,
-                                               0);
-                _Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;
-            }
-            else
-            {
-                _View.VerticalOptions = LayoutOptions.CenterAndExpand;
-                _View.Padding = new Thickness(0);
-                _Logo.IsVisible = true;
-            }
+		void UnlockBtn_Clicked(object sender, System.EventArgs e)
+		{
+			if (_PIN.IsVisible)
+			{
+				CheckPIN();
+			}
+			else
+				TryToUnlock();
+		}
 
-            BatchCommit();
-        }
+		void PIN_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
+		{
+			if (Device.Idiom == TargetIdiom.Desktop)
+				return;
 
-        void PIN_Completed(object sender, System.EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(_PIN.Text))
-                CheckPIN();
-        }
+			BatchBegin();
 
-    }
+			if (e.IsFocused)
+			{
+				_View.VerticalOptions = LayoutOptions.FillAndExpand;
+				_View.Padding = new Thickness(0,
+											   (DeviceEx.Orientation == DeviceOrientation.Landscape
+													? Metrics.AppBarHeightLandscape / (Device.Idiom == TargetIdiom.Tablet ? 1 : 4)
+													: Metrics.AppBarHeightPortrait / (Device.RuntimePlatform == Device.iOS ? 1 : 2)),
+											   0,
+											   0);
+				_Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;
+			}
+			else
+			{
+				_View.VerticalOptions = LayoutOptions.CenterAndExpand;
+				_View.Padding = new Thickness(0);
+				_Logo.IsVisible = true;
+			}
+
+			BatchCommit();
+		}
+
+		void PIN_Completed(object sender, System.EventArgs e)
+		{
+			if (!string.IsNullOrEmpty(_PIN.Text))
+				CheckPIN();
+		}
+
+	}
 }

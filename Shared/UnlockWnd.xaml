@@ -37,7 +37,9 @@
                 HorizontalTextAlignment = "Center" />
 
             <Label
-                Text = "{T:Localized IsLocked}"
+                x:Name="_Message"
+                IsVisible = "false"
+                Margin="20,20,20,8"
                 FontSize = "Medium"
                 HorizontalTextAlignment = "Center" />
 
@@ -53,8 +55,9 @@
                 Focused = "PIN_Focused" />
 
             <pbXForms:FlatButton
-                Text = "{T:Localized Unlock}"
-                FontSize = "Medium"
+                x:Name = "_UnlockOrCancelBtn"
+                IsVisible = "false"
+                TextColor="{StaticResource AccentTextColor}"
                 Clicked = "UnlockBtn_Clicked" />
 
         </StackLayout>
