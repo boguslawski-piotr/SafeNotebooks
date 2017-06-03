@@ -241,6 +241,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\ic_radio_button_unchecked.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_radio_button_unchecked.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_radio_button_unchecked.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_fingerprint.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_fingerprint.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_fingerprint.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_fingerprint.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_fingerprint.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\values-pl\" />

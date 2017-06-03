@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
+using pbXSecurity;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
@@ -46,6 +47,7 @@ namespace SafeNotebooks
 
 			_Message.Text = "";
 			_Message.IsVisible = false;
+			_FPIcon.IsVisible = false;
 			_PIN.IsVisible = false;
 			_UnlockOrCancelBtn.IsVisible = false;
 			PIN_Focused(this, new FocusEventArgs(_PIN, false));
@@ -62,6 +64,7 @@ namespace SafeNotebooks
 
 			_Message.Text = "";
 			_Message.IsVisible = false;
+			_FPIcon.IsVisible = false;
 			_UnlockOrCancelBtn.Text = "";
 			_UnlockOrCancelBtn.IsVisible = false;
 		}
@@ -72,13 +75,20 @@ namespace SafeNotebooks
 
 			if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
 			{
-				if (TryToUnlockUsingDeviceOwnerAuthentication())
+				DOAuthentication doa = App.SecretsManager.AvailableDOAuthentication;
+
+				if (doa != DOAuthentication.None && TryToUnlockUsingDOAuthentication())
 				{
-					_Message.IsVisible = true;
-					if (App.SecretsManager.DeviceOwnerAuthenticationWithBiometricsAvailable)
-						_Message.Text = "Scan your fingerprint...";
+					if (doa == DOAuthentication.Fingerprint)
+					{
+						_FPIcon.IsVisible = true;
+						_Message.Text = T.Localized("ScanFingerprint");
+					}
+					else if (doa == DOAuthentication.Password)
+						_Message.Text = T.Localized("EnterSystemPassword");
 					else
-						_Message.Text = "Enter your pasword/PIN...";
+						_Message.Text = T.Localized("UseSomeDOA");
+					_Message.IsVisible = true;
 					return;
 				};
 			}
@@ -90,24 +100,25 @@ namespace SafeNotebooks
 
 		//
 
-		bool TryToUnlockUsingDeviceOwnerAuthentication()
+		bool TryToUnlockUsingDOAuthentication()
 		{
-			return App.SecretsManager.AuthenticateDeviceOwner(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDeviceOwnerAuthentication, OnNotUnlockedUsingDeviceOwnerAuthentication);
+			return App.SecretsManager.StartDOAuthentication(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDOAuthentication, OnNotUnlockedUsingDOAuthentication);
 		}
 
-		void OnUnlockedCorrectlyUsingDeviceOwnerAuthentication()
+		void OnUnlockedCorrectlyUsingDOAuthentication()
 		{
 			TryToUnlockUsingPin();
 		}
 
-		void OnNotUnlockedUsingDeviceOwnerAuthentication(string error, bool hint)
+		void OnNotUnlockedUsingDOAuthentication(string error, bool hint)
 		{
 			State = TState.Locked;
 
 			_Message.Text = error;
 			if (!hint)
 			{
-				_UnlockOrCancelBtn.Text = "Try again";
+				_FPIcon.IsVisible = false;
+				_UnlockOrCancelBtn.Text = T.Localized("TryAgain");
 				_UnlockOrCancelBtn.IsVisible = true;
 			}
 		}
@@ -120,6 +131,7 @@ namespace SafeNotebooks
 
 				_Message.Text = "";
 				_Message.IsVisible = false;
+				_FPIcon.IsVisible = false;
 				_UnlockOrCancelBtn.Text = T.Localized("Unlock");
 				_UnlockOrCancelBtn.IsVisible = true;
 				_PIN.IsVisible = true;
@@ -184,7 +196,7 @@ namespace SafeNotebooks
 				_View.Padding = new Thickness(0,
 											   (DeviceEx.Orientation == DeviceOrientation.Landscape
 													? Metrics.AppBarHeightLandscape / (Device.Idiom == TargetIdiom.Tablet ? 1 : 4)
-													: Metrics.AppBarHeightPortrait / (Device.RuntimePlatform == Device.iOS ? 1 : 2)),
+													: Metrics.AppBarHeightPortrait),
 											   0,
 											   0);
 				_Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;

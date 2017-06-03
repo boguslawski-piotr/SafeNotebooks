@@ -61,7 +61,7 @@ namespace SafeNotebooks
 			static readonly bool UnlockUsingDeviceOwnerAuthenticationDefault = false;
 
 			const string UnlockUsingPinKey = "_uup";
-			static readonly bool UnlockUsingPinDefault = false;
+			static readonly bool UnlockUsingPinDefault = true;
 
 			const string TryToUnlockItemItemsKey = "_ttuii";
 			static readonly bool TryToUnlockItemItemsDefault = false;

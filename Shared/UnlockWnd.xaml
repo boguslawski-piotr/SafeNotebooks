@@ -36,11 +36,17 @@
                 FontSize = "Large"
                 HorizontalTextAlignment = "Center" />
 
-            <Label
-                x:Name="_Message"
+            <Image
+                x:Name = "_FPIcon"
                 IsVisible = "false"
-                Margin="20,20,20,8"
-                FontSize = "Medium"
+                Margin = "20,20,20,0"
+                Aspect = "AspectFit"
+                Source = "ic_fingerprint.png" />
+
+            <Label
+                x:Name = "_Message"
+                IsVisible = "false"
+                Margin = "20,20,20,8"
                 HorizontalTextAlignment = "Center" />
 
             <Entry
@@ -48,7 +54,7 @@
                 x:Name = "_PIN"
                 Keyboard = "Numeric"
                 Placeholder = "{T:Localized PinPlaceholder}"
-                Margin = "0,16,0,0"
+                Margin = "0,16,0,8"
                 FontSize = "Medium"
                 HorizontalTextAlignment = "Center"
                 Completed = "PIN_Completed"
@@ -57,7 +63,8 @@
             <pbXForms:FlatButton
                 x:Name = "_UnlockOrCancelBtn"
                 IsVisible = "false"
-                TextColor="{StaticResource AccentTextColor}"
+                TextColor = "{StaticResource AccentTextColor}"
+                FontSize = "Large"
                 Clicked = "UnlockBtn_Clicked" />
 
         </StackLayout>

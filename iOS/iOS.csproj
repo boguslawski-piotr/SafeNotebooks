@@ -199,6 +199,9 @@
     <BundleResource Include="Resources\ic_radio_button_checked%402x.png" />
     <BundleResource Include="Resources\ic_radio_button_checked%403x.png" />
     <BundleResource Include="Resources\ic_radio_button_checked.png" />
+    <BundleResource Include="Resources\ic_fingerprint%402x.png" />
+    <BundleResource Include="Resources\ic_fingerprint%403x.png" />
+    <BundleResource Include="Resources\ic_fingerprint.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\Texts.csproj">

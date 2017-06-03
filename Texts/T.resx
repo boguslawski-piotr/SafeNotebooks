@@ -1,105 +1,117 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>2.0</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<data name="AppName" xml:space="preserve">
+    <resheader name = "resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name = "version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name = "reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name = "writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name = "AppName" xml:space = "preserve">
 		<value>Safe Notebooks</value>
 	</data>
-	<data name="Settings" xml:space="preserve">
+    <data name = "Settings" xml:space = "preserve">
 		<value>Settings</value>
 	</data>
-	<data name="in" xml:space="preserve">
+    <data name = "in" xml:space = "preserve">
 		<value>in</value>
 	</data>
-	<data name="OK" xml:space="preserve">
+    <data name = "OK" xml:space = "preserve">
 		<value>OK</value>
 	</data>
-	<data name="Cancel" xml:space="preserve">
+    <data name = "Cancel" xml:space = "preserve">
 		<value>Cancel</value>
 	</data>
-	<data name="Error" xml:space="preserve">
+    <data name = "Error" xml:space = "preserve">
 		<value>Error</value>
 	</data>
-	<data name="Unlock" xml:space="preserve">
+    <data name = "Unlock" xml:space = "preserve">
 		<value>Unlock</value>
 	</data>
-	<data name="New" xml:space="preserve">
+    <data name = "TryAgain" xml:space = "preserve">
+		<value>Try again</value>
+	</data>
+    <data name = "New" xml:space = "preserve">
 		<value>Add</value>
 	</data>
-	<data name="SelectAndNew" xml:space="preserve">
+    <data name = "SelectAndNew" xml:space = "preserve">
 		<value>Add...</value>
 	</data>
-	<data name="Edit" xml:space="preserve">
+    <data name = "Edit" xml:space = "preserve">
 		<value>Edit</value>
 	</data>
-	<data name="Move" xml:space="preserve">
+    <data name = "Move" xml:space = "preserve">
 		<value>Move</value>
 	</data>
-	<data name="Delete" xml:space="preserve">
+    <data name = "Delete" xml:space = "preserve">
 		<value>Delete</value>
 	</data>
-	<data name="Notebook" xml:space="preserve">
+    <data name = "Notebook" xml:space = "preserve">
 		<value>Notebook</value>
 	</data>
-	<data name="Page" xml:space="preserve">
+    <data name = "Page" xml:space = "preserve">
 		<value>Page</value>
 	</data>
-	<data name="Note" xml:space="preserve">
+    <data name = "Note" xml:space = "preserve">
 		<value>Note</value>
 	</data>
-	<data name="Notebooks" xml:space="preserve">
+    <data name = "Notebooks" xml:space = "preserve">
 		<value>Notebooks</value>
 	</data>
-	<data name="Pages" xml:space="preserve">
+    <data name = "Pages" xml:space = "preserve">
 		<value>Pages</value>
 	</data>
-	<data name="Notes" xml:space="preserve">
+    <data name = "Notes" xml:space = "preserve">
 		<value>Notes</value>
 	</data>
-	<data name="NewNotebook" xml:space="preserve">
+    <data name = "NewNotebook" xml:space = "preserve">
 		<value>Add Notebook</value>
 	</data>
-	<data name="NewPage" xml:space="preserve">
+    <data name = "NewPage" xml:space = "preserve">
 		<value>Add Page</value>
 	</data>
-	<data name="SearchQueryPlaceholder" xml:space="preserve">
+    <data name = "SearchQueryPlaceholder" xml:space = "preserve">
 		<value>tap here to search</value>
 	</data>
-	<data name="AuthenticateDeviceOwnerReason" xml:space="preserve">
-		<value>The application must recognize you as such an option has been set in the settings.</value>
+    <data name = "AuthenticateDeviceOwnerReason" xml:space = "preserve">
+		<value>Safe Notebooks must recognize you as such an option has been set in the settings.</value>
 	</data>
-	<data name="IsLocked" xml:space="preserve">
+    <data name = "ScanFingerprint" xml:space = "preserve">
+		<value>Scan your fingerprint.</value>
+	</data>
+    <data name = "EnterSystemPassword" xml:space = "preserve">
+		<value>Enter your pasword/passkey/pin.</value>
+	</data>
+    <data name = "UseSomeDOA" xml:space = "preserve">
+		<value>Use your way of identifying that you own this device.</value>
+	</data>
+    <data name = "IsLocked" xml:space = "preserve">
 		<value>is currently locked</value>
 	</data>
-	<data name="PinPlaceholder" xml:space="preserve">
+    <data name = "PinPlaceholder" xml:space = "preserve">
 		<value>enter your pin</value>
 	</data>
-	<data name="WhereStoreNotebook" xml:space="preserve">
+    <data name = "WhereStoreNotebook" xml:space = "preserve">
 		<value>Where do you want to store the notebook?</value>
 	</data>
-	<data name="HowToSort" xml:space="preserve">
+    <data name = "HowToSort" xml:space = "preserve">
 		<value>How do you want to sort</value>
 	</data>
-	<data name="Descending" xml:space="preserve">
+    <data name = "Descending" xml:space = "preserve">
 		<value>Descending</value>
 	</data>
-	<data name="SortByColor" xml:space="preserve">
+    <data name = "SortByColor" xml:space = "preserve">
 		<value>By colors</value>
 	</data>
-	<data name="SortByName" xml:space="preserve">
+    <data name = "SortByName" xml:space = "preserve">
 		<value>By name</value>
 	</data>
-	<data name="SortByDate" xml:space="preserve">
+    <data name = "SortByDate" xml:space = "preserve">
 		<value>By modified date</value>
 	</data>
 </root>
