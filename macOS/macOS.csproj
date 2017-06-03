@@ -10,7 +10,6 @@
     <AssemblyName>Safe Notebooks</AssemblyName>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
     <ReleaseVersion>1.0.0</ReleaseVersion>
-    <SynchReleaseVersion>false</SynchReleaseVersion>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
   </PropertyGroup>
@@ -33,6 +32,7 @@
     <LinkMode>None</LinkMode>
     <XamMacArch></XamMacArch>
     <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
+    <EnableSGenConc>true</EnableSGenConc>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType></DebugType>
@@ -52,6 +52,7 @@
     <XamMacArch></XamMacArch>
     <CodeSigningKey>Mac Developer</CodeSigningKey>
     <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
+    <EnableSGenConc>true</EnableSGenConc>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

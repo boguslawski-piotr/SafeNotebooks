@@ -4,12 +4,12 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("SafeNotebooks.Texts")]
+[assembly: AssemblyTitle("Safe Notebooks Texts")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Syrensoft Applications")]
+[assembly: AssemblyCompany("${AuthorName}")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Piotr Bogusławski")]
+[assembly: AssemblyCopyright("${AuthorCopyright}")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

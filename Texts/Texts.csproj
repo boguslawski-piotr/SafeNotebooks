@@ -29,21 +29,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="T.Designer.cs">
-      <DependentUpon>T.resx</DependentUpon>
-    </Compile>
     <Compile Include="Texts.cs" />
-    <Compile Include="T.pl.Designer.cs">
-      <DependentUpon>T.pl.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="T.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>T.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="T.pl.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>T.pl.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
