@@ -83,14 +83,14 @@
             <pbXForms:FlatButton
                 Grid.Column = "1"
                 x:Name = "NewBtn"
-                Image = "ic_add_circle.png"
+                Image = "ic_add_circle_accent.png"
                 Clicked = "NewBtn_Clicked" />
 
             <pbXForms:FlatButton
                 Grid.Column = "2"
                 x:Name = "EditItemsBtn"
-                Image = "ic_transform.png"
-                Clicked = "EditItemsBtn_Clicked" />
+                Image = "ic_selection_mode.png"
+                Clicked = "ToogleSelectModeBtn_Clicked" />
 
         </pbXForms:ToolBarGridLayout>
 

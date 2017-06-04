@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SafeNotebooks.Droid
 {
-	[Activity(Label = "@string/app_name", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true,
+	[Activity(Label = "@string/app_name", Icon = "@drawable/ic_launcher", Theme = "@style/MyTheme", MainLauncher = true,
 			  ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
 	{

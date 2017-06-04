@@ -91,13 +91,13 @@ namespace SafeNotebooks
 #if DEBUG
 			Tests();
 #endif
+
+			MainPage = new MainWnd();
 		}
 
 		protected override async void OnStart()
 		{
 			Debug.WriteLine($"OnStart: {_timeFromStart}");
-
-			MainPage = new MainWnd();
 
 			UnlockWnd = new UnlockWnd();
 			UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;

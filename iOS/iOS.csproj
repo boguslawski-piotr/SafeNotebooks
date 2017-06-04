@@ -121,6 +121,16 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
     <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher180.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher152.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher76.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher167.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher80.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher40.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher29.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher58.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher87.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -162,12 +172,7 @@
     <BundleResource Include="Resources\ic_arrow_back%402x.png" />
     <BundleResource Include="Resources\ic_arrow_back%403x.png" />
     <BundleResource Include="Resources\ic_arrow_back.png" />
-    <BundleResource Include="Resources\icon.png" />
-    <BundleResource Include="Resources\icon%402x.png" />
-    <BundleResource Include="Resources\icon%403x.png" />
-    <BundleResource Include="Resources\splash.png" />
-    <BundleResource Include="Resources\splash%402x.png" />
-    <BundleResource Include="Resources\splash%403x.png" />
+    <BundleResource Include="Resources\splash640x960.png" />
     <BundleResource Include="Resources\ic_more_horiz%402x.png" />
     <BundleResource Include="Resources\ic_more_horiz%403x.png" />
     <BundleResource Include="Resources\ic_more_horiz.png" />
@@ -190,9 +195,6 @@
     <BundleResource Include="Resources\ic_add_circle.png" />
     <BundleResource Include="Resources\ic_add_circle%402x.png" />
     <BundleResource Include="Resources\ic_add_circle%403x.png" />
-    <BundleResource Include="Resources\ic_transform%402x.png" />
-    <BundleResource Include="Resources\ic_transform%403x.png" />
-    <BundleResource Include="Resources\ic_transform.png" />
     <BundleResource Include="Resources\ic_radio_button_unchecked%402x.png" />
     <BundleResource Include="Resources\ic_radio_button_unchecked%403x.png" />
     <BundleResource Include="Resources\ic_radio_button_unchecked.png" />
@@ -202,12 +204,43 @@
     <BundleResource Include="Resources\ic_fingerprint%402x.png" />
     <BundleResource Include="Resources\ic_fingerprint%403x.png" />
     <BundleResource Include="Resources\ic_fingerprint.png" />
+    <BundleResource Include="Resources\icon.png" />
+    <BundleResource Include="Resources\icon%402x.png" />
+    <BundleResource Include="Resources\icon%403.png" />
+    <BundleResource Include="Resources\ic_launcher120.png" />
+    <BundleResource Include="Resources\ic_launcher180.png" />
+    <BundleResource Include="Resources\ic_launcher152.png" />
+    <BundleResource Include="Resources\ic_launcher76.png" />
+    <BundleResource Include="Resources\ic_launcher167.png" />
+    <BundleResource Include="Resources\ic_launcher80.png" />
+    <BundleResource Include="Resources\ic_launcher40.png" />
+    <BundleResource Include="Resources\ic_selection_mode.png" />
+    <BundleResource Include="Resources\ic_selection_mode%402x.png" />
+    <BundleResource Include="Resources\ic_selection_mode%403x.png" />
+    <BundleResource Include="Resources\ic_add_circle_accent.png" />
+    <BundleResource Include="Resources\ic_add_circle_accent%402x.png" />
+    <BundleResource Include="Resources\ic_add_circle_accent%403x.png" />
+    <BundleResource Include="Resources\ic_delete_selected.png" />
+    <BundleResource Include="Resources\ic_delete_selected%402x.png" />
+    <BundleResource Include="Resources\ic_delete_selected%403x.png" />
+    <BundleResource Include="Resources\ic_move_selected.png" />
+    <BundleResource Include="Resources\ic_move_selected%402x.png" />
+    <BundleResource Include="Resources\ic_move_selected%403x.png" />
+    <BundleResource Include="Resources\ic_launcher1024.png" />
+    <BundleResource Include="Resources\ic_launcher512.png" />
+    <BundleResource Include="Resources\ic_launcher29.png" />
+    <BundleResource Include="Resources\ic_launcher58.png" />
+    <BundleResource Include="Resources\ic_launcher87.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\Texts.csproj">
       <Project>{BD23F900-50B7-4714-98C1-D1A192C1E939}</Project>
       <Name>Texts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ITunesArtwork Include="iTunesArtwork" />
+    <ITunesArtwork Include="iTunesArtwork%402x" />
   </ItemGroup>
   <Import Project="..\Shared\SafeNotebooks.Shared.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.Shared.projitems')" />
   <Import Project="..\..\pbXNet\pbXNet.projitems" Label="Shared" Condition="Exists('..\..\pbXNet\pbXNet.projitems')" />

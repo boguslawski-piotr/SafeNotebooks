@@ -199,7 +199,7 @@ namespace SafeNotebooks
 													: Metrics.AppBarHeightPortrait),
 											   0,
 											   0);
-				_Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape;
+				_Logo.IsVisible = DeviceEx.Orientation != DeviceOrientation.Landscape || Device.Idiom != TargetIdiom.Phone;
 			}
 			else
 			{

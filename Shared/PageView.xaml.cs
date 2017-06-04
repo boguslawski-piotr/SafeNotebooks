@@ -7,187 +7,190 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public partial class PageView : BaseView
-    {
-        public PageView()
-        {
-            InitializeComponent();
+	public partial class PageView : BaseView
+	{
+		public PageView()
+		{
+			InitializeComponent();
 
-            MainWnd.Current.DetailViewWillBeShown += DetailViewWillBeShown;
+			MainWnd.Current.DetailViewWillBeShown += DetailViewWillBeShown;
 
-            App.NotebooksManager.PageWillBeSelected += PageWillBeSelected;
-            App.NotebooksManager.ItemObservableItemsCreated += ItemObservableItemsCreated;
-            App.NotebooksManager.PageSelected += PageSelected;
+			App.NotebooksManager.PageWillBeSelected += PageWillBeSelected;
+			App.NotebooksManager.ItemObservableItemsCreated += ItemObservableItemsCreated;
+			App.NotebooksManager.PageSelected += PageSelected;
 
-            ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
-            ListCtl.ItemTapped += ListCtl_ItemTapped;
+			ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
+			ListCtl.ItemTapped += ListCtl_ItemTapped;
 
-            InitializeSearchBarFor(ListCtl);
-        }
+			InitializeSearchBarFor(ListCtl);
+		}
 
-        protected override void ContinueOnSizeAllocated(double width, double height)
-        {
-            BackBtn.IsVisible = !MainWnd.Current.IsSplitView;
+		protected override void ContinueOnSizeAllocated(double width, double height)
+		{
+			BackBtn.IsVisible = !MainWnd.Current.IsSplitView;
 
-            double m = !BackBtn.IsVisible ? Metrics.ScreenEdgeMargin : 0;
-            SelectedPageName.Margin = new Thickness(m, 0, 0, 0);
-            SelectedPageParentName.Margin = new Thickness(m, 0, 0, 0);
+			double m = !BackBtn.IsVisible ? Metrics.ScreenEdgeMargin : 0;
+			SelectedPageName.Margin = new Thickness(m, 0, 0, 0);
+			SelectedPageParentName.Margin = new Thickness(m, 0, 0, 0);
 
-            if (MainWnd.Current.IsSplitView && App.NotebooksManager.SelectedPage == null)
-                UI(forPage: false);
-            else
-                UI(forPage: true);
-        }
-
-
-        //
-
-        void DetailViewWillBeShown(object sender, (View view, object param) e)
-        {
-            if (e.param is Page page && page != App.NotebooksManager.SelectedPage)
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    ListCtl.ItemsSource = null;
-                    SetPageName(page);
-                    AIIsVisible(true);
-                });
-            }
-        }
-
-        void PageWillBeSelected(object sender, Page page)
-        {
-            Device.BeginInvokeOnMainThread(() => ShowPage(page));
-        }
-
-        void ItemObservableItemsCreated(object sender, ItemWithItems forWhom)
-        {
-            if (forWhom is Page page)
-                Device.BeginInvokeOnMainThread(() => ListCtl.ItemsSource = page.ObservableItems);
-        }
-
-        void PageSelected(object sender, Page page)
-        {
-            Device.BeginInvokeOnMainThread(() => AIIsVisible(false));
-        }
+			if (MainWnd.Current.IsSplitView && App.NotebooksManager.SelectedPage == null)
+				UI(forPage: false);
+			else
+				UI(forPage: true);
+		}
 
 
-        //
+		//
 
-        void ShowPage(Page page)
-        {
-            if (page != null)
-            {
-                ListCtl.ItemsSource = page.ObservableItems;
-                SetPageName(page);
-                UI(forPage: true);
-            }
-            else
-            {
-                UI(forPage: false);
-                MainWnd.Current.MasterViewIsVisible = true;
-            }
-        }
+		void DetailViewWillBeShown(object sender, (View view, object param) e)
+		{
+			if (e.param is Page page && page != App.NotebooksManager.SelectedPage)
+			{
+				Device.BeginInvokeOnMainThread(() =>
+				{
+					ListCtl.ItemsSource = null;
+					SetPageName(page);
+					AIIsVisible(true);
+				});
+			}
+		}
 
-        void SetPageName(Page page)
-        {
-            SelectedPageName.Text = page?.NameForLists;
-            SelectedPageParentName.Text = $"{T.Localized("in")} {page?.Notebook?.NameForLists}, {page?.Notebook?.Storage?.Name}";
-        }
+		void PageWillBeSelected(object sender, Page page)
+		{
+			Device.BeginInvokeOnMainThread(() => ShowPage(page));
+		}
 
-        void UI(bool forPage)
-        {
-            BatchBegin();
+		void ItemObservableItemsCreated(object sender, ItemWithItems forWhom)
+		{
+			if (forWhom is Page page)
+				Device.BeginInvokeOnMainThread(() => ListCtl.ItemsSource = page.ObservableItems);
+		}
 
-            AppBar.IsVisible = forPage;
-            ListCtl.IsVisible = forPage;
-            ToolBar.IsVisible = forPage;
-
-            NoUIBar.IsVisible = !forPage;
-
-            BatchCommit();
-        }
-
-        void AIIsVisible(bool isVisible)
-        {
-            AI.IsVisible = isVisible;
-            AI.IsRunning = isVisible;
-        }
+		void PageSelected(object sender, Page page)
+		{
+			Device.BeginInvokeOnMainThread(() => AIIsVisible(false));
+		}
 
 
-        //
+		//
 
-        void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            Note note = (Note)e.Item;
-            if (note.Page.SelectModeForItemsEnabled)
-                note.IsSelected = !note.IsSelected;
-            else
-            {
-                MainWnd.Current.ShowDetailViewAsync<TestView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward);
-                //App.NotebooksManager.SelectNoteAsync(note, App.Settings.TryToUnlockItemChildren);
-            }
-        }
+		void ShowPage(Page page)
+		{
+			if (page != null)
+			{
+				ListCtl.ItemsSource = page.ObservableItems;
+				SetPageName(page);
+				UI(forPage: true);
+			}
+			else
+			{
+				UI(forPage: false);
+				MainWnd.Current.MasterViewIsVisible = true;
+			}
+		}
+
+		void SetPageName(Page page)
+		{
+			SelectedPageName.Text = page?.NameForLists;
+			SelectedPageParentName.Text = $"{T.Localized("in")} {page?.Notebook?.NameForLists}, {page?.Notebook?.Storage?.Name}";
+		}
+
+		void UI(bool forPage)
+		{
+			BatchBegin();
+
+			AppBar.IsVisible = forPage;
+			ListCtl.IsVisible = forPage;
+			ToolBar.IsVisible = forPage;
+
+			NoUIBar.IsVisible = !forPage;
+
+			BatchCommit();
+		}
+
+		void AIIsVisible(bool isVisible)
+		{
+			AI.IsVisible = isVisible;
+			AI.IsRunning = isVisible;
+		}
 
 
-        //
+		//
 
-        public override async void OnSwipeLeftToRight()
-        {
-            if (!MainWnd.Current.IsSplitView)
-                await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back, App.NotebooksManager.SelectedNotebook);
-        }
-
-        void BackBtn_Clicked(object sender, System.EventArgs e)
-        {
-            OnSwipeLeftToRight();
-        }
-
-        void EditBtn_Clicked(object sender, System.EventArgs e)
-        {
-            App.NotebooksManager.SelectedPage?.EditAsync();
-        }
+		void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
+		{
+			Note note = (Note)e.Item;
+			if (note.Page.SelectModeForItemsEnabled)
+				note.IsSelected = !note.IsSelected;
+			else
+			{
+				MainWnd.Current.ShowDetailViewAsync<TestView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward);
+				//App.NotebooksManager.SelectNoteAsync(note, App.Settings.TryToUnlockItemChildren);
+			}
+		}
 
 
-        //
+		//
 
-        public override void SearchQueryChanged(string text)
-        {
-        }
+		public override async void OnSwipeLeftToRight()
+		{
+			if (!MainWnd.Current.IsSplitView)
+				await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back, App.NotebooksManager.SelectedNotebook);
+		}
+
+		void BackBtn_Clicked(object sender, System.EventArgs e)
+		{
+			OnSwipeLeftToRight();
+		}
 
 
-        //
+		//
 
-        void SortBtn_Clicked(object sender, System.EventArgs e)
-        {
-            base.SortBtn_Clicked(T.Localized("Notes"), App.NotebooksManager.SelectedPage, ListCtl, true);
-        }
+		void EditBtn_Clicked(object sender, System.EventArgs e)
+		{
+			App.NotebooksManager.SelectedPage?.EditAsync();
+		}
 
-        async void NewBtn_Clicked(object sender, System.EventArgs e)
-        {
-            string rc = await Application.Current.MainPage.DisplayActionSheet(T.Localized("SelectAndNew"), T.Localized("Cancel"), null, "Note", "Checklist", "Secret");
-            New(rc);
-        }
 
-        void FavoriteNewBtn_Clicked(object sender, System.EventArgs e)
-        {
-            New("Note");
-        }
+		//
 
-        async void New(string what)
-        {
-            Note o = await App.NotebooksManager.SelectedPage.NewNoteAsync();
-            if (o != null)
-            {
-                await App.NotebooksManager.SelectNoteAsync(o);
-                Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, o));
-            }
-        }
+		public override void SearchQueryChanged(string text)
+		{
+		}
 
-        void EditItemsBtn_Clicked(object sender, System.EventArgs e)
-        {
-            if (App.NotebooksManager.SelectedPage != null)
-                App.NotebooksManager.SelectedPage.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedPage.SelectModeForItemsEnabled;
-        }
-    }
+
+		//
+
+		void SortBtn_Clicked(object sender, System.EventArgs e)
+		{
+			base.SortBtn_Clicked(T.Localized("Notes"), App.NotebooksManager.SelectedPage, ListCtl, true);
+		}
+
+		async void NewBtn_Clicked(object sender, System.EventArgs e)
+		{
+			string rc = await Application.Current.MainPage.DisplayActionSheet(T.Localized("SelectAndNew"), T.Localized("Cancel"), null, "Note", "Checklist", "Secret");
+			New(rc);
+		}
+
+		void FavoriteNewBtn_Clicked(object sender, System.EventArgs e)
+		{
+			New("Note");
+		}
+
+		async void New(string what)
+		{
+			Note o = await App.NotebooksManager.SelectedPage.NewNoteAsync();
+			if (o != null)
+			{
+				await App.NotebooksManager.SelectNoteAsync(o);
+				Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, o));
+			}
+		}
+
+		void ToogleSelectModeBtn_Clicked(object sender, System.EventArgs e)
+		{
+			if (App.NotebooksManager.SelectedPage != null)
+				App.NotebooksManager.SelectedPage.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedPage.SelectModeForItemsEnabled;
+		}
+	}
 }

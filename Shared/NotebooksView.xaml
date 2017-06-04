@@ -18,6 +18,7 @@
             LineBreakMode = "HeadTruncation"
             TextColor = "{StaticResource AccentTextColor}"
             VerticalOptions = "Center"
+            VerticalTextAlignment = "Center"
             HorizontalOptions = "FillAndExpand" />
 
         <pbXForms:PIButton
@@ -55,38 +56,51 @@
 
     <pbXForms:ContentViewEx.ToolBarContent>
 
-        <pbXForms:ToolBarGridLayout ColumnSpacing="24">
+        <pbXForms:ToolBarGridLayout
+            x:Name = "NormalToolbar">
 
             <pbXForms:PIButton
                 Grid.Column = "0"
-                x:Name = "SortBtn"
-                ContentLayout="Bottom,0"
                 Image = "ic_sort.png"
-                Text = "Sortuj"
-                FontSize = "Micro"
-                WidthRequest = "-1"
                 Clicked = "SortBtn_Clicked" />
 
             <pbXForms:PIButton
                 Grid.Column = "1"
-                x:Name = "NewBtn"
-                ContentLayout="Bottom,0"
-                Image = "ic_add_circle.png"
-                Text = "Dodaj"
-                FontSize = "Micro"
-                TextColor = "{StaticResource AccentTextColor}"
-                WidthRequest = "-1"
+                Image = "ic_add_circle_accent.png"
                 Clicked = "NewBtn_Clicked" />
 
             <pbXForms:PIButton
                 Grid.Column = "2"
-                x:Name = "EditItemsBtn"
-                ContentLayout="Bottom,0"
-                Image = "ic_transform.png"
-                Text = "Edytuj"
-                FontSize = "Micro"
-                WidthRequest = "-1"
-                Clicked = "EditItemsBtn_Clicked" />
+                Image = "ic_selection_mode.png"
+                Clicked = "ToogleSelectModeBtn_Clicked" />
+
+        </pbXForms:ToolBarGridLayout>
+
+        <pbXForms:ToolBarGridLayout
+            x:Name = "SelectModeToolbar"
+            IsVisible = "false">
+
+            <pbXForms:PIButton
+                Grid.Column = "0"
+                Image = "ic_sort.png"
+                Clicked = "SortBtn_Clicked" />
+
+            <pbXForms:PIButton
+                Grid.Column = "1"
+                Image = "ic_delete_selected.png"
+                Clicked = "DeleteSelectedItemsBtn_Clicked" />
+
+            <pbXForms:PIButton
+                x:Name = "MoveSelectedItemsBtn"
+                Grid.Column = "2"
+                ContentLayout = "Bottom,0"
+                Image = "ic_move_selected.png"
+                Clicked = "MoveSelectedItemsBtn_Clicked" />
+
+            <pbXForms:PIButton
+                Grid.Column = "3"
+                Image = "ic_close.png"
+                Clicked = "ToogleSelectModeBtn_Clicked" />
 
         </pbXForms:ToolBarGridLayout>
 
