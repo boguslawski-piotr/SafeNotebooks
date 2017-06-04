@@ -11,27 +11,27 @@ using System.Threading.Tasks;
 
 namespace SafeNotebooks.Droid
 {
-	[Activity(Label = "@string/app_name", Icon = "@drawable/ic_launcher", Theme = "@style/MyTheme", MainLauncher = true,
-			  ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
-	{
-		public static MainActivity Current;
+    [Activity(Label = "@string/app_name", Icon = "@drawable/ic_launcher", Theme = "@style/MyTheme", MainLauncher = true,
+              ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    {
+        public static MainActivity Current;
 
-		public MainActivity()
-		{
-			Current = this;
-		}
+        public MainActivity()
+        {
+            Current = this;
+        }
 
-		protected override void OnCreate(Bundle bundle)
-		{
-			TabLayoutResource = Resource.Layout.Tabbar;
-			ToolbarResource = Resource.Layout.Toolbar;
+        protected override void OnCreate(Bundle bundle)
+        {
+            //TabLayoutResource = Resource.Layout.Tabbar;
+            //ToolbarResource = Resource.Layout.Toolbar;
 
-			base.OnCreate(bundle);
+            base.OnCreate(bundle);
 
-			global::Xamarin.Forms.Forms.Init(this, bundle);
+            global::Xamarin.Forms.Forms.Init(this, bundle);
 
-			LoadApplication(new App());
-		}
-	}
+            LoadApplication(new App());
+        }
+    }
 }
