@@ -5,7 +5,7 @@
 	<key>CFBundleName</key>
 	<string>Safe Notebooks</string>
 	<key>CFBundleIdentifier</key>
-	<string>pl.boguslawski.piotr.safenotebooks</string>
+	<string>io.github.boguslawski-piotr.safenotebooks</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
 	<key>CFBundleVersion</key>

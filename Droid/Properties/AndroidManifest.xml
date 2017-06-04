@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    xmlns:android = "http://schemas.android.com/apk/res/android"
-    android:versionCode = "1"
-    android:versionName = "1.0.0"
-    package = "pl.boguslawski.piotr.safenotebooks">
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	android:versionCode = "1"
+	android:versionName = "1.0.0"
+	package = "io.github.boguslawski-piotr.safenotebooks">
 
-    <uses-sdk
-        android:minSdkVersion = "19" />
+	<uses-sdk
+		android:minSdkVersion = "19" />
 
-    <uses-permission
-        android:name = "android.permission.USE_FINGERPRINT" />
+	<uses-permission
+		android:name = "android.permission.USE_FINGERPRINT" />
 
-    <application
-        android:allowBackup = "true"
-        android:label = "@string/app_name"
-        android:configChanges = "screenSize|orientation"
-        android:icon = "@drawable/ic_launcher"
-        android:theme = "@style/MyTheme">
+	<application
+		android:allowBackup = "true"
+		android:label = "@string/app_name"
+		android:configChanges = "screenSize|orientation"
+		android:icon = "@drawable/ic_launcher"
+		android:theme = "@style/MyTheme">
 
-    </application>
+	</application>
 
 </manifest>
