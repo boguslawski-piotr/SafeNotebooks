@@ -86,7 +86,4 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Notebooks\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)License.md" />
-  </ItemGroup>
 </Project>
