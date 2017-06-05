@@ -18,6 +18,8 @@ namespace SafeNotebooks
 
 		public TState State = TState.Splash;
 
+		PinDlg dlg;
+
 		public UnlockWnd()
 		{
 			InitializeComponent();
@@ -27,11 +29,6 @@ namespace SafeNotebooks
 		{
 			if (State == TState.Unlocking)
 				TryToUnlock();
-		}
-
-		protected override void OnSizeAllocated(double width, double height)
-		{
-			base.OnSizeAllocated(width, height);
 		}
 
 		public void SetSplashMode()
@@ -84,7 +81,7 @@ namespace SafeNotebooks
 				};
 			}
 
-			TryToUnlockUsingPinAsync(true);
+			TryToUnlockUsingPinAsync();
 		}
 
 		public event EventHandler UnlockedCorrectly = null;
@@ -98,7 +95,7 @@ namespace SafeNotebooks
 
 		void OnUnlockedCorrectlyUsingDOAuthentication()
 		{
-			TryToUnlockUsingPinAsync(false);
+			TryToUnlockUsingPinAsync();
 		}
 
 		void OnNotUnlockedUsingDOAuthentication(string error, bool hint)
@@ -114,24 +111,29 @@ namespace SafeNotebooks
 			}
 		}
 
-		async Task TryToUnlockUsingPinAsync(bool appStarting)
+		async Task TryToUnlockUsingPinAsync()
 		{
 			// TODO: nie uzywac tego ustawienia, rozpoznawac po tym czy passwd jest w systemie
-			if (App.Settings.UnlockUsingPin)
+			//if (App.Settings.UnlockUsingPin)
+			if(await App.SecretsManager.PasswordExistsAsync(App.Name))
 			{
 				SetUnlockingMode();
 
-				// Wait for a while in order to process everything during app start
-				if(appStarting)
-					await Task.Delay(1000);
+				// Wait for a while in order to process everything during app start/resume
+				await Task.Delay(1000);
 
 				// Move logo and app name to the top
 				_View.VerticalOptions = LayoutOptions.FillAndExpand;
-				_View.Padding = new Thickness(0, Metrics.AppBarHeightLandscape, 0, 0);
+				_View.Padding = new Thickness(0, Bounds.Height <= 520 ? Metrics.ScreenEdgeMargin : Metrics.AppBarHeightLandscape, 0, 0);
 
 				// Run PIN dialog
-				PinDlg dlg = new PinDlg();
-				dlg.Content.WidthRequest = 240;
+				dlg = new PinDlg();
+
+				if (Bounds.Height <= 320)
+					dlg.SetCompactSize();
+				else if (Bounds.Height > 640)
+					dlg.SetLargeSize();
+
 				dlg.BackgroundColor = (Color)Application.Current.Resources["PageBackgroundColor"];
 				dlg.Title.Text = T.Localized("PinTitle");
 				dlg.PinVisualization.BackgroundColor = (Color)Application.Current.Resources["EntryBackgroundColor"];
@@ -142,7 +144,7 @@ namespace SafeNotebooks
 
 				//for (int i = 0; i < 10; i++)
 				//{
-				//	PIButton btn = dlg.Btn[i];
+				//	PIButton btn = dlg.DigitBtns[i];
 				//	if(btn != null)
 				//		btn.BackgroundColor = Color.Red;
 				//}
@@ -154,7 +156,7 @@ namespace SafeNotebooks
 						bool pok = await App.SecretsManager.ComparePasswordAsync(App.Name, dlg.Pin);
 						dlg.Reset();
 
-						if(pok)
+						if (pok)
 						{
 							OnUnlockedCorrectly();
 							break;
