@@ -147,7 +147,6 @@
   </ItemGroup>
   <Import Project="..\..\pbX\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbX\pbXForms\pbXForms.projitems')" />
   <Import Project="..\..\pbX\pbXNet\pbXNet.projitems" Label="Shared" Condition="Exists('..\..\pbX\pbXNet\pbXNet.projitems')" />
-  <Import Project="..\..\pbX\pbXSecurity\pbXSecurity.projitems" Label="Shared" Condition="Exists('..\..\pbX\pbXSecurity\pbXSecurity.projitems')" />
   <Import Project="..\Shared\SafeNotebooks.Shared.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.5.239-pre3\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.5.239-pre3\build\netstandard1.0\Xamarin.Forms.targets')" />

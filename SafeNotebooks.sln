@@ -11,8 +11,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "pbXForms", "..\pbX\pbXForms
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "macOS", "macOS\macOS.csproj", "{7F4FAECE-5E0E-488D-9F5B-3C85B34C9B69}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "pbXSecurity", "..\pbX\pbXSecurity\pbXSecurity.shproj", "{10EBD9BF-4B9F-4130-BE8F-5C245D3B5C37}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "pbXNet", "..\pbX\pbXNet\pbXNet.shproj", "{0F24CC4F-7A9B-4835-8F00-4DC291773539}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Texts", "Texts\Texts.csproj", "{BD23F900-50B7-4714-98C1-D1A192C1E939}"
