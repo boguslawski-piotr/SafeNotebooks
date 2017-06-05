@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
-using pbXSecurity;
 using Xamarin.Forms;
 
 namespace SafeNotebooks

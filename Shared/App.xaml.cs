@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
-using pbXSecurity;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -59,7 +58,6 @@ namespace SafeNotebooks
 		void InitializeLocalization()
 		{
 			LocalizationManager.AddResource("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly, true);
-			LocalizationManager.AddResource("pbXSecurity.Texts.T", typeof(pbXSecurity.SecretsManager).GetTypeInfo().Assembly);
 			LocalizationManager.AddResource("pbXNet.Texts.T", typeof(pbXNet.LocalizationManager).GetTypeInfo().Assembly);
 		}
 
