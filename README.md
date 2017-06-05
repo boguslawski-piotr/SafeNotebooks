@@ -13,5 +13,5 @@ The application is written in C# and uses [Xamarin](https://github.com/xamarin) 
 The whole project (app and all libraries) is based on the philosophy of open source and I sincerely invite you to contribute and at the same time have fun.
 
 ```
-string BestRegards() => Piotr Boguslawski
+SendBestRegards(fromWhom: "Piotr Boguslawski");
 ```
