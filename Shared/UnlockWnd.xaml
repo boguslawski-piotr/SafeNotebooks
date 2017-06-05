@@ -1,74 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage
-    xmlns = "http://xamarin.com/schemas/2014/forms"
-    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms = "clr-namespace:pbXForms"
-    xmlns:T = "clr-namespace:pbXForms"
-    x:Class = "SafeNotebooks.UnlockWnd">
+<pbXForms:ContentPageEx
+	xmlns = "http://xamarin.com/schemas/2014/forms"
+	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms = "clr-namespace:pbXForms"
+	xmlns:T = "clr-namespace:pbXForms"
+	x:Class = "SafeNotebooks.UnlockWnd"
+	BackgroundColor = "{StaticResource AppBarBackgroundColor}">
 
-    <StackLayout
-        Orientation = "Vertical"
-        VerticalOptions = "FillAndExpand"
-        Padding = "0"
-        Margin = "0"
-        Spacing = "0"
-        BackgroundColor = "{StaticResource AppBarBackgroundColor}">
+	<pbXForms:ContentPageEx.PageContent>
 
-        <StackLayout
-            x:Name = "_View"
-            Orientation = "Vertical"
-            VerticalOptions = "CenterAndExpand"
-            HorizontalOptions = "Center"
-            Padding = "0"
-            Margin = "0"
-            Spacing = "0">
+			<StackLayout
+				x:Name = "_View"
+				Orientation = "Vertical"
+				VerticalOptions = "CenterAndExpand"
+				HorizontalOptions = "Center"
+				Padding = "0"
+				Margin = "0"
+				Spacing = "0">
 
-            <Image
-                x:Name = "_Logo"
-                WidthRequest = "112"
-                HeightRequest = "112"
-                Aspect = "AspectFit"
-                Margin = "20, 0, 20, 20"
-                Source = "icon.png" />
+				<Image
+					x:Name = "_Logo"
+					WidthRequest = "112"
+					HeightRequest = "112"
+					Aspect = "AspectFit"
+					Margin = "20, 0, 20, 8"
+					Source = "icon.png" />
 
-            <Label
-                Text = "{T:Localized AppName}"
-                FontSize = "Large"
-                HorizontalTextAlignment = "Center" />
+				<Label
+					Text = "{T:Localized AppName}"
+					FontSize = "Large"
+					HorizontalTextAlignment = "Center" />
 
-            <Image
-                x:Name = "_FPIcon"
-                IsVisible = "false"
-                Margin = "20,20,20,0"
-                Aspect = "AspectFit"
-                Source = "ic_fingerprint.png" />
+				<Image
+					x:Name = "_FPIcon"
+					IsVisible = "false"
+					Margin = "20,20,20,0"
+					Aspect = "AspectFit"
+					Source = "ic_fingerprint.png" />
 
-            <Label
-                x:Name = "_Message"
-                IsVisible = "false"
-                Margin = "20,20,20,8"
-                HorizontalTextAlignment = "Center" />
+				<Label
+					x:Name = "_Message"
+					IsVisible = "false"
+					Margin = "20,20,20,8"
+					HorizontalTextAlignment = "Center" />
 
-            <Entry
-                IsVisible = "false"
-                x:Name = "_PIN"
-                Keyboard = "Numeric"
-                Placeholder = "{T:Localized PinPlaceholder}"
-                Margin = "0,16,0,8"
-                FontSize = "Medium"
-                HorizontalTextAlignment = "Center"
-                Completed = "PIN_Completed"
-                Focused = "PIN_Focused" />
+				<pbXForms:FlatButton
+					x:Name = "_UnlockOrCancelBtn"
+					IsVisible = "false"
+					TextColor = "{StaticResource AccentTextColor}"
+					FontSize = "Large"
+					Clicked = "UnlockBtn_Clicked" />
 
-            <pbXForms:FlatButton
-                x:Name = "_UnlockOrCancelBtn"
-                IsVisible = "false"
-                TextColor = "{StaticResource AccentTextColor}"
-                FontSize = "Large"
-                Clicked = "UnlockBtn_Clicked" />
+			</StackLayout>
 
-        </StackLayout>
+	</pbXForms:ContentPageEx.PageContent>
 
-    </StackLayout>
-
-</ContentPage>
+</pbXForms:ContentPageEx>

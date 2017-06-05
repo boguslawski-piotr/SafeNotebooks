@@ -138,6 +138,7 @@
     <BundleResource Include="Resources\ic_add_circle_accent.png" />
     <BundleResource Include="Resources\ic_move_selected.png" />
     <BundleResource Include="Resources\ic_delete_selected.png" />
+    <BundleResource Include="Resources\ic_action_backspace.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\Texts.csproj">

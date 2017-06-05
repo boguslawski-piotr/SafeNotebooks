@@ -228,6 +228,9 @@
     <BundleResource Include="Resources\ic_launcher29.png" />
     <BundleResource Include="Resources\ic_launcher58.png" />
     <BundleResource Include="Resources\ic_launcher87.png" />
+    <BundleResource Include="Resources\ic_action_backspace.png" />
+    <BundleResource Include="Resources\ic_action_backspace%402x.png" />
+    <BundleResource Include="Resources\ic_action_backspace%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\Texts.csproj">

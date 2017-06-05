@@ -34,6 +34,13 @@ namespace SafeNotebooks
 			//await SecretsManager.DeletePasswordAsync(App.Name);
 			//await SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
 			//await SecretsManager.DeletePasswordAsync(App.Name);
+			//char[] pp = { '1' };
+			//await SecretsManager.AddOrUpdatePasswordAsync(App.Name, pp);
+			//bool b = await SecretsManager.ComparePasswordAsync(App.Name, pp);
+			//Debug.Assert(b);
+			//byte[] ckey = await SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, pp);
+			//byte[] ckey2 = await SecretsManager.GetCKeyAsync(App.Name);
+			//Debug.Assert(object.Equals(ckey, ckey2));
 
 			//***
 

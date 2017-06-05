@@ -278,6 +278,11 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_move_selected.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_move_selected.png" />
     <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_action_backspace.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_action_backspace.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_action_backspace.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_action_backspace.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_action_backspace.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\values-pl\" />

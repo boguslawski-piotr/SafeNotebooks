@@ -90,11 +90,8 @@
     <data name = "UseSomeDOA" xml:space = "preserve">
 		<value>Użyj swojego sposobu na potwierdzenie, że jesteś właścicielem tego urządzenia.</value>
 	</data>
-    <data name = "IsLocked" xml:space = "preserve">
-		<value>jest aktualnie zablokowany</value>
-	</data>
-    <data name = "PinPlaceholder" xml:space = "preserve">
-		<value>wprowadź swój pin</value>
+    <data name = "PinTitle" xml:space = "preserve">
+		<value>Wprowadź swój PIN</value>
 	</data>
     <data name = "WhereStoreNotebook" xml:space = "preserve">
 		<value>Gdzie chcesz umieścić notatnik?</value>
