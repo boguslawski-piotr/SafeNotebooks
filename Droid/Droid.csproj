@@ -281,7 +281,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\values-pl\" />
-    <Folder Include="Resources\layout\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Texts\Texts.csproj">
