@@ -10,8 +10,8 @@ All of the above security techniques can be combined. :smile:
 
 The application is written in C# and uses [Xamarin](https://github.com/xamarin) and [Xamarin.Forms](https://github.com/xamarin/Xamarin.Forms) technologies, and also uses my own library [pbX](https://github.com/boguslawski-piotr/pbX) and it's like an example application for it.
 
-The whole project (app and all libraries) is based on the philosophy of open source and I sincerely invite you to jointly develop it.
+The whole project (app and all libraries) is based on the philosophy of open source and I sincerely invite you to contribute and at the same time have fun.
 
-Best regards
-
-Piotr Boguslawski
+```
+string BestRegards() => Piotr Boguslawski
+```
