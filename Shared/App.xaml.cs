@@ -66,16 +66,12 @@ namespace SafeNotebooks
 			if (_SecretsManager != null)
 				return;
 
-			_SecretsManager = new SecretsManager(App.Name, new AesCryptographer(), Settings.Current.Storage);
+			_SecretsManager = new SecretsManager(App.Name, new AesCryptographer(), Settings.Storage);
 
 #if __ANDROID__
 			// TODO: jakos lepiej to rozwiazac?
 			_SecretsManager.Initialize(MainActivity.Current);
 #endif
-
-			// TODO: do wywalenia!
-			_SecretsManager.AddOrUpdatePasswordAsync(App.Name, "1");
-			// ***
 		}
 
 		public App()
@@ -134,7 +130,7 @@ namespace SafeNotebooks
 
 			NotebooksManager.SecretsManager = SecretsManager;
 			NotebooksManager.UI = new NotebooksManagerUI();
-			await NotebooksManager.InitializeAsync(Settings.Current.Storage);
+			await NotebooksManager.InitializeAsync(Settings.Storage);
 
 			// Load/reload available notebooks
 

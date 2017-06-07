@@ -105,9 +105,14 @@ namespace SafeNotebooks
 
 		//
 
+		SettingsDlg dlg;
+
 		async void SettingsBtn_Clicked(object sender, System.EventArgs e)
 		{
-			await Navigation.PushModalAsync(new SettingsWnd(), true);
+			if(dlg == null)
+				dlg = new SettingsDlg();
+			dlg.MinimumHeightRequest = Bounds.Height - 3 * Metrics.ScreenEdgeMargin;
+			await MainWnd.Current.ModalManager.DisplayModalAsync(dlg, Device.Idiom != TargetIdiom.Phone ? ModalViewsManager.ModalPosition.Center : ModalViewsManager.ModalPosition.WholeView);
 		}
 
 

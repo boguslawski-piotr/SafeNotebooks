@@ -85,13 +85,19 @@
 		<value>Zeskanuj swój odcisk palca.</value>
 	</data>
     <data name = "EnterSystemPassword" xml:space = "preserve">
-		<value>Wprowadź swoje systemowe hasło/pin.</value>
+		<value>Wprowadź swoje systemowe hasło.</value>
 	</data>
     <data name = "UseSomeDOA" xml:space = "preserve">
 		<value>Użyj swojego sposobu na potwierdzenie, że jesteś właścicielem tego urządzenia.</value>
 	</data>
     <data name = "PinTitle" xml:space = "preserve">
 		<value>Wprowadź swój PIN</value>
+	</data>
+    <data name = "NewPinTitle" xml:space = "preserve">
+		<value>Wprowadź swój nowy PIN</value>
+	</data>
+    <data name = "ConfirmNewPinTitle" xml:space = "preserve">
+		<value>Potwierdź swój nowy PIN</value>
 	</data>
     <data name = "WhereStoreNotebook" xml:space = "preserve">
 		<value>Gdzie chcesz umieścić notatnik?</value>

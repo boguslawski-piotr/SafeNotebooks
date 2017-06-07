@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pbXForms:SettingsContentView
+	xmlns = "http://xamarin.com/schemas/2014/forms"
+	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms = "clr-namespace:pbXForms"
+	xmlns:T = "clr-namespace:pbXForms"
+	xmlns:local = "clr-namespace:SafeNotebooks"
+	x:Class = "SafeNotebooks.SettingsDlg"
+	BackgroundColor = "{StaticResource NotebookBackgroundColor}"
+	GroupDescTextColor = "{StaticResource ListItemDetailColor}"
+	GroupCollapsedExpandedImage="ic_chevron_right.png"
+	ControlBackgroundColor = "{StaticResource PageBackgroundColor}"
+	ControlTextTextColor = "{StaticResource ListItemTextColor}"
+	ControlDescTextColor = "{StaticResource ListItemDetailColor}"
+	BindingContext = "{x:Static local:App.Settings}">
+
+	<pbXForms:SettingsContentView.HeaderContent>
+
+		<Label
+			x:Name="_title"
+			Margin="8,0"
+			VerticalTextAlignment = "Center"
+			HorizontalOptions="StartAndExpand"
+			FontSize="Large"
+			LineBreakMode="TailTruncation"
+			Text = "Ustawienia Bezpieczne Notaniki" />
+
+		<pbXForms:PIButton
+			Image = "ic_close.png"
+			Clicked = "OK_Clicked" />
+
+	</pbXForms:SettingsContentView.HeaderContent>
+
+	<pbXForms:SettingsContentView.ViewContent>
+
+		<pbXForms:SettingsGroup
+			IsCollapsed="true"
+			Text = "JAKAŚ SEKCJA"
+			Desc = "jakis dlugi opis mozna tu dac">
+
+			<pbXForms:SettingsSwitch
+				Text = "switch in group -1"
+				Desc = "asddfggggggh dkd dkkd dkd kkkks skks skkks skks skksk" />
+
+			<pbXForms:SettingsSwitch
+				Text = "second switch in group -1"
+				/>
+			<pbXForms:SettingsSwitch
+				Text = "second switch in group -1"
+				IsToggled = "{Binding TryToUnlockItemItems}" />
+			<pbXForms:SettingsSwitch
+				Text = "second switch in group -1"
+				/>
+			<pbXForms:SettingsSwitch
+				Separator="false"
+				Text = "second switch in group -1"
+				IsToggled = "{Binding TryToUnlockItemItems}" />
+
+		</pbXForms:SettingsGroup>
+
+		<pbXForms:SettingsGroup
+			IsCollapsed="true"
+			Text = "ZABEZPIECZENIA"
+			Desc="Różne opcje dotyczące zabezpieczenia dostępu do programu i danych.">
+
+			<pbXForms:SettingsSwitch
+				IsToggled = "{Binding UnlockUsingDeviceOwnerAuthentication}"
+				Text = "device owner auth"
+				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
+
+			<pbXForms:SettingsSwitch
+				x:Name="UnlockUsingPin"
+				IsToggled = "{Binding UnlockUsingPin}"
+				Toggled="UnlockUsingPin_Toggled"
+				Text = "unlock with pin"
+				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
+
+			<pbXForms:SettingsSwitch
+				x:Name="UsePinAsMasterPassword"
+				IsToggled = "{Binding UsePinAsMasterPassword}"
+				Toggled="UsePinAsMasterPassword_Toggled"
+				Text = "use pin as the master password"
+				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie"/>
+
+			<pbXForms:SettingsSwitch
+				IsToggled = "{Binding TryToUnlockItemItems}"
+				Text = "try to unlock items"
+				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie"/>
+
+		</pbXForms:SettingsGroup>
+
+		<!--
+		<pbXForms:SettingsGroup
+			Text = "GroupHeader 1"
+			Desc = "Free text.... description for many, many words description for many, many words ">
+
+			<pbXForms:SettingsSwitch
+				Text = "Switch with long desc"
+				Desc = "description for many, many words description for many, many words description for many, many words" />
+
+			<StackLayout
+				Orientation = "Horizontal"
+				BackgroundColor = "#F0FCF0"
+				Padding = "8,8"
+				Spacing = "16">
+
+				<Label
+					Text = "Go deeper (button)"
+					WidthRequest = "-1"
+					VerticalOptions = "Center"
+					HorizontalOptions = "FillAndExpand" />
+
+				<Image
+					Source = "ic_chevron_right" />
+
+			</StackLayout>
+
+			<pbXForms:SettingsSeparator />
+
+			<StackLayout
+				Orientation = "Horizontal"
+				Spacing = "16"
+				Padding = "8, 8"
+				BackgroundColor = "#F0FCF0">
+
+				<Label
+					Text = "Free text.... description for many"
+					HorizontalOptions = "FillAndExpand"
+					FontSize = "Small" />
+
+				<Label
+					HorizontalOptions = "End"
+					Text = "aas kkd ajd"
+					TextColor = "Silver"
+					FontSize = "Small" />
+
+			</StackLayout>
+
+			<StackLayout
+				Orientation = "Horizontal"
+				Spacing = "16"
+				Padding = "8, 8"
+				BackgroundColor = "#F0FCF0">
+
+				<Slider
+					HorizontalOptions = "FillAndExpand" />
+
+			</StackLayout>
+
+			<StackLayout
+				Orientation = "Horizontal"
+				Spacing = "16"
+				Padding = "8, 8"
+				BackgroundColor = "#F0FCF0">
+
+				<Picker
+					Title = "wybierz cos z listy..."
+					HorizontalOptions = "FillAndExpand" />
+
+			</StackLayout>
+
+			<pbXForms:SettingsSeparator />
+
+			<StackLayout
+				Orientation = "Horizontal"
+				Spacing = "16"
+				Padding = "8, 8"
+				BackgroundColor = "#F0FCF0">
+
+				<DatePicker
+					Format = "D"
+					HorizontalOptions = "FillAndExpand" />
+
+			</StackLayout>
+
+			<StackLayout
+				Orientation = "Horizontal"
+				Spacing = "16"
+				Padding = "8, 8"
+				BackgroundColor = "#F0FCF0">
+
+				<Label
+					Text = "co zmieniamy "
+					HorizontalOptions = "FillAndExpand"
+					VerticalTextAlignment = "Center" />
+
+				<Stepper
+					HorizontalOptions = "End" />
+
+			</StackLayout>
+
+			<StackLayout
+				Orientation = "Horizontal"
+				Spacing = "16"
+				Padding = "8, 8"
+				BackgroundColor = "#F0FCF0">
+
+				<Label
+					Text = "name"
+					WidthRequest = "80"
+					HorizontalOptions = "Start"
+					VerticalTextAlignment = "Center" />
+
+				<Entry
+					HorizontalOptions = "FillAndExpand" />
+
+			</StackLayout>
+
+			<StackLayout
+				Orientation = "Horizontal"
+				Spacing = "16"
+				Padding = "8, 8"
+				BackgroundColor = "#F0FCF0">
+
+				<Label
+					Text = "password"
+					WidthRequest = "80"
+					HorizontalOptions = "Start"
+					VerticalTextAlignment = "Center" />
+
+				<Entry
+					HorizontalOptions = "FillAndExpand" />
+
+			</StackLayout>
+
+		</pbXForms:SettingsGroup>
+-->
+	</pbXForms:SettingsContentView.ViewContent>
+
+</pbXForms:SettingsContentView>

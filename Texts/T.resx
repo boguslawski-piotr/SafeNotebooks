@@ -93,6 +93,12 @@
     <data name = "PinTitle" xml:space = "preserve">
 		<value>Enter your PIN</value>
 	</data>
+    <data name = "NewPinTitle" xml:space = "preserve">
+		<value>Enter your new PIN</value>
+	</data>
+    <data name = "ConfirmNewPinTitle" xml:space = "preserve">
+		<value>Confirm your new PIN</value>
+	</data>
     <data name = "WhereStoreNotebook" xml:space = "preserve">
 		<value>Where do you want to store the notebook?</value>
 	</data>
