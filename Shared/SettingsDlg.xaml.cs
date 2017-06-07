@@ -16,9 +16,13 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 			InitializeSettings();
+			InitializeUI();
+		}
 
-			// Initialize iface
-			HeaderHeight = (DeviceEx.Orientation == DeviceOrientation.Landscape) ? Metrics.AppBarHeightLandscape : Metrics.AppBarHeightPortrait;
+		public void InitializeUI()
+		{
+			HeaderHeightInLandscape = Metrics.AppBarHeightLandscape;
+			HeaderHeightInPortrait = Metrics.AppBarHeightPortrait;
 		}
 
 		void InitializeSettings()

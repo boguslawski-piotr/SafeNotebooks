@@ -111,7 +111,11 @@ namespace SafeNotebooks
 		{
 			if(dlg == null)
 				dlg = new SettingsDlg();
+
 			dlg.MinimumHeightRequest = Bounds.Height - 3 * Metrics.ScreenEdgeMargin;
+			dlg.InitializeUI();
+			//dlg.MaximumHeightRequest = 720;
+
 			await MainWnd.Current.ModalManager.DisplayModalAsync(dlg, Device.Idiom != TargetIdiom.Phone ? ModalViewsManager.ModalPosition.Center : ModalViewsManager.ModalPosition.WholeView);
 		}
 
