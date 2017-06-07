@@ -18,8 +18,6 @@ namespace SafeNotebooks
 
 		public TState State = TState.Splash;
 
-		PinDlg dlg;
-
 		public UnlockWnd()
 		{
 			InitializeComponent();
@@ -41,11 +39,6 @@ namespace SafeNotebooks
 			_UnlockOrCancelBtn.IsVisible = false;
 		}
 
-		public static bool UnlockingNeeded
-		{
-			get { return App.Settings.UnlockUsingDeviceOwnerAuthentication || App.Settings.UnlockUsingPin; }
-		}
-
 		public void SetUnlockingMode()
 		{
 			State = TState.Unlocking;
@@ -64,7 +57,6 @@ namespace SafeNotebooks
 			if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
 			{
 				DOAuthentication doa = App.SecretsManager.AvailableDOAuthentication;
-
 				if (doa != DOAuthentication.None && TryToUnlockUsingDOAuthentication())
 				{
 					if (doa == DOAuthentication.Fingerprint)
@@ -111,11 +103,33 @@ namespace SafeNotebooks
 			}
 		}
 
+		public static PinDlg CreatePinDlg(double ownerHeight)
+		{
+			PinDlg dlg = new PinDlg();
+
+			if (ownerHeight < 360)
+				dlg.SetCompactSize();
+
+			dlg.BackgroundColor = (Color)Application.Current.Resources["PageBackgroundColor"];
+			dlg.PinVisualization.BackgroundColor = (Color)Application.Current.Resources["EntryBackgroundColor"];
+			dlg.DelBtn.Text = "";
+			dlg.DelBtn.Image = new FileImageSource { File = "ic_action_backspace.png" };
+			dlg.OKBtn.Text = "";
+			dlg.OKBtn.Image = new FileImageSource { File = "ic_done.png" };
+
+			//for (int i = 0; i < 10; i++)
+			//{
+			//	PIButton btn = dlg.DigitBtns[i];
+			//	if(btn != null)
+			//		btn.BackgroundColor = Color.Red;
+			//}		
+
+			return dlg;
+		}
+
 		async Task TryToUnlockUsingPinAsync()
 		{
-			// TODO: nie uzywac tego ustawienia, rozpoznawac po tym czy passwd jest w systemie
-			//if (App.Settings.UnlockUsingPin)
-			if(await App.SecretsManager.PasswordExistsAsync(App.Name))
+			if (await App.SecretsManager.PasswordExistsAsync(App.Name))
 			{
 				SetUnlockingMode();
 
@@ -127,33 +141,20 @@ namespace SafeNotebooks
 				_View.Padding = new Thickness(0, Bounds.Height <= 520 ? Metrics.ScreenEdgeMargin : Metrics.AppBarHeightLandscape, 0, 0);
 
 				// Run PIN dialog
-				dlg = new PinDlg();
-
-				if (Bounds.Height <= 320)
-					dlg.SetCompactSize();
-				else if (Bounds.Height > 640)
-					dlg.SetLargeSize();
-
-				dlg.BackgroundColor = (Color)Application.Current.Resources["PageBackgroundColor"];
+				PinDlg dlg = CreatePinDlg(Bounds.Height);
 				dlg.Title.Text = T.Localized("PinTitle");
-				dlg.PinVisualization.BackgroundColor = (Color)Application.Current.Resources["EntryBackgroundColor"];
-				dlg.DelBtn.Text = "";
-				dlg.DelBtn.Image = new FileImageSource { File = "ic_action_backspace.png" };
-				dlg.OKBtn.Text = "";
-				dlg.OKBtn.Image = new FileImageSource { File = "ic_done.png" };
-
-				//for (int i = 0; i < 10; i++)
-				//{
-				//	PIButton btn = dlg.DigitBtns[i];
-				//	if(btn != null)
-				//		btn.BackgroundColor = Color.Red;
-				//}
 
 				while (true)
 				{
-					if (await ModalManager.DisplayModalAsync(dlg, Bounds.Height <= 640 || Device.Idiom == TargetIdiom.Phone ? ModalViewsManager.ModalPosition.BottomCenter : ModalViewsManager.ModalPosition.Center))
+					if (await ModalManager.DisplayModalAsync(dlg, ModalViewsManager.ModalPosition.BottomCenter))
 					{
 						bool pok = await App.SecretsManager.ComparePasswordAsync(App.Name, dlg.Pin);
+						if (pok)
+						{
+							if(App.Settings.UsePinAsMasterPassword)
+								await App.SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, dlg.Pin);
+						}
+
 						dlg.Reset();
 
 						if (pok)
