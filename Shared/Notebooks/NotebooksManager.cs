@@ -301,6 +301,7 @@ namespace SafeNotebooks
 			IEnumerable<string> idsInStorage = await storage.FindIdsAsync(pattern);
 			if (idsInStorage != null)
 			{
+				int batchSize = 50;
 				foreach (var idInStorage in idsInStorage)
 				{
 					T item = (T)forWhom.Items?.Find((i) => i.IdForStorage == idInStorage);
@@ -318,13 +319,14 @@ namespace SafeNotebooks
 						}
 					}
 
-					if (tasks.Count > 50)
+					if (tasks.Count > batchSize)
 					{
 						await Task.WhenAll(tasks);
 						tasks.Clear();
 
-						// Give a little time for UI to refresh content
-						await Task.Delay(25);
+						// Give a little time for UI to refresh content and enter low power mode for the rest
+						await Task.Delay(50);
+						batchSize = 5;
 					}
 				}
 			}
