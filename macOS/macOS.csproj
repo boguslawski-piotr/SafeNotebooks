@@ -95,6 +95,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Resources\pl.lproj\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -104,6 +105,9 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -145,10 +149,16 @@
       <Project>{BD23F900-50B7-4714-98C1-D1A192C1E939}</Project>
       <Name>Texts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\pbX\pbXNet.macOS\pbXNet.macOS.csproj">
+      <Project>{038B20C3-4EDD-4619-B83A-EC3471335477}</Project>
+      <Name>pbXNet.macOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\pbX\pbXForms.macOS\pbXForms.macOS.csproj">
+      <Project>{6FE2DB7D-4FB5-4A33-AC48-41C22DEA02A5}</Project>
+      <Name>pbXForms.macOS</Name>
+    </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\pbX\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbX\pbXForms\pbXForms.projitems')" />
-  <Import Project="..\..\pbX\pbXNet\pbXNet.projitems" Label="Shared" Condition="Exists('..\..\pbX\pbXNet\pbXNet.projitems')" />
-  <Import Project="..\Shared\SafeNotebooks.Shared.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.Shared.projitems')" />
+  <Import Project="..\Shared\Shared.projitems" Label="Shared" Condition="Exists('..\Shared\Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.5.239-pre3\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.5.239-pre3\build\netstandard1.0\Xamarin.Forms.targets')" />
   <Import Project="..\packages\Xamarin.Forms.2.3.5.239-pre3\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.5.239-pre3\build\netstandard1.0\Xamarin.Forms.targets')" />

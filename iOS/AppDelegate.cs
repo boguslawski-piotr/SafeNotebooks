@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Foundation;
 using UIKit;
+using SafeNotebooks;
 
 namespace SafeNotebooks.iOS
 {

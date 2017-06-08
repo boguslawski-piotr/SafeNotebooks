@@ -134,6 +134,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Resources\pl.lproj\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -146,6 +147,9 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ic_sort%402x.png" />
@@ -237,14 +241,20 @@
       <Project>{BD23F900-50B7-4714-98C1-D1A192C1E939}</Project>
       <Name>Texts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\pbX\pbXForms.iOS\pbXForms.iOS.csproj">
+      <Project>{1E8F6F65-6007-4717-B210-C3554873F37A}</Project>
+      <Name>pbXForms.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\pbX\pbXNet.iOS\pbXNet.iOS.csproj">
+      <Project>{885C3BD5-106C-47FA-83D1-B86217610C25}</Project>
+      <Name>pbXNet.iOS</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork%402x" />
   </ItemGroup>
-  <Import Project="..\..\pbX\pbXForms\pbXForms.projitems" Label="Shared" Condition="Exists('..\..\pbX\pbXForms\pbXForms.projitems')" />
-  <Import Project="..\..\pbX\pbXNet\pbXNet.projitems" Label="Shared" Condition="Exists('..\..\pbX\pbXNet\pbXNet.projitems')" />
-  <Import Project="..\Shared\SafeNotebooks.Shared.projitems" Label="Shared" Condition="Exists('..\Shared\SafeNotebooks.Shared.projitems')" />
+  <Import Project="..\Shared\Shared.projitems" Label="Shared" Condition="Exists('..\Shared\Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.3.4.224\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.4.224\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.5.239-pre3\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.5.239-pre3\build\netstandard1.0\Xamarin.Forms.targets')" />

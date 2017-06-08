@@ -2,7 +2,7 @@
 <pbXForms:MasterDetailPageEx
     xmlns = "http://xamarin.com/schemas/2014/forms"
     xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms = "clr-namespace:pbXForms"
+    xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
     xmlns:local = "clr-namespace:SafeNotebooks"
     x:Class = "SafeNotebooks.MainWnd">
 
