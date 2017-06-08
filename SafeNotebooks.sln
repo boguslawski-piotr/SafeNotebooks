@@ -29,6 +29,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pbXForms.macOS", "..\pbX\pb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pbXForms.Droid", "..\pbX\pbXForms.Droid\pbXForms.Droid.csproj", "{D4DEE17B-27B9-4BF3-8868-76197F53EB6D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32D0ED62-3E8F-4449-8D53-FF37A0627120}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		License.md = License.md
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator

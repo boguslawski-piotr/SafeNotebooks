@@ -11,7 +11,10 @@ namespace SafeNotebooks
 {
 	public class NotebooksManager : ItemWithItems
 	{
+		public ISerializer Serializer { get; set; }
+
 		public ISecretsManager SecretsManager { get; set; }
+
 		public INotebooksManagerUI UI { get; set; }
 
 		public override string IdForStorage => "M-c4d3404e8bbb4967861357ca00905547";

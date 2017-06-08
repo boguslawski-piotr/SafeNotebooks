@@ -73,14 +73,13 @@ namespace SafeNotebooks
 
         protected override string SerializeNotEncryptedData()
         {
-            return base.SerializeNotEncryptedData() +
-                ",'iwid':" + JsonConvert.SerializeObject(iwidata, pbXNet.Settings.JsonSerializer);
+            return base.SerializeNotEncryptedData() + NotebooksManager.Serializer.ToString(iwidata, "iwid");
         }
 
-        protected override void DeserializeNotEncryptedData(JObject d)
+        protected override void DeserializeNotEncryptedData(string d)
         {
             base.DeserializeNotEncryptedData(d);
-            iwidata = JsonConvert.DeserializeObject<IWIData>(d["iwid"].ToString(), pbXNet.Settings.JsonSerializer);
+            iwidata = NotebooksManager.Serializer.FromString<IWIData>(d, "iwid");
         }
 
         protected override void InternalNew()

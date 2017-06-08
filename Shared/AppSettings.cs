@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using pbXNet;
 using Plugin.Settings;
@@ -60,8 +61,16 @@ namespace SafeNotebooks
 				return CrossSettings.Current.GetValueOrDefault<T>(key, defaultValue);
 			}
 
-			public bool AddOrUpdateValue<T>(string key, T value)
+			IDictionary<string, object> _values = new Dictionary<string, object>();
+
+			public bool AddOrUpdateValue<T>(string key, T value, [CallerMemberName]string name = null)
 			{
+				// This piece is only for the fully functional Observable interface.
+				_values.TryGetValue(key, out object storage);
+				SetValue(ref storage, value, name);
+				_values[key] = storage;
+
+				// Here is the place where the data is really written ;)
 				return CrossSettings.Current.AddOrUpdateValue<T>(key, value);
 			}
 

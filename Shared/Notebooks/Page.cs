@@ -23,14 +23,13 @@ namespace SafeNotebooks
 
         protected override string Serialize()
         {
-            return base.Serialize() +
-                ",'pd':" + JsonConvert.SerializeObject(pdata, pbXNet.Settings.JsonSerializer);
+            return base.Serialize() + NotebooksManager.Serializer.ToString(pdata, "pd");
         }
 
-        protected override void Deserialize(JObject d)
+        protected override void Deserialize(string d)
         {
             base.Deserialize(d);
-            pdata = JsonConvert.DeserializeObject<PageData>(d["pd"].ToString(), pbXNet.Settings.JsonSerializer);
+            pdata = NotebooksManager.Serializer.FromString<PageData>(d, "pd");
         }
 
         protected override void InternalNew()

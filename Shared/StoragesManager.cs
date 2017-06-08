@@ -8,7 +8,9 @@ namespace SafeNotebooks
 {
 	public class StoragesManager
 	{
-		public IList<IFileSystem> FileSystems;
+		public ISerializer Serializer { get; set; }
+
+		public IList<IFileSystem> FileSystems { get; private set; }
 
 		public IEnumerable<StorageOnFileSystem<string>> Storages => _storages?.Values;
 
@@ -60,7 +62,7 @@ namespace SafeNotebooks
 		{
 			try
 			{
-				StorageOnFileSystem<string> storage = await StorageOnFileSystem<string>.NewAsync(Id, fs);
+				StorageOnFileSystem<string> storage = await StorageOnFileSystem<string>.NewAsync(Id, fs, Serializer);
 				return storage;
 			}
 			catch (Exception ex)

@@ -262,22 +262,22 @@ namespace SafeNotebooks
 
 		protected virtual string SerializeNotEncryptedData()
 		{
-			return "'ned':" + JsonConvert.SerializeObject(nedata, pbXNet.Settings.JsonSerializer);
+			return NotebooksManager.Serializer.ToString(nedata, "ned");
 		}
 
-		protected virtual void DeserializeNotEncryptedData(JObject d)
+		protected virtual void DeserializeNotEncryptedData(string d)
 		{
-			nedata = JsonConvert.DeserializeObject<NotEncryptedData>(d["ned"].ToString(), pbXNet.Settings.JsonSerializer);
+			nedata = NotebooksManager.Serializer.FromString<NotEncryptedData>(d, "ned");
 		}
 
 		protected virtual string Serialize()
 		{
-			return "'d':" + JsonConvert.SerializeObject(data, pbXNet.Settings.JsonSerializer);
+			return NotebooksManager.Serializer.ToString(data, "d");
 		}
 
-		protected virtual void Deserialize(JObject d)
+		protected virtual void Deserialize(string d)
 		{
-			data = JsonConvert.DeserializeObject<Data>(d["d"].ToString(), pbXNet.Settings.JsonSerializer);
+			data = NotebooksManager.Serializer.FromString<Data>(d, "d");
 		}
 
 
@@ -324,22 +324,17 @@ namespace SafeNotebooks
 		protected virtual async Task<bool> InternalOpenAsync(string idInStorage, bool tryToUnlock)
 		{
 			string d = await Storage?.GetACopyAsync(idInStorage);
-			d = Obfuscator.DeObfuscate(d);
+			//d = Obfuscator.DeObfuscate(d);
 
-			int _nedEnd = d.IndexOf(NotEncyptedDataEndMarker, StringComparison.Ordinal);
-			string _ned = d.Substring(0, _nedEnd);
-
-			JObject neg = JObject.Parse("{" + _ned + "}");
-			DeserializeNotEncryptedData(neg);
+			int nedEnd = d.IndexOf(NotEncyptedDataEndMarker, StringComparison.Ordinal);
+			string ned = d.Substring(0, nedEnd);
+			DeserializeNotEncryptedData(ned);
 
 			if (tryToUnlock || !IsSecured || (!ThisIsSecured && Parent.DataIsAvailable))
 			{
-				string _d = d.Substring(_nedEnd + NotEncyptedDataEndMarker.Length);
-
-				_d = await DecryptAsync(_d);
-
-				JObject g = JObject.Parse("{" + _d + "}");
-				Deserialize(g);
+				d = d.Substring(nedEnd + NotEncyptedDataEndMarker.Length);
+				d = await DecryptAsync(d);
+				Deserialize(d);
 
 				// Xamarin.Forms binding system support
 				NameForLists = Name;
@@ -392,11 +387,11 @@ namespace SafeNotebooks
 			}
 
 			string ned = SerializeNotEncryptedData();
-			string d = Serialize();
-			string ed = await EncryptAsync(d);
+			string d = await EncryptAsync(Serialize());
 
-			d = ned + NotEncyptedDataEndMarker + ed;
-			d = Obfuscator.Obfuscate(d);
+			d = ned + NotEncyptedDataEndMarker + d;
+			//d = Obfuscator.Obfuscate(d);
+
 			await Storage?.StoreAsync(IdForStorage, d, nedata.ModifiedOn);
 
 			Modified = false;
