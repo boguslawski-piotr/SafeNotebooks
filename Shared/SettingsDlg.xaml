@@ -8,7 +8,7 @@
 	x:Class = "SafeNotebooks.SettingsDlg"
 	BackgroundColor = "{StaticResource NotebookBackgroundColor}"
 	GroupDescTextColor = "{StaticResource ListItemDetailColor}"
-	GroupCollapsedExpandedImage="ic_chevron_right.png"
+	GroupCollapsedExpandedImage = "ic_chevron_right.png"
 	ControlBackgroundColor = "{StaticResource PageBackgroundColor}"
 	ControlTextTextColor = "{StaticResource ListItemTextColor}"
 	ControlDescTextColor = "{StaticResource ListItemDetailColor}"
@@ -17,12 +17,12 @@
 	<pbXForms:SettingsContentView.HeaderContent>
 
 		<Label
-			x:Name="_title"
-			Margin="8,0"
+			x:Name = "_title"
+			Margin = "8,0"
 			VerticalTextAlignment = "Center"
-			HorizontalOptions="StartAndExpand"
-			FontSize="Large"
-			LineBreakMode="TailTruncation"
+			HorizontalOptions = "StartAndExpand"
+			FontSize = "Large"
+			LineBreakMode = "TailTruncation"
 			Text = "Ustawienia Bezpieczne Notaniki" />
 
 		<pbXForms:PIButton
@@ -33,8 +33,12 @@
 
 	<pbXForms:SettingsContentView.ViewContent>
 
+		<Button
+			Text = "Test..."
+			Clicked = "Handle_Clicked" />
+
 		<pbXForms:SettingsGroup
-			IsCollapsed="true"
+			IsCollapsed = "true"
 			Text = "JAKAŚ SEKCJA"
 			Desc = "jakis dlugi opis mozna tu dac">
 
@@ -43,25 +47,24 @@
 				Desc = "asddfggggggh dkd dkkd dkd kkkks skks skkks skks skksk" />
 
 			<pbXForms:SettingsSwitch
-				Text = "second switch in group -1"
-				/>
+				Text = "second switch in group -1" />
+
 			<pbXForms:SettingsSwitch
-				Text = "second switch in group -1"
-				IsToggled = "{Binding TryToUnlockItemItems}" />
+				Text = "second switch in group -1" />
+
 			<pbXForms:SettingsSwitch
-				Text = "second switch in group -1"
-				/>
+				Text = "second switch in group -1" />
+
 			<pbXForms:SettingsSwitch
-				Separator="false"
-				Text = "second switch in group -1"
-				IsToggled = "{Binding TryToUnlockItemItems}" />
+				Separator = "false"
+				Text = "second switch in group -1" />
 
 		</pbXForms:SettingsGroup>
 
 		<pbXForms:SettingsGroup
-			IsCollapsed="true"
+			IsCollapsed = "true"
 			Text = "ZABEZPIECZENIA"
-			Desc="Różne opcje dotyczące zabezpieczenia dostępu do programu i danych.">
+			Desc = "Różne opcje dotyczące zabezpieczenia dostępu do programu i danych.">
 
 			<pbXForms:SettingsSwitch
 				IsToggled = "{Binding UnlockUsingDeviceOwnerAuthentication}"
@@ -69,23 +72,19 @@
 				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
 
 			<pbXForms:SettingsSwitch
-				x:Name="UnlockUsingPin"
-				IsToggled = "{Binding UnlockUsingPin}"
-				Toggled="UnlockUsingPin_Toggled"
+				x:Name = "UnlockUsingPin"
 				Text = "unlock with pin"
 				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
 
 			<pbXForms:SettingsSwitch
-				x:Name="UsePinAsMasterPassword"
-				IsToggled = "{Binding UsePinAsMasterPassword}"
-				Toggled="UsePinAsMasterPassword_Toggled"
+				x:Name = "UsePinAsMasterPassword"
 				Text = "use pin as the master password"
-				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie"/>
+				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
 
 			<pbXForms:SettingsSwitch
 				IsToggled = "{Binding TryToUnlockItemItems}"
 				Text = "try to unlock items"
-				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie"/>
+				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
 
 		</pbXForms:SettingsGroup>
 

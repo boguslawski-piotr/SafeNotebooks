@@ -15,6 +15,7 @@ namespace SafeNotebooks
 		public SettingsDlg()
 		{
 			InitializeComponent();
+
 			InitializeSettings();
 			InitializeUI();
 		}
@@ -25,13 +26,43 @@ namespace SafeNotebooks
 			HeaderHeightInPortrait = Metrics.AppBarHeightPortrait;
 		}
 
-		void InitializeSettings()
+		void Handle_Clicked(object sender, System.EventArgs e)
 		{
-			UsePinAsMasterPassword.IsEnabled = App.Settings.UnlockUsingPin;
+			App.Settings.TryToUnlockItemItems = !App.Settings.TryToUnlockItemItems;
+			ApplyBindings();
 		}
 
 
 		//
+
+		void InitializeSettings()
+		{
+			if (!App.Settings.UnlockUsingPin)
+				App.Settings.UsePinAsMasterPassword = false;
+
+			UnlockUsingPin.Toggled -= UnlockUsingPin_Toggled;
+			UsePinAsMasterPassword.Toggled -= UsePinAsMasterPassword_Toggled;
+
+			// Unfortunately because of asynchronus operations it is not quite clear what and when is done
+			// and simple: unregister from event, change observable value (IsToggled), register to event again
+			// doesn't work every time :(. So the following guards are used.
+
+			if (UnlockUsingPin.IsToggled != App.Settings.UnlockUsingPin)
+			{
+				LockEvent(_UsePinAsMasterPassword_Toggled_Guard);
+				UnlockUsingPin.IsToggled = App.Settings.UnlockUsingPin;
+			}
+
+			UsePinAsMasterPassword.IsEnabled = UnlockUsingPin.IsToggled;
+			if (UsePinAsMasterPassword.IsToggled != App.Settings.UsePinAsMasterPassword)
+			{
+				LockEvent(_UsePinAsMasterPassword_Toggled_Guard);
+				UsePinAsMasterPassword.IsToggled = App.Settings.UsePinAsMasterPassword;
+			}
+
+			UnlockUsingPin.Toggled += UnlockUsingPin_Toggled;
+			UsePinAsMasterPassword.Toggled += UsePinAsMasterPassword_Toggled;
+		}
 
 		const int _UnlockUsingPin_Toggled_Guard = 0;
 		const int _UsePinAsMasterPassword_Toggled_Guard = 1;
@@ -53,11 +84,71 @@ namespace SafeNotebooks
 		{
 			bool rc = _eventsGuards[i];
 			_eventsGuards[i] = false;
+
+			if (rc)
+				InitializeSettings();
+
 			return rc;
 		}
 
 
 		//
+
+		async Task<bool> TurnOnUnlockUsingPin()
+		{
+			// The design of the function is a bit strange to be sure to clear the entire memory where the pin could be stored as soon as possible.
+
+			// Before we can turn on UnlockUsingPin option we need to ask user for pin.
+			// Twice, just to be sure... ;)
+
+			PinDlg pinDlg = UnlockWnd.CreatePinDlg(MainWnd.Current.Bounds.Height);
+			pinDlg.Title.Text = T.Localized("NewPinTitle");
+			bool rc = await MainWnd.Current.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
+			if (rc)
+			{
+				char[] pin = pinDlg.Pin.MakeACopy();
+				pinDlg.Reset();
+
+				pinDlg.Title.Text = T.Localized("ConfirmNewPinTitle");
+				rc = await MainWnd.Current.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
+				if (rc)
+					rc = pin.SequenceEqual(pinDlg.Pin);
+
+				pin.FillWithDefault();
+
+				if (rc)
+				{
+					// Everything is in order, pin confirmed and we can save it (sort of ;))
+					App.Settings.UnlockUsingPin = true;
+					await App.SecretsManager.AddOrUpdatePasswordAsync(App.Name, pinDlg.Pin);
+				}
+
+				pinDlg.Reset();
+
+				if (rc)
+					return true;
+				else
+				{
+					// Pin was not confirmed.
+					// TODO: komunikat dla uzytkownika, ze piny sie nie zgadzaja (ale NIE return!)
+				}
+			}
+
+			pinDlg.Reset();
+			await TurnOffUnlockUsingPin();
+			return false;
+		}
+
+		async Task<bool> TurnOffUnlockUsingPin()
+		{
+			if (App.Settings.UsePinAsMasterPassword && !await TurnOffUsePinAsMasterPassword())
+				return false;
+
+			App.Settings.UnlockUsingPin = false;
+			await App.SecretsManager.DeletePasswordAsync(App.Name);
+
+			return true;
+		}
 
 		async void UnlockUsingPin_Toggled(object sender, Xamarin.Forms.ToggledEventArgs e)
 		{
@@ -65,69 +156,56 @@ namespace SafeNotebooks
 				return;
 
 			if (e.Value)
-			{
-				// The design of the function is a bit strange to be sure to clear the entire memory where the pin could be stored.
-
-				// Before we can turn on UnlockUsingPin option we need to ask user for pin.
-				// Twice, just to be sure... ;)
-
-				PinDlg dlg = UnlockWnd.CreatePinDlg(Bounds.Height);
-				dlg.Title.Text = T.Localized("NewPinTitle");
-
-				bool rc = await MainWnd.Current.ModalManager.DisplayModalAsync(dlg, ModalViewsManager.ModalPosition.BottomCenter);
-				if (rc)
-				{
-					char[] pin1 = dlg.Pin.MakeACopy();
-					dlg.Reset();
-
-					dlg.Title.Text = T.Localized("ConfirmNewPinTitle");
-					rc = await MainWnd.Current.ModalManager.DisplayModalAsync(dlg, ModalViewsManager.ModalPosition.BottomCenter);
-					if (rc)
-						rc = pin1.SequenceEqual(dlg.Pin);
-
-					pin1.FillWithDefault();
-
-					if (rc)
-						// Everything is in order, pin confirmed and we can save it (sort of ;))
-						await App.SecretsManager.AddOrUpdatePasswordAsync(App.Name, dlg.Pin);
-
-					dlg.Reset();
-
-					if (rc)
-					{
-						InitializeSettings();
-						return;
-					}
-					else
-					{
-						// Pin was not confirmed.
-						// TODO: komunikat dla uzytkownika, ze piny sie nie zgadzaja (ale NIE return!)
-					}
-				}
-
-				dlg.Reset();
-			}
+				await TurnOnUnlockUsingPin();
 			else
-			{
-				// Pin was just turned off and now we have to check if it was used as the master password...
-				if (App.Settings.UsePinAsMasterPassword)
-				{
-					// ... and if so, do the right thing like decrypt all data on low level.
-					UsePinAsMasterPassword.IsToggled = false;
-					return;
-				}
-			}
-
-			// Unfortunately because of asynchronus operations it is not quite clear what and when is done
-			// and simple: unregister from event, change observable value (IsToggled), register to event again
-			// doesn't work every time :(. So the following guard is used.
-
-			LockEvent(_UnlockUsingPin_Toggled_Guard);
-			UnlockUsingPin.IsToggled = false;
+				await TurnOffUnlockUsingPin();
 
 			InitializeSettings();
+		}
 
-			await App.SecretsManager.DeletePasswordAsync(App.Name);
+		async Task<bool> TurnOnUsePinAsMasterPassword()
+		{
+			bool rc = false;
+
+			if (App.Settings.UnlockUsingPin == true)
+			{
+				PinDlg pinDlg = UnlockWnd.CreatePinDlg(MainWnd.Current.Bounds.Height);
+				pinDlg.Title.Text = T.Localized("PinTitle");
+				rc = await MainWnd.Current.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
+				if (rc)
+					rc = await App.SecretsManager.ComparePasswordAsync(App.Name, pinDlg.Pin);
+
+				pinDlg.Reset();
+
+				if (rc)
+				{
+					await App.SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, pinDlg.Pin);
+
+					// encrypt all data on low level
+
+					App.Settings.UsePinAsMasterPassword = rc;
+				}
+				else
+				{
+					// bad pin message
+				}
+			}
+
+			return false;
+		}
+
+		async Task<bool> TurnOffUsePinAsMasterPassword()
+		{
+			// We should ask the user if he really wants to do it, because it involves decrypting the data.
+			if (!await Application.Current.MainPage.DisplayAlert("Q", "Really?", "Yes", "No")) // TODO: zastapic wlasnym dialogiem
+				return false;
+
+			// Decrypt all data on low level...
+
+			App.Settings.UsePinAsMasterPassword = false;
+			await App.SecretsManager.DeleteCKeyAsync(App.Name);
+
+			return true;
 		}
 
 		async void UsePinAsMasterPassword_Toggled(object sender, Xamarin.Forms.ToggledEventArgs e)
@@ -136,43 +214,9 @@ namespace SafeNotebooks
 				return;
 
 			if (e.Value)
-			{
-				Debug.Assert(App.Settings.UnlockUsingPin == true);
-
-				// ask for pin (again... but only once)
-
-				// store ckey
-
-				// encrypt all data on low level
-			}
+				await TurnOnUsePinAsMasterPassword();
 			else
-			{
-				// Now we should ask the user if he wants to do it, because it involves decrypting the data.
-				if (!await Application.Current.MainPage.DisplayAlert("Q", "Really?", "Yes", "No")) // TODO: zastapic wlasnym dialogiem
-				{
-					// He doesn't ;) We need to rollback everything. 
-
-					// Unfortunately because of asynchronus operations it is not quite clear what and when is done
-					// and simple: unregister from event, change observable value (IsToggled), register to event again
-					// doesn't work every time :(. So the following guards are used.
-
-					LockEvent(_UsePinAsMasterPassword_Toggled_Guard);
-					UsePinAsMasterPassword.IsToggled = true;
-
-					if (!UnlockUsingPin.IsToggled)
-					{
-						LockEvent(_UnlockUsingPin_Toggled_Guard);
-						UnlockUsingPin.IsToggled = true;
-					}
-				}
-				else
-				{
-					// Decrypt all data on low level...
-
-					await App.SecretsManager.DeleteCKeyAsync(App.Name);
-					await App.SecretsManager.DeletePasswordAsync(App.Name);
-				}
-			}
+				await TurnOffUsePinAsMasterPassword();
 
 			InitializeSettings();
 		}
