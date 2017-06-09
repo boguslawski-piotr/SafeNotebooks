@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
@@ -26,7 +26,7 @@ namespace SafeNotebooks
 		protected override void OnAppearing()
 		{
 			if (State == TState.Unlocking)
-				TryToUnlock();
+				TryToUnlockAsync();
 		}
 
 		public void SetSplashMode()
@@ -50,27 +50,35 @@ namespace SafeNotebooks
 			_UnlockOrCancelBtn.IsVisible = false;
 		}
 
-		public void TryToUnlock()
+		public async Task TryToUnlockAsync()
 		{
 			SetUnlockingMode();
 
-			if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
+			try
 			{
-				DOAuthentication doa = App.SecretsManager.AvailableDOAuthentication;
-				if (doa != DOAuthentication.None && TryToUnlockUsingDOAuthentication())
+				if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
 				{
-					if (doa == DOAuthentication.Fingerprint)
+					DOAuthentication doa = App.C.SecretsManager.AvailableDOAuthentication;
+					if (doa != DOAuthentication.None && TryToUnlockUsingDOAuthentication())
 					{
-						_FPIcon.IsVisible = true;
-						_Message.Text = T.Localized("ScanFingerprint");
-					}
-					else if (doa == DOAuthentication.Password)
-						_Message.Text = T.Localized("EnterSystemPassword");
-					else
-						_Message.Text = T.Localized("UseSomeDOA");
-					_Message.IsVisible = true;
-					return;
-				};
+						if (doa == DOAuthentication.Fingerprint)
+						{
+							_FPIcon.IsVisible = true;
+							_Message.Text = T.Localized("ScanFingerprint");
+						}
+						else if (doa == DOAuthentication.Password)
+							_Message.Text = T.Localized("EnterSystemPassword");
+						else
+							_Message.Text = T.Localized("UseSomeDOA");
+						_Message.IsVisible = true;
+						return;
+					};
+				}
+			}
+			catch (Exception ex)
+			{
+				await new NotebooksManagerUI().DisplayError(ex);
+				return;
 			}
 
 			TryToUnlockUsingPinAsync();
@@ -82,7 +90,7 @@ namespace SafeNotebooks
 
 		bool TryToUnlockUsingDOAuthentication()
 		{
-			return App.SecretsManager.StartDOAuthentication(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDOAuthentication, OnNotUnlockedUsingDOAuthentication);
+			return App.C.SecretsManager.StartDOAuthentication(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDOAuthentication, OnNotUnlockedUsingDOAuthentication);
 		}
 
 		void OnUnlockedCorrectlyUsingDOAuthentication()
@@ -129,7 +137,18 @@ namespace SafeNotebooks
 
 		async Task TryToUnlockUsingPinAsync()
 		{
-			if (await App.SecretsManager.PasswordExistsAsync(App.Name))
+			bool pexists = false;
+			try
+			{
+				pexists = await App.C.SecretsManager.PasswordExistsAsync(App.Name);
+			}
+			catch (Exception ex)
+			{
+				await new NotebooksManagerUI().DisplayError(ex);
+				return;
+			}
+
+			if (pexists)
 			{
 				SetUnlockingMode();
 
@@ -148,11 +167,11 @@ namespace SafeNotebooks
 				{
 					if (await ModalManager.DisplayModalAsync(dlg, ModalViewsManager.ModalPosition.BottomCenter))
 					{
-						bool pok = await App.SecretsManager.ComparePasswordAsync(App.Name, dlg.Pin);
+						bool pok = await App.C.SecretsManager.ComparePasswordAsync(App.Name, dlg.Pin);
 						if (pok)
 						{
-							if(App.Settings.UsePinAsMasterPassword)
-								await App.SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, dlg.Pin);
+							if (App.Settings.UsePinAsMasterPassword)
+								await App.C.SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, dlg.Pin);
 						}
 
 						dlg.Reset();
@@ -185,7 +204,7 @@ namespace SafeNotebooks
 
 		void UnlockBtn_Clicked(object sender, System.EventArgs e)
 		{
-			TryToUnlock();
+			TryToUnlockAsync();
 		}
 	}
 }

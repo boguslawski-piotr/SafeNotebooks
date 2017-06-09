@@ -13,11 +13,11 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
-			MainWnd.Current.DetailViewWillBeShown += DetailViewWillBeShown;
+			Wnd.C.DetailViewWillBeShown += DetailViewWillBeShown;
 
-			App.NotebooksManager.PageWillBeSelected += PageWillBeSelected;
-			App.NotebooksManager.ItemObservableItemsCreated += ItemObservableItemsCreated;
-			App.NotebooksManager.PageSelected += PageSelected;
+			App.C.NotebooksManager.PageWillBeSelected += PageWillBeSelected;
+			App.C.NotebooksManager.ItemObservableItemsCreated += ItemObservableItemsCreated;
+			App.C.NotebooksManager.PageSelected += PageSelected;
 
 			ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
 			ListCtl.ItemTapped += ListCtl_ItemTapped;
@@ -27,13 +27,13 @@ namespace SafeNotebooks
 
 		protected override void ContinueOnSizeAllocated(double width, double height)
 		{
-			BackBtn.IsVisible = !MainWnd.Current.IsSplitView;
+			BackBtn.IsVisible = !Wnd.C.IsSplitView;
 
 			double m = !BackBtn.IsVisible ? Metrics.ScreenEdgeMargin : 0;
 			SelectedPageName.Margin = new Thickness(m, 0, 0, 0);
 			SelectedPageParentName.Margin = new Thickness(m, 0, 0, 0);
 
-			if (MainWnd.Current.IsSplitView && App.NotebooksManager.SelectedPage == null)
+			if (Wnd.C.IsSplitView && App.C.NotebooksManager.SelectedPage == null)
 				UI(forPage: false);
 			else
 				UI(forPage: true);
@@ -44,7 +44,7 @@ namespace SafeNotebooks
 
 		void DetailViewWillBeShown(object sender, (View view, object param) e)
 		{
-			if (e.param is Page page && page != App.NotebooksManager.SelectedPage)
+			if (e.param is Page page && page != App.C.NotebooksManager.SelectedPage)
 			{
 				Device.BeginInvokeOnMainThread(() =>
 				{
@@ -85,7 +85,7 @@ namespace SafeNotebooks
 			else
 			{
 				UI(forPage: false);
-				MainWnd.Current.MasterViewIsVisible = true;
+				Wnd.C.MasterViewIsVisible = true;
 			}
 		}
 
@@ -124,8 +124,8 @@ namespace SafeNotebooks
 				note.IsSelected = !note.IsSelected;
 			else
 			{
-				MainWnd.Current.ShowDetailViewAsync<TestView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward);
-				//App.NotebooksManager.SelectNoteAsync(note, App.Settings.TryToUnlockItemChildren);
+				Wnd.C.ShowDetailViewAsync<TestView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward);
+				//App.C.NotebooksManager.SelectNoteAsync(note, App.C.Settings.TryToUnlockItemChildren);
 			}
 		}
 
@@ -134,8 +134,8 @@ namespace SafeNotebooks
 
 		public override async void OnSwipeLeftToRight()
 		{
-			if (!MainWnd.Current.IsSplitView)
-				await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back, App.NotebooksManager.SelectedNotebook);
+			if (!Wnd.C.IsSplitView)
+				await Wnd.C.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back, App.C.NotebooksManager.SelectedNotebook);
 		}
 
 		void BackBtn_Clicked(object sender, System.EventArgs e)
@@ -148,7 +148,7 @@ namespace SafeNotebooks
 
 		void EditBtn_Clicked(object sender, System.EventArgs e)
 		{
-			App.NotebooksManager.SelectedPage?.EditAsync();
+			App.C.NotebooksManager.SelectedPage?.EditAsync();
 		}
 
 
@@ -163,7 +163,7 @@ namespace SafeNotebooks
 
 		void SortBtn_Clicked(object sender, System.EventArgs e)
 		{
-			base.SortBtn_Clicked(T.Localized("Notes"), App.NotebooksManager.SelectedPage, ListCtl, true);
+			base.SortBtn_Clicked(T.Localized("Notes"), App.C.NotebooksManager.SelectedPage, ListCtl, true);
 		}
 
 		async void NewBtn_Clicked(object sender, System.EventArgs e)
@@ -179,18 +179,18 @@ namespace SafeNotebooks
 
 		async void New(string what)
 		{
-			Note o = await App.NotebooksManager.SelectedPage.NewNoteAsync();
+			Note o = await App.C.NotebooksManager.SelectedPage.NewNoteAsync();
 			if (o != null)
 			{
-				await App.NotebooksManager.SelectNoteAsync(o);
+				await App.C.NotebooksManager.SelectNoteAsync(o);
 				Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, o));
 			}
 		}
 
 		void ToogleSelectModeBtn_Clicked(object sender, System.EventArgs e)
 		{
-			if (App.NotebooksManager.SelectedPage != null)
-				App.NotebooksManager.SelectedPage.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedPage.SelectModeForItemsEnabled;
+			if (App.C.NotebooksManager.SelectedPage != null)
+				App.C.NotebooksManager.SelectedPage.SelectModeForItemsEnabled = !App.C.NotebooksManager.SelectedPage.SelectModeForItemsEnabled;
 		}
 	}
 }

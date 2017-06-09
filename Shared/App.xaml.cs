@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 #if __ANDROID__
 using SafeNotebooks.Droid;
@@ -17,21 +16,21 @@ namespace SafeNotebooks
 {
 	public partial class App : Application
 	{
-		static string _Name;
+		static string _name;
 		public static string Name
 		{
 			get {
 				try
 				{
-					if (_Name == null)
+					if (_name == null)
 					{
 						string name = typeof(App).GetTypeInfo().Assembly.ManifestModule.Name;
 						int firstDot = name.IndexOf('.');
 						if (firstDot > 0)
 							name = name.Substring(0, firstDot);
-						_Name = name;
+						_name = name;
 					}
-					return _Name;
+					return _name;
 				}
 				catch
 				{
@@ -40,24 +39,24 @@ namespace SafeNotebooks
 			}
 		}
 
-		Lazy<ISerializer> _Serializer = new Lazy<ISerializer>(() => new NewtonsoftJsonSerializer());
-		public static ISerializer Serializer => (Application.Current as App)._Serializer.Value;
-
-		Lazy<ISecretsManager> _SecretsManager = new Lazy<ISecretsManager>(() => new SecretsManager(App.Name, new AesCryptographer(), Settings.Storage, Serializer));
-		public static ISecretsManager SecretsManager => (Application.Current as App)._SecretsManager.Value;
-
-		Lazy<StoragesManager> _StoragesManager = new Lazy<StoragesManager>(() => new StoragesManager(App.Name));
-		public static StoragesManager StoragesManager => (Application.Current as App)._StoragesManager.Value;
-
-		Lazy<NotebooksManager> _NotebooksManager = new Lazy<NotebooksManager>(() => new NotebooksManager());
-		public static NotebooksManager NotebooksManager => (Application.Current as App)._NotebooksManager.Value;
+		public static App C => (Current as App);
 
 		// Settings in AppSettings.cs
+
+		public ISerializer Serializer;
+
+		public ISearchableStorage<string> SafeStorage;
+
+		public ISecretsManager SecretsManager;
+
+		public StoragesManager StoragesManager;
+
+		public NotebooksManager NotebooksManager;
 
 
 		//
 
-		UnlockWnd _UnlockWnd;
+		UnlockWnd _unlockWnd;
 
 		static DateTime _startTime = DateTime.Now;
 		TimeSpan _timeFromStart => DateTime.Now - _startTime;
@@ -71,18 +70,52 @@ namespace SafeNotebooks
 			LocalizationManager.AddResource("pbXNet.Texts.T", typeof(pbXNet.LocalizationManager).GetTypeInfo().Assembly);
 		}
 
+		void CreateSerializer()
+		{
+			Serializer = new NewtonsoftJsonSerializer();  // very, very fast
+			//Serializer = new BinarySerializer();          // slow and produce 2x larger files
+		}
+
+		void CreateSafeStorage()
+		{
+			byte[] pwd = Obfuscator.Obfuscate(DeviceEx.Id).ToByteArray();
+			Debug.WriteLine($"CreateSafeStorage: pwd: {pwd.ToHexString()}");
+
+			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, new DeviceFileSystem(DeviceFileSystemRoot.Config), new AesCryptographer(), EncryptedFileSystem.CKeyType.Password, pwd);
+			SafeStorage = new StorageOnFileSystem<string>(App.Name, SafeFs, Serializer);
+		}
+
+		void CreateSecretsManager()
+		{
+			CreateSerializer();
+			CreateSafeStorage();
+			SecretsManager = new SecretsManager(App.Name, new AesCryptographer(), SafeStorage, Serializer);
+		}
+
 		void InitializeSecretsManager()
 		{
 #if __ANDROID__
 			// TODO: jakos lepiej to rozwiazac?
-			_SecretsManager.Initialize(MainActivity.Current);
+			SecretsManager.Initialize(MainActivity.Current);
 #endif
+		}
+
+		void CreateStoragesManager()
+		{
+			StoragesManager = new StoragesManager(App.Name);
 		}
 
 		async Task InitializeStoragesManagerAsync()
 		{
+			await SafeStorage.InitializeAsync();
+
 			StoragesManager.Serializer = Serializer;
 			await StoragesManager.InitializeAsync();
+		}
+
+		void CreateNotebooksManager()
+		{
+			NotebooksManager = new NotebooksManager();
 		}
 
 		async Task InitializeNotebooksManagerAsync()
@@ -90,7 +123,7 @@ namespace SafeNotebooks
 			NotebooksManager.Serializer = Serializer;
 			NotebooksManager.SecretsManager = SecretsManager;
 			NotebooksManager.UI = new NotebooksManagerUI();
-			await NotebooksManager.InitializeAsync(Settings.Storage);
+			await NotebooksManager.InitializeAsync(SafeStorage);
 		}
 
 		async Task LoadNotebooksAsync()
@@ -109,8 +142,18 @@ namespace SafeNotebooks
 			Debug.WriteLine($"App constructor: {_timeFromStart}");
 
 			InitializeLocalization();
+
+			CreateSecretsManager();
+
 			InitializeSecretsManager();
+
+			CreateStoragesManager();
+
+			CreateNotebooksManager();
+
 			InitializeComponent();
+
+			Tests();
 
 			MainPage = new MainWnd();
 		}
@@ -122,10 +165,10 @@ namespace SafeNotebooks
 		{
 			Debug.WriteLine($"OnStart: {_timeFromStart}");
 
-			_UnlockWnd = new UnlockWnd();
-			_UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
-			_UnlockWnd.SetUnlockingMode();
-			await MainPage.Navigation.PushModalAsync(_UnlockWnd, false);
+			_unlockWnd = new UnlockWnd();
+			_unlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
+			_unlockWnd.SetUnlockingMode();
+			await MainPage.Navigation.PushModalAsync(_unlockWnd, false);
 		}
 
 		async void UnlockedCorrectlyInOnStart(object sender, EventArgs e)
@@ -136,9 +179,9 @@ namespace SafeNotebooks
 			// no action on the UnlockWnd window displayed during OnStart execution.
 			await Task.Delay(500);
 
-			_UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
+			_unlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
 			await Application.Current.MainPage.Navigation.PopModalAsync(true);
-			_UnlockWnd = null;
+			_unlockWnd = null;
 
 			ContinueOnStartAsync();
 		}
@@ -163,9 +206,9 @@ namespace SafeNotebooks
 			Debug.WriteLine("OnSleep");
 
 			// Do not do anything if unlocking is in progress (app loses focus because system needs to show some dialogs)
-			if (_UnlockWnd != null)
+			if (_unlockWnd != null)
 			{
-				if (_UnlockWnd.State == UnlockWnd.TState.Unlocking)
+				if (_unlockWnd.State == UnlockWnd.TState.Unlocking)
 				{
 					Debug.WriteLine("OnSleep: did nothing");
 					return;
@@ -177,9 +220,9 @@ namespace SafeNotebooks
 			//Data.SelectPage(null, false);
 
 			// Show lock screen in order to hide data in system task manager
-			_UnlockWnd = new UnlockWnd();
-			_UnlockWnd.SetSplashMode();
-			await MainPage.Navigation.PushModalAsync(_UnlockWnd, false);
+			_unlockWnd = new UnlockWnd();
+			_unlockWnd.SetSplashMode();
+			await MainPage.Navigation.PushModalAsync(_unlockWnd, false);
 		}
 
 
@@ -190,23 +233,23 @@ namespace SafeNotebooks
 			Debug.WriteLine("OnResume");
 
 			// Do not do anything if not unlocked
-			if (_UnlockWnd == null || _UnlockWnd.State != UnlockWnd.TState.Splash)
+			if (_unlockWnd == null || _unlockWnd.State != UnlockWnd.TState.Splash)
 			{
 				Debug.WriteLine("OnResume: did nothing");
 				return;
 			}
 
-			_UnlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
-			_UnlockWnd.TryToUnlock();
+			_unlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnResume;
+			_unlockWnd.TryToUnlockAsync();
 		}
 
 		async void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
 		{
 			Debug.WriteLine("UnlockedCorrectlyInOnResume");
 
-			_UnlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
+			_unlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
 			await Application.Current.MainPage.Navigation.PopModalAsync(true);
-			_UnlockWnd = null;
+			_unlockWnd = null;
 
 			ContinueOnResumeAsync();
 		}

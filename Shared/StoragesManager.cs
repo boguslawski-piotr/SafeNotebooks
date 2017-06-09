@@ -67,7 +67,7 @@ namespace SafeNotebooks
 			}
 			catch (Exception ex)
 			{
-				await App.NotebooksManager.UI.DisplayError(ex);
+				await App.C.NotebooksManager.UI.DisplayError(ex);
 				return null;
 			}
 		}

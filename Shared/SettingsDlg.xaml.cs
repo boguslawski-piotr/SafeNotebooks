@@ -101,26 +101,26 @@ namespace SafeNotebooks
 			// Before we can turn on UnlockUsingPin option we need to ask user for pin.
 			// Twice, just to be sure... ;)
 
-			PinDlg pinDlg = UnlockWnd.CreatePinDlg(MainWnd.Current.Bounds.Height);
+			PinDlg pinDlg = UnlockWnd.CreatePinDlg(Wnd.C.Bounds.Height);
 			pinDlg.Title.Text = T.Localized("NewPinTitle");
-			bool rc = await MainWnd.Current.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
+			bool rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 			if (rc)
 			{
-				char[] pin = pinDlg.Pin.MakeACopy();
+				char[] pin = (char[])pinDlg.Pin.Clone();
 				pinDlg.Reset();
 
 				pinDlg.Title.Text = T.Localized("ConfirmNewPinTitle");
-				rc = await MainWnd.Current.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
+				rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 				if (rc)
 					rc = pin.SequenceEqual(pinDlg.Pin);
 
-				pin.FillWithDefault();
+				pin.FillWith<char>((char)0);
 
 				if (rc)
 				{
 					// Everything is in order, pin confirmed and we can save it (sort of ;))
 					App.Settings.UnlockUsingPin = true;
-					await App.SecretsManager.AddOrUpdatePasswordAsync(App.Name, pinDlg.Pin);
+					await App.C.SecretsManager.AddOrUpdatePasswordAsync(App.Name, pinDlg.Pin);
 				}
 
 				pinDlg.Reset();
@@ -145,7 +145,7 @@ namespace SafeNotebooks
 				return false;
 
 			App.Settings.UnlockUsingPin = false;
-			await App.SecretsManager.DeletePasswordAsync(App.Name);
+			await App.C.SecretsManager.DeletePasswordAsync(App.Name);
 
 			return true;
 		}
@@ -169,17 +169,17 @@ namespace SafeNotebooks
 
 			if (App.Settings.UnlockUsingPin == true)
 			{
-				PinDlg pinDlg = UnlockWnd.CreatePinDlg(MainWnd.Current.Bounds.Height);
+				PinDlg pinDlg = UnlockWnd.CreatePinDlg(Wnd.C.Bounds.Height);
 				pinDlg.Title.Text = T.Localized("PinTitle");
-				rc = await MainWnd.Current.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
+				rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 				if (rc)
-					rc = await App.SecretsManager.ComparePasswordAsync(App.Name, pinDlg.Pin);
+					rc = await App.C.SecretsManager.ComparePasswordAsync(App.Name, pinDlg.Pin);
 
 				pinDlg.Reset();
 
 				if (rc)
 				{
-					await App.SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, pinDlg.Pin);
+					await App.C.SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, pinDlg.Pin);
 
 					// encrypt all data on low level
 
@@ -203,7 +203,7 @@ namespace SafeNotebooks
 			// Decrypt all data on low level...
 
 			App.Settings.UsePinAsMasterPassword = false;
-			await App.SecretsManager.DeleteCKeyAsync(App.Name);
+			await App.C.SecretsManager.DeleteCKeyAsync(App.Name);
 
 			return true;
 		}

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using pbXForms;
-using pbXNet;
-using Xamarin.Forms;
+﻿using pbXForms;
 
 namespace SafeNotebooks
 {
-    public partial class MainWnd : MasterDetailPageEx
+	public partial class MainWnd : MasterDetailPageEx
     {
         public static MainWnd Current { get; set; }
+		public static MainWnd C => Current;
 
-        public MainWnd()
+		public MainWnd()
         {
             Current = this;
 
@@ -19,4 +15,9 @@ namespace SafeNotebooks
             InitializeViews();
         }
     }
+
+	public static class Wnd
+	{
+		public static MainWnd C => MainWnd.C;
+	}
 }

@@ -17,12 +17,12 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
-			MainWnd.Current.MasterViewWillBeShown += MasterViewWillBeShown;
+			Wnd.C.MasterViewWillBeShown += MasterViewWillBeShown;
 
-			App.NotebooksManager.NotebooksAreStartingToLoad += NotebooksAreStartingToLoad;
-			App.NotebooksManager.NotebooksLoaded += NotebooksLoaded;
+			App.C.NotebooksManager.NotebooksAreStartingToLoad += NotebooksAreStartingToLoad;
+			App.C.NotebooksManager.NotebooksLoaded += NotebooksLoaded;
 
-			App.NotebooksManager.ItemObservableItemsCreated += ObservableItemsCreated;
+			App.C.NotebooksManager.ItemObservableItemsCreated += ObservableItemsCreated;
 
 			ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
 			ListCtl.ItemTapped += ListCtl_ItemTapped;
@@ -36,7 +36,7 @@ namespace SafeNotebooks
 		protected override void ContinueOnSizeAllocated(double width, double height)
 		{
 			base.ContinueOnSizeAllocated(width, height);
-			if (MainWnd.Current.IsSplitView)
+			if (Wnd.C.IsSplitView)
 			{
 				AppTitle.FontSize = Device.GetNamedSize(NamedSize.Medium, AppTitle);
 			}
@@ -49,7 +49,7 @@ namespace SafeNotebooks
 		void MasterViewWillBeShown(object sender, (View view, object param) e)
 		{
 			if (e.view == this)
-				Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, App.NotebooksManager.SelectedNotebook));
+				Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, App.C.NotebooksManager.SelectedNotebook));
 		}
 
 		void NotebooksAreStartingToLoad(object sender, EventArgs ea)
@@ -79,21 +79,21 @@ namespace SafeNotebooks
 
 		async void RefreshNotebooks()
 		{
-			await App.NotebooksManager.LoadNotebooksAsync(App.StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
+			await App.C.NotebooksManager.LoadNotebooksAsync(App.C.StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
 			Device.BeginInvokeOnMainThread(ListCtl.EndRefresh);
 		}
 
 		async Task SelectNotebook(Notebook notebook)
 		{
-			await MainWnd.Current.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, notebook);
-			await App.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
+			await Wnd.C.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, notebook);
+			await App.C.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
 		}
 
 		async void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
 		{
 			if (e.Item is Notebook notebook)
 			{
-				if (App.NotebooksManager.SelectModeForItemsEnabled)
+				if (App.C.NotebooksManager.SelectModeForItemsEnabled)
 					notebook.IsSelected = !notebook.IsSelected;
 				else
 				{
@@ -116,7 +116,7 @@ namespace SafeNotebooks
 			dlg.InitializeUI();
 			//dlg.MaximumHeightRequest = 720;
 
-			await MainWnd.Current.ModalManager.DisplayModalAsync(dlg, Device.Idiom != TargetIdiom.Phone ? ModalViewsManager.ModalPosition.Center : ModalViewsManager.ModalPosition.WholeView);
+			await Wnd.C.ModalManager.DisplayModalAsync(dlg, Device.Idiom != TargetIdiom.Phone ? ModalViewsManager.ModalPosition.Center : ModalViewsManager.ModalPosition.WholeView);
 		}
 
 
@@ -140,7 +140,7 @@ namespace SafeNotebooks
 			//}
 			//App.NotebooksManager.SortNotebooks();
 
-			base.SortBtn_Clicked(T.Localized("Notebooks"), App.NotebooksManager, ListCtl);
+			base.SortBtn_Clicked(T.Localized("Notebooks"), App.C.NotebooksManager, ListCtl);
 		}
 
 		async Task<StorageOnFileSystem<string>> SelectStorageUIAsync(IEnumerable<StorageOnFileSystem<string>> storages)
@@ -162,14 +162,14 @@ namespace SafeNotebooks
 
 		async void NewBtn_Clicked(object sender, System.EventArgs e)
 		{
-			StorageOnFileSystem<string> storage = await App.StoragesManager.SelectStorageAsync(SelectStorageUIAsync);
+			StorageOnFileSystem<string> storage = await App.C.StoragesManager.SelectStorageAsync(SelectStorageUIAsync);
 			if (storage != null)
 			{
 				//for (int i = 0; i < 200; i++)
 				//{
 				//    await App.NotebooksManager.NewNotebookAsync(storage);
 				//}
-				Notebook notebook = await App.NotebooksManager.NewNotebookAsync(storage);
+				Notebook notebook = await App.C.NotebooksManager.NewNotebookAsync(storage);
 				if (notebook != null)
 				{
 					Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, notebook));
@@ -188,13 +188,13 @@ namespace SafeNotebooks
 
 		async void ToogleSelectModeBtn_Clicked(object sender, System.EventArgs e)
 		{
-			MoveSelectedItemsBtn.IsEnabled = App.StoragesManager.Storages.Count() > 1;
-			App.NotebooksManager.SelectModeForItemsEnabled = !App.NotebooksManager.SelectModeForItemsEnabled;
+			MoveSelectedItemsBtn.IsEnabled = App.C.StoragesManager.Storages.Count() > 1;
+			App.C.NotebooksManager.SelectModeForItemsEnabled = !App.C.NotebooksManager.SelectModeForItemsEnabled;
 
 			await Task.Delay((int)(DeviceEx.AnimationsLength * 1.33));
 
-			SelectModeToolbar.IsVisible = App.NotebooksManager.SelectModeForItemsEnabled;
-			NormalToolbar.IsVisible = !App.NotebooksManager.SelectModeForItemsEnabled;
+			SelectModeToolbar.IsVisible = App.C.NotebooksManager.SelectModeForItemsEnabled;
+			NormalToolbar.IsVisible = !App.C.NotebooksManager.SelectModeForItemsEnabled;
 		}
 	}
 }

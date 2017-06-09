@@ -85,6 +85,8 @@ namespace SafeNotebooks
 
 				public string Name => T.Localized("Settings");
 
+				public Task InitializeAsync() => Task.FromResult(true);
+
 				public async Task StoreAsync(string id, string data, DateTime modifiedOn) => CrossSettings.Current.AddOrUpdateValue<string>(id, data);
 
 				public async Task<bool> ExistsAsync(string id) => CrossSettings.Current.Contains(id);

@@ -71,7 +71,7 @@ namespace SafeNotebooks
             if (d1 == null)
                 //d1 = new NotebooksView();
                 d1 = new TestView();
-            await MainWnd.Current.ModalManager.DisplayModalAsync(d1, ModalViewsManager.ModalPosition.BottomCenter);
+            await Wnd.C.ModalManager.DisplayModalAsync(d1, ModalViewsManager.ModalPosition.BottomCenter);
         }
 #endif
     }

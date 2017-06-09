@@ -13,11 +13,11 @@ namespace SafeNotebooks
 		{
 			InitializeComponent();
 
-			MainWnd.Current.MasterViewWillBeShown += MasterViewWillBeShown;
+			Wnd.C.MasterViewWillBeShown += MasterViewWillBeShown;
 
-			App.NotebooksManager.NotebookWillBeSelected += NotebookWillBeSelected;
-			App.NotebooksManager.ItemObservableItemsCreated += ItemObservableItemsCreated;
-			App.NotebooksManager.NotebookSelected += NotebookSelected;
+			App.C.NotebooksManager.NotebookWillBeSelected += NotebookWillBeSelected;
+			App.C.NotebooksManager.ItemObservableItemsCreated += ItemObservableItemsCreated;
+			App.C.NotebooksManager.NotebookSelected += NotebookSelected;
 
 			ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
 			ListCtl.ItemTapped += ListCtl_ItemTapped;
@@ -32,7 +32,7 @@ namespace SafeNotebooks
 		{
 			if (e.view == this && e.param is Notebook notebook)
 			{
-				if (notebook != App.NotebooksManager.SelectedNotebook)
+				if (notebook != App.C.NotebooksManager.SelectedNotebook)
 				{
 					Device.BeginInvokeOnMainThread(() =>
 					{
@@ -43,7 +43,7 @@ namespace SafeNotebooks
 
 				}
 				else
-					Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, App.NotebooksManager.SelectedPage));
+					Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, App.C.NotebooksManager.SelectedPage));
 			}
 		}
 
@@ -99,8 +99,8 @@ namespace SafeNotebooks
 
 		async Task SelectPage(Page page)
 		{
-			await MainWnd.Current.ShowDetailViewAsync<PageView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, page);
-			await App.NotebooksManager.SelectPageAsync(page, App.Settings.TryToUnlockItemItems);
+			await Wnd.C.ShowDetailViewAsync<PageView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, page);
+			await App.C.NotebooksManager.SelectPageAsync(page, App.Settings.TryToUnlockItemItems);
 		}
 
 		async void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -121,7 +121,7 @@ namespace SafeNotebooks
 
 		public override async void OnSwipeLeftToRight()
 		{
-			await MainWnd.Current.ShowMasterViewAsync<NotebooksView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back);
+			await Wnd.C.ShowMasterViewAsync<NotebooksView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back);
 		}
 
 		void BackBtn_Clicked(object sender, System.EventArgs e)
@@ -134,7 +134,7 @@ namespace SafeNotebooks
 
 		void EditBtn_Clicked(object sender, System.EventArgs e)
 		{
-			App.NotebooksManager.SelectedNotebook?.EditAsync();
+			App.C.NotebooksManager.SelectedNotebook?.EditAsync();
 		}
 
 
@@ -149,13 +149,13 @@ namespace SafeNotebooks
 
 		void SortBtn_Clicked(object sender, System.EventArgs e)
 		{
-			base.SortBtn_Clicked(T.Localized("Pages"), App.NotebooksManager.SelectedNotebook, ListCtl);
+			base.SortBtn_Clicked(T.Localized("Pages"), App.C.NotebooksManager.SelectedNotebook, ListCtl);
 		}
 
 
 		async void NewBtn_Clicked(object sender, System.EventArgs e)
 		{
-			Page page = await App.NotebooksManager.SelectedNotebook.NewPageAsync();
+			Page page = await App.C.NotebooksManager.SelectedNotebook.NewPageAsync();
 			if (page != null)
 			{
 				Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, page));
@@ -166,8 +166,8 @@ namespace SafeNotebooks
 
 		void ToogleSelectModeBtn_Clicked(object sender, System.EventArgs e)
 		{
-			if (App.NotebooksManager.SelectedNotebook != null)
-				App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled = !App.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled;
+			if (App.C.NotebooksManager.SelectedNotebook != null)
+				App.C.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled = !App.C.NotebooksManager.SelectedNotebook.SelectModeForItemsEnabled;
 		}
 	}
 }

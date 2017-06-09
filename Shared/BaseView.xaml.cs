@@ -98,7 +98,7 @@ namespace SafeNotebooks
                 return;
 
             SortParametersDlg dlg = new SortParametersDlg(T.Localized("HowToSort") + " " + title + "?", item.SortParams);
-            if (await MainWnd.Current.ModalManager.DisplayModalAsync(dlg, MainWnd.Current.IsSplitView && !detailView ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter))
+            if (await Wnd.C.ModalManager.DisplayModalAsync(dlg, Wnd.C.IsSplitView && !detailView ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter))
             {
                 item.SortParams = dlg.SortParams;
                 item.SortItems();
