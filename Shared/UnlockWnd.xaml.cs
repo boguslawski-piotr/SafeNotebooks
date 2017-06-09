@@ -137,18 +137,7 @@ namespace SafeNotebooks
 
 		async Task TryToUnlockUsingPinAsync()
 		{
-			bool pexists = false;
-			try
-			{
-				pexists = await App.C.SecretsManager.PasswordExistsAsync(App.Name);
-			}
-			catch (Exception ex)
-			{
-				await new NotebooksManagerUI().DisplayError(ex);
-				return;
-			}
-
-			if (pexists)
+			if (App.Settings.UnlockUsingPin)
 			{
 				SetUnlockingMode();
 

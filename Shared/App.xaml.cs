@@ -78,7 +78,7 @@ namespace SafeNotebooks
 
 		void CreateSafeStorage()
 		{
-			byte[] pwd = Obfuscator.Obfuscate(DeviceEx.Id).ToByteArray();
+			byte[] pwd = Obfuscator.Obfuscate(Tools.GetUaqpid()).ToByteArray();
 			Debug.WriteLine($"CreateSafeStorage: pwd: {pwd.ToHexString()}");
 
 			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, new DeviceFileSystem(DeviceFileSystemRoot.Config), new AesCryptographer(), EncryptedFileSystem.CKeyType.Password, pwd);

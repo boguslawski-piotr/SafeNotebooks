@@ -77,7 +77,7 @@ namespace SafeNotebooks
 
 			//***
 
-			string s = DeviceEx.Id;
+			//string s = DeviceEx.Id;
 
 
 			//***
