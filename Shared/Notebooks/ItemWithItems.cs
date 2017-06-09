@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using pbXNet;
 
 namespace SafeNotebooks
 {
-    public class ItemWithItems : Item
+	public class ItemWithItems : Item
     {
         public List<Item> Items { get; protected set; }
 
@@ -23,7 +19,8 @@ namespace SafeNotebooks
             NotebooksManager?.OnItemObservableItemsCreated(this);
         }
 
-        public struct SortParameters
+		[Serializable]
+		public struct SortParameters
         {
             public bool ByName;
             public bool ByDate;
@@ -46,7 +43,8 @@ namespace SafeNotebooks
 
         public static readonly SortParameters DefaultSortParams = new SortParameters(false, false, true, false);
 
-        class IWIData
+        [Serializable]
+		class IWIData
         {
             public SortParameters SortParams = DefaultSortParams;
         }

@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using pbXForms;
 using pbXNet;
 
@@ -30,7 +24,8 @@ namespace SafeNotebooks
 
 		protected Item Parent { get; private set; }
 
-		public class NotEncryptedData
+		[Serializable]
+		class NotEncryptedData
 		{
 			public string Id;
 			public DateTime CreatedOn;
@@ -104,7 +99,8 @@ namespace SafeNotebooks
 
 		public bool IsSecured => (ThisIsSecured || Parent == null) ? ThisIsSecured : Parent.IsSecured;
 
-		public class Data
+		[Serializable]
+		class Data
 		{
 			public string Name;
 			public string Detail;
@@ -324,7 +320,7 @@ namespace SafeNotebooks
 		protected virtual async Task<bool> InternalOpenAsync(string idInStorage, bool tryToUnlock)
 		{
 			string d = await Storage?.GetACopyAsync(idInStorage);
-			//d = Obfuscator.DeObfuscate(d);
+			d = Obfuscator.DeObfuscate(d);
 
 			int nedEnd = d.IndexOf(NotEncyptedDataEndMarker, StringComparison.Ordinal);
 			string ned = d.Substring(0, nedEnd);
@@ -390,7 +386,7 @@ namespace SafeNotebooks
 			string d = await EncryptAsync(Serialize());
 
 			d = ned + NotEncyptedDataEndMarker + d;
-			//d = Obfuscator.Obfuscate(d);
+			d = Obfuscator.Obfuscate(d);
 
 			await Storage?.StoreAsync(IdForStorage, d, nedata.ModifiedOn);
 

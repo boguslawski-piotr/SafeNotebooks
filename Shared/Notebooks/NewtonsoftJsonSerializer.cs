@@ -20,7 +20,7 @@ namespace SafeNotebooks
 						DateTimeZoneHandling = DateTimeZoneHandling.Utc,
 						NullValueHandling = NullValueHandling.Ignore,
 #if DEBUG
-						Formatting = Formatting.Indented,
+						//Formatting = Formatting.Indented,
 #endif
 					};
 				}

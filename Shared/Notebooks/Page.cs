@@ -14,6 +14,7 @@ namespace SafeNotebooks
 		public const string IdForStoragePrefix = "P-";
 		public override string IdForStorage => IdForStoragePrefix + Notebook?.Id + "-" + base.IdForStorage;
 
+		[Serializable]
 		class PageData
         {
             public NoteType DefaultNoteType = NoteType.Note;
