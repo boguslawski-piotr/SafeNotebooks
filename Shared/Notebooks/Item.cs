@@ -373,7 +373,7 @@ namespace SafeNotebooks
 
 		protected virtual async Task<bool> InternalSaveAsync(bool force = false)
 		{
-			Debug.WriteLine($"SafeNotebooks: Item: InternalSaveAsync: for {GetType().FullName}: {Id}");
+			Log.D($"for {GetType().FullName}: {Id}", this);
 
 			DateTime modifiedOn = await Storage?.GetModifiedOnAsync(IdForStorage);
 			if (modifiedOn > nedata.ModifiedOn)
@@ -513,7 +513,7 @@ namespace SafeNotebooks
 				}
 				catch (Exception ex)
 				{
-					Debug.WriteLine($"SafeNotebooks: Item: DecryptAsync: error: {ex.Message}");
+					Log.E(ex.Message, this);
 					return null;
 				}
 

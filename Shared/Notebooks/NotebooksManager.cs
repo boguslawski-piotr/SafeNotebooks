@@ -166,7 +166,7 @@ namespace SafeNotebooks
 
 		async Task SaveAllTask()
 		{
-			//Debug.WriteLine($"NotebooksManager: SaveAllModifiedDataTask: started at {DateTime.Now.ToString("HH: mm:ss.ffff")}");
+			Log.D($"started at {DateTime.Now.ToString("HH:mm:ss.fff")}", this);
 
 			await Task.Delay(1000);
 			try
@@ -175,7 +175,7 @@ namespace SafeNotebooks
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine($"NotebooksManager: SaveAllTasks: error: {ex.Message}");
+				Log.E(ex.Message, this);
 			}
 			finally
 			{
@@ -185,7 +185,7 @@ namespace SafeNotebooks
 				}
 			}
 
-			//Debug.WriteLine($"NotebooksManager: SaveAllModifiedDataTask: ended at {DateTime.Now.ToString("HH: mm:ss.ffff")}");
+			Log.D($"ended at {DateTime.Now.ToString("HH:mm:ss.fff")}");
 		}
 
 		public event EventHandler<Item> ItemModifiedOnChanged;
@@ -337,7 +337,7 @@ namespace SafeNotebooks
 			if (tasks.Count > 0)
 				await Task.WhenAll(tasks);
 
-			//Debug.WriteLine($"NotebooksManager: LoadItemsForItemAsync: execute time {(DateTime.Now - s).Duration()}");
+			//Log.D($"execute time {(DateTime.Now - s).Duration()}");
 			return tasksExecuted > 0;
 		}
 	}

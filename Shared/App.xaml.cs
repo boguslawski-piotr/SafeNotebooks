@@ -79,7 +79,7 @@ namespace SafeNotebooks
 		void CreateSafeStorage()
 		{
 			byte[] pwd = Obfuscator.Obfuscate(Tools.GetUaqpid()).ToByteArray();
-			Debug.WriteLine($"CreateSafeStorage: pwd: {pwd.ToHexString()}");
+			Log.D($"pwd: {pwd.ToHexString()}", this);
 
 			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, new DeviceFileSystem(DeviceFileSystemRoot.Config), new AesCryptographer(), EncryptedFileSystem.CKeyType.Password, pwd);
 			SafeStorage = new StorageOnFileSystem<string>(App.Name, SafeFs, Serializer);
@@ -139,7 +139,7 @@ namespace SafeNotebooks
 
 		public App()
 		{
-			Debug.WriteLine($"App constructor: {_timeFromStart}");
+			Log.D($"{_timeFromStart}", this);
 
 			InitializeLocalization();
 
@@ -163,7 +163,7 @@ namespace SafeNotebooks
 
 		protected override async void OnStart()
 		{
-			Debug.WriteLine($"OnStart: {_timeFromStart}");
+			Log.D($"{_timeFromStart}", this);
 
 			_unlockWnd = new UnlockWnd();
 			_unlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
@@ -173,7 +173,7 @@ namespace SafeNotebooks
 
 		async void UnlockedCorrectlyInOnStart(object sender, EventArgs e)
 		{
-			Debug.WriteLine($"UnlockedCorrectlyInOnStart: {_timeFromStart}");
+			Log.D($"{_timeFromStart}", this);
 
 			// Give a little time for everything to be done in case there was 
 			// no action on the UnlockWnd window displayed during OnStart execution.
@@ -188,14 +188,14 @@ namespace SafeNotebooks
 
 		async Task ContinueOnStartAsync()
 		{
-			Debug.WriteLine($"ContinueOnStart: {_timeFromStart}");
+			Log.D($"{_timeFromStart}", this);
 
 			InitializeSecretsManager();
 			await InitializeStoragesManagerAsync();
 			await InitializeNotebooksManagerAsync();
 			await LoadNotebooksAsync();
 
-			Debug.WriteLine($"ContinueOnStart: END: {_timeFromStart}");
+			Log.D($"END: {_timeFromStart}", this);
 		}
 
 
@@ -203,14 +203,14 @@ namespace SafeNotebooks
 
 		protected override async void OnSleep()
 		{
-			Debug.WriteLine("OnSleep");
+			Log.D("", this);
 
 			// Do not do anything if unlocking is in progress (app loses focus because system needs to show some dialogs)
 			if (_unlockWnd != null)
 			{
 				if (_unlockWnd.State == UnlockWnd.TState.Unlocking)
 				{
-					Debug.WriteLine("OnSleep: did nothing");
+					Log.D("did nothing", this);
 					return;
 				}
 			}
@@ -230,12 +230,12 @@ namespace SafeNotebooks
 
 		protected override void OnResume()
 		{
-			Debug.WriteLine("OnResume");
+			Log.D("", this);
 
 			// Do not do anything if not unlocked
 			if (_unlockWnd == null || _unlockWnd.State != UnlockWnd.TState.Splash)
 			{
-				Debug.WriteLine("OnResume: did nothing");
+				Log.D("did nothing", this);
 				return;
 			}
 
@@ -245,7 +245,7 @@ namespace SafeNotebooks
 
 		async void UnlockedCorrectlyInOnResume(object sender, EventArgs e)
 		{
-			Debug.WriteLine("UnlockedCorrectlyInOnResume");
+			Log.D("", this);
 
 			_unlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
 			await Application.Current.MainPage.Navigation.PopModalAsync(true);
@@ -256,7 +256,7 @@ namespace SafeNotebooks
 
 		async Task ContinueOnResumeAsync()
 		{
-			Debug.WriteLine("ContinueOnResume");
+			Log.D("", this);
 		}
 	}
 }

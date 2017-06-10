@@ -52,7 +52,7 @@ namespace SafeNotebooks
 				Debug.Assert(d.ModifiedOn == dd.ModifiedOn);
 			}
 
-			Debug.WriteLine($"SerializeTest: {s.GetType().FullName}: {DateTime.Now - _startTime}");
+			Log.D($"{s.GetType().FullName}: {DateTime.Now - _startTime}", this);
 		}
 
 		async void Tests()
