@@ -1,0 +1,69 @@
+﻿[
+	{
+		"FileNames": [
+			"iOS/Info.plist",
+			"macOS/Info.plist"
+		],
+		"Entries": [
+			{
+				"Pattern": "<key>CFBundleShortVersionString</key>\\s*<string>\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)\\s*</string>",
+				"RevisionGroup": -1
+			},
+			{
+				"Pattern": "<key>CFBundleVersion</key>\\s*<string>\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)\\s*</string>",
+				"RevisionGroup": -1
+			},
+		]
+
+	},
+	{
+		"FileName": "Droid/Properties/AndroidManifest.xml",
+		"Entries": [
+			{
+				"Pattern": "android:versionCode\\s*=\\s*\"([0-9]+)\"",
+				"MajorGroup": -1,
+				"MinorGroup": -1,
+				"BuildGroup": 0,
+				"RevisionGroup": -1
+			},
+			{
+				"Pattern": "android:versionName\\s*=\\s*\"([0-9]+)\\.([0-9]+)\\.([0-9]+)\\s*\"",
+				"RevisionGroup": -1
+			}
+		]
+	},
+	{
+		"FileName": "CommonAssemblyInfo.cs",
+		"Entries": [
+			{
+				"Pattern": "AssemblyVersion\\(\"([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9*]+)\"\\)"
+			},
+			{
+				"Pattern": "AssemblyFileVersion\\(\"([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9*]+)\"\\)"
+			}
+		]
+	},
+	{
+		"FileName": "SafeNotebooks.sln",
+		"Entries": [
+			{
+				"Pattern": "version\\s*=\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9*]+)"
+			}
+		]
+	},
+	{
+		"FileNames": [
+			"Droid/Droid.csproj",
+			"iOS/iOS.csproj",
+			"macOS/macOS.csproj",
+			"Shared/Shared.shproj",
+			"Texts/Texts.csproj",
+		],
+		"Entries": [
+			{
+				"Pattern": "<ReleaseVersion>\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)\\s*</ReleaseVersion>"
+			}
+		]
+
+	},
+]
