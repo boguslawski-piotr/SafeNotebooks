@@ -19,6 +19,7 @@
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
+    <ReleaseVersion>1.0.0.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -295,13 +296,13 @@
       <Project>{BD23F900-50B7-4714-98C1-D1A192C1E939}</Project>
       <Name>Texts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\pbX\pbXNet.Droid\pbXNet.Droid.csproj">
-      <Project>{09F056D8-6ECD-4398-B06C-AFE32E911B85}</Project>
-      <Name>pbXNet.Droid</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\pbX\pbXForms.Droid\pbXForms.Droid.csproj">
       <Project>{D4DEE17B-27B9-4BF3-8868-76197F53EB6D}</Project>
       <Name>pbXForms.Droid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\pbX\pbXNet.Droid\pbXNet.Droid.csproj">
+      <Project>{09F056D8-6ECD-4398-B06C-AFE32E911B85}</Project>
+      <Name>pbXNet.Droid</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

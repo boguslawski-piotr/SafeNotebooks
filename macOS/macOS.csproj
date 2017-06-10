@@ -11,6 +11,7 @@
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
+    <ReleaseVersion>1.0.0.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -149,13 +150,13 @@
       <Project>{BD23F900-50B7-4714-98C1-D1A192C1E939}</Project>
       <Name>Texts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\pbX\pbXNet.macOS\pbXNet.macOS.csproj">
-      <Project>{038B20C3-4EDD-4619-B83A-EC3471335477}</Project>
-      <Name>pbXNet.macOS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\pbX\pbXForms.macOS\pbXForms.macOS.csproj">
       <Project>{6FE2DB7D-4FB5-4A33-AC48-41C22DEA02A5}</Project>
       <Name>pbXForms.macOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\pbX\pbXNet.macOS\pbXNet.macOS.csproj">
+      <Project>{038B20C3-4EDD-4619-B83A-EC3471335477}</Project>
+      <Name>pbXNet.macOS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" Condition="Exists('..\Shared\Shared.projitems')" />

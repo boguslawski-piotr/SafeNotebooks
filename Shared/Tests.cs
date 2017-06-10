@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using pbXForms;
@@ -57,6 +58,13 @@ namespace SafeNotebooks
 
 		async void Tests()
 		{
+			//***
+			Assembly pbXNetA = typeof(pbXNet.Tools).GetTypeInfo().Assembly;
+			Assembly pbXFormsA = typeof(pbXForms.AppBarLayout).GetTypeInfo().Assembly;
+			Assembly appA = typeof(App).GetTypeInfo().Assembly;
+
+			string d1 = "";
+
 			//***
 
 			//ISerializer s = new BinarySerializer();
