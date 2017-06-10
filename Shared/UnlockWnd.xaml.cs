@@ -29,6 +29,11 @@ namespace SafeNotebooks
 				TryToUnlockAsync();
 		}
 
+		protected override bool OnBackButtonPressed()
+		{
+			return false;
+		}
+
 		public void SetSplashMode()
 		{
 			State = TState.Splash;
