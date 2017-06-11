@@ -60,7 +60,6 @@
       <DependentUpon>MainWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NotebooksManagerUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\INotebooksManagerUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NoteType.cs" />

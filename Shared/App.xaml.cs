@@ -122,7 +122,7 @@ namespace SafeNotebooks
 		{
 			NotebooksManager.Serializer = Serializer;
 			NotebooksManager.SecretsManager = SecretsManager;
-			NotebooksManager.UI = new NotebooksManagerUI();
+			NotebooksManager.UI = MainWnd.Current;
 			await NotebooksManager.InitializeAsync(SafeStorage);
 		}
 
@@ -158,6 +158,7 @@ namespace SafeNotebooks
 			MainPage = new MainWnd();
 		}
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 		//
 
@@ -257,6 +258,9 @@ namespace SafeNotebooks
 		async Task ContinueOnResumeAsync()
 		{
 			Log.D("", this);
+			await Task.Delay(0);
 		}
+
+#pragma warning restore CS4014
 	}
 }

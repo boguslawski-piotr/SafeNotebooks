@@ -23,11 +23,15 @@ namespace SafeNotebooks
 			InitializeComponent();
 		}
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
 		protected override void OnAppearing()
 		{
 			if (State == TState.Unlocking)
 				TryToUnlockAsync();
 		}
+
+#pragma warning restore CS4014
 
 		protected override bool OnBackButtonPressed()
 		{
@@ -82,11 +86,15 @@ namespace SafeNotebooks
 			}
 			catch (Exception ex)
 			{
-				await new NotebooksManagerUI().DisplayError(ex);
+				await MainWnd.C.DisplayError(ex);
 				return;
 			}
 
+#pragma warning disable CS4014
+
 			TryToUnlockUsingPinAsync();
+
+#pragma warning restore CS4014
 		}
 
 		public event EventHandler UnlockedCorrectly = null;
@@ -98,10 +106,14 @@ namespace SafeNotebooks
 			return App.C.SecretsManager.StartDOAuthentication(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDOAuthentication, OnNotUnlockedUsingDOAuthentication);
 		}
 
+#pragma warning disable CS4014
+
 		void OnUnlockedCorrectlyUsingDOAuthentication()
 		{
 			TryToUnlockUsingPinAsync();
 		}
+
+#pragma warning restore CS4014
 
 		void OnNotUnlockedUsingDOAuthentication(string error, bool hint)
 		{
@@ -196,9 +208,13 @@ namespace SafeNotebooks
 
 		//
 
+#pragma warning disable CS4014
+
 		void UnlockBtn_Clicked(object sender, System.EventArgs e)
 		{
 			TryToUnlockAsync();
 		}
+
+#pragma warning restore CS4014
 	}
 }

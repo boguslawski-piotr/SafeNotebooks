@@ -87,20 +87,28 @@ namespace SafeNotebooks
 
 				public Task InitializeAsync() => Task.FromResult(true);
 
-				public async Task StoreAsync(string id, string data, DateTime modifiedOn) => CrossSettings.Current.AddOrUpdateValue<string>(id, data);
+				public Task StoreAsync(string id, string data, DateTime modifiedOn)
+				{
+					CrossSettings.Current.AddOrUpdateValue<string>(id, data); 
+					return Task.FromResult(true);
+				}
 
-				public async Task<bool> ExistsAsync(string id) => CrossSettings.Current.Contains(id);
+				public Task<bool> ExistsAsync(string id) => Task.FromResult(CrossSettings.Current.Contains(id));
 
-				public async Task<DateTime> GetModifiedOnAsync(string id) => DateTime.MinValue; // TODO: obsluzyc GetModifiedOnAsync
+				public Task<DateTime> GetModifiedOnAsync(string id) => Task.FromResult(DateTime.MinValue); // TODO: obsluzyc GetModifiedOnAsync
 
-				public async Task DiscardAsync(string id) => CrossSettings.Current.Remove(id);
+				public Task DiscardAsync(string id)
+				{
+					CrossSettings.Current.Remove(id);
+					return Task.FromResult(true);
+				}
 
-				public async Task<string> GetACopyAsync(string id)
+				public Task<string> GetACopyAsync(string id)
 				{
 					string rc = null;
 					if (CrossSettings.Current.Contains(id))
 						rc = CrossSettings.Current.GetValueOrDefault<string>(id, "");
-					return rc;
+					return Task.FromResult(rc);
 				}
 
 				public async Task<string> RetrieveAsync(string id)
@@ -113,7 +121,7 @@ namespace SafeNotebooks
 
 				public Task<IEnumerable<string>> FindIdsAsync(string pattern)
 				{
-					throw new NotImplementedException();
+					throw new NotSupportedException();
 				}
 			}
 		}

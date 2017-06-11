@@ -496,7 +496,7 @@ namespace SafeNotebooks
 			if (IsSecured)
 			{
 				byte[] ckey = await GetCKeyAsync();
-				return await NotebooksManager.SecretsManager.EncryptAsync(d, ckey, IV);
+				return NotebooksManager.SecretsManager.Encrypt(d, ckey, IV);
 			}
 
 			return d;
@@ -509,7 +509,7 @@ namespace SafeNotebooks
 				byte[] ckey = await GetCKeyAsync();
 				try
 				{
-					d = await NotebooksManager.SecretsManager.DecryptAsync(d, ckey, IV);
+					d = NotebooksManager.SecretsManager.Decrypt(d, ckey, IV);
 				}
 				catch (Exception ex)
 				{

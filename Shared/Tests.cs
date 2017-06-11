@@ -11,59 +11,60 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-	[Serializable]
-	class NotEncryptedData
-	{
-		public string Id;
-		public DateTime CreatedOn;
-		public DateTime ModifiedOn;
-		public string Color = "#00ffffff";
-		public string Nick;
-		public CKeyLifeTime CKeyLifeTime;
-		public byte[] IV;
-	}
+	//[Serializable]
+	//class NotEncryptedData
+	//{
+	//	public string Id;
+	//	public DateTime CreatedOn;
+	//	public DateTime ModifiedOn;
+	//	public string Color = "#00ffffff";
+	//	public string Nick;
+	//	public CKeyLifeTime CKeyLifeTime;
+	//	public byte[] IV;
+	//}
 
 	public partial class App : Application
 	{
-		void SerializerTest(ISerializer s)
+		//void SerializerTest(ISerializer s)
+		//{
+		//	DateTime _startTime = DateTime.Now;
+
+		//	for (int i = 0; i < 1000; i++)
+		//	{
+		//		NotEncryptedData d = new NotEncryptedData();
+
+		//		d.ModifiedOn = DateTime.UtcNow;
+		//		d.Nick = "1";
+		//		string sd = s.ToString(d, "ala1");
+
+		//		d.ModifiedOn = DateTime.UtcNow + TimeSpan.FromHours(2);
+		//		d.Nick = "2";
+		//		sd += s.ToString(d, "ala2");
+
+		//		d.ModifiedOn = DateTime.UtcNow + TimeSpan.FromHours(2);
+		//		d.Nick = "3";
+		//		sd += s.ToString(d, "ala3");
+
+		//		sd = Obfuscator.Obfuscate(sd);
+		//		sd = Obfuscator.DeObfuscate(sd);
+
+		//		NotEncryptedData dd = s.FromString<NotEncryptedData>(sd, "ala3");
+
+		//		Debug.Assert(d.ModifiedOn == dd.ModifiedOn);
+		//	}
+
+		//	Log.D($"{s.GetType().FullName}: {DateTime.Now - _startTime}", this);
+		//}
+
+		async Task Tests()
 		{
-			DateTime _startTime = DateTime.Now;
+			//string d1 = "";
 
-			for (int i = 0; i < 1000; i++)
-			{
-				NotEncryptedData d = new NotEncryptedData();
-
-				d.ModifiedOn = DateTime.UtcNow;
-				d.Nick = "1";
-				string sd = s.ToString(d, "ala1");
-
-				d.ModifiedOn = DateTime.UtcNow + TimeSpan.FromHours(2);
-				d.Nick = "2";
-				sd += s.ToString(d, "ala2");
-
-				d.ModifiedOn = DateTime.UtcNow + TimeSpan.FromHours(2);
-				d.Nick = "3";
-				sd += s.ToString(d, "ala3");
-
-				sd = Obfuscator.Obfuscate(sd);
-				sd = Obfuscator.DeObfuscate(sd);
-
-				NotEncryptedData dd = s.FromString<NotEncryptedData>(sd, "ala3");
-
-				Debug.Assert(d.ModifiedOn == dd.ModifiedOn);
-			}
-
-			Log.D($"{s.GetType().FullName}: {DateTime.Now - _startTime}", this);
-		}
-
-		async void Tests()
-		{
 			//***
-			Assembly pbXNetA = typeof(pbXNet.Tools).GetTypeInfo().Assembly;
-			Assembly pbXFormsA = typeof(pbXForms.AppBarLayout).GetTypeInfo().Assembly;
-			Assembly appA = typeof(App).GetTypeInfo().Assembly;
 
-			string d1 = "";
+			//Assembly pbXNetA = typeof(pbXNet.Tools).GetTypeInfo().Assembly;
+			//Assembly pbXFormsA = typeof(pbXForms.AppBarLayout).GetTypeInfo().Assembly;
+			//Assembly appA = typeof(App).GetTypeInfo().Assembly;
 
 			//***
 

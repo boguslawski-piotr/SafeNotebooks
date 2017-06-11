@@ -21,21 +21,21 @@
                 VerticalOptions = "CenterAndExpand"
                 Text = "" />
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 x:Name = "ByDateBtn"
                 Text = "{T:Localized SortByDate}"
                 LineBreakMode = "TailTruncation"
                 FontSize = "Medium"
                 Clicked = "ByDate_Clicked" />
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 x:Name = "ByNameBtn"
                 Text = "{T:Localized SortByName}"
                 LineBreakMode = "TailTruncation"
                 FontSize = "Medium"
                 Clicked = "ByName_Clicked" />
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 x:Name = "ByColorBtn"
                 Text = "{T:Localized SortByColor}"
                 LineBreakMode = "TailTruncation"
@@ -58,7 +58,7 @@
 
             </StackLayout>
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 Text = "{T:Localized Cancel}"
                 HeightRequest = "36"
                 FontSize = "Small"

@@ -44,7 +44,7 @@
 					Margin = "20,20,20,8"
 					HorizontalTextAlignment = "Center" />
 
-				<pbXForms:FlatButton
+				<pbXForms:PIButton
 					x:Name = "_UnlockOrCancelBtn"
 					IsVisible = "false"
 					TextColor = "{StaticResource AccentTextColor}"

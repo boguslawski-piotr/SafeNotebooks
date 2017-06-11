@@ -11,7 +11,7 @@
 
     <pbXForms:ContentViewEx.AppBarContent>
 
-        <pbXForms:FlatButton
+        <pbXForms:PIButton
             x:Name = "BackBtn"
             IsVisible = "true"
             Image = "ic_arrow_back.png"
@@ -39,7 +39,7 @@
 
         </StackLayout>
 
-        <pbXForms:FlatButton
+        <pbXForms:PIButton
             x:Name = "EditBtn"
             Image = "ic_mode_edit.png"
             Clicked = "EditBtn_Clicked" />
@@ -93,24 +93,24 @@
 
         <pbXForms:ToolBarGridLayout>
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 Grid.Column = "0"
                 HorizontalOptions = "Fill"
                 Image = "ic_sort.png"
                 Clicked = "SortBtn_Clicked" />
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 Grid.Column = "1"
                 HorizontalOptions = "Fill"
                 Image = "ic_add_circle_outline.png"
                 Clicked = "NewBtn_Clicked" />
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 Grid.Column = "2"
                 Image = "ic_add_circle_accent.png"
                 Clicked = "FavoriteNewBtn_Clicked" />
 
-            <pbXForms:FlatButton
+            <pbXForms:PIButton
                 Grid.Column = "3"
                 Image = "ic_selection_mode.png"
                 Clicked = "ToogleSelectModeBtn_Clicked" />

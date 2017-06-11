@@ -77,11 +77,20 @@ namespace SafeNotebooks
 
 		//
 
-		async void RefreshNotebooks()
+		async Task RefreshNotebooksAsync()
 		{
 			await App.C.NotebooksManager.LoadNotebooksAsync(App.C.StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
 			Device.BeginInvokeOnMainThread(ListCtl.EndRefresh);
 		}
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+		void RefreshNotebooks()
+		{
+			RefreshNotebooksAsync();
+		}
+
+#pragma warning restore CS4014
 
 		async Task SelectNotebook(Notebook notebook)
 		{
@@ -109,7 +118,7 @@ namespace SafeNotebooks
 
 		async void SettingsBtn_Clicked(object sender, System.EventArgs e)
 		{
-			if(dlg == null)
+			if (dlg == null)
 				dlg = new SettingsDlg();
 
 			dlg.MinimumHeightRequest = Bounds.Height - 3 * Metrics.ScreenEdgeMargin;
@@ -178,11 +187,11 @@ namespace SafeNotebooks
 			}
 		}
 
-		async void DeleteSelectedItemsBtn_Clicked(object sender, System.EventArgs e)
+		void DeleteSelectedItemsBtn_Clicked(object sender, System.EventArgs e)
 		{
 		}
 
-		async void MoveSelectedItemsBtn_Clicked(object sender, System.EventArgs e)
+		void MoveSelectedItemsBtn_Clicked(object sender, System.EventArgs e)
 		{
 		}
 

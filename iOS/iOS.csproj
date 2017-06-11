@@ -120,7 +120,6 @@
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\LaunchImage.launchimage\Contents.json" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher120.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher180.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ic_launcher152.png" />

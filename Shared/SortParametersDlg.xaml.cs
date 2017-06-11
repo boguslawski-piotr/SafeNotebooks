@@ -32,11 +32,6 @@ namespace SafeNotebooks
             SortParams.Clear();
         }
 
-        void Cancel_Clicked(object sender, System.EventArgs e)
-        {
-            OnCancel();
-        }
-
         public override void OnOK()
         {
             SortParams.Descending = Descending.IsToggled;
