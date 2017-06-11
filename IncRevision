@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd $HOME/Projects/SafeNotebooks
+../Tools/Versions/Versions Versions.json 
+
+git commit -am "Next: Revision"
