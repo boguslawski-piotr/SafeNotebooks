@@ -104,21 +104,21 @@ namespace SafeNotebooks
 			bool rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 			if (rc)
 			{
-				char[] pin = (char[])pinDlg.Pin.Clone();
+				Password pin = new Password(pinDlg.Pin);
 				pinDlg.Reset();
 
 				pinDlg.Title.Text = T.Localized("ConfirmNewPinTitle");
 				rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 				if (rc)
-					rc = pin.SequenceEqual(pinDlg.Pin);
+					rc = pin == pinDlg.Pin;
 
-				pin.FillWith<char>((char)0);
+				pin.Clear(true);
 
 				if (rc)
 				{
 					// Everything is in order, pin confirmed and we can save it (sort of ;))
 					App.Settings.UnlockUsingPin = true;
-					await App.C.SecretsManager.AddOrUpdatePasswordAsync(App.Name, pinDlg.Pin);
+					App.C.SecretsManager.AddOrUpdatePassword(App.Name, pinDlg.Pin);
 				}
 
 				pinDlg.Reset();
@@ -143,7 +143,7 @@ namespace SafeNotebooks
 				return false;
 
 			App.Settings.UnlockUsingPin = false;
-			await App.C.SecretsManager.DeletePasswordAsync(App.Name);
+			App.C.SecretsManager.DeletePassword(App.Name);
 
 			return true;
 		}
@@ -171,13 +171,13 @@ namespace SafeNotebooks
 				pinDlg.Title.Text = T.Localized("PinTitle");
 				rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 				if (rc)
-					rc = await App.C.SecretsManager.ComparePasswordAsync(App.Name, pinDlg.Pin);
+					rc = App.C.SecretsManager.ComparePassword(App.Name, pinDlg.Pin);
 
 				pinDlg.Reset();
 
 				if (rc)
 				{
-					await App.C.SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, pinDlg.Pin);
+					App.C.SecretsManager.CreateCKey(App.Name, CKeyLifeTime.WhileAppRunning, pinDlg.Pin);
 
 					// encrypt all data on low level
 
@@ -201,7 +201,7 @@ namespace SafeNotebooks
 			// Decrypt all data on low level...
 
 			App.Settings.UsePinAsMasterPassword = false;
-			await App.C.SecretsManager.DeleteCKeyAsync(App.Name);
+			App.C.SecretsManager.DeleteCKey(App.Name);
 
 			return true;
 		}

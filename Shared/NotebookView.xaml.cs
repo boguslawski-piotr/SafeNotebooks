@@ -99,8 +99,11 @@ namespace SafeNotebooks
 
 		async Task SelectPage(Page page)
 		{
-			await Wnd.C.ShowDetailViewAsync<PageView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward, page);
-			await App.C.NotebooksManager.SelectPageAsync(page, App.Settings.TryToUnlockItemItems);
+			if (await page.OpenAsync(true))
+			{
+				await Wnd.C.ShowDetailViewAsync<PageView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward, page);
+				await App.C.NotebooksManager.SelectPageAsync(page, App.Settings.TryToUnlockItemItems);
+			}
 		}
 
 		async void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)

@@ -93,8 +93,11 @@ namespace SafeNotebooks
 
 		async Task SelectNotebook(Notebook notebook)
 		{
-			await Wnd.C.ShowMasterViewAsync<NotebookView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward, notebook);
-			await App.C.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
+			if (await notebook.OpenAsync(true)) 
+			{
+				await Wnd.C.ShowMasterViewAsync<NotebookView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward, notebook);
+				await App.C.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
+			}
 		}
 
 		async void ListCtl_ItemTapped(object sender, ItemTappedEventArgs e)

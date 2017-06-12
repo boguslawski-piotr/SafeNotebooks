@@ -29,8 +29,8 @@ namespace SafeNotebooks
         }
     }
 
-    public partial class TestView : ModalContentView
-    {
+    public partial class TestView : pbXForms.ContentView
+	{
         public static TestModel Model { get; } = new TestModel("constructor from TestView");
 
         public static string TestProperty => "static test property";

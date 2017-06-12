@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pbXForms:ModalContentView
+<pbXForms:ContentView
 	xmlns = "http://xamarin.com/schemas/2014/forms"
 	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
@@ -8,42 +8,48 @@
 	x:Class = "SafeNotebooks.TestView"
 	BindingContext = "{x:Static local:TestView.Model}">
 
-	<ContentView.Content>
+	<pbXForms:ContentView.ViewContent>
 
-		<StackLayout
-			Padding = "30, 0, 30, 0"
-			Style = "{StaticResource stVerticalNoSpaces}">
+		<Label
+			Text = "{Binding ModelTestProperty}" />
 
-			<Label
-				Text = "{Binding ModelTestProperty}" />
+		<Label
+			Text = "{x:Static local:TestView.TestProperty}" />
 
-			<Label
-				Text = "{x:Static local:TestView.TestProperty}" />
+		<Label
+			Text = "to jest test!!!" />
 
-			<Label
-				Text = "to jest test!!!" />
+		<Label
+			Text = "to jest test!!!" />
 
-			<Label
-				Text = "to jest test!!!" />
+		<pbXForms:PITextButton
+			BackgroundColor = "Aqua"
+			Text = "back alala skks dkkd fkkf"
+			TextColor = "{StaticResource AccentTextColor}"
+			Clicked = "Hide_Clicked" />
 
-			<pbXForms:PITextButton
-				BackgroundColor = "Aqua"
-				Text = "back alala skks dkkd fkkf"
-				TextColor = "{StaticResource AccentTextColor}"
-				Clicked = "Hide_Clicked" />
+		<Button
+			BackgroundColor = "Fuchsia"
+			Text = "master show"
+			Clicked = "MS_Clicked" />
 
-			<Button
-				BackgroundColor = "Fuchsia"
-				Text = "master show"
-				Clicked = "MS_Clicked" />
+		<Button
+			BackgroundColor = "Transparent"
+			Text = "master hide"
+			Clicked = "MH_Clicked" />
 
-			<Button
-				BackgroundColor = "Transparent"
-				Text = "master hide"
-				Clicked = "MH_Clicked" />
+	</pbXForms:ContentView.ViewContent>
 
-		</StackLayout>
+	<pbXForms:ContentView.ToolBarContent>
 
-	</ContentView.Content>
+		<Label
+			Text = "footer"
+			HorizontalOptions="FillAndExpand"
+			HorizontalTextAlignment="Center"
+			VerticalOptions = "FillAndExpand"
+			VerticalTextAlignment = "Center"
+			BackgroundColor = "Gray" />
 
-</pbXForms:ModalContentView>
+	</pbXForms:ContentView.ToolBarContent>
+
+</pbXForms:ContentView>

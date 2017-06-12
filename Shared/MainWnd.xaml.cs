@@ -34,33 +34,33 @@ namespace SafeNotebooks
 			);
 		}
 
-		public async Task<string> GetPasswordAsync(Item item, bool passwordForTheFirstTime)
+		public async Task<Password> GetPasswordAsync(Item item, bool passwordForTheFirstTime)
 		{
 			// TODO: UI powinno sprawdzac poprawnosc hasla -> wykorzystac SecretsManager -> Basic authentication based on passwords
 			await DisplayAlert("Password", $"is needed for: {item.Nick}; first: {passwordForTheFirstTime}", T.Localized("Cancel"));
-			return "123";
+			return new Password("123");
 			//return null;
 		}
 
-		public async Task<(bool, string)> EditItemAsync(Item item)
+		public async Task<(bool, Password)> EditItemAsync(Item item)
 		{
 			//if (!await DisplayAlert("New/Edit", $"{item.GetType().Name}", T.Localized("OK"), T.Localized("Cancel")))
 			//return (false, "");
 
 			int lll = App.Settings.GetValueOrDefault("lll", 1);
 
-			//item.Color = Color.FromHex("#800000ff");
+			item.Color = Color.FromHex("#800000ff");
 			item.Nick = $"{item.GetType().Name} Nick " + lll;
 			item.Name = $"{item.GetType().Name} " + lll++;
 			if (lll % 2 == 0)
 				item.Detail = "alaal sksi dkd dkkfir fkfir fkdid dkdkf";
 			//item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
-			//item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+			item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
 			//item.ThisCKeyLifeTime = CKeyLifeTime.OneTime;
 
 			App.Settings.AddOrUpdateValue("lll", lll);
 
-			return (true, "123");
+			return (true, new Password("123"));
 		}
 
 		//

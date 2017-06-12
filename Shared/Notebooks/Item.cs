@@ -44,9 +44,12 @@ namespace SafeNotebooks
 			private set => nedata.Id = value;
 		}
 
+		public virtual string IdForStorage => Id;
+
 		public DateTime CreatedOn => nedata.CreatedOn;
 
 		public DateTime ModifiedOn => nedata.ModifiedOn;
+
 		public bool Modified { get; protected set; }
 
 		public Color Color
@@ -246,15 +249,7 @@ namespace SafeNotebooks
 		}
 
 
-		//
-
-		public Item()
-		{
-			//InitalizeCommands();
-		}
-
-
-		//
+		#region Serialization
 
 		protected virtual string SerializeNotEncryptedData()
 		{
@@ -276,10 +271,9 @@ namespace SafeNotebooks
 			data = NotebooksManager.Serializer.FromString<Data>(d, "d");
 		}
 
+		#endregion
 
 		//
-
-		public virtual string IdForStorage => Id;
 
 		public Item New(Item parent)
 		{
@@ -317,9 +311,21 @@ namespace SafeNotebooks
 			return await TryExecute(InternalOpenAsync(idInStorage, tryToUnlock));
 		}
 
+		public async Task<bool> OpenAsync(bool tryToUnlock)
+		{
+			return await TryExecute(InternalOpenAsync(IdForStorage, tryToUnlock));
+		}
+
 		protected virtual async Task<bool> InternalOpenAsync(string idInStorage, bool tryToUnlock)
 		{
 			string d = await Storage?.GetACopyAsync(idInStorage);
+			if (d == null)
+			{
+				// No data for the item in storage probably means that this object was just created (it is new).
+				// If the item has a name then we treat this as a correct situation.
+				return !string.IsNullOrEmpty(Name);
+			}
+
 			d = Obfuscator.DeObfuscate(d);
 
 			int nedEnd = d.IndexOf(NotEncyptedDataEndMarker, StringComparison.Ordinal);
@@ -421,57 +427,29 @@ namespace SafeNotebooks
 			await App.Current.MainPage.DisplayAlert("Delete", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
 		}
 
-		// Xamarin.Forms binding system support
 
-		//public ICommand EditItemCommand { get; private set; }
-		//public ICommand MoveItemCommand { get; private set; }
-		//public ICommand DeleteItemCommand { get; private set; }
-		//public ICommand SelectUnselectItemCommand { get; private set; }
+		#region Security Tools
 
-		//void InitalizeCommands()
-		//{
-		//    EditItemCommand = new Command(ExecuteEditItemCommand, CanExecuteEditMoveDelete);
-		//    MoveItemCommand = new Command(ExecuteMoveItemCommand, CanExecuteEditMoveDelete);
-		//    DeleteItemCommand = new Command(ExecuteDeleteItemCommand, CanExecuteEditMoveDelete);
-		//    SelectUnselectItemCommand = new Command(ExecuteSelectUnselectItemCommand, CanExecuteSelectUnselectItemCommand);
-		//}
+		Item ItemForCKey => (ThisIsSecured || Parent == null) ? this : Parent?.ItemForCKey;
 
-		//protected virtual bool CanExecuteEditMoveDelete(object sender) => true;
-		//protected virtual void ExecuteEditItemCommand(object sender) => ((Item)sender)?.EditAsync();
-		//protected virtual void ExecuteMoveItemCommand(object sender) => ((Item)sender)?.MoveAsync();
-		//protected virtual void ExecuteDeleteItemCommand(object sender) => ((Item)sender)?.DeleteAsync();
+		string IdForCKey => ItemForCKey?.Id;
 
-		//protected virtual bool CanExecuteSelectUnselectItemCommand(object sender) => true;
-		//protected virtual void ExecuteSelectUnselectItemCommand(object sender)
-		//{
-		//    Item item = (Item)sender;
-		//    if (item != null)
-		//        item.IsSelected = !item.IsSelected;
-		//}
-
-
-		//
-
-		public virtual Item ObjectFotCKey => (ThisIsSecured || Parent == null) ? this : Parent?.ObjectFotCKey;
-
-		public virtual string IdForCKey => ObjectFotCKey?.Id;
-
-		public virtual async Task InitializePasswordAsync(string passwd)
+		public virtual async Task InitializePasswordAsync(Password passwd)
 		{
-			// If user decided to secure this item with a password
-			if (ThisIsSecured && !string.IsNullOrEmpty(passwd))
+			// If user decided to secure this item with a password...
+			if (ThisIsSecured && passwd != null && passwd.Length > 0)
 			{
-				// Create ckey (in repository) for future use
-				// Ignore the result because it is not needed here
+				// ...create ckey (in repository) for future use.
+				// Ignore the result because it is not needed here.
 				await CreateCKeyAsync(passwd);
 			}
 		}
 
-		public virtual async Task<byte[]> CreateCKeyAsync(string passwd)
+		public virtual async Task<byte[]> CreateCKeyAsync(Password passwd)
 		{
-			if (string.IsNullOrEmpty(passwd))
+			if (passwd == null)
 			{
-				passwd = await NotebooksManager.UI?.GetPasswordAsync(ObjectFotCKey, IV == null);
+				passwd = await NotebooksManager.UI?.GetPasswordAsync(ItemForCKey, IV == null);
 				if (passwd == null)
 					throw new NotebooksException(NotebooksException.ErrorCode.PasswordNotGiven);
 			}
@@ -479,12 +457,12 @@ namespace SafeNotebooks
 			if (IV == null)
 				IV = NotebooksManager.SecretsManager.GenerateIV();
 
-			return await NotebooksManager.SecretsManager.CreateCKeyAsync(IdForCKey, CKeyLifeTime, passwd);
+			return NotebooksManager.SecretsManager.CreateCKey(IdForCKey, CKeyLifeTime, passwd);
 		}
 
 		public virtual async Task<byte[]> GetCKeyAsync()
 		{
-			byte[] ckey = await NotebooksManager.SecretsManager.GetCKeyAsync(IdForCKey);
+			byte[] ckey = NotebooksManager.SecretsManager.GetCKey(IdForCKey);
 			if (ckey == null)
 				ckey = await CreateCKeyAsync(null);
 
@@ -519,9 +497,9 @@ namespace SafeNotebooks
 
 				if (string.IsNullOrEmpty(d))
 				{
-					// Most likely, a bad password has been entered 
-					// To be safe delete ckey from repository in order to give a chance to ask again
-					await NotebooksManager.SecretsManager.DeleteCKeyAsync(IdForCKey);
+					// Most likely, a bad password has been entered. 
+					// To be safe delete ckey from repository in order to give a chance to ask again.
+					NotebooksManager.SecretsManager.DeleteCKey(IdForCKey);
 					throw new NotebooksException(NotebooksException.ErrorCode.BadPassword);
 				}
 			}
@@ -529,8 +507,9 @@ namespace SafeNotebooks
 			return d;
 		}
 
+		#endregion
 
-		//
+		#region Tools
 
 		volatile int _batchCounter = 0;
 		readonly Object _batchCounterLock = new Object();
@@ -562,9 +541,6 @@ namespace SafeNotebooks
 			}
 		}
 
-
-		//
-
 		protected async Task<bool> TryExecute(Task<bool> t)
 		{
 			BatchBegin();
@@ -587,5 +563,7 @@ namespace SafeNotebooks
 				BatchEnd();
 			}
 		}
+
+		#endregion
 	}
 }

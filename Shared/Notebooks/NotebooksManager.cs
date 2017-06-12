@@ -97,8 +97,10 @@ namespace SafeNotebooks
 			NotebookWillBeSelected?.Invoke(this, notebook);
 
 			if (notebook != null)
-				await notebook.LoadAsync(tryToUnlockPages);
-
+			{
+				if (!await notebook.LoadAsync(tryToUnlockPages))
+					return false;
+			}
 			PreviouslySelectedNotebook = SelectedNotebook;
 			SelectedNotebook = notebook;
 
@@ -127,7 +129,10 @@ namespace SafeNotebooks
 			PageWillBeSelected?.Invoke(this, page);
 
 			if (page != null)
-				await page.LoadAsync(tryToUnlockNotes);
+			{
+				if (!await page.LoadAsync(tryToUnlockNotes))
+					return false;
+			}
 
 			PreviouslySelectedPage = SelectedPage;
 			SelectedPage = page;
@@ -265,7 +270,7 @@ namespace SafeNotebooks
 			item.BatchBegin();
 
 			// Allow user to edit data
-			(bool ok, string passwd) rc = await UI.EditItemAsync(item);
+			(bool ok, Password passwd) rc = await UI.EditItemAsync(item);
 			if (rc.ok)
 			{
 				await item.InitializePasswordAsync(rc.passwd);

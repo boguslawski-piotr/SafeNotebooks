@@ -78,10 +78,10 @@ namespace SafeNotebooks
 
 		void CreateSafeStorage()
 		{
-			byte[] pwd = Obfuscator.Obfuscate(Tools.GetUaqpid()).ToByteArray();
-			Log.D($"pwd: {pwd.ToHexString()}", this);
+			Password passwd = new Password(Obfuscator.Obfuscate(Tools.GetUaqpid()));
+			Log.D($"pwd: {passwd}", this);
 
-			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, new DeviceFileSystem(DeviceFileSystemRoot.Config), new AesCryptographer(), EncryptedFileSystem.CKeyType.Password, pwd);
+			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, new DeviceFileSystem(DeviceFileSystemRoot.Config), new AesCryptographer(), passwd);
 			SafeStorage = new StorageOnFileSystem<string>(App.Name, SafeFs, Serializer);
 		}
 
@@ -97,6 +97,8 @@ namespace SafeNotebooks
 #if __ANDROID__
 			// TODO: jakos lepiej to rozwiazac?
 			SecretsManager.Initialize(MainActivity.Current);
+#else
+			SecretsManager.Initialize(null);
 #endif
 		}
 

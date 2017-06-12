@@ -173,11 +173,11 @@ namespace SafeNotebooks
 				{
 					if (await ModalManager.DisplayModalAsync(dlg, ModalViewsManager.ModalPosition.BottomCenter))
 					{
-						bool pok = await App.C.SecretsManager.ComparePasswordAsync(App.Name, dlg.Pin);
+						bool pok = App.C.SecretsManager.ComparePassword(App.Name, dlg.Pin);
 						if (pok)
 						{
 							if (App.Settings.UsePinAsMasterPassword)
-								await App.C.SecretsManager.CreateCKeyAsync(App.Name, CKeyLifeTime.WhileAppRunning, dlg.Pin);
+								App.C.SecretsManager.CreateCKey(App.Name, CKeyLifeTime.WhileAppRunning, dlg.Pin);
 						}
 
 						dlg.Reset();
