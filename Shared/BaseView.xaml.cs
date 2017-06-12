@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-    public abstract partial class BaseView : ContentViewEx
+    public abstract partial class BaseView : pbXForms.ContentView
     {
         public BaseView()
         {

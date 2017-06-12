@@ -99,9 +99,9 @@ namespace SafeNotebooks
 		{
 			BatchBegin();
 
-			AppBar.IsVisible = forPage;
+			AppBarLayout.IsVisible = forPage;
 			ListCtl.IsVisible = forPage;
-			ToolBar.IsVisible = forPage;
+			ToolBarLayout.IsVisible = forPage;
 
 			NoUIBar.IsVisible = !forPage;
 
@@ -124,7 +124,7 @@ namespace SafeNotebooks
 				note.IsSelected = !note.IsSelected;
 			else
 			{
-				Wnd.C.ShowDetailViewAsync<TestView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward);
+				Wnd.C.ShowDetailViewAsync<TestView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward);
 				//App.C.NotebooksManager.SelectNoteAsync(note, App.C.Settings.TryToUnlockItemChildren);
 			}
 		}
@@ -135,7 +135,7 @@ namespace SafeNotebooks
 		public override async void OnSwipeLeftToRight()
 		{
 			if (!Wnd.C.IsSplitView)
-				await Wnd.C.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back, App.C.NotebooksManager.SelectedNotebook);
+				await Wnd.C.ShowMasterViewAsync<NotebookView>(MastersDetailsPage.ViewsSwitchingAnimation.Back, App.C.NotebooksManager.SelectedNotebook);
 		}
 
 		void BackBtn_Clicked(object sender, System.EventArgs e)

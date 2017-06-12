@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pbXForms:ModalContentView
-    xmlns = "http://xamarin.com/schemas/2014/forms"
-    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.SortParametersDlg"
-    BackgroundColor = "{StaticResource PageBackgroundColor}"
-    Padding = "{x:Static pbXForms:Metrics.ScreenEdgePadding}">
+	xmlns = "http://xamarin.com/schemas/2014/forms"
+	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:local = "clr-namespace:SafeNotebooks"
+	x:Class = "SafeNotebooks.SortParametersDlg"
+	BackgroundColor = "{StaticResource PageBackgroundColor}"
+	Padding = "{x:Static pbXForms:Metrics.ScreenEdgePadding}">
 
-    <ContentView.Content>
+	<ContentView.Content>
 
-        <StackLayout
-            MinimumWidthRequest = "240"
-            Style = "{StaticResource stVerticalNoSpaces}">
+		<StackLayout
+			MinimumWidthRequest = "240"
+			Style = "{StaticResource stVerticalNoSpaces}">
 
-            <Label
-                x:Name = "Title"
-                Margin = "0,0,0,16"
-                VerticalOptions = "CenterAndExpand"
-                Text = "" />
+			<Label
+				x:Name = "Title"
+				Margin = "0,0,0,16"
+				VerticalOptions = "CenterAndExpand"
+				Text = "" />
 
-            <pbXForms:PIButton
-                x:Name = "ByDateBtn"
-                Text = "{T:Localized SortByDate}"
-                LineBreakMode = "TailTruncation"
-                FontSize = "Medium"
-                Clicked = "ByDate_Clicked" />
+			<pbXForms:PIButton
+				x:Name = "ByDateBtn"
+				Text = "{T:Localized SortByDate}"
+				LineBreakMode = "TailTruncation"
+				FontSize = "Medium"
+				Clicked = "ByDate_Clicked" />
 
-            <pbXForms:PIButton
-                x:Name = "ByNameBtn"
-                Text = "{T:Localized SortByName}"
-                LineBreakMode = "TailTruncation"
-                FontSize = "Medium"
-                Clicked = "ByName_Clicked" />
+			<pbXForms:PIButton
+				x:Name = "ByNameBtn"
+				Text = "{T:Localized SortByName}"
+				LineBreakMode = "TailTruncation"
+				FontSize = "Medium"
+				Clicked = "ByName_Clicked" />
 
-            <pbXForms:PIButton
-                x:Name = "ByColorBtn"
-                Text = "{T:Localized SortByColor}"
-                LineBreakMode = "TailTruncation"
-                FontSize = "Medium"
-                Clicked = "ByColor_Clicked" />
+			<pbXForms:PIButton
+				x:Name = "ByColorBtn"
+				Text = "{T:Localized SortByColor}"
+				LineBreakMode = "TailTruncation"
+				FontSize = "Medium"
+				Clicked = "ByColor_Clicked" />
 
-            <StackLayout
-                Padding = "0,16,0,16"
-                Spacing = "8"
-                HorizontalOptions = "CenterAndExpand"
-                Style = "{StaticResource stHorizontalNoSpaces}">
+			<StackLayout
+				Padding = "0,16,0,16"
+				Spacing = "8"
+				HorizontalOptions = "CenterAndExpand"
+				Style = "{StaticResource stHorizontalNoSpaces}">
 
-                <Label
-                    VerticalTextAlignment = "Center"
-                    Text = "{T:Localized Descending}"
-                    FontSize = "Small" />
+				<Label
+					VerticalTextAlignment = "Center"
+					Text = "{T:Localized Descending}"
+					FontSize = "Small" />
 
-                <Switch
-                    x:Name = "Descending" />
+				<Switch
+					x:Name = "Descending" />
 
-            </StackLayout>
+			</StackLayout>
 
-            <pbXForms:PIButton
-                Text = "{T:Localized Cancel}"
-                HeightRequest = "36"
-                FontSize = "Small"
-                Clicked = "Cancel_Clicked" />
+			<pbXForms:PIButton
+				Text = "{T:Localized Cancel}"
+				HeightRequest = "36"
+				FontSize = "Small"
+				Clicked = "Cancel_Clicked" />
 
-        </StackLayout>
+		</StackLayout>
 
-    </ContentView.Content>
+	</ContentView.Content>
 
 </pbXForms:ModalContentView>

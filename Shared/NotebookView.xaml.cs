@@ -99,7 +99,7 @@ namespace SafeNotebooks
 
 		async Task SelectPage(Page page)
 		{
-			await Wnd.C.ShowDetailViewAsync<PageView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, page);
+			await Wnd.C.ShowDetailViewAsync<PageView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward, page);
 			await App.C.NotebooksManager.SelectPageAsync(page, App.Settings.TryToUnlockItemItems);
 		}
 
@@ -121,7 +121,7 @@ namespace SafeNotebooks
 
 		public override async void OnSwipeLeftToRight()
 		{
-			await Wnd.C.ShowMasterViewAsync<NotebooksView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back);
+			await Wnd.C.ShowMasterViewAsync<NotebooksView>(MastersDetailsPage.ViewsSwitchingAnimation.Back);
 		}
 
 		void BackBtn_Clicked(object sender, System.EventArgs e)

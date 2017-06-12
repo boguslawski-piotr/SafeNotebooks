@@ -6,18 +6,18 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-	public partial class MainWnd : MasterDetailPageEx, INotebooksManagerUI
-    {
-        public static MainWnd Current { get; set; }
+	public partial class MainWnd : MastersDetailsPage, INotebooksManagerUI
+	{
+		public static MainWnd Current { get; set; }
 		public static MainWnd C => Current;
 
 		public MainWnd()
-        {
-            Current = this;
+		{
+			Current = this;
 
-            InitializeComponent();
-            InitializeViews();
-        }
+			InitializeComponent();
+			InitializeViews();
+		}
 
 		//
 
@@ -34,7 +34,6 @@ namespace SafeNotebooks
 			);
 		}
 
-
 		public async Task<string> GetPasswordAsync(Item item, bool passwordForTheFirstTime)
 		{
 			// TODO: UI powinno sprawdzac poprawnosc hasla -> wykorzystac SecretsManager -> Basic authentication based on passwords
@@ -42,7 +41,6 @@ namespace SafeNotebooks
 			return "123";
 			//return null;
 		}
-
 
 		public async Task<(bool, string)> EditItemAsync(Item item)
 		{
@@ -65,7 +63,6 @@ namespace SafeNotebooks
 			return (true, "123");
 		}
 
-
 		//
 
 		public string LockedImageNameForLists { get; } = "ic_lock_outline.png";
@@ -74,7 +71,7 @@ namespace SafeNotebooks
 		public string SelectedImageNameForLists { get; } = "ic_radio_button_checked.png";
 		public string UnselectedImageNameForLists { get; } = "ic_radio_button_unchecked.png";
 		public double SelectedUnselectedImageWidthForLists { get; } = Metrics.SmallIconHeight;
-    }
+	}
 
 	public static class Wnd
 	{

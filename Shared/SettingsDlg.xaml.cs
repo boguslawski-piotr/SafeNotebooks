@@ -22,8 +22,6 @@ namespace SafeNotebooks
 
 		public void InitializeUI()
 		{
-			HeaderHeightInLandscape = Metrics.AppBarHeightLandscape;
-			HeaderHeightInPortrait = Metrics.AppBarHeightPortrait;
 		}
 
 		void Handle_Clicked(object sender, System.EventArgs e)

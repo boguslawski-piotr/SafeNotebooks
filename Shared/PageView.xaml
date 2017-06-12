@@ -1,122 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <local:BaseView
-    xmlns = "http://xamarin.com/schemas/2014/forms"
-    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.PageView"
-    BackgroundColor = "{StaticResource PageBackgroundColor}">
+	xmlns = "http://xamarin.com/schemas/2014/forms"
+	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:local = "clr-namespace:SafeNotebooks"
+	x:Class = "SafeNotebooks.PageView"
+	BackgroundColor = "{StaticResource PageBackgroundColor}">
 
-    <pbXForms:ContentViewEx.AppBarContent>
+	<pbXForms:ContentView.AppBarContent>
 
-        <pbXForms:PIButton
-            x:Name = "BackBtn"
-            IsVisible = "true"
-            Image = "ic_arrow_back.png"
-            Clicked = "BackBtn_Clicked" />
+		<pbXForms:PIButton
+			x:Name = "BackBtn"
+			IsVisible = "true"
+			Image = "ic_arrow_back.png"
+			Clicked = "BackBtn_Clicked" />
 
-        <StackLayout
-            x:Name = "SelectedPageBar"
-            Style = "{StaticResource stVerticalNoSpaces}">
+		<StackLayout
+			x:Name = "SelectedPageBar"
+			Style = "{StaticResource stVerticalNoSpaces}">
 
-            <Label
-                x:Name = "SelectedPageName"
-                Text = ""
-                TextColor = "{StaticResource AppBarTextColor}"
-                LineBreakMode = "MiddleTruncation"
-                VerticalOptions = "Center"
-                HorizontalOptions = "FillAndExpand" />
+			<Label
+				x:Name = "SelectedPageName"
+				Text = ""
+				TextColor = "{StaticResource AppBarTextColor}"
+				LineBreakMode = "MiddleTruncation"
+				VerticalOptions = "Center"
+				HorizontalOptions = "FillAndExpand" />
 
-            <Label
-                x:Name = "SelectedPageParentName"
-                Text = ""
-                FontSize = "Micro"
-                TextColor = "{StaticResource ListItemDetailColor}"
-                LineBreakMode = "MiddleTruncation"
-                VerticalOptions = "Center" />
+			<Label
+				x:Name = "SelectedPageParentName"
+				Text = ""
+				FontSize = "Micro"
+				TextColor = "{StaticResource ListItemDetailColor}"
+				LineBreakMode = "MiddleTruncation"
+				VerticalOptions = "Center" />
 
-        </StackLayout>
+		</StackLayout>
 
-        <pbXForms:PIButton
-            x:Name = "EditBtn"
-            Image = "ic_mode_edit.png"
-            Clicked = "EditBtn_Clicked" />
+		<pbXForms:PIButton
+			x:Name = "EditBtn"
+			Image = "ic_mode_edit.png"
+			Clicked = "EditBtn_Clicked" />
 
-    </pbXForms:ContentViewEx.AppBarContent>
+	</pbXForms:ContentView.AppBarContent>
 
-    <pbXForms:ContentViewEx.ViewContent>
+	<pbXForms:ContentView.ViewContent>
 
-        <AbsoluteLayout
-            VerticalOptions = "FillAndExpand"
-            HorizontalOptions = "FillAndExpand">
+		<AbsoluteLayout
+			VerticalOptions = "FillAndExpand"
+			HorizontalOptions = "FillAndExpand">
 
-            <ListView
-                x:Name = "ListCtl"
-                IsVisible = "true"
-                AbsoluteLayout.LayoutFlags = "SizeProportional"
-                AbsoluteLayout.LayoutBounds = "0,0,1,1"
-                RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
-                BackgroundColor = "{StaticResource PageBackgroundColor}"
-                SeparatorColor = "{StaticResource ListItemDividerColor}"
-                HeaderTemplate = "{StaticResource SearchBarTemplate}"
-                Header = " "
-                ItemTemplate = "{StaticResource ItemListViewItemTemlate}">
+			<ListView
+				x:Name = "ListCtl"
+				IsVisible = "true"
+				AbsoluteLayout.LayoutFlags = "SizeProportional"
+				AbsoluteLayout.LayoutBounds = "0,0,1,1"
+				RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
+				BackgroundColor = "{StaticResource PageBackgroundColor}"
+				SeparatorColor = "{StaticResource ListItemDividerColor}"
+				HeaderTemplate = "{StaticResource SearchBarTemplate}"
+				Header = " "
+				ItemTemplate = "{StaticResource ItemListViewItemTemlate}">
 
-            </ListView>
+			</ListView>
 
-            <StackLayout
-                x:Name = "NoUIBar"
-                IsVisible = "false"
-                AbsoluteLayout.LayoutFlags = "SizeProportional"
-                AbsoluteLayout.LayoutBounds = "0,0,1,1"
-                Style = "{StaticResource stVerticalNoSpaces}">
+			<StackLayout
+				x:Name = "NoUIBar"
+				IsVisible = "false"
+				AbsoluteLayout.LayoutFlags = "SizeProportional"
+				AbsoluteLayout.LayoutBounds = "0,0,1,1"
+				Style = "{StaticResource stVerticalNoSpaces}">
 
-                <Image
-                    WidthRequest = "112"
-                    HeightRequest = "112"
-                    Aspect = "AspectFit"
-                    Margin = "20, 0, 20, 20"
-                    Source = "icon.png" />
+				<Image
+					WidthRequest = "112"
+					HeightRequest = "112"
+					Aspect = "AspectFit"
+					Margin = "20, 0, 20, 20"
+					Source = "icon.png" />
 
-            </StackLayout>
+			</StackLayout>
 
-            <ActivityIndicator
-                x:Name = "AI" />
+			<ActivityIndicator
+				x:Name = "AI" />
 
-        </AbsoluteLayout>
+		</AbsoluteLayout>
 
-    </pbXForms:ContentViewEx.ViewContent>
+	</pbXForms:ContentView.ViewContent>
 
-    <pbXForms:ContentViewEx.ToolBarContent>
+	<pbXForms:ContentView.ToolBarContent>
 
-        <pbXForms:ToolBarGridLayout>
+		<pbXForms:ToolBarGridLayout>
 
-            <pbXForms:PIButton
-                Grid.Column = "0"
-                HorizontalOptions = "Fill"
-                Image = "ic_sort.png"
-                Clicked = "SortBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "0"
+				HorizontalOptions = "Fill"
+				Image = "ic_sort.png"
+				Clicked = "SortBtn_Clicked" />
 
-            <pbXForms:PIButton
-                Grid.Column = "1"
-                HorizontalOptions = "Fill"
-                Image = "ic_add_circle_outline.png"
-                Clicked = "NewBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "1"
+				HorizontalOptions = "Fill"
+				Image = "ic_add_circle_outline.png"
+				Clicked = "NewBtn_Clicked" />
 
-            <pbXForms:PIButton
-                Grid.Column = "2"
-                Image = "ic_add_circle_accent.png"
-                Clicked = "FavoriteNewBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "2"
+				Image = "ic_add_circle_accent.png"
+				Clicked = "FavoriteNewBtn_Clicked" />
 
-            <pbXForms:PIButton
-                Grid.Column = "3"
-                Image = "ic_selection_mode.png"
-                Clicked = "ToogleSelectModeBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "3"
+				Image = "ic_selection_mode.png"
+				Clicked = "ToogleSelectModeBtn_Clicked" />
 
-        </pbXForms:ToolBarGridLayout>
+		</pbXForms:ToolBarGridLayout>
 
-    </pbXForms:ContentViewEx.ToolBarContent>
+	</pbXForms:ContentView.ToolBarContent>
 
 </local:BaseView>

@@ -36,10 +36,9 @@ namespace SafeNotebooks
 		protected override void ContinueOnSizeAllocated(double width, double height)
 		{
 			base.ContinueOnSizeAllocated(width, height);
+
 			if (Wnd.C.IsSplitView)
-			{
 				AppTitle.FontSize = Device.GetNamedSize(NamedSize.Medium, AppTitle);
-			}
 			else
 				AppTitle.FontSize = Device.GetNamedSize(NamedSize.Large, AppTitle);
 		}
@@ -94,7 +93,7 @@ namespace SafeNotebooks
 
 		async Task SelectNotebook(Notebook notebook)
 		{
-			await Wnd.C.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Forward, notebook);
+			await Wnd.C.ShowMasterViewAsync<NotebookView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward, notebook);
 			await App.C.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
 		}
 

@@ -1,143 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pbXForms:ContentViewEx
-    xmlns = "http://xamarin.com/schemas/2014/forms"
-    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.BaseView">
+<pbXForms:ContentView
+	xmlns = "http://xamarin.com/schemas/2014/forms"
+	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:local = "clr-namespace:SafeNotebooks"
+	x:Class = "SafeNotebooks.BaseView">
 
-    <local:BaseView.Resources>
+	<local:BaseView.Resources>
 
-        <ResourceDictionary>
+		<ResourceDictionary>
 
-            <Thickness
-                x:Key = "SearchBarPadding"
-                Top = "8"
-                Bottom = "4"
-                Right = "{x:Static pbXForms:Metrics.ScreenEdgeMargin}"
-                Left = "{x:Static pbXForms:Metrics.ScreenEdgeMargin}" />
+			<Thickness
+				x:Key = "SearchBarPadding"
+				Top = "8"
+				Bottom = "4"
+				Right = "{x:Static pbXForms:Metrics.ScreenEdgeMargin}"
+				Left = "{x:Static pbXForms:Metrics.ScreenEdgeMargin}" />
 
-            <DataTemplate
-                x:Key = "SearchBarTemplate">
+			<DataTemplate
+				x:Key = "SearchBarTemplate">
 
-                <StackLayout
-                    x:Name = "SearchBar"
-                    Style = "{StaticResource stHorizontalNoSpaces}"
-                    Padding = "{StaticResource SearchBarPadding}">
+				<StackLayout
+					x:Name = "SearchBar"
+					Style = "{StaticResource stHorizontalNoSpaces}"
+					Padding = "{StaticResource SearchBarPadding}">
 
-                    <Entry
-                        x:Name = "SearchQuery"
-                        TextChanged = "SearchQuery_TextChanged"
-                        Focused = "SearchQuery_Focused"
-                        Unfocused = "SearchQuery_Unfocused"
-                        Placeholder = "{T:Localized SearchQueryPlaceholder}"
-                        HorizontalTextAlignment = "Center"
-                        HorizontalOptions = "FillAndExpand" />
+					<Entry
+						x:Name = "SearchQuery"
+						TextChanged = "SearchQuery_TextChanged"
+						Focused = "SearchQuery_Focused"
+						Unfocused = "SearchQuery_Unfocused"
+						Placeholder = "{T:Localized SearchQueryPlaceholder}"
+						HorizontalTextAlignment = "Center"
+						HorizontalOptions = "FillAndExpand" />
 
-                    <pbXForms:PIButton
-                        x:Name = "CancelSearchBtn"
-                        IsVisible = "false"
-                        HeightRequest = "{x:Static pbXForms:Metrics.IconHeight}"
-                        Image = "ic_close.png"
-                        Clicked = "CancelSearchBtn_Clicked" />
+					<pbXForms:PIButton
+						x:Name = "CancelSearchBtn"
+						IsVisible = "false"
+						HeightRequest = "{x:Static pbXForms:Metrics.IconHeight}"
+						Image = "ic_close.png"
+						Clicked = "CancelSearchBtn_Clicked" />
 
-                </StackLayout>
+				</StackLayout>
 
-            </DataTemplate>
+			</DataTemplate>
 
-            <Thickness
-                x:Key = "ItemListViewItemGridPadding"
-                Right = "{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}" />
+			<Thickness
+				x:Key = "ItemListViewItemGridPadding"
+				Right = "{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}" />
 
-            <DataTemplate
-                x:Key = "ItemListViewItemTemlate">
+			<DataTemplate
+				x:Key = "ItemListViewItemTemlate">
 
-                <ViewCell>
+				<ViewCell>
 
-                    <ViewCell.ContextActions>
-                        <MenuItem
-                            Clicked="EditItem_Clicked"
-                            CommandParameter = "{Binding .}"
-                            Text = "{T:Localized Edit}" />
-                        <MenuItem
-                            Clicked="MoveItem_Clicked"
-                            CommandParameter = "{Binding .}"
-                            Text = "{T:Localized Move}" />
-                        <MenuItem
-                            Clicked="DeleteItem_Clicked"
-                            CommandParameter = "{Binding .}"
-                            IsDestructive = "True"
-                            Text = "{T:Localized Delete}" />
-                    </ViewCell.ContextActions>
+					<ViewCell.ContextActions>
 
-                    <StackLayout
-                        Grid.Row = "0"
-                        Grid.Column = "0"
-                        Padding = "{StaticResource ItemListViewItemGridPadding}"
-                        Style = "{StaticResource stHorizontalNoSpaces}">
+						<MenuItem
+							Clicked = "EditItem_Clicked"
+							CommandParameter = "{Binding .}"
+							Text = "{T:Localized Edit}" />
 
-                        <pbXForms:ImageEx
-                            Clicked="SelectUnselectItem_Clicked"
-                            CommandParameter = "{Binding .}"
-                            Source = "{Binding SelectedUnselectedImageNameForLists}"
-                            WidthRequest = "{Binding SelectedUnselectedImageWidthForLists}"
-                            Margin = "{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}"
-                            HeightRequest = "-1" />
+						<MenuItem
+							Clicked = "MoveItem_Clicked"
+							CommandParameter = "{Binding .}"
+							Text = "{T:Localized Move}" />
 
-                        <StackLayout
-                            Style = "{StaticResource stVerticalNoSpaces}">
+						<MenuItem
+							Clicked = "DeleteItem_Clicked"
+							CommandParameter = "{Binding .}"
+							IsDestructive = "True"
+							Text = "{T:Localized Delete}" />
 
-                            <Label
-                                Text = "{Binding NameForLists}"
-                                LineBreakMode = "TailTruncation"
-                                FontSize = "Medium"
-                                Margin = "0"
-                                TextColor = "{StaticResource ListItemTextColor}" />
+					</ViewCell.ContextActions>
 
-                            <Label
-                                Text = "{Binding DetailForLists}"
-                                LineBreakMode = "TailTruncation"
-                                FontSize = "Micro"
-                                Margin = "0"
-                                TextColor = "{StaticResource ListItemDetailColor}" />
+					<StackLayout
+						Grid.Row = "0"
+						Grid.Column = "0"
+						Padding = "{StaticResource ItemListViewItemGridPadding}"
+						Style = "{StaticResource stHorizontalNoSpaces}">
 
-                        </StackLayout>
+						<pbXForms:ImageEx
+							Clicked = "SelectUnselectItem_Clicked"
+							CommandParameter = "{Binding .}"
+							Source = "{Binding SelectedUnselectedImageNameForLists}"
+							WidthRequest = "{Binding SelectedUnselectedImageWidthForLists}"
+							Margin = "{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}"
+							HeightRequest = "-1" />
 
-                        <Image
-                            Source = "{Binding LockedImageNameForLists}"
-                            WidthRequest = "{Binding LockedImageWidthForLists}"
-                            HorizontalOptions = "Center" />
+						<StackLayout
+							Style = "{StaticResource stVerticalNoSpaces}">
 
-                        <Label
-                            TextColor = "{Binding ColorForLists}"
-                            Text = "●"
-                            Margin = "8,0,4,0"
-                            VerticalTextAlignment = "Center">
+							<Label
+								Text = "{Binding NameForLists}"
+								LineBreakMode = "TailTruncation"
+								FontSize = "Medium"
+								Margin = "0"
+								TextColor = "{StaticResource ListItemTextColor}" />
 
-                            <Label.FontSize>
+							<Label
+								Text = "{Binding DetailForLists}"
+								LineBreakMode = "TailTruncation"
+								FontSize = "Micro"
+								Margin = "0"
+								TextColor = "{StaticResource ListItemDetailColor}" />
 
-                                <OnPlatform
-                                    x:TypeArguments = "x:Double"
-                                    iOS = "14"
-                                    Android = "24" />
+						</StackLayout>
 
-                            </Label.FontSize>
+						<Image
+							Source = "{Binding LockedImageNameForLists}"
+							WidthRequest = "{Binding LockedImageWidthForLists}"
+							HorizontalOptions = "Center" />
 
-                        </Label>
+						<Label
+							TextColor = "{Binding ColorForLists}"
+							Text = "●"
+							Margin = "8,0,4,0"
+							VerticalTextAlignment = "Center">
 
-                        <Image
-                            Source = "ic_chevron_right.png"
-                            HorizontalOptions = "Center" />
+							<Label.FontSize>
 
-                    </StackLayout>
+								<OnPlatform
+									x:TypeArguments = "x:Double"
+									iOS = "14"
+									Android = "24" />
 
-                </ViewCell>
+							</Label.FontSize>
 
-            </DataTemplate>
+						</Label>
 
-        </ResourceDictionary>
+						<Image
+							Source = "ic_chevron_right.png"
+							HorizontalOptions = "Center" />
 
-    </local:BaseView.Resources>
+					</StackLayout>
 
-</pbXForms:ContentViewEx>
+				</ViewCell>
+
+			</DataTemplate>
+
+		</ResourceDictionary>
+
+	</local:BaseView.Resources>
+
+</pbXForms:ContentView>

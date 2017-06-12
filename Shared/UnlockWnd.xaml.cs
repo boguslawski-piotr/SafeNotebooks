@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
-	public partial class UnlockWnd : ContentPageEx
+	public partial class UnlockWnd : pbXForms.ContentPage
 	{
 		public enum TState
 		{

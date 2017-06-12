@@ -1,109 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <local:BaseView
-    xmlns = "http://xamarin.com/schemas/2014/forms"
-    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.NotebooksView"
-    BackgroundColor = "{StaticResource NotebooksBackgroundColor}">
+	xmlns = "http://xamarin.com/schemas/2014/forms"
+	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:local = "clr-namespace:SafeNotebooks"
+	x:Class = "SafeNotebooks.NotebooksView"
+	BackgroundColor = "{StaticResource NotebooksBackgroundColor}">
 
-    <pbXForms:ContentViewEx.AppBarContent>
+	<pbXForms:ContentView.AppBarContent>
 
-        <Label
-            x:Name = "AppTitle"
-            Text = "{T:Localized AppName}"
-            Margin = "{x:Static pbXForms:Metrics.ScreenEdgeLeftPadding}"
-            FontSize = "Large"
-            LineBreakMode = "HeadTruncation"
-            TextColor = "{StaticResource AccentTextColor}"
-            VerticalOptions = "Center"
-            VerticalTextAlignment = "Center"
-            HorizontalOptions = "FillAndExpand" />
+		<Label
+			x:Name = "AppTitle"
+			Text = "{T:Localized AppName}"
+			Margin = "{x:Static pbXForms:Metrics.ScreenEdgeLeftPadding}"
+			FontSize = "Large"
+			LineBreakMode = "HeadTruncation"
+			TextColor = "{StaticResource AccentTextColor}"
+			VerticalOptions = "Center"
+			VerticalTextAlignment = "Center"
+			HorizontalOptions = "FillAndExpand" />
 
-        <pbXForms:PIButton
-            x:Name = "SettingsBtn"
-            Image = "ic_settings.png"
-            Clicked = "SettingsBtn_Clicked" />
+		<pbXForms:PIButton
+			x:Name = "SettingsBtn"
+			Image = "ic_settings.png"
+			Clicked = "SettingsBtn_Clicked" />
 
-    </pbXForms:ContentViewEx.AppBarContent>
+	</pbXForms:ContentView.AppBarContent>
 
-    <pbXForms:ContentViewEx.ViewContent>
+	<pbXForms:ContentView.ViewContent>
 
-        <AbsoluteLayout
-            VerticalOptions = "FillAndExpand"
-            HorizontalOptions = "FillAndExpand">
+		<AbsoluteLayout
+			VerticalOptions = "FillAndExpand"
+			HorizontalOptions = "FillAndExpand">
 
-            <ListView
-                x:Name = "ListCtl"
-                AbsoluteLayout.LayoutFlags = "SizeProportional"
-                AbsoluteLayout.LayoutBounds = "0,0,1,1"
-                BackgroundColor = "{StaticResource NotebooksBackgroundColor}"
-                RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
-                SeparatorColor = "{StaticResource ListItemDividerColor}"
-                HeaderTemplate = "{StaticResource SearchBarTemplate}"
-                Header = " "
-                ItemTemplate = "{StaticResource ItemListViewItemTemlate}">
+			<ListView
+				x:Name = "ListCtl"
+				AbsoluteLayout.LayoutFlags = "SizeProportional"
+				AbsoluteLayout.LayoutBounds = "0,0,1,1"
+				BackgroundColor = "{StaticResource NotebooksBackgroundColor}"
+				RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
+				SeparatorColor = "{StaticResource ListItemDividerColor}"
+				HeaderTemplate = "{StaticResource SearchBarTemplate}"
+				Header = " "
+				ItemTemplate = "{StaticResource ItemListViewItemTemlate}">
 
-            </ListView>
+			</ListView>
 
-            <ActivityIndicator
-                x:Name = "AI" />
+			<ActivityIndicator
+				x:Name = "AI" />
 
-        </AbsoluteLayout>
+		</AbsoluteLayout>
 
-    </pbXForms:ContentViewEx.ViewContent>
+	</pbXForms:ContentView.ViewContent>
 
-    <pbXForms:ContentViewEx.ToolBarContent>
+	<pbXForms:ContentView.ToolBarContent>
 
-        <pbXForms:ToolBarGridLayout
-            x:Name = "NormalToolbar">
+		<pbXForms:ToolBarGridLayout
+			x:Name = "NormalToolbar">
 
-            <pbXForms:PIButton
-                Grid.Column = "0"
-                Image = "ic_sort.png"
-                Clicked = "SortBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "0"
+				Image = "ic_sort.png"
+				Clicked = "SortBtn_Clicked" />
 
-            <pbXForms:PIButton
-                Grid.Column = "1"
-                Image = "ic_add_circle_accent.png"
-                Clicked = "NewBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "1"
+				Image = "ic_add_circle_accent.png"
+				Clicked = "NewBtn_Clicked" />
 
-            <pbXForms:PIButton
-                Grid.Column = "2"
-                Image = "ic_selection_mode.png"
-                Clicked = "ToogleSelectModeBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "2"
+				Image = "ic_selection_mode.png"
+				Clicked = "ToogleSelectModeBtn_Clicked" />
 
-        </pbXForms:ToolBarGridLayout>
+		</pbXForms:ToolBarGridLayout>
 
-        <pbXForms:ToolBarGridLayout
-            x:Name = "SelectModeToolbar"
-            IsVisible = "false">
+		<pbXForms:ToolBarGridLayout
+			x:Name = "SelectModeToolbar"
+			IsVisible = "false">
 
-            <pbXForms:PIButton
-                Grid.Column = "0"
-                Image = "ic_sort.png"
-                Clicked = "SortBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "0"
+				Image = "ic_sort.png"
+				Clicked = "SortBtn_Clicked" />
 
-            <pbXForms:PIButton
-                Grid.Column = "1"
-                Image = "ic_delete_selected.png"
-                Clicked = "DeleteSelectedItemsBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "1"
+				Image = "ic_delete_selected.png"
+				Clicked = "DeleteSelectedItemsBtn_Clicked" />
 
-            <pbXForms:PIButton
-                x:Name = "MoveSelectedItemsBtn"
-                Grid.Column = "2"
-                ContentLayout = "Bottom,0"
-                Image = "ic_move_selected.png"
-                Clicked = "MoveSelectedItemsBtn_Clicked" />
+			<pbXForms:PIButton
+				x:Name = "MoveSelectedItemsBtn"
+				Grid.Column = "2"
+				ContentLayout = "Bottom,0"
+				Image = "ic_move_selected.png"
+				Clicked = "MoveSelectedItemsBtn_Clicked" />
 
-            <pbXForms:PIButton
-                Grid.Column = "3"
-                Image = "ic_close.png"
-                Clicked = "ToogleSelectModeBtn_Clicked" />
+			<pbXForms:PIButton
+				Grid.Column = "3"
+				Image = "ic_close.png"
+				Clicked = "ToogleSelectModeBtn_Clicked" />
 
-        </pbXForms:ToolBarGridLayout>
+		</pbXForms:ToolBarGridLayout>
 
-    </pbXForms:ContentViewEx.ToolBarContent>
+	</pbXForms:ContentView.ToolBarContent>
 
 </local:BaseView>

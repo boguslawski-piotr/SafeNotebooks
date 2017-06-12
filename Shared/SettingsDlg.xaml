@@ -14,7 +14,7 @@
 	ControlDescTextColor = "{StaticResource ListItemDetailColor}"
 	BindingContext = "{x:Static local:App.Settings}">
 
-	<pbXForms:SettingsContentView.HeaderContent>
+	<pbXForms:SettingsContentView.AppBarContent>
 
 		<Label
 			x:Name = "_title"
@@ -29,16 +29,12 @@
 			Image = "ic_close.png"
 			Clicked = "OK_Clicked" />
 
-	</pbXForms:SettingsContentView.HeaderContent>
+	</pbXForms:SettingsContentView.AppBarContent>
 
 	<pbXForms:SettingsContentView.ViewContent>
 
-		<Button
-			Text = "Test..."
-			Clicked = "Handle_Clicked" />
-
 		<pbXForms:SettingsGroup
-			IsCollapsed = "true"
+			IsCollapsed = "false"
 			Text = "JAKAŚ SEKCJA"
 			Desc = "jakis dlugi opis mozna tu dac">
 

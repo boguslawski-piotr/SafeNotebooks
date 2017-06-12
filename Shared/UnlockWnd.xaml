@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pbXForms:ContentPageEx
+<pbXForms:ContentPage
 	xmlns = "http://xamarin.com/schemas/2014/forms"
 	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
@@ -7,52 +7,52 @@
 	x:Class = "SafeNotebooks.UnlockWnd"
 	BackgroundColor = "{StaticResource AppBarBackgroundColor}">
 
-	<pbXForms:ContentPageEx.PageContent>
+	<pbXForms:ContentPage.ViewContent>
 
-			<StackLayout
-				x:Name = "_View"
-				Orientation = "Vertical"
-				VerticalOptions = "CenterAndExpand"
-				HorizontalOptions = "Center"
-				Padding = "0"
-				Margin = "0"
-				Spacing = "0">
+		<StackLayout
+			x:Name = "_View"
+			Orientation = "Vertical"
+			VerticalOptions = "CenterAndExpand"
+			HorizontalOptions = "Center"
+			Padding = "0"
+			Margin = "0"
+			Spacing = "0">
 
-				<Image
-					x:Name = "_Logo"
-					WidthRequest = "112"
-					HeightRequest = "112"
-					Aspect = "AspectFit"
-					Margin = "20, 0, 20, 8"
-					Source = "icon.png" />
+			<Image
+				x:Name = "_Logo"
+				WidthRequest = "112"
+				HeightRequest = "112"
+				Aspect = "AspectFit"
+				Margin = "20, 0, 20, 8"
+				Source = "icon.png" />
 
-				<Label
-					Text = "{T:Localized AppName}"
-					FontSize = "Large"
-					HorizontalTextAlignment = "Center" />
+			<Label
+				Text = "{T:Localized AppName}"
+				FontSize = "Large"
+				HorizontalTextAlignment = "Center" />
 
-				<Image
-					x:Name = "_FPIcon"
-					IsVisible = "false"
-					Margin = "20,20,20,0"
-					Aspect = "AspectFit"
-					Source = "ic_fingerprint.png" />
+			<Image
+				x:Name = "_FPIcon"
+				IsVisible = "false"
+				Margin = "20,20,20,0"
+				Aspect = "AspectFit"
+				Source = "ic_fingerprint.png" />
 
-				<Label
-					x:Name = "_Message"
-					IsVisible = "false"
-					Margin = "20,20,20,8"
-					HorizontalTextAlignment = "Center" />
+			<Label
+				x:Name = "_Message"
+				IsVisible = "false"
+				Margin = "20,20,20,8"
+				HorizontalTextAlignment = "Center" />
 
-				<pbXForms:PIButton
-					x:Name = "_UnlockOrCancelBtn"
-					IsVisible = "false"
-					TextColor = "{StaticResource AccentTextColor}"
-					FontSize = "Large"
-					Clicked = "UnlockBtn_Clicked" />
+			<pbXForms:PIButton
+				x:Name = "_UnlockOrCancelBtn"
+				IsVisible = "false"
+				TextColor = "{StaticResource AccentTextColor}"
+				FontSize = "Large"
+				Clicked = "UnlockBtn_Clicked" />
 
-			</StackLayout>
+		</StackLayout>
 
-	</pbXForms:ContentPageEx.PageContent>
+	</pbXForms:ContentPage.ViewContent>
 
-</pbXForms:ContentPageEx>
+</pbXForms:ContentPage>

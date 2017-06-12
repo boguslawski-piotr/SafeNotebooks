@@ -43,13 +43,13 @@ namespace SafeNotebooks
         void Hide_Clicked(object sender, System.EventArgs e)
         {
             //Wnd.C.IsSplitView = true;
-            //Wnd.C.ShowDetailView<PageView>("vPage", MasterDetailPageEx.ViewsSwitchingAnimation.LeftToRight);
-            //Wnd.C.ShowDetailViewAsync<PageView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back);
+            //Wnd.C.ShowDetailView<PageView>("vPage", MastersDetailsPage.ViewsSwitchingAnimation.LeftToRight);
+            //Wnd.C.ShowDetailViewAsync<PageView>(MastersDetailsPage.ViewsSwitchingAnimation.Back);
         }
 
         void MS_Clicked(object sender, System.EventArgs e)
         {
-            //Wnd.C.ShowMasterViewAsync<NotebookView>(MasterDetailPageEx.ViewsSwitchingAnimation.Back);
+            //Wnd.C.ShowMasterViewAsync<NotebookView>(MastersDetailsPage.ViewsSwitchingAnimation.Back);
             //Wnd.C.MasterViewIsVisible = true;
         }
 

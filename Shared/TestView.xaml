@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pbXForms:ModalContentView
-    xmlns = "http://xamarin.com/schemas/2014/forms"
-    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.TestView"
-    BackgroundColor = "Fuchsia"
-    BindingContext = "{x:Static local:TestView.Model}">
+	xmlns = "http://xamarin.com/schemas/2014/forms"
+	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:local = "clr-namespace:SafeNotebooks"
+	x:Class = "SafeNotebooks.TestView"
+	BindingContext = "{x:Static local:TestView.Model}">
 
-    <ContentView.Content>
+	<ContentView.Content>
 
-        <StackLayout
-            Padding="30, 0, 30, 0"
-            Style = "{StaticResource stVerticalNoSpaces}">
+		<StackLayout
+			Padding = "30, 0, 30, 0"
+			Style = "{StaticResource stVerticalNoSpaces}">
 
-            <Label
-                Text = "{Binding ModelTestProperty}" />
+			<Label
+				Text = "{Binding ModelTestProperty}" />
 
-            <Label
-                Text = "{x:Static local:TestView.TestProperty}" />
+			<Label
+				Text = "{x:Static local:TestView.TestProperty}" />
 
-            <Label
-                Text = "to jest test!!!" />
+			<Label
+				Text = "to jest test!!!" />
 
-            <Label
-                Text = "to jest test!!!" />
+			<Label
+				Text = "to jest test!!!" />
 
-            <pbXForms:ButtonEx
-                Text = "back"
-                TextColor="{StaticResource AccentTextColor}"
-                Clicked = "Hide_Clicked" />
+			<pbXForms:PITextButton
+				BackgroundColor = "Aqua"
+				Text = "back alala skks dkkd fkkf"
+				TextColor = "{StaticResource AccentTextColor}"
+				Clicked = "Hide_Clicked" />
 
-            <Button
-                BackgroundColor="White"
-                Text = "master show"
-                Clicked = "MS_Clicked" />
+			<Button
+				BackgroundColor = "Fuchsia"
+				Text = "master show"
+				Clicked = "MS_Clicked" />
 
-            <Button
-                BackgroundColor="Transparent"
-                Text = "master hide"
-                Clicked = "MH_Clicked" />
+			<Button
+				BackgroundColor = "Transparent"
+				Text = "master hide"
+				Clicked = "MH_Clicked" />
 
-        </StackLayout>
+		</StackLayout>
 
-    </ContentView.Content>
+	</ContentView.Content>
 
 </pbXForms:ModalContentView>

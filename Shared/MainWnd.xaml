@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pbXForms:MasterDetailPageEx
-    xmlns = "http://xamarin.com/schemas/2014/forms"
-    xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
-    xmlns:local = "clr-namespace:SafeNotebooks"
-    x:Class = "SafeNotebooks.MainWnd">
+<pbXForms:MastersDetailsPage
+	xmlns = "http://xamarin.com/schemas/2014/forms"
+	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:local = "clr-namespace:SafeNotebooks"
+	x:Class = "SafeNotebooks.MainWnd">
 
-    <pbXForms:MasterDetailPageEx.MasterViews>
+	<pbXForms:MastersDetailsPage.MasterViews>
 
-        <local:NotebooksView />
+		<local:NotebooksView />
 
-        <local:NotebookView />
+		<local:NotebookView />
 
-    </pbXForms:MasterDetailPageEx.MasterViews>
+	</pbXForms:MastersDetailsPage.MasterViews>
 
-    <pbXForms:MasterDetailPageEx.DetailViews>
+	<pbXForms:MastersDetailsPage.DetailViews>
 
-        <local:PageView />
+		<local:PageView />
 
-        <local:TestView />
+		<local:TestView />
 
-    </pbXForms:MasterDetailPageEx.DetailViews>
+	</pbXForms:MastersDetailsPage.DetailViews>
 
-</pbXForms:MasterDetailPageEx>
+</pbXForms:MastersDetailsPage>
