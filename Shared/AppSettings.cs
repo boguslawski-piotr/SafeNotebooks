@@ -81,6 +81,8 @@ namespace SafeNotebooks
 
 			public class StorageImpl : ISearchableStorage<string>
 			{
+				public StorageType Type => StorageType.Memory;
+
 				public string Id => "2b60a5af8f5e4fa4be62cb05bacbdf2b";
 
 				public string Name => T.Localized("Settings");

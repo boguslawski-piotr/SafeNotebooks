@@ -49,13 +49,13 @@ namespace SafeNotebooks
 
 			int lll = App.Settings.GetValueOrDefault("lll", 1);
 
-			item.Color = Color.FromHex("#800000ff");
+			//item.Color = Color.FromHex("#800000ff");
 			item.Nick = $"{item.GetType().Name} Nick " + lll;
 			item.Name = $"{item.GetType().Name} " + lll++;
 			if (lll % 2 == 0)
 				item.Detail = "alaal sksi dkd dkkfir fkfir fkdid dkdkf";
 			//item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
-			item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+			//item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
 			//item.ThisCKeyLifeTime = CKeyLifeTime.OneTime;
 
 			App.Settings.AddOrUpdateValue("lll", lll);

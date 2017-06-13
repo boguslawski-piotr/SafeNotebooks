@@ -158,6 +158,10 @@ namespace SafeNotebooks
 
 		async void NewBtn_Clicked(object sender, System.EventArgs e)
 		{
+			//for (int i = 0; i < 200; i++)
+			//{
+			//    await App.C.NotebooksManager.SelectedNotebook.NewPageAsync();
+			//}
 			Page page = await App.C.NotebooksManager.SelectedNotebook.NewPageAsync();
 			if (page != null)
 			{

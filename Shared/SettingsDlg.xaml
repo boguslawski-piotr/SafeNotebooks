@@ -19,6 +19,7 @@
 		<Label
 			x:Name = "_title"
 			Margin = "8,0"
+			VerticalOptions="FillAndExpand"
 			VerticalTextAlignment = "Center"
 			HorizontalOptions = "StartAndExpand"
 			FontSize = "Large"

@@ -178,7 +178,7 @@ namespace SafeNotebooks
 			{
 				//for (int i = 0; i < 200; i++)
 				//{
-				//    await App.NotebooksManager.NewNotebookAsync(storage);
+				//    await App.C.NotebooksManager.NewNotebookAsync(storage);
 				//}
 				Notebook notebook = await App.C.NotebooksManager.NewNotebookAsync(storage);
 				if (notebook != null)

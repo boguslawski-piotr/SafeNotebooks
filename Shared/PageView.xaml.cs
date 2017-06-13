@@ -179,6 +179,10 @@ namespace SafeNotebooks
 
 		async void New(string what)
 		{
+			//for (int i = 0; i < 400; i++)
+			//{
+			//	await App.C.NotebooksManager.SelectedPage.NewNoteAsync();
+			//}
 			Note o = await App.C.NotebooksManager.SelectedPage.NewNoteAsync();
 			if (o != null)
 			{
