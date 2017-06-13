@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using pbXNet;
+using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
@@ -45,19 +42,25 @@ namespace SafeNotebooks
 		//
 
 		public event EventHandler NotebooksAreStartingToLoad;
-		public event EventHandler<bool> NotebooksLoaded;
+		public event EventHandler<(int notebooksAdded, int notebooksReloaded)> NotebooksLoaded;
 
 		public async Task LoadNotebooksAsync(IEnumerable<ISearchableStorage<string>> storages, bool tryToUnlock)
 		{
 			NotebooksAreStartingToLoad?.Invoke(this, null);
 
+			(int notebooksAdded, int notebooksReloaded) report = (0, 0);
 			string pattern = Notebook.IdForStoragePrefix + "\\w*";
 			IList<Task> tasks = new List<Task>();
-			bool anyNotebookLoaded = false;
 
 			async Task LoadNotebooksFromStorageAsync(ISearchableStorage<string> storage)
 			{
-				anyNotebookLoaded |= await LoadItemsForItemAsync<Notebook>(this, pattern, tryToUnlock, storage);
+				await StartLoadItemsForItemAsync<Notebook>(this, pattern, tryToUnlock,
+				                                           ((int notebooksAdded, int notebooksReloaded) r) =>
+														   {
+															   report.notebooksAdded += r.notebooksAdded;
+															   report.notebooksReloaded += r.notebooksReloaded;
+														   },
+														   storage);
 			}
 
 			foreach (var storage in storages)
@@ -68,10 +71,7 @@ namespace SafeNotebooks
 			if (tasks.Count > 0)
 				await Task.WhenAll(tasks);
 
-			if (anyNotebookLoaded)
-				SortItems();
-
-			NotebooksLoaded?.Invoke(this, anyNotebookLoaded);
+			NotebooksLoaded?.Invoke(this, report);
 		}
 
 		public async Task<Notebook> NewNotebookAsync(ISearchableStorage<string> storage)
@@ -81,7 +81,6 @@ namespace SafeNotebooks
 				return null;
 
 			AddItem(notebook);
-			SortItems();
 
 			return notebook;
 		}
@@ -111,7 +110,7 @@ namespace SafeNotebooks
 
 		public event EventHandler<Notebook> NotebookLoaded;
 
-		public void OnNotebookLoaded(Notebook notebook, bool anyPageLoaded)
+		public void OnNotebookLoaded(Notebook notebook, (int pagesAdded, int pagesReloaded) report)
 		{
 			NotebookLoaded?.Invoke(this, notebook);
 		}
@@ -144,7 +143,7 @@ namespace SafeNotebooks
 
 		public event EventHandler<Page> PageLoaded;
 
-		public void OnPageLoaded(Page page, bool anyNoteLoaded)
+		public void OnPageLoaded(Page page, (int notesAdded, int notesReloaded) report)
 		{
 			PageLoaded?.Invoke(this, page);
 		}
@@ -276,41 +275,36 @@ namespace SafeNotebooks
 			return rc.ok ? item : null;
 		}
 
+		async Task OpenAndAddItemAsync<T>(ItemWithItems parent, ISearchableStorage<string> storage, string idInStorage, bool tryToUnlock) where T : Item, new()
+		{
+			T item = await Item.OpenAsync<T>(this, parent, storage, idInStorage, tryToUnlock);
+			if (item != null)
+			{
+				Device.BeginInvokeOnMainThread(() => parent.AddItem(item));
+				//parent.AddItem(item);
+			}
+		}
+
+		async Task ReloadItemAsync(Item item)
+		{
+			// TODO: co tu zrobic???
+		}
+
 		/// <summary>
 		/// Returns true if any item was opened/loaded, false otherwise
 		/// </summary>
-		public async Task<bool> LoadItemsForItemAsync<T>(ItemWithItems forWhom, string pattern, bool tryToUnlock, ISearchableStorage<string> storage = null) where T : Item, new()
+		public async Task<(int, int)> LoadItemsForItemAsync<T>(ItemWithItems forWhom, string pattern, bool tryToUnlock, ISearchableStorage<string> storage = null) where T : Item, new()
 		{
-			//DateTime s = DateTime.Now;
-
-			async Task CreateItemAsync(string idInStorage)
-			{
-				//DateTime cs = DateTime.Now;
-				//DateTime ss = cs;
-				T item = await Item.OpenAsync<T>(this, forWhom, storage, idInStorage, tryToUnlock);
-				//TimeSpan s1 = DateTime.Now - cs;
-				//cs = DateTime.Now;
-				if (item != null)
-					forWhom.AddItem(item);
-				//TimeSpan s2 = DateTime.Now - cs;
-				//Log.D($"OpenAsync: {s1.Milliseconds}, AddItem: {s2.Milliseconds}, CreateItemAsync: {(DateTime.Now - ss).Milliseconds}");
-			}
-
-			async Task ReloadItemAsync(Item item)
-			{
-				// TODO: co tu zrobic???
-			}
-
+			ISearchableStorage<string> storageWithItems = storage ?? forWhom.Storage;
 			IList<IList<Task>> allTasks = new List<IList<Task>>();
+
+			(int itemsAdded, int itemsReloaded) report = (0, 0);
 			int tasksScheduled = 0;
 
-			if (storage == null)
-				storage = forWhom.Storage;
-
-			IEnumerable<string> idsInStorage = await storage.FindIdsAsync(pattern);
+			IEnumerable<string> idsInStorage = await storageWithItems.FindIdsAsync(pattern);
 			if (idsInStorage != null)
 			{
-				int batchSize = storage.Type == StorageType.Memory ? 256 : storage.Type == StorageType.LocalIO ? 128 : 32;
+				const int batchSize = 128;
 				IList<Task> tasks = new List<Task>();
 
 				foreach (var idInStorage in idsInStorage)
@@ -318,22 +312,22 @@ namespace SafeNotebooks
 					T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
 					if (item == null)
 					{
-						tasks.Add(CreateItemAsync(idInStorage));
+						tasks.Add(OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock));
 						tasksScheduled++;
+						report.itemsAdded++;
 					}
 					else
 					{
-						if (await storage.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
+						if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
 						{
 							tasks.Add(ReloadItemAsync(item));
 							tasksScheduled++;
+							report.itemsReloaded++;
 						}
 					}
 
 					if (tasks.Count > batchSize)
 					{
-						//Log.D($"{tasks.Count}");
-
 						allTasks.Add(tasks);
 						tasks = new List<Task>();
 					}
@@ -348,8 +342,47 @@ namespace SafeNotebooks
 				}
 			}
 
-			//Log.D($"execute time {(DateTime.Now - s).Milliseconds}");
-			return tasksScheduled > 0;
+			return report;
+		}
+
+		public async Task StartLoadItemsForItemAsync<T>(ItemWithItems forWhom, string pattern, bool tryToUnlock, Action<(int, int)> OnEnd, ISearchableStorage<string> storage = null) where T : Item, new()
+		{
+			ISearchableStorage<string> storageWithItems = storage ?? forWhom.Storage;
+
+			if ((StorageType.Quick & storageWithItems.Type) == storageWithItems.Type)
+			{
+				OnEnd(await LoadItemsForItemAsync<T>(forWhom, pattern, tryToUnlock, storage));
+				return;
+			}
+
+			await Task.Run(async () =>
+			{
+				(int itemsAdded, int itemsReloaded) report = (0, 0);
+
+				IEnumerable<string> idsInStorage = await storageWithItems.FindIdsAsync(pattern);
+				if (idsInStorage != null)
+				{
+					foreach (var idInStorage in idsInStorage)
+					{
+						T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
+						if (item == null)
+						{
+							await OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock);
+							report.itemsAdded++;
+						}
+						else
+						{
+							if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
+							{
+								await ReloadItemAsync(item);
+								report.itemsReloaded++;
+							}
+						}
+					}
+				}
+
+				Device.BeginInvokeOnMainThread(() => OnEnd(report));
+			});
 		}
 	}
 }

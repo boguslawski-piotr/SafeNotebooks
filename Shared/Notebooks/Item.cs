@@ -22,7 +22,7 @@ namespace SafeNotebooks
 			set => _Storage = value;
 		}
 
-		protected Item Parent { get; private set; }
+		public Item Parent { get; private set; }
 
 		public static T New<T>(NotebooksManager notebooksManager, Item parent) where T : Item, new()
 		{

@@ -18,6 +18,7 @@ namespace SafeNotebooks
 			App.C.NotebooksManager.PageWillBeSelected += PageWillBeSelected;
 			App.C.NotebooksManager.ItemObservableItemsCreated += ItemObservableItemsCreated;
 			App.C.NotebooksManager.PageSelected += PageSelected;
+			App.C.NotebooksManager.PageLoaded += PageLoaded;
 
 			ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
 			ListCtl.ItemTapped += ListCtl_ItemTapped;
@@ -68,9 +69,13 @@ namespace SafeNotebooks
 
 		void PageSelected(object sender, Page page)
 		{
-			Device.BeginInvokeOnMainThread(() => AIIsVisible(false));
+			//Device.BeginInvokeOnMainThread(() => AIIsVisible(false));
 		}
 
+		void PageLoaded(object sender, Page page)
+		{
+			Device.BeginInvokeOnMainThread(() => AIIsVisible(false));
+		}
 
 		//
 

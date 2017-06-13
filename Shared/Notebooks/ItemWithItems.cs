@@ -92,7 +92,7 @@ namespace SafeNotebooks
 			return true;
 		}
 
-		protected void CreateObservableItems()
+		protected virtual void CreateObservableItems()
 		{
 			ObservableItems = new ObservableCollectionEx<Item>();
 			NotebooksManager?.OnItemObservableItemsCreated(this);
@@ -100,39 +100,64 @@ namespace SafeNotebooks
 
 		object addItemLock = new object();
 
-		public void AddItem(Item item)
+		public virtual void AddItem(Item item)
 		{
+			if (item.Parent != null && item.Parent != this)
+				throw new Exception("Wrong parent!");
+
 			item.SelectModeEnabled = SelectModeForItemsEnabled;
 			lock (addItemLock)
 			{
 				if (ObservableItems == null)
 					CreateObservableItems();
-				
-				ObservableItems.Add(item);
-				if (ObservableItems.Count % 5 == 0)
-					SortItems();
+
+				if (ObservableItems.Find((i) => i.Id == item.Id) != null)
+					return;
+
+				Comparison<Item> compare = SortComparision;
+				bool inserted = false;
+
+				for (int n = 0; n < ObservableItems.Count; n++)
+				{
+					if (compare(item, ObservableItems[n]) <= 0)
+					{
+						ObservableItems.Insert(n, item);
+						inserted = true;
+						break;
+					}
+				}
+
+				if (!inserted)
+					ObservableItems.Add(item);
 			}
 
 			NotebooksManager?.OnItemAdded(item, this);
 		}
 
+		protected virtual Comparison<Item> SortComparision
+		{
+			get {
+				bool desc = SortParams.Descending;
+				Comparison<Item> f = (x, y) =>
+				{
+					int cc = (desc ? 1 : -1) * string.Compare(x.ComparableColor, y.ComparableColor, StringComparison.Ordinal);
+					if (cc == 0)
+						cc = (desc ? -1 : 1) * string.Compare(x.NameForLists, y.NameForLists, StringComparison.CurrentCulture);
+					return cc;
+				};
+
+				if (SortParams.ByName)
+					f = (x, y) => (desc ? -1 : 1) * string.Compare(x.NameForLists, y.NameForLists, StringComparison.CurrentCulture);
+				else if (SortParams.ByDate)
+					f = (x, y) => (desc ? -1 : 1) * (x.ModifiedOn > y.ModifiedOn ? 1 : x.ModifiedOn < y.ModifiedOn ? -1 : 0);
+
+				return f;
+			}
+		}
+
 		public virtual void SortItems()
 		{
-			bool desc = SortParams.Descending;
-			Comparison<Item> f = (x, y) =>
-			{
-				int cc = (desc ? 1 : -1) * string.Compare(x.ComparableColor, y.ComparableColor, StringComparison.Ordinal);
-				if (cc == 0)
-					cc = (desc ? -1 : 1) * string.Compare(x.NameForLists, y.NameForLists, StringComparison.CurrentCulture);
-				return cc;
-			};
-
-			if (SortParams.ByName)
-				f = (x, y) => (desc ? -1 : 1) * string.Compare(x.NameForLists, y.NameForLists, StringComparison.CurrentCulture);
-			else if (SortParams.ByDate)
-				f = (x, y) => (desc ? -1 : 1) * (x.ModifiedOn > y.ModifiedOn ? 1 : x.ModifiedOn < y.ModifiedOn ? -1 : 0);
-
-			ObservableItems?.Sort(f);
+			ObservableItems?.Sort(SortComparision);
 			NotebooksManager?.OnItemObservableItemsSorted(this);
 		}
 	}

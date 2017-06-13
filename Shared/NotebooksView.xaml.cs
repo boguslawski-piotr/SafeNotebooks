@@ -62,7 +62,7 @@ namespace SafeNotebooks
 				Device.BeginInvokeOnMainThread(() => ListCtl.ItemsSource = forWhom.ObservableItems);
 		}
 
-		void NotebooksLoaded(object sender, bool anyNotebookLoaded)
+		void NotebooksLoaded(object sender, (int, int) report)
 		{
 			Device.BeginInvokeOnMainThread(() => AIIsVisible(false));
 		}

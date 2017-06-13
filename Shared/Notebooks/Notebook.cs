@@ -21,12 +21,12 @@ namespace SafeNotebooks
 				return false;
 
 			string pattern = Page.IdForStoragePrefix + Id + "-\\w*";
-			bool anyPageLoaded = await NotebooksManager.LoadItemsForItemAsync<Page>(this, pattern, tryToUnlockChildren);
 
-			if (anyPageLoaded)
-				SortItems();
+			await NotebooksManager.StartLoadItemsForItemAsync<Page>(this, pattern, tryToUnlockChildren, ((int pagesAdded, int pagesReloaded) report) =>
+			{
+				NotebooksManager.OnNotebookLoaded(this, report);
+			});
 
-			NotebooksManager.OnNotebookLoaded(this, anyPageLoaded);
 			return true;
 		}
 
@@ -37,7 +37,6 @@ namespace SafeNotebooks
 				return null;
 
 			AddItem(page);
-			SortItems();
 
 			return page;
 		}

@@ -18,6 +18,7 @@ namespace SafeNotebooks
 			App.C.NotebooksManager.NotebookWillBeSelected += NotebookWillBeSelected;
 			App.C.NotebooksManager.ItemObservableItemsCreated += ItemObservableItemsCreated;
 			App.C.NotebooksManager.NotebookSelected += NotebookSelected;
+			App.C.NotebooksManager.NotebookLoaded += NotebookLoaded;
 
 			ListCtl.ItemSelected += (sender, e) => ((ListView)sender).SelectedItem = null; // disable item selection
 			ListCtl.ItemTapped += ListCtl_ItemTapped;
@@ -59,6 +60,10 @@ namespace SafeNotebooks
 		}
 
 		void NotebookSelected(object sender, Notebook notebook)
+		{
+		}
+
+		void NotebookLoaded(object sender, Notebook notebook)
 		{
 			Device.BeginInvokeOnMainThread(() => AIIsVisible(false));
 		}

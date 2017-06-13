@@ -45,12 +45,12 @@ namespace SafeNotebooks
                 return false;
 
 			string pattern = Note.IdForStoragePrefix + Id + "-\\w*";
-            bool anyNoteLoaded = await NotebooksManager.LoadItemsForItemAsync<Note>(this, pattern, tryToUnlockChildren);
 
-            if(anyNoteLoaded)
-                SortItems();
+			await NotebooksManager.StartLoadItemsForItemAsync<Note>(this, pattern, tryToUnlockChildren, ((int notesAdded, int notesReloaded) report) =>
+			{
+				NotebooksManager.OnPageLoaded(this, report);
+			});
 
-			NotebooksManager.OnPageLoaded(this, anyNoteLoaded);
 			return true;
 		}
 
@@ -61,7 +61,6 @@ namespace SafeNotebooks
 				return null;
 
 			AddItem(note);
-			SortItems();
 
 			return note;
 		}
