@@ -111,6 +111,7 @@
 						<Image
 							Source = "{Binding LockedImageNameForLists}"
 							WidthRequest = "{Binding LockedImageWidthForLists}"
+							VerticalOptions="Center"
 							HorizontalOptions = "Center" />
 
 						<Label
@@ -132,6 +133,7 @@
 
 						<Image
 							Source = "ic_chevron_right.png"
+							VerticalOptions="Center"
 							HorizontalOptions = "Center" />
 
 					</StackLayout>

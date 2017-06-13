@@ -17,7 +17,8 @@
 
 		<StackLayout
 			x:Name = "SelectedNotebookBar"
-			Style = "{StaticResource stVerticalNoSpaces}">
+			Style = "{StaticResource stVerticalNoSpaces}"
+			HorizontalOptions="FillAndExpand" >
 
 			<Label
 				x:Name = "SelectedNotebookName"

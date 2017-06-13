@@ -550,11 +550,13 @@ namespace SafeNotebooks
 			}
 			catch (NotebooksException dmex)
 			{
+				throw dmex;
 				await NotebooksManager.UI?.DisplayError(dmex);
 				return false;
 			}
 			catch (Exception ex)
 			{
+				throw ex;
 				await NotebooksManager.UI?.DisplayError(ex);
 				return false;
 			}

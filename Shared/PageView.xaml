@@ -77,6 +77,8 @@
 					HeightRequest = "112"
 					Aspect = "AspectFit"
 					Margin = "20, 0, 20, 20"
+					VerticalOptions="Center"
+					HorizontalOptions="Center"
 					Source = "icon.png" />
 
 			</StackLayout>
