@@ -320,7 +320,7 @@ namespace SafeNotebooks
 					}
 					else
 					{
-						if (await storage.GetModifiedOnAsync(IdForStorage) > item.ModifiedOn)
+						if (await storage.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
 						{
 							tasks.Add(ReloadItemAsync(item));
 							tasksExecuted++;
