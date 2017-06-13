@@ -24,6 +24,43 @@ namespace SafeNotebooks
 
 		protected Item Parent { get; private set; }
 
+		public static T New<T>(NotebooksManager notebooksManager, Item parent) where T : Item, new()
+		{
+			T item = new T()
+			{
+				NotebooksManager = notebooksManager,
+				Parent = parent,
+			};
+
+			item.BatchBegin();
+			try
+			{
+				item.InternalNew();
+			}
+			finally
+			{
+				item.BatchEnd();
+			}
+
+			return item;
+		}
+
+		public static async Task<T> OpenAsync<T>(NotebooksManager notebooksManager, Item parent, ISearchableStorage<string> storage, string idInStorage, bool tryToUnlock) where T : Item, new()
+		{
+			T item = new T()
+			{
+				NotebooksManager = notebooksManager,
+				Storage = storage,
+				Parent = parent,
+			};
+
+			if (!await item.InternalOpenAsync(idInStorage, tryToUnlock))
+				return null;
+
+			return item;
+		}
+
+
 		[Serializable]
 		class NotEncryptedData
 		{
@@ -55,8 +92,7 @@ namespace SafeNotebooks
 		public Color Color
 		{
 			get => Color.FromHex(nedata.Color);
-			set
-			{
+			set {
 				SetValue(ref nedata.Color, value.ToHex());
 				ColorForLists = value;
 			}
@@ -75,8 +111,7 @@ namespace SafeNotebooks
 		public string Nick
 		{
 			get => nedata?.Nick;
-			set
-			{
+			set {
 				SetValue(ref nedata.Nick, value);
 				if (!DataIsAvailable)
 					NameForLists = value;
@@ -116,8 +151,7 @@ namespace SafeNotebooks
 		public string Name
 		{
 			get => data.Name;
-			set
-			{
+			set {
 				SetValue(ref data.Name, value);
 				NameForLists = value;
 			}
@@ -134,8 +168,7 @@ namespace SafeNotebooks
 		public string Detail
 		{
 			get => data.Detail;
-			set
-			{
+			set {
 				SetValue(ref data.Detail, value);
 				DetailForLists = value;
 			}
@@ -169,8 +202,7 @@ namespace SafeNotebooks
 		public virtual bool SelectModeEnabled
 		{
 			get => _SelectModeEnabled;
-			set
-			{
+			set {
 				_SelectModeEnabled = value;
 				SelectedUnselectedImageNameForLists = _SelectModeEnabled ? "e" : "d";
 				SelectedUnselectedImageWidthForLists = _SelectModeEnabled ? 1 : 0;
@@ -181,8 +213,7 @@ namespace SafeNotebooks
 		public bool IsSelected
 		{
 			get => _IsSelected;
-			set
-			{
+			set {
 				_IsSelected = value;
 				SelectedUnselectedImageNameForLists = _IsSelected ? "s" : "u";
 				SelectedUnselectedImageWidthForLists = _IsSelected ? 2 : 3;
@@ -193,8 +224,7 @@ namespace SafeNotebooks
 
 		public virtual string SelectedUnselectedImageNameForLists
 		{
-			get
-			{
+			get {
 				if (SelectModeEnabled)
 					return IsSelected ? NotebooksManager.UI.SelectedImageNameForLists : NotebooksManager.UI.UnselectedImageNameForLists;
 				else
@@ -207,8 +237,7 @@ namespace SafeNotebooks
 
 		public virtual double SelectedUnselectedImageWidthForLists
 		{
-			get
-			{
+			get {
 				if (SelectModeEnabled)
 					return NotebooksManager.UI.SelectedUnselectedImageWidthForLists;
 				else
@@ -275,23 +304,6 @@ namespace SafeNotebooks
 
 		//
 
-		public Item New(Item parent)
-		{
-			Parent = parent;
-
-			BatchBegin();
-			try
-			{
-				InternalNew();
-			}
-			finally
-			{
-				BatchEnd();
-			}
-
-			return this;
-		}
-
 		protected virtual void InternalNew()
 		{
 			nedata = new NotEncryptedData();
@@ -304,12 +316,6 @@ namespace SafeNotebooks
 		}
 
 		const string NotEncyptedDataEndMarker = "72d26030-0d4d-4625-b6e8-785de17db815";
-
-		public async Task<bool> OpenAsync(Item parent, string idInStorage, bool tryToUnlock)
-		{
-			Parent = parent;
-			return await TryExecute(InternalOpenAsync(idInStorage, tryToUnlock));
-		}
 
 		public async Task<bool> OpenAsync(bool tryToUnlock)
 		{

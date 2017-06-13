@@ -34,10 +34,11 @@ namespace SafeNotebooks
 		public async Task InitializeAsync(ISearchableStorage<string> storage)
 		{
 			Storage = storage;
+
 			if (await Storage.ExistsAsync(IdForStorage))
-				await OpenAsync(null, IdForStorage, false);
+				await OpenAsync(false);
 			else
-				New(null);
+				InternalNew();
 		}
 
 
@@ -57,7 +58,6 @@ namespace SafeNotebooks
 			async Task LoadNotebooksFromStorageAsync(ISearchableStorage<string> storage)
 			{
 				anyNotebookLoaded |= await LoadItemsForItemAsync<Notebook>(this, pattern, tryToUnlock, storage);
-				await Task.Delay(300);
 			}
 
 			foreach (var storage in storages)
@@ -101,6 +101,7 @@ namespace SafeNotebooks
 				if (!await notebook.LoadAsync(tryToUnlockPages))
 					return false;
 			}
+
 			PreviouslySelectedNotebook = SelectedNotebook;
 			SelectedNotebook = notebook;
 
@@ -259,13 +260,8 @@ namespace SafeNotebooks
 			// i tak dostana zmodyfikowana date i sie zapisza do storage.
 			// Dzieje sie tak dlatego, ze Touch dziala po calej hierarchi (i jest to potrzebne).
 
-			T item = new T()
-			{
-				NotebooksManager = this
-			};
-
+			T item = Item.New<T>(this, parent);
 			initializer?.Invoke(item);
-			item.New(parent);
 
 			item.BatchBegin();
 
@@ -289,10 +285,15 @@ namespace SafeNotebooks
 
 			async Task CreateItemAsync(string idInStorage)
 			{
-				T item = new T() { NotebooksManager = this, Storage = storage };
-				await item.OpenAsync(forWhom, idInStorage, tryToUnlock);
-				//await Task.Delay(300);
-				forWhom.AddItem(item);
+				//DateTime cs = DateTime.Now;
+				//DateTime ss = cs;
+				T item = await Item.OpenAsync<T>(this, forWhom, storage, idInStorage, tryToUnlock);
+				//TimeSpan s1 = DateTime.Now - cs;
+				//cs = DateTime.Now;
+				if (item != null)
+					forWhom.AddItem(item);
+				//TimeSpan s2 = DateTime.Now - cs;
+				//Log.D($"OpenAsync: {s1.Milliseconds}, AddItem: {s2.Milliseconds}, CreateItemAsync: {(DateTime.Now - ss).Milliseconds}");
 			}
 
 			async Task ReloadItemAsync(Item item)
@@ -300,8 +301,8 @@ namespace SafeNotebooks
 				// TODO: co tu zrobic???
 			}
 
-			IList<Task> tasks = new List<Task>();
-			int tasksExecuted = 0;
+			IList<IList<Task>> allTasks = new List<IList<Task>>();
+			int tasksScheduled = 0;
 
 			if (storage == null)
 				storage = forWhom.Storage;
@@ -309,41 +310,46 @@ namespace SafeNotebooks
 			IEnumerable<string> idsInStorage = await storage.FindIdsAsync(pattern);
 			if (idsInStorage != null)
 			{
-				int batchSize = 50;
+				int batchSize = storage.Type == StorageType.Memory ? 256 : storage.Type == StorageType.LocalIO ? 128 : 32;
+				IList<Task> tasks = new List<Task>();
+
 				foreach (var idInStorage in idsInStorage)
 				{
-					T item = (T)forWhom.Items?.Find((i) => i.IdForStorage == idInStorage);
+					T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
 					if (item == null)
 					{
 						tasks.Add(CreateItemAsync(idInStorage));
-						tasksExecuted++;
+						tasksScheduled++;
 					}
 					else
 					{
 						if (await storage.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
 						{
 							tasks.Add(ReloadItemAsync(item));
-							tasksExecuted++;
+							tasksScheduled++;
 						}
 					}
 
 					if (tasks.Count > batchSize)
 					{
-						await Task.WhenAll(tasks);
-						tasks.Clear();
+						//Log.D($"{tasks.Count}");
 
-						// Give a little time for UI to refresh content and enter low power mode for the rest
-						await Task.Delay(50);
-						batchSize = 5;
+						allTasks.Add(tasks);
+						tasks = new List<Task>();
 					}
 				}
 			}
 
-			if (tasks.Count > 0)
-				await Task.WhenAll(tasks);
+			if (tasksScheduled > 0)
+			{
+				foreach (var tasks in allTasks)
+				{
+					await Task.WhenAll(tasks);
+				}
+			}
 
-			//Log.D($"execute time {(DateTime.Now - s).Duration()}");
-			return tasksExecuted > 0;
+			//Log.D($"execute time {(DateTime.Now - s).Milliseconds}");
+			return tasksScheduled > 0;
 		}
 	}
 }
