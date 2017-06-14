@@ -39,3 +39,5 @@ Thumbs.db
 # dotCover
 *.dotCover
 *.bak
+*.sqlite
+UWP/project.lock.json
