@@ -51,7 +51,7 @@
 				IsVisible="false"
 				TextColor="{StaticResource AccentTextColor}"
 				FontSize="Large"
-				Clicked="UnlockBtn_Clicked" />
+				Clicked="UnlockOrCancelBtn_Clicked" />
 
 		</StackLayout>
 

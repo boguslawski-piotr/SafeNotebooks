@@ -90,6 +90,9 @@
     <data name = "UseSomeDOA" xml:space = "preserve">
 		<value>Użyj swojego sposobu na potwierdzenie, że jesteś właścicielem tego urządzenia.</value>
 	</data>
+    <data name = "DOAWasCanceled" xml:space = "preserve">
+		<value>Identyfikacja biometryczna została przerwana.</value>
+	</data>
     <data name = "PinTitle" xml:space = "preserve">
 		<value>Wprowadź swój PIN</value>
 	</data>

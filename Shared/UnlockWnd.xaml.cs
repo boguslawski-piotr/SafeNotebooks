@@ -18,6 +18,8 @@ namespace SafeNotebooks
 
 		public TState State = TState.Splash;
 
+		public event EventHandler UnlockedCorrectly = null;
+
 		public UnlockWnd()
 		{
 			InitializeComponent();
@@ -70,15 +72,25 @@ namespace SafeNotebooks
 					DOAuthentication doa = App.C.SecretsManager.AvailableDOAuthentication;
 					if (doa != DOAuthentication.None && TryToUnlockUsingDOAuthentication())
 					{
-						if (doa == DOAuthentication.Fingerprint)
+						if (string.IsNullOrEmpty(_Message.Text))
 						{
-							_FPIcon.IsVisible = true;
-							_Message.Text = T.Localized("ScanFingerprint");
+							if (doa == DOAuthentication.Fingerprint)
+							{
+								_FPIcon.IsVisible = true;
+								_Message.Text = T.Localized("ScanFingerprint");
+							}
+							else if (doa == DOAuthentication.Password)
+								_Message.Text = T.Localized("EnterSystemPassword");
+							else
+								_Message.Text = T.Localized("UseSomeDOA");
+
+							if (App.C.SecretsManager.CanDOAuthenticationBeCanceled())
+							{
+								_UnlockOrCancelBtn.Text = T.Localized("Cancel");
+								_UnlockOrCancelBtn.IsVisible = true;
+							}
 						}
-						else if (doa == DOAuthentication.Password)
-							_Message.Text = T.Localized("EnterSystemPassword");
-						else
-							_Message.Text = T.Localized("UseSomeDOA");
+
 						_Message.IsVisible = true;
 						return;
 					};
@@ -97,7 +109,6 @@ namespace SafeNotebooks
 #pragma warning restore CS4014
 		}
 
-		public event EventHandler UnlockedCorrectly = null;
 
 		//
 
@@ -210,8 +221,17 @@ namespace SafeNotebooks
 
 #pragma warning disable CS4014
 
-		void UnlockBtn_Clicked(object sender, System.EventArgs e)
+		void UnlockOrCancelBtn_Clicked(object sender, System.EventArgs e)
 		{
+			if (App.C.SecretsManager.CanDOAuthenticationBeCanceled())
+			{
+				if (App.C.SecretsManager.CancelDOAuthentication())
+				{
+					OnNotUnlockedUsingDOAuthentication(T.Localized("DOAWasCanceled"), false);
+					return;
+				}
+			}
+
 			TryToUnlockAsync();
 		}
 

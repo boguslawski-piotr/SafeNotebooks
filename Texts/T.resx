@@ -85,10 +85,13 @@
 		<value>Scan your fingerprint.</value>
 	</data>
     <data name = "EnterSystemPassword" xml:space = "preserve">
-		<value>Enter your pasword/passkey/pin.</value>
+		<value>Enter your pasword or pin.</value>
 	</data>
     <data name = "UseSomeDOA" xml:space = "preserve">
 		<value>Use your way of identifying that you own this device.</value>
+	</data>
+    <data name = "DOAWasCanceled" xml:space = "preserve">
+		<value>The biometrics authentication has been canceled.</value>
 	</data>
     <data name = "PinTitle" xml:space = "preserve">
 		<value>Enter your PIN</value>

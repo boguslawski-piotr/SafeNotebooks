@@ -64,6 +64,7 @@
 			Desc = "Różne opcje dotyczące zabezpieczenia dostępu do programu i danych.">
 
 			<pbXForms:SettingsSwitch
+				x:Name = "UnlockUsingDOAuthentication"
 				IsToggled = "{Binding UnlockUsingDeviceOwnerAuthentication}"
 				Text = "device owner auth"
 				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
