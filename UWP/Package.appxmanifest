@@ -14,7 +14,7 @@
   <mp:PhoneIdentity PhoneProductId="f736c883-f105-4d30-a719-4bf328872f5e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>SafeNotebooks.UWP</DisplayName>
+    <DisplayName>Safe Notebooks</DisplayName>
     <PublisherDisplayName>Piotr Boguslawski</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -32,10 +32,10 @@
         Executable="$targetnametoken$.exe"
         EntryPoint="SafeNotebooks.UWP.App">
       <uap:VisualElements
-        DisplayName="SafeNotebooks.UWP"
+        DisplayName="Safe Notebooks"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="SafeNotebooks.UWP"
+        Description="Simple application to store all kinds of notes, which can be organized in notebooks and pages and password/pin protected."
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

@@ -403,7 +403,7 @@ Global
 		{55400609-5FB0-4825-9104-4D8C586688D5} = {D27F01C4-BDC1-4792-9875-2794D463A0A1}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		version = 1.0.0.5
+		version = 1.0.0.6
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.FileWidth = 160

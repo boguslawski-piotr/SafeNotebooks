@@ -66,4 +66,12 @@
 		]
 
 	},
+	{
+		"FileName": "Package.appxmanifest",
+		"Entries": [
+			{
+				"Pattern": "Version\\s*=\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9*]+)\\s*/>"
+			}
+		]
+	},
 ]
