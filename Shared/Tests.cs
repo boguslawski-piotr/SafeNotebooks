@@ -145,6 +145,12 @@ namespace SafeNotebooks
 
 			//await fs.CreateDirectoryAsync("dir1");
 
+			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Personal);
+			//await fs.WriteTextAsync("ala", "jakiś tekst");
+			//await fs.SetModifiedOnAsync("ala", DateTime.UtcNow - TimeSpan.FromMinutes(5));
+			//DateTime dd = await fs.GetModifiedOnAsync("ala");
+			//await fs.DeleteFileAsync("ala");
+
 			//***
 
 			//var tests = new AesCryptographerTests();
