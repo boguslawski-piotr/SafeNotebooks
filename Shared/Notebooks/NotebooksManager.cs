@@ -55,7 +55,7 @@ namespace SafeNotebooks
 			async Task LoadNotebooksFromStorageAsync(ISearchableStorage<string> storage)
 			{
 				await StartLoadItemsForItemAsync<Notebook>(this, pattern, tryToUnlock,
-				                                           ((int notebooksAdded, int notebooksReloaded) r) =>
+														   ((int notebooksAdded, int notebooksReloaded) r) =>
 														   {
 															   report.notebooksAdded += r.notebooksAdded;
 															   report.notebooksReloaded += r.notebooksReloaded;
@@ -349,11 +349,18 @@ namespace SafeNotebooks
 		{
 			ISearchableStorage<string> storageWithItems = storage ?? forWhom.Storage;
 
+			// On Windows (UWP) we have true async IO even for local file system, not faked one like on other systems.
+			// That's why the first data load algorithm is off.
+
+#if !WINDOWS_UWP
+
 			if ((StorageType.Quick & storageWithItems.Type) == storageWithItems.Type)
 			{
 				OnEnd(await LoadItemsForItemAsync<T>(forWhom, pattern, tryToUnlock, storage));
 				return;
 			}
+
+#endif
 
 			await Task.Run(async () =>
 			{

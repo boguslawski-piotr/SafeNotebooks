@@ -23,6 +23,7 @@
 			<Label
 				x:Name = "SelectedNotebookName"
 				Text = ""
+				FontSize="Medium"
 				TextColor = "{StaticResource AppBarTextColor}"
 				LineBreakMode = "MiddleTruncation"
 				VerticalOptions = "Center"

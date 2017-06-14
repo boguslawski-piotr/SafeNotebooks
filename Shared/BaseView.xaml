@@ -87,6 +87,7 @@
 							Source = "{Binding SelectedUnselectedImageNameForLists}"
 							WidthRequest = "{Binding SelectedUnselectedImageWidthForLists}"
 							Margin = "{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}"
+							VerticalOptions="Center"
 							HeightRequest = "-1" />
 
 						<StackLayout
@@ -97,6 +98,7 @@
 								LineBreakMode = "TailTruncation"
 								FontSize = "Medium"
 								Margin = "0"
+								VerticalTextAlignment="Center"
 								TextColor = "{StaticResource ListItemTextColor}" />
 
 							<Label
@@ -104,6 +106,7 @@
 								LineBreakMode = "TailTruncation"
 								FontSize = "Micro"
 								Margin = "0"
+								VerticalTextAlignment="Center"
 								TextColor = "{StaticResource ListItemDetailColor}" />
 
 						</StackLayout>

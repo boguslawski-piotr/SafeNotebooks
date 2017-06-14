@@ -28,6 +28,8 @@
 
 		<pbXForms:PIButton
 			Image = "ic_close.png"
+			VerticalOptions="Center"
+			HorizontalOptions="Center"
 			Clicked = "OK_Clicked" />
 
 	</pbXForms:SettingsContentView.AppBarContent>
@@ -35,7 +37,7 @@
 	<pbXForms:SettingsContentView.ViewContent>
 
 		<pbXForms:SettingsGroup
-			IsCollapsed = "false"
+			IsCollapsed = "true"
 			Text = "JAKAŚ SEKCJA"
 			Desc = "jakis dlugi opis mozna tu dac">
 
