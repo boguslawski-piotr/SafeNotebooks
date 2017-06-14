@@ -102,7 +102,7 @@ namespace SafeNotebooks
 
 		//
 
-		async Task SelectPage(Page page)
+		async Task SelectPageAsync(Page page)
 		{
 			if (await page.OpenAsync(true))
 			{
@@ -119,7 +119,7 @@ namespace SafeNotebooks
 					page.IsSelected = !page.IsSelected;
 				else
 				{
-					await SelectPage(page);
+					await SelectPageAsync(page);
 				}
 			}
 		}
@@ -171,7 +171,7 @@ namespace SafeNotebooks
 			if (page != null)
 			{
 				Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, page));
-				await SelectPage(page);
+				await SelectPageAsync(page);
 			}
 		}
 

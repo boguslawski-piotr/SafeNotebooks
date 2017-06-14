@@ -325,7 +325,7 @@ namespace SafeNotebooks
 		protected virtual async Task<bool> InternalOpenAsync(string idInStorage, bool tryToUnlock)
 		{
 			string d = await Storage?.GetACopyAsync(idInStorage);
-			if (d == null)
+			if (string.IsNullOrEmpty(d))
 			{
 				// No data for the item in storage probably means that this object was just created (it is new).
 				// If the item has a name then we treat this as a correct situation.

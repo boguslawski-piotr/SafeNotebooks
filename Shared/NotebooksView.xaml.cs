@@ -91,7 +91,7 @@ namespace SafeNotebooks
 
 #pragma warning restore CS4014
 
-		async Task SelectNotebook(Notebook notebook)
+		async Task SelectNotebookAsync(Notebook notebook)
 		{
 			if (await notebook.OpenAsync(true)) 
 			{
@@ -108,7 +108,7 @@ namespace SafeNotebooks
 					notebook.IsSelected = !notebook.IsSelected;
 				else
 				{
-					await SelectNotebook(notebook);
+					await SelectNotebookAsync(notebook);
 				}
 			}
 		}
@@ -184,7 +184,7 @@ namespace SafeNotebooks
 				if (notebook != null)
 				{
 					Device.BeginInvokeOnMainThread(() => BaseView.ListViewScrollTo(ListCtl, notebook));
-					await SelectNotebook(notebook);
+					await SelectNotebookAsync(notebook);
 				}
 			}
 		}
