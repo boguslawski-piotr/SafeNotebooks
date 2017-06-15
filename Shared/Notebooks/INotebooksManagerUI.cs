@@ -10,9 +10,9 @@ namespace SafeNotebooks
 		Task DisplayError(NotebooksException ex);
 		Task DisplayError(Exception ex);
 
-		Task<Password> GetPasswordAsync(Item item, bool passwordForTheFirstTime);
+		Task<IPassword> GetPasswordAsync(Item item, bool passwordForTheFirstTime);
 
-		Task<(bool, Password)> EditItemAsync(Item item);
+		Task<(bool, IPassword)> EditItemAsync(Item item);
 
         // For listviews
 

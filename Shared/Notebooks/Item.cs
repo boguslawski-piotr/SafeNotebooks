@@ -440,7 +440,7 @@ namespace SafeNotebooks
 
 		string IdForCKey => ItemForCKey?.Id;
 
-		public virtual async Task InitializePasswordAsync(Password passwd)
+		public virtual async Task InitializePasswordAsync(IPassword passwd)
 		{
 			// If user decided to secure this item with a password...
 			if (ThisIsSecured && passwd != null && passwd.Length > 0)
@@ -451,7 +451,7 @@ namespace SafeNotebooks
 			}
 		}
 
-		public virtual async Task<byte[]> CreateCKeyAsync(Password passwd)
+		public virtual async Task<byte[]> CreateCKeyAsync(IPassword passwd)
 		{
 			if (passwd == null)
 			{

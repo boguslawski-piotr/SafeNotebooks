@@ -34,7 +34,7 @@ namespace SafeNotebooks
 			);
 		}
 
-		public async Task<Password> GetPasswordAsync(Item item, bool passwordForTheFirstTime)
+		public async Task<IPassword> GetPasswordAsync(Item item, bool passwordForTheFirstTime)
 		{
 			// TODO: UI powinno sprawdzac poprawnosc hasla -> wykorzystac SecretsManager -> Basic authentication based on passwords
 			await DisplayAlert("Password", $"is needed for: {item.Nick}; first: {passwordForTheFirstTime}", T.Localized("Cancel"));
@@ -42,7 +42,7 @@ namespace SafeNotebooks
 			//return null;
 		}
 
-		public async Task<(bool, Password)> EditItemAsync(Item item)
+		public async Task<(bool, IPassword)> EditItemAsync(Item item)
 		{
 			//if (!await DisplayAlert("New/Edit", $"{item.GetType().Name}", T.Localized("OK"), T.Localized("Cancel")))
 			//return (false, "");

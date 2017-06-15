@@ -265,7 +265,7 @@ namespace SafeNotebooks
 			item.BatchBegin();
 
 			// Allow user to edit data
-			(bool ok, Password passwd) rc = await UI.EditItemAsync(item);
+			(bool ok, IPassword passwd) rc = await UI.EditItemAsync(item);
 			if (rc.ok)
 			{
 				await item.InitializePasswordAsync(rc.passwd);

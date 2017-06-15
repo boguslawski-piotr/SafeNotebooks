@@ -107,15 +107,15 @@ namespace SafeNotebooks
 			bool rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 			if (rc)
 			{
-				Password pin = new Password(pinDlg.Pin);
+				IPassword pin = new Password(pinDlg.Pin);
 				pinDlg.Reset();
 
 				pinDlg.Title.Text = T.Localized("ConfirmNewPinTitle");
 				rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 				if (rc)
-					rc = pin == pinDlg.Pin;
+					rc = pin.Equals(pinDlg.Pin);
 
-				pin.Clear(true);
+				pin.Dispose();
 
 				if (rc)
 				{
