@@ -71,7 +71,8 @@
 		"FileName": "UWP/Package.appxmanifest",
 		"Entries": [
 			{
-				"Pattern": "Version\\s*=\\s*\"([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9*]+)\"\\s*/>"
+				"Pattern": "Version\\s*=\\s*\"([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9*]+)\"\\s*/>",
+				"RevisionGroup": -1
 			}
 		]
 	},
