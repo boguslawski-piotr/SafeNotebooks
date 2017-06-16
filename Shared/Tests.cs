@@ -61,6 +61,22 @@ namespace SafeNotebooks
 		{
 			//***
 
+			AesCryptographer cr = new AesCryptographer();
+
+			IByteBuffer key = cr.GenerateKey(new Password("ala ma kota"), new ByteBuffer("to jest salt", Encoding.UTF8));
+			string skey = key.ToString();
+
+			// PasswordDeriveBytes: FBBE8CE5A293A76E4E48BE7E1EDBD30893C587A3EF5CBE20245AFDF9850EEB4DC65A00
+			// Rfc2898DeriveBytes:  012000DFFFE56761A0798B58E1A94CD81DACF7DFDC1AFE987596B465BB716685FB7A342877
+
+			IByteBuffer iv = cr.GenerateIV();
+			ByteBuffer e = cr.Encrypt(new ByteBuffer("wiadomość", Encoding.UTF8), key, iv);
+			ByteBuffer d = cr.Decrypt(e, key, iv);
+			string s = d.ToString(Encoding.UTF8);
+			Log.D($"decrypted: {s}");
+
+			//***
+
 			//ByteBuffer b = new ByteBuffer("ala ma kota", Encoding.UTF8);
 			//foreach (var item in b)
 			//{
@@ -177,11 +193,6 @@ namespace SafeNotebooks
 			//await fs.SetModifiedOnAsync("ala", DateTime.UtcNow - TimeSpan.FromMinutes(5));
 			//DateTime dd = await fs.GetModifiedOnAsync("ala");
 			//await fs.DeleteFileAsync("ala");
-
-			//***
-
-			//var tests = new AesCryptographerTests();
-			//tests.BasicEncryptDecrypt();
 		}
 	}
 }
