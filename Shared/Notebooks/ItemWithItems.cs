@@ -117,6 +117,7 @@ namespace SafeNotebooks
 				Comparison<Item> compare = SortComparision;
 				bool inserted = false;
 
+				// TODO: make it faster, use bsearch
 				for (int n = 0; n < ObservableItems.Count; n++)
 				{
 					if (compare(item, ObservableItems[n]) <= 0)

@@ -165,6 +165,7 @@ namespace SafeNotebooks
 
 		async Task TryToUnlockUsingPinAsync()
 		{
+			//if(false)
 			if (App.Settings.UnlockUsingPin)
 			{
 				SetUnlockingMode();

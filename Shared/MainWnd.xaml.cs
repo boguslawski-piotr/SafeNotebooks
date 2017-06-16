@@ -23,20 +23,19 @@ namespace SafeNotebooks
 
 		public async Task DisplayError(NotebooksException ex)
 		{
-			string message = $"DataManagerException:Err {ex.Err}"; // TODO: wyciagac komunikaty bledow z zasobow
+			string message = $"NotebooksException:Err {ex.Err}"; // TODO: wyciagac komunikaty bledow z zasobow
 			await DisplayError(new Exception(message));
 		}
 
 		public async Task DisplayError(Exception ex)
 		{
 			await Task.Run(() =>
-				Device.BeginInvokeOnMainThread(async () => await DisplayAlert(T.Localized("Error"), ex.Message, T.Localized("Cancel")))
+				Device.BeginInvokeOnMainThread(async () => await DisplayAlert(T.Localized("Error"), ex.Message, T.Localized("OK")))
 			);
 		}
 
 		public async Task<IPassword> GetPasswordAsync(Item item, bool passwordForTheFirstTime)
 		{
-			// TODO: UI powinno sprawdzac poprawnosc hasla -> wykorzystac SecretsManager -> Basic authentication based on passwords
 			await DisplayAlert("Password", $"is needed for: {item.Nick}; first: {passwordForTheFirstTime}", T.Localized("Cancel"));
 			return new Password("123");
 			//return null;

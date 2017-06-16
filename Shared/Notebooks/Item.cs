@@ -70,7 +70,7 @@ namespace SafeNotebooks
 			public string Color = "#00ffffff";
 			public string Nick;
 			public CKeyLifeTime CKeyLifeTime;
-			public byte[] IV;
+			public string IV;
 		}
 
 		NotEncryptedData nedata;
@@ -125,10 +125,10 @@ namespace SafeNotebooks
 			set => SetValue(ref nedata.CKeyLifeTime, value);
 		}
 
-		byte[] IV
+		IByteBuffer IV
 		{
-			get => nedata.IV ?? Parent?.IV;
-			set => SetValue(ref nedata.IV, value);
+			get => nedata.IV == null ? Parent?.IV : SecureBuffer.NewFromHexString(nedata.IV);
+			set => SetValue(ref nedata.IV, new SecureBuffer(value, true).ToHexString());
 		}
 
 		public bool ThisIsSecured => ThisCKeyLifeTime != CKeyLifeTime.Undefined;
@@ -446,12 +446,11 @@ namespace SafeNotebooks
 			if (ThisIsSecured && passwd != null && passwd.Length > 0)
 			{
 				// ...create ckey (in repository) for future use.
-				// Ignore the result because it is not needed here.
 				await CreateCKeyAsync(passwd);
 			}
 		}
 
-		public virtual async Task<byte[]> CreateCKeyAsync(IPassword passwd)
+		public virtual async Task CreateCKeyAsync(IPassword passwd)
 		{
 			if (passwd == null)
 			{
@@ -463,24 +462,21 @@ namespace SafeNotebooks
 			if (IV == null)
 				IV = NotebooksManager.SecretsManager.GenerateIV();
 
-			return NotebooksManager.SecretsManager.CreateCKey(IdForCKey, CKeyLifeTime, passwd);
+			NotebooksManager.SecretsManager.CreateCKey(IdForCKey, CKeyLifeTime, passwd);
 		}
 
-		public virtual async Task<byte[]> GetCKeyAsync()
+		public virtual async Task PrepareCKeyAsync()
 		{
-			byte[] ckey = NotebooksManager.SecretsManager.GetCKey(IdForCKey);
-			if (ckey == null)
-				ckey = await CreateCKeyAsync(null);
-
-			return ckey;
+			if (!NotebooksManager.SecretsManager.CKeyExists(IdForCKey))
+				await CreateCKeyAsync(null);
 		}
 
 		protected virtual async Task<string> EncryptAsync(string d)
 		{
 			if (IsSecured)
 			{
-				byte[] ckey = await GetCKeyAsync();
-				return NotebooksManager.SecretsManager.Encrypt(d, ckey, IV);
+				await PrepareCKeyAsync();
+				return NotebooksManager.SecretsManager.Encrypt(d, IdForCKey, IV);
 			}
 
 			return d;
@@ -490,17 +486,8 @@ namespace SafeNotebooks
 		{
 			if (IsSecured)
 			{
-				byte[] ckey = await GetCKeyAsync();
-				try
-				{
-					d = NotebooksManager.SecretsManager.Decrypt(d, ckey, IV);
-				}
-				catch (Exception ex)
-				{
-					Log.E(ex.Message, this);
-					return null;
-				}
-
+				await PrepareCKeyAsync();
+				d = NotebooksManager.SecretsManager.Decrypt(d, IdForCKey, IV);
 				if (string.IsNullOrEmpty(d))
 				{
 					// Most likely, a bad password has been entered. 
@@ -554,15 +541,15 @@ namespace SafeNotebooks
 			{
 				return await t;
 			}
-			catch (NotebooksException dmex)
+			catch (NotebooksException nex)
 			{
-				throw dmex;
-				await NotebooksManager.UI?.DisplayError(dmex);
+				Log.E(nex.ToString(), this);
+				await NotebooksManager.UI?.DisplayError(nex);
 				return false;
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				Log.E(ex.ToString(), this);
 				await NotebooksManager.UI?.DisplayError(ex);
 				return false;
 			}

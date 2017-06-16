@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using pbXForms;
@@ -58,7 +59,33 @@ namespace SafeNotebooks
 
 		async Task Tests()
 		{
-			//string d1 = "";
+			//***
+
+			//ByteBuffer b = new ByteBuffer("ala ma kota", Encoding.UTF8);
+			//foreach (var item in b)
+			//{
+			//	byte c = item;
+			//	if (c == 0)
+			//		return;
+			//}
+
+			//***
+
+			//Password p = new Password("ąałlcć");
+			//byte[] bp = p.GetBytes();
+
+			//***
+
+			//byte[] data = new byte[] { 10, 12, 14, 16, 18, 20, 8, 6, 4, 2 };
+			//SecureBuffer b = new SecureBuffer(data, true);
+
+			//byte[] dataCopy = b.GetBytes();
+			//b.DisposeBytes();
+
+			//string d1 = b.ToString();
+
+			//b.Dispose();
+
 
 			//***
 
