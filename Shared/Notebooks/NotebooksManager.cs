@@ -362,7 +362,9 @@ namespace SafeNotebooks
 
 #endif
 
-			await Task.Run(async () =>
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+			Task.Run(async () =>
 			{
 				(int itemsAdded, int itemsReloaded) report = (0, 0);
 
@@ -371,6 +373,8 @@ namespace SafeNotebooks
 				{
 					foreach (var idInStorage in idsInStorage)
 					{
+						const int batchSize = 32;
+
 						T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
 						if (item == null)
 						{
@@ -385,11 +389,17 @@ namespace SafeNotebooks
 								report.itemsReloaded++;
 							}
 						}
+
+						// Trying to make UI more responsive...
+						if (report.itemsAdded > batchSize)
+							await Task.Delay(25);
 					}
 				}
 
 				Device.BeginInvokeOnMainThread(() => OnEnd(report));
 			});
+
+#pragma warning restore CS4014
 		}
 	}
 }
