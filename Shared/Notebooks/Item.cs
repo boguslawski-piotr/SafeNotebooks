@@ -61,7 +61,7 @@ namespace SafeNotebooks
 		}
 
 
-		[Serializable]
+		[System.Serializable]
 		class NotEncryptedData
 		{
 			public string Id;
@@ -137,7 +137,7 @@ namespace SafeNotebooks
 
 		public bool IsSecured => (ThisIsSecured || Parent == null) ? ThisIsSecured : Parent.IsSecured;
 
-		[Serializable]
+		[System.Serializable]
 		class Data
 		{
 			public string Name;

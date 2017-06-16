@@ -24,12 +24,10 @@ namespace SafeNotebooks
 		{
 		}
 
-		void Handle_Clicked(object sender, System.EventArgs e)
+		public void OK_Clicked(object sender, System.EventArgs e)
 		{
-			App.Settings.TryToUnlockItemItems = !App.Settings.TryToUnlockItemItems;
-			ApplyBindings();
+			OnOK();
 		}
-
 
 		//
 

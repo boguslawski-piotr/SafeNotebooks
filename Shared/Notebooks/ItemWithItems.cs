@@ -12,7 +12,7 @@ namespace SafeNotebooks
 	{
 		public ObservableCollectionEx<Item> ObservableItems { get; protected set; }
 
-		[Serializable]
+		[System.Serializable]
 		public struct SortParameters
 		{
 			public bool ByName;
@@ -36,7 +36,7 @@ namespace SafeNotebooks
 
 		public static readonly SortParameters DefaultSortParams = new SortParameters(false, false, true, false);
 
-		[Serializable]
+		[System.Serializable]
 		class IWIData
 		{
 			public SortParameters SortParams = DefaultSortParams;

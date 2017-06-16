@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 #if __ANDROID__
 using SafeNotebooks.Droid;
 #endif
 
-//[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
 {
 	public partial class App : Application

@@ -55,5 +55,10 @@ namespace SafeNotebooks
 			SortParams.ByColor = true;
 			OnOK();
 		}
+
+		public void Cancel_Clicked(object sender, System.EventArgs e)
+		{
+			OnCancel();
+		}
 	}
 }
