@@ -32,11 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pbXForms.Droid", "..\pbX\pb
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32D0ED62-3E8F-4449-8D53-FF37A0627120}"
 	ProjectSection(SolutionItems) = preProject
+		IncRevision = IncRevision
 		LICENSE = LICENSE
 		License.md = License.md
-		README.md = README.md
-		IncRevision = IncRevision
 		pre-push.hook = pre-push.hook
+		README.md = README.md
 		Versions.json = Versions.json
 	EndProjectSection
 EndProject
@@ -369,6 +369,8 @@ Global
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Debug|ARM.Deploy.0 = Debug|ARM
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Debug|iPhone.ActiveCfg = Debug|x86
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
+		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Debug|iPhoneSimulator.Build.0 = Debug|x86
+		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Debug|iPhoneSimulator.Deploy.0 = Debug|x86
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Debug|x64.ActiveCfg = Debug|x64
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Debug|x64.Build.0 = Debug|x64
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Debug|x64.Deploy.0 = Debug|x64
@@ -383,6 +385,8 @@ Global
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Release|ARM.Deploy.0 = Release|ARM
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Release|iPhone.ActiveCfg = Release|x86
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Release|iPhoneSimulator.ActiveCfg = Release|x86
+		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Release|iPhoneSimulator.Build.0 = Release|x86
+		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Release|iPhoneSimulator.Deploy.0 = Release|x86
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Release|x64.ActiveCfg = Release|x64
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Release|x64.Build.0 = Release|x64
 		{DAAE1EBA-EAFA-4C0E-B03A-8EBE6D3CF01B}.Release|x64.Deploy.0 = Release|x64
