@@ -44,7 +44,7 @@ namespace SafeNotebooks
         {
             //Wnd.C.IsSplitView = true;
             //Wnd.C.ShowDetailView<PageView>("vPage", MastersDetailsPage.ViewsSwitchingAnimation.LeftToRight);
-            //Wnd.C.ShowDetailViewAsync<PageView>(MastersDetailsPage.ViewsSwitchingAnimation.Back);
+            Wnd.C.ShowDetailViewAsync<PageView>(MastersDetailsPage.ViewsSwitchingAnimation.Back);
         }
 
         void MS_Clicked(object sender, System.EventArgs e)
