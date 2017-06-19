@@ -42,3 +42,5 @@ Thumbs.db
 *.sqlite
 UWP/project.lock.json
 *.appx
+.vs
+
