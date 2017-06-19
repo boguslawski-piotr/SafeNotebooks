@@ -48,5 +48,4 @@ UWP/project.lock.json
 .vs
 .vs/*
 
-[Dd]roid/Resource.designer.cs
-
+Droid/Resources/Resource.designer.cs
