@@ -6,9 +6,9 @@
     "Xam.Plugins.Settings": "2.5.8",
     "Xamarin.Forms": "2.3.5.239-pre3"
   },
-  "frameworks": {
-    "uap10.0.14393": {}
-  },
+	"frameworks": {
+		"uap10.0.10240": {}
+	},
   "runtimes": {
     "win10-arm": {},
     "win10-arm-aot": {},
