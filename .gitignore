@@ -40,7 +40,13 @@ Thumbs.db
 *.dotCover
 *.bak
 *.sqlite
+
+# others
 UWP/project.lock.json
 *.appx
+
 .vs
+.vs/*
+
+[Dd]roid/Resource.designer.cs
 
