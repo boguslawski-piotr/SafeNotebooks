@@ -54,7 +54,7 @@ namespace SafeNotebooks
 			if (lll % 2 == 0)
 				item.Detail = "alaal sksi dkd dkkfir fkfir fkdid dkdkf";
 			//item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
-			//item.ThisCKeyLifeTime = CKeyLifeTime.WhileAppRunning;
+			//item.ThisCKeyLifeTime = SecretLifeTime.WhileAppRunning;
 			//item.ThisCKeyLifeTime = CKeyLifeTime.OneTime;
 
 			App.Settings.AddOrUpdateValue("lll", lll);

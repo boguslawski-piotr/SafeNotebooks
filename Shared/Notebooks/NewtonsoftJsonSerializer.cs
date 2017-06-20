@@ -33,7 +33,7 @@ namespace SafeNotebooks
 			}
 		}
 
-		public string ToString(object o, string id = null)
+		public string Serialize<T>(T o, string id = null)
 		{
 			string d = JsonConvert.SerializeObject(o, Settings);
 			if (id != null)
@@ -43,7 +43,7 @@ namespace SafeNotebooks
 			return d;
 		}
 
-		public T FromString<T>(string d, string id = null)
+		public T Deserialize<T>(string d, string id = null)
 		{
 			if (id != null)
 			{

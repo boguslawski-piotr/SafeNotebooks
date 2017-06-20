@@ -64,13 +64,13 @@ namespace SafeNotebooks
 
 		protected override string SerializeNotEncryptedData()
 		{
-			return base.SerializeNotEncryptedData() + NotebooksManager.Serializer.ToString(iwidata, "iwid");
+			return base.SerializeNotEncryptedData() + NotebooksManager.Serializer.Serialize(iwidata, "iwid");
 		}
 
 		protected override void DeserializeNotEncryptedData(string d)
 		{
 			base.DeserializeNotEncryptedData(d);
-			iwidata = NotebooksManager.Serializer.FromString<IWIData>(d, "iwid");
+			iwidata = NotebooksManager.Serializer.Deserialize<IWIData>(d, "iwid");
 		}
 
 		protected override void InternalNew()

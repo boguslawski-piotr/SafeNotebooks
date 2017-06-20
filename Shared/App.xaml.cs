@@ -90,7 +90,7 @@ namespace SafeNotebooks
 		{
 			CreateSerializer();
 			CreateSafeStorage();
-			SecretsManager = new SecretsManager(App.Name, new AesCryptographer(), SafeStorage, Serializer);
+			SecretsManager = new SecretsManager(App.Name, new AesCryptographer(), Serializer, SafeStorage);
 		}
 
 		void InitializeSecretsManager()

@@ -24,13 +24,13 @@ namespace SafeNotebooks
 
         protected override string Serialize()
         {
-            return base.Serialize() + NotebooksManager.Serializer.ToString(pdata, "pd");
+            return base.Serialize() + NotebooksManager.Serializer.Serialize(pdata, "pd");
         }
 
         protected override void Deserialize(string d)
         {
             base.Deserialize(d);
-            pdata = NotebooksManager.Serializer.FromString<PageData>(d, "pd");
+            pdata = NotebooksManager.Serializer.Deserialize<PageData>(d, "pd");
         }
 
         protected override void InternalNew()

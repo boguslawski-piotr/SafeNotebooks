@@ -69,7 +69,7 @@ namespace SafeNotebooks
 			public DateTime ModifiedOn;
 			public string Color = "#00ffffff";
 			public string Nick;
-			public CKeyLifeTime CKeyLifeTime;
+			public SecretLifeTime CKeyLifeTime;
 			public string IV;
 		}
 
@@ -118,7 +118,7 @@ namespace SafeNotebooks
 			}
 		}
 
-		public CKeyLifeTime ThisCKeyLifeTime
+		public SecretLifeTime ThisCKeyLifeTime
 		{
 			get => nedata.CKeyLifeTime;
 			// TODO: changing ThisCKeyLifeTime needs additional action like for example: decrypt this and all children, invalidate keys, etc. -> should be rethought more thoroughly
@@ -131,9 +131,9 @@ namespace SafeNotebooks
 			set => SetValue(ref nedata.IV, new SecureBuffer(value, true).ToHexString());
 		}
 
-		public bool ThisIsSecured => ThisCKeyLifeTime != CKeyLifeTime.Undefined;
+		public bool ThisIsSecured => ThisCKeyLifeTime != SecretLifeTime.Undefined;
 
-		public CKeyLifeTime CKeyLifeTime => (ThisIsSecured || Parent == null) ? ThisCKeyLifeTime : Parent.CKeyLifeTime;
+		public SecretLifeTime CKeyLifeTime => (ThisIsSecured || Parent == null) ? ThisCKeyLifeTime : Parent.CKeyLifeTime;
 
 		public bool IsSecured => (ThisIsSecured || Parent == null) ? ThisIsSecured : Parent.IsSecured;
 
@@ -282,22 +282,22 @@ namespace SafeNotebooks
 
 		protected virtual string SerializeNotEncryptedData()
 		{
-			return NotebooksManager.Serializer.ToString(nedata, "ned");
+			return NotebooksManager.Serializer.Serialize(nedata, "ned");
 		}
 
 		protected virtual void DeserializeNotEncryptedData(string d)
 		{
-			nedata = NotebooksManager.Serializer.FromString<NotEncryptedData>(d, "ned");
+			nedata = NotebooksManager.Serializer.Deserialize<NotEncryptedData>(d, "ned");
 		}
 
 		protected virtual string Serialize()
 		{
-			return NotebooksManager.Serializer.ToString(data, "d");
+			return NotebooksManager.Serializer.Serialize(data, "d");
 		}
 
 		protected virtual void Deserialize(string d)
 		{
-			data = NotebooksManager.Serializer.FromString<Data>(d, "d");
+			data = NotebooksManager.Serializer.Deserialize<Data>(d, "d");
 		}
 
 		#endregion

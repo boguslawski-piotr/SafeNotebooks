@@ -119,7 +119,7 @@ namespace SafeNotebooks
 				{
 					// Everything is in order, pin confirmed and we can save it (sort of ;))
 					App.Settings.UnlockUsingPin = true;
-					App.C.SecretsManager.AddOrUpdatePassword(App.Name, pinDlg.Pin);
+					App.C.SecretsManager.AddOrUpdatePassword(App.Name, SecretLifeTime.Infinite, pinDlg.Pin);
 				}
 
 				pinDlg.Reset();
@@ -178,7 +178,7 @@ namespace SafeNotebooks
 
 				if (rc)
 				{
-					App.C.SecretsManager.CreateCKey(App.Name, CKeyLifeTime.WhileAppRunning, pinDlg.Pin);
+					App.C.SecretsManager.CreateCKey(App.Name, SecretLifeTime.WhileAppRunning, pinDlg.Pin);
 
 					// encrypt all data on low level
 

@@ -189,7 +189,7 @@ namespace SafeNotebooks
 						if (pok)
 						{
 							if (App.Settings.UsePinAsMasterPassword)
-								App.C.SecretsManager.CreateCKey(App.Name, CKeyLifeTime.WhileAppRunning, dlg.Pin);
+								App.C.SecretsManager.CreateCKey(App.Name, SecretLifeTime.WhileAppRunning, dlg.Pin);
 						}
 
 						dlg.Reset();
