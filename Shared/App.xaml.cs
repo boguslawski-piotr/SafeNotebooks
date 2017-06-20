@@ -59,9 +59,6 @@ namespace SafeNotebooks
 
 		UnlockWnd _unlockWnd;
 
-		static DateTime _startTime = DateTime.Now;
-		TimeSpan _timeFromStart => DateTime.Now - _startTime;
-
 
 		//
 
@@ -74,7 +71,6 @@ namespace SafeNotebooks
 		void CreateSerializer()
 		{
 			Serializer = new NewtonsoftJsonSerializer();  // very, very fast
-			//Serializer = new BinarySerializer();          // slow and produce 2x larger files
 		}
 
 		void CreateSafeStorage()
@@ -145,8 +141,6 @@ namespace SafeNotebooks
 
 		public App()
 		{
-			Log.D($"{_timeFromStart}", this);
-
 			InitializeLocalization();
 
 			CreateSecretsManager();
@@ -170,7 +164,7 @@ namespace SafeNotebooks
 
 		protected override async void OnStart()
 		{
-			Log.D($"{_timeFromStart}", this);
+			Log.D("", this);
 
 			_unlockWnd = new UnlockWnd();
 			_unlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
@@ -180,7 +174,7 @@ namespace SafeNotebooks
 
 		async void UnlockedCorrectlyInOnStart(object sender, EventArgs e)
 		{
-			Log.D($"{_timeFromStart}", this);
+			Log.D("", this);
 
 			// Give a little time for everything to be done in case there was 
 			// no action on the UnlockWnd window displayed during OnStart execution.
@@ -195,14 +189,20 @@ namespace SafeNotebooks
 
 		async Task ContinueOnStartAsync()
 		{
-			Log.D($"{_timeFromStart}", this);
+			Log.D("", this);
 
-			InitializeSecretsManager();
-			await InitializeStoragesManagerAsync();
-			await InitializeNotebooksManagerAsync();
-			await LoadNotebooksAsync();
-
-			Log.D($"END: {_timeFromStart}", this);
+			try
+			{
+				InitializeSecretsManager();
+				await InitializeStoragesManagerAsync();
+				await InitializeNotebooksManagerAsync();
+				await LoadNotebooksAsync();
+			}
+			catch (Exception ex)
+			{
+				Log.E(ex.Message, this);
+				MainWnd.C.DisplayError(ex);
+			}
 		}
 
 

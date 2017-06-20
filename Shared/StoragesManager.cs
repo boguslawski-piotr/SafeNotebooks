@@ -34,39 +34,43 @@ namespace SafeNotebooks
 
 		public async Task InitializeAsync()
 		{
-			FileSystems = new List<IFileSystem>();
 			_storages = new Dictionary<string, ISearchableStorage<string>>();
 
-			foreach (DeviceFileSystemRoot root in DeviceFileSystem.AvailableRootsForEndUser)
+			try
 			{
-				IFileSystem fs = new DeviceFileSystem(root);
-				FileSystems.Add(fs);
-				StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);
-				if (storage != null)
-					_storages[fs.Id] = storage;
+				FileSystems = new List<IFileSystem>();
+				foreach (DeviceFileSystemRoot root in DeviceFileSystem.AvailableRootsForEndUser)
+				{
+					IFileSystem fs = new DeviceFileSystem(root);
+					FileSystems.Add(fs);
+					StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);
+					if (storage != null)
+						_storages[fs.Id] = storage;
+				}
+			}
+			catch (Exception ex)
+			{
+				await MainWnd.C.DisplayError(ex);
 			}
 
+			try
+			{
 #if DEBUG
-			AzureStorageSettings azureStorageSettings = new AzureStorageSettings { ConnectionString = "UseDevelopmentStorage=true",	};
-			StorageOnAzureStorage<string> azureStorage = await StorageOnAzureStorage<string>.NewAsync("Azure Storage Emulator", azureStorageSettings, Serializer);
-			_storages[azureStorage.Id] = azureStorage;
+#if WINDOWS_UWP
+				AzureStorageSettings azureStorageSettings = new AzureStorageSettings { ConnectionString = "UseDevelopmentStorage=true",	};
+				StorageOnAzureStorage<string> azureStorage = await StorageOnAzureStorage<string>.NewAsync("Azure Storage Emulator", azureStorageSettings, Serializer);
+				if(azureStorage != null)
+					_storages[azureStorage.Id] = azureStorage;
 #endif
+#endif
+			}
+			catch (Exception ex)
+			{
+				await MainWnd.C.DisplayError(ex);
+			}
 		}
 
-		//
-
-		public async Task<IFileSystem> SelectFileSystemAsync(Func<IEnumerable<IFileSystem>, Task<IFileSystem>> UI)
-		{
-			if (FileSystems.Count <= 0)
-				return new DeviceFileSystem(DeviceFileSystemRoot.Personal);
-			else if (FileSystems.Count == 1)
-				return FileSystems[0];
-			return await UI(FileSystems);
-		}
-
-		//
-
-		protected async Task<StorageOnFileSystem<string>> NewStorageOnFileSystemAsync(IFileSystem fs)
+		async Task<StorageOnFileSystem<string>> NewStorageOnFileSystemAsync(IFileSystem fs)
 		{
 			try
 			{
@@ -78,13 +82,6 @@ namespace SafeNotebooks
 				await MainWnd.C.DisplayError(ex);
 				return null;
 			}
-		}
-
-		public async Task<ISearchableStorage<string>> GetStorageAsync(IFileSystem fs)
-		{
-			if (!_storages.ContainsKey(fs.Id))
-				_storages[fs.Id] = await NewStorageOnFileSystemAsync(fs);
-			return _storages[fs.Id];
 		}
 
 		public async Task<ISearchableStorage<string>> SelectStorageAsync(Func<IEnumerable<ISearchableStorage<string>>, Task<ISearchableStorage<string>>> UI)

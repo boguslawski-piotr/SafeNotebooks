@@ -77,9 +77,9 @@ namespace SafeNotebooks
 
 			// Storage
 
-			public ISearchableStorage<string> Storage = new StorageImpl();
+			public IStorage<string> Storage = new StorageImpl();
 
-			public class StorageImpl : ISearchableStorage<string>
+			public class StorageImpl : IStorage<string>
 			{
 				public StorageType Type => StorageType.Memory;
 
@@ -87,7 +87,7 @@ namespace SafeNotebooks
 
 				public string Name => T.Localized("Settings");
 
-				public Task InitializeAsync() => Task.FromResult(true);
+				public Task<bool> InitializeAsync() => Task.FromResult(true);
 
 				public Task StoreAsync(string id, string data, DateTime modifiedOn)
 				{
@@ -119,11 +119,6 @@ namespace SafeNotebooks
 					if (data != null)
 						await DiscardAsync(id);
 					return data;
-				}
-
-				public Task<IEnumerable<string>> FindIdsAsync(string pattern)
-				{
-					throw new NotSupportedException();
 				}
 			}
 		}
