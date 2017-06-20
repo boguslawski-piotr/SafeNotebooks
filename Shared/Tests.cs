@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -61,20 +62,47 @@ namespace SafeNotebooks
 		{
 			//***
 
-			AesCryptographer cr = new AesCryptographer();
+			//AzureStorageSettings settings = new AzureStorageSettings
+			//{
+			//	ConnectionString = "UseDevelopmentStorage=true",
+			//};
 
-			IByteBuffer key = cr.GenerateKey(new Password("ala ma kota"), new ByteBuffer("to jest salt", Encoding.UTF8));
-			string skey = key.ToString();
+			//StorageOnAzureStorage<string> storage = new StorageOnAzureStorage<string>("test", settings, new NewtonsoftJsonSerializer());
+			//await storage.InitializeAsync();
 
-			// PasswordDeriveBytes: FBBE8CE5A293A76E4E48BE7E1EDBD30893C587A3EF5CBE20245AFDF9850EEB4DC65A00
-			// Rfc2898DeriveBytes:  012000DFFFE56761A0798B58E1A94CD81DACF7DFDC1AFE987596B465BB716685FB7A342877
-			// UWP:                 012000DFFFE56761A0798B58E1A94CD81DACF7DFDC1AFE987596B465BB716685FB7A342877
+			//await storage.StoreAsync("1", "ala ma kota i psa", new DateTime(2015, 5, 7, 20, 11, 59));
 
-			IByteBuffer iv = cr.GenerateIV();
-			ByteBuffer e = cr.Encrypt(new ByteBuffer("wiadomość", Encoding.UTF8), key, iv);
-			ByteBuffer d = cr.Decrypt(e, key, iv);
-			string s = d.ToString(Encoding.UTF8);
-			Log.D($"decrypted: {s}");
+			//DateTime dt = await storage.GetModifiedOnAsync("1");
+			//string data = await storage.GetACopyAsync("1");
+
+			//await storage.DiscardAsync("1");
+			//data = await storage.GetACopyAsync("1");
+
+			//await storage.StoreAsync("1", "zupełnie coś innego", new DateTime(2015, 5, 7, 20, 11, 59));
+			//data = await storage.GetACopyAsync("1");
+
+			//await storage.StoreAsync("2", "ala ma kota i psa", DateTime.Now);
+			//await storage.StoreAsync("3", "ala ma kota i psa", DateTime.Now);
+
+			//IEnumerable<string> l = await storage.FindIdsAsync("[12]");
+
+
+			//***
+
+			//AesCryptographer cr = new AesCryptographer();
+
+			//IByteBuffer key = cr.GenerateKey(new Password("ala ma kota"), new ByteBuffer("to jest salt", Encoding.UTF8));
+			//string skey = key.ToString();
+
+			//// PasswordDeriveBytes: FBBE8CE5A293A76E4E48BE7E1EDBD30893C587A3EF5CBE20245AFDF9850EEB4DC65A00
+			//// Rfc2898DeriveBytes:  012000DFFFE56761A0798B58E1A94CD81DACF7DFDC1AFE987596B465BB716685FB7A342877
+			//// UWP:                 012000DFFFE56761A0798B58E1A94CD81DACF7DFDC1AFE987596B465BB716685FB7A342877
+
+			//IByteBuffer iv = cr.GenerateIV();
+			//ByteBuffer e = cr.Encrypt(new ByteBuffer("wiadomość", Encoding.UTF8), key, iv);
+			//ByteBuffer d = cr.Decrypt(e, key, iv);
+			//string s = d.ToString(Encoding.UTF8);
+			//Log.D($"decrypted: {s}");
 
 			//***
 

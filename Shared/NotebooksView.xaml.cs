@@ -154,7 +154,7 @@ namespace SafeNotebooks
 			base.SortBtn_Clicked(T.Localized("Notebooks"), App.C.NotebooksManager, ListCtl);
 		}
 
-		async Task<StorageOnFileSystem<string>> SelectStorageUIAsync(IEnumerable<StorageOnFileSystem<string>> storages)
+		async Task<ISearchableStorage<string>> SelectStorageUIAsync(IEnumerable<ISearchableStorage<string>> storages)
 		{
 			// TODO: do zmiany na wlasny dialog (modal view)
 			string fsName = await App.Current.MainPage.DisplayActionSheet(T.Localized("WhereStoreNotebook"),
@@ -173,12 +173,12 @@ namespace SafeNotebooks
 
 		async void NewBtn_Clicked(object sender, System.EventArgs e)
 		{
-			StorageOnFileSystem<string> storage = await App.C.StoragesManager.SelectStorageAsync(SelectStorageUIAsync);
+			ISearchableStorage<string> storage = await App.C.StoragesManager.SelectStorageAsync(SelectStorageUIAsync);
 			if (storage != null)
 			{
 				//for (int i = 0; i < 200; i++)
 				//{
-				//    await App.C.NotebooksManager.NewNotebookAsync(storage);
+				//	await App.C.NotebooksManager.NewNotebookAsync(storage);
 				//}
 				Notebook notebook = await App.C.NotebooksManager.NewNotebookAsync(storage);
 				if (notebook != null)
