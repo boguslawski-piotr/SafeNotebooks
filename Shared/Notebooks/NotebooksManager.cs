@@ -51,6 +51,7 @@ namespace SafeNotebooks
 			(int notebooksAdded, int notebooksReloaded) report = (0, 0);
 			string pattern = Notebook.IdForStoragePrefix + "\\w*";
 			IList<Task> tasks = new List<Task>();
+			int tasksFinished = 0;
 
 			async Task LoadNotebooksFromStorageAsync(ISearchableStorage<string> storage)
 			{
@@ -59,6 +60,11 @@ namespace SafeNotebooks
 														   {
 															   report.notebooksAdded += r.notebooksAdded;
 															   report.notebooksReloaded += r.notebooksReloaded;
+
+															   tasksFinished++;
+
+															   if(tasksFinished >= tasks.Count)
+																   NotebooksLoaded?.Invoke(this, report);
 														   },
 														   storage);
 			}
@@ -70,8 +76,6 @@ namespace SafeNotebooks
 
 			if (tasks.Count > 0)
 				await Task.WhenAll(tasks);
-
-			NotebooksLoaded?.Invoke(this, report);
 		}
 
 		public async Task<Notebook> NewNotebookAsync(ISearchableStorage<string> storage)
