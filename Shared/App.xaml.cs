@@ -82,7 +82,7 @@ namespace SafeNotebooks
 			IPassword passwd = new Password(Obfuscator.Obfuscate(Tools.GetUaqpid()));
 			Log.D($"pwd: {passwd}", this);
 
-			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, new DeviceFileSystem(DeviceFileSystemRoot.Config), new AesCryptographer(), passwd);
+			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, new DeviceFileSystem(DeviceFileSystemRoot.Config), passwd);
 			SafeStorage = new StorageOnFileSystem<string>(App.Name, SafeFs, Serializer);
 		}
 
@@ -90,13 +90,16 @@ namespace SafeNotebooks
 		{
 			CreateSerializer();
 			CreateSafeStorage();
-			SecretsManager = new SecretsManager(App.Name, new AesCryptographer(), Serializer, SafeStorage);
+
+			IPassword passwd = new Password(Tools.GetUaqpid());
+			Log.D($"pwd: {passwd}", this);
+
+			SecretsManager = new SecretsManager(App.Name, Serializer, SafeStorage, passwd);
 		}
 
 		void InitializeSecretsManager()
 		{
 #if __ANDROID__
-			// TODO: jakos lepiej to rozwiazac?
 			SecretsManager.Initialize(MainActivity.Current);
 #else
 			SecretsManager.Initialize(null);
