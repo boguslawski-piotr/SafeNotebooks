@@ -276,7 +276,7 @@ namespace SafeNotebooks
 
 		async Task OpenAndAddItemAsync<T>(ItemWithItems parent, ISearchableStorage<string> storage, string idInStorage, bool tryToUnlock) where T : Item, new()
 		{
-			T item = await Item.OpenAsync<T>(this, parent, storage, idInStorage, tryToUnlock);
+			T item = await Item.OpenAsync<T>(this, (parent == this) ? null : parent, storage, idInStorage, tryToUnlock);
 			if (item != null)
 			{
 				Device.BeginInvokeOnMainThread(() => parent.AddItem(item));
