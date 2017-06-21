@@ -7,6 +7,8 @@ namespace SafeNotebooks
 {
 	public interface INotebooksManagerUI
 	{
+		void BeginInvokeOnMainThread(Action action);
+
 		Task DisplayError(NotebooksException ex);
 		Task DisplayError(Exception ex);
 

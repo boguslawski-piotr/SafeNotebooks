@@ -21,6 +21,11 @@ namespace SafeNotebooks
 
 		//
 
+		public void BeginInvokeOnMainThread(Action action)
+		{
+			Device.BeginInvokeOnMainThread(action);
+		}
+
 		public async Task DisplayError(NotebooksException ex)
 		{
 			string message = $"NotebooksException:Err {ex.Err}"; // TODO: wyciagac komunikaty bledow z zasobow
@@ -30,7 +35,7 @@ namespace SafeNotebooks
 		public async Task DisplayError(Exception ex)
 		{
 			await Task.Run(() =>
-				Device.BeginInvokeOnMainThread(async () => await DisplayAlert(T.Localized("Error"), ex.Message, T.Localized("OK")))
+				BeginInvokeOnMainThread(async () => await DisplayAlert(T.Localized("Error"), ex.Message, T.Localized("OK")))
 			);
 		}
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using pbXNet;
-using Xamarin.Forms;
 
 namespace SafeNotebooks
 {
@@ -279,8 +278,7 @@ namespace SafeNotebooks
 			T item = await Item.OpenAsync<T>(this, (parent == this) ? null : parent, storage, idInStorage, tryToUnlock);
 			if (item != null)
 			{
-				Device.BeginInvokeOnMainThread(() => parent.AddItem(item));
-				//parent.AddItem(item);
+				UI.BeginInvokeOnMainThread(() => parent.AddItem(item));
 			}
 		}
 
@@ -396,7 +394,7 @@ namespace SafeNotebooks
 					}
 				}
 
-				Device.BeginInvokeOnMainThread(() => OnEnd(report));
+				UI.BeginInvokeOnMainThread(() => OnEnd(report));
 			});
 
 #pragma warning restore CS4014
