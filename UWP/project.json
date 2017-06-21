@@ -1,14 +1,14 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
-    "Newtonsoft.Json": "10.0.2",
+    "Newtonsoft.Json": "10.0.3",
     "System.ValueTuple": "4.3.1",
     "Xam.Plugins.Settings": "2.5.8",
     "Xamarin.Forms": "2.3.5.239-pre3"
   },
-	"frameworks": {
-		"uap10.0.10240": {}
-	},
+  "frameworks": {
+    "uap10.0.10240": {}
+  },
   "runtimes": {
     "win10-arm": {},
     "win10-arm-aot": {},
