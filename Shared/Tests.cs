@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using pbXForms;
@@ -65,12 +66,13 @@ namespace SafeNotebooks
 			//AzureStorageSettings settings = new AzureStorageSettings
 			//{
 			//	ConnectionString = "UseDevelopmentStorage=true",
+			//	Type = AzureStorageSettings.BlobType.Block,
 			//};
 
-			//StorageOnAzureStorage<string> storage = new StorageOnAzureStorage<string>("test", settings, new NewtonsoftJsonSerializer());
+			//StorageOnAzureStorage<string> storage = new StorageOnAzureStorage<string>("test1", settings, new NewtonsoftJsonSerializer());
 			//await storage.InitializeAsync();
 
-			//await storage.StoreAsync("1", "ala ma kota i psa", new DateTime(2015, 5, 7, 20, 11, 59));
+			//await storage.StoreAsync("1", "ółżź test", new DateTime(2015, 5, 7, 20, 11, 59));
 
 			//DateTime dt = await storage.GetModifiedOnAsync("1");
 			//string data = await storage.GetACopyAsync("1");

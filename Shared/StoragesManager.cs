@@ -57,10 +57,15 @@ namespace SafeNotebooks
 			{
 #if DEBUG
 #if WINDOWS_UWP
-				AzureStorageSettings azureStorageSettings = new AzureStorageSettings { ConnectionString = "UseDevelopmentStorage=true",	};
-				StorageOnAzureStorage<string> azureStorage = await StorageOnAzureStorage<string>.NewAsync("Azure Storage Emulator", azureStorageSettings, Serializer);
-				if(azureStorage != null)
-					_storages[azureStorage.Id] = azureStorage;
+				//AzureStorageSettings azureStorageSettings = new AzureStorageSettings
+				//{
+				//	ConnectionString = "UseDevelopmentStorage=true",
+				//	Type = AzureStorageSettings.StorageType.PageBlob,
+				//};
+
+				//StorageOnAzureStorage<string> azureStorage = await StorageOnAzureStorage<string>.NewAsync("Azure Storage Emulator", azureStorageSettings, Serializer);
+				//if (azureStorage != null)
+				//	_storages[azureStorage.Id] = azureStorage;
 #endif
 #endif
 			}
