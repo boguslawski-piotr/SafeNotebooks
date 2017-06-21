@@ -2,16 +2,11 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using pbXForms;
 using pbXNet;
-
-#if !NOT_XAMARIN_FORMS
-using Xamarin.Forms;
-#endif
 
 namespace SafeNotebooks
 {
-	public class Item : BindableObject
+	public class Item : Observable
 	{
 		public NotebooksManager NotebooksManager { get; set; }
 
@@ -89,23 +84,10 @@ namespace SafeNotebooks
 
 		public bool Modified { get; protected set; }
 
-		public Color Color
+		public string Color
 		{
-			get => Color.FromHex(nedata.Color);
-			set {
-				SetValue(ref nedata.Color, value.ToHex());
-				ColorForLists = value;
-			}
-		}
-
-		public string ComparableColor => nedata.Color;
-
-		public static readonly BindableProperty ColorForListsProperty = BindableProperty.Create("ColorForLists", typeof(Color), typeof(Item), Color.Transparent);
-
-		public Color ColorForLists
-		{
-			get => Color;
-			set => SetValue(ColorForListsProperty, value);
+			get => nedata.Color;
+			set => SetValue(ref nedata.Color, value);
 		}
 
 		public string Nick
@@ -157,12 +139,11 @@ namespace SafeNotebooks
 			}
 		}
 
-		public static readonly BindableProperty NameForListsProperty = BindableProperty.Create("NameForLists", typeof(string), typeof(Item));
-
+		string _nameForLists;
 		public virtual string NameForLists
 		{
 			get => DataIsAvailable ? Name : Nick;
-			set => SetValue(NameForListsProperty, value);
+			set => SetValueForLists(ref _nameForLists, value);
 		}
 
 		public string Detail
@@ -174,28 +155,25 @@ namespace SafeNotebooks
 			}
 		}
 
-		public static readonly BindableProperty DetailForListsProperty = BindableProperty.Create("DetailForLists", typeof(string), typeof(Item));
-
+		string _detailForLists;
 		public virtual string DetailForLists
 		{
 			get => ModifiedOn.ToLocalTime().ToString() + (DataIsAvailable && !string.IsNullOrEmpty(Detail) ? ", " + Detail : "");
-			set => SetValue(DetailForListsProperty, value);
+			set => SetValueForLists(ref _detailForLists, value);
 		}
 
-		public static readonly BindableProperty LockedImageNameForListsProperty = BindableProperty.Create("LockedImageNameForLists", typeof(string), typeof(Item));
-
+		string _lockedImageNameForLists;
 		public virtual string LockedImageNameForLists
 		{
 			get => !DataIsAvailable ? NotebooksManager.UI.LockedImageNameForLists : "";
-			set => SetValue(LockedImageNameForListsProperty, value);
+			set => SetValueForLists(ref _lockedImageNameForLists, value);
 		}
 
-		public static readonly BindableProperty LockedImageWidthForListsProperty = BindableProperty.Create("LockedImageWidthForLists", typeof(double), typeof(Item), 0d);
-
+		double _lockedImageWidthForLists;
 		public virtual double LockedImageWidthForLists
 		{
 			get => !DataIsAvailable ? NotebooksManager.UI.LockedImageWidthForLists : 0;
-			set => SetValue(LockedImageWidthForListsProperty, value);
+			set => SetValueForLists(ref _lockedImageWidthForLists, value);
 		}
 
 		bool _SelectModeEnabled;
@@ -220,8 +198,7 @@ namespace SafeNotebooks
 			}
 		}
 
-		public static readonly BindableProperty SelectedUnselectedImageNameForListsProperty = BindableProperty.Create("SelectedUnselectedImageNameForLists", typeof(string), typeof(Item));
-
+		string _selectedUnselectedImageNameForLists;
 		public virtual string SelectedUnselectedImageNameForLists
 		{
 			get {
@@ -230,11 +207,10 @@ namespace SafeNotebooks
 				else
 					return "";
 			}
-			set => SetValue(SelectedUnselectedImageNameForListsProperty, value);
+			set => SetValueForLists(ref _selectedUnselectedImageNameForLists, value);
 		}
 
-		public static readonly BindableProperty SelectedUnselectedImageWidthForListsProperty = BindableProperty.Create("SelectedUnselectedImageWidthForLists", typeof(double), typeof(Item), -1d);
-
+		double _selectedUnselectedImageWidthForLists;
 		public virtual double SelectedUnselectedImageWidthForLists
 		{
 			get {
@@ -243,7 +219,16 @@ namespace SafeNotebooks
 				else
 					return 0;
 			}
-			set => SetValue(SelectedUnselectedImageWidthForListsProperty, value);
+			set => SetValueForLists(ref _selectedUnselectedImageWidthForLists, value);
+		}
+
+		protected void SetValueForLists<T>(ref T storage, T value, [CallerMemberName]string name = null)
+		{
+			if (Equals(storage, value))
+				return;
+
+			storage = value;
+			base.OnPropertyChanged(name);
 		}
 
 		protected void SetValue<T>(ref T storage, T value, bool touchWithParent = true, [CallerMemberName]string name = null)
@@ -267,7 +252,6 @@ namespace SafeNotebooks
 			if (!BatchInProgress)
 				NotebooksManager.OnItemModifiedOnChanged(this);
 
-			// Xamarin.Forms binding system support
 			DetailForLists = DetailForLists + nedata.ModifiedOn.ToLocalTime().ToString();
 		}
 
@@ -338,20 +322,18 @@ namespace SafeNotebooks
 			string ned = d.Substring(0, nedEnd);
 			DeserializeNotEncryptedData(ned);
 
-			if (tryToUnlock || !IsSecured || (!ThisIsSecured && Parent.DataIsAvailable))
+			if (tryToUnlock || !IsSecured || (!ThisIsSecured && Parent != null && Parent.DataIsAvailable))
 			{
 				d = d.Substring(nedEnd + NotEncyptedDataEndMarker.Length);
 				d = await DecryptAsync(d);
 				Deserialize(d);
 
-				// Xamarin.Forms binding system support
 				NameForLists = Name;
 				DetailForLists = Detail;
 				LockedImageNameForLists = "u";
 			}
 			else
 			{
-				// Xamarin.Forms binding system support
 				LockedImageNameForLists = "l";
 			}
 

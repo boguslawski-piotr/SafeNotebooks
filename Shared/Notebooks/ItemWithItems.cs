@@ -141,7 +141,7 @@ namespace SafeNotebooks
 				bool desc = SortParams.Descending;
 				Comparison<Item> f = (x, y) =>
 				{
-					int cc = (desc ? 1 : -1) * string.Compare(x.ComparableColor, y.ComparableColor, StringComparison.Ordinal);
+					int cc = (desc ? 1 : -1) * string.Compare(x.Color, y.Color, StringComparison.Ordinal);
 					if (cc == 0)
 						cc = (desc ? -1 : 1) * string.Compare(x.NameForLists, y.NameForLists, StringComparison.CurrentCulture);
 					return cc;

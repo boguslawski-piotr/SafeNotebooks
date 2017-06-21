@@ -118,7 +118,7 @@
 							HorizontalOptions = "Center" />
 
 						<Label
-							TextColor = "{Binding ColorForLists}"
+							TextColor = "{Binding Color}"
 							Text = "●"
 							Margin = "8,0,4,0"
 							VerticalTextAlignment = "Center">

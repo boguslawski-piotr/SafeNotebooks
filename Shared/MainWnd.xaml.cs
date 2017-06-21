@@ -48,7 +48,7 @@ namespace SafeNotebooks
 
 			int lll = App.Settings.GetValueOrDefault("lll", 1);
 
-			//item.Color = Color.FromHex("#800000ff");
+			//item.Color = "#800000ff";
 			item.Nick = $"{item.GetType().Name} Nick " + lll;
 			item.Name = $"{item.GetType().Name} " + lll++;
 			if (lll % 2 == 0)
