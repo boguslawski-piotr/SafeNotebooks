@@ -44,7 +44,12 @@
 		]
 	},
 	{
-		"FileName": "SafeNotebooks.sln",
+		"FileNames": [
+			"SafeNotebooks.sln",
+			"SafeNotebooks.Apple.sln",
+			"SafeNotebooks.Droid.sln",
+			"SafeNotebooks.UWP.sln",
+		],
 		"Entries": [
 			{
 				"Pattern": "version\\s*=\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9*]+)"
