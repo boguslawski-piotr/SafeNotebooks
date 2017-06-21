@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using pbXNet;
 using Xamarin.Forms;
@@ -63,7 +64,7 @@ namespace SafeNotebooks
 
 															   tasksFinished++;
 
-															   if(tasksFinished >= tasks.Count)
+															   if (tasksFinished >= tasks.Count)
 																   NotebooksLoaded?.Invoke(this, report);
 														   },
 														   storage);
@@ -170,14 +171,14 @@ namespace SafeNotebooks
 
 		//
 
-		Object _saveAllTaskRunningLock = new Object();
-		volatile bool _saveAllTaskRunning = false;
+		Int32 _saveAllTaskRunning = 0;
 
 		async Task SaveAllTask()
 		{
-			Log.D($"started at {DateTime.Now.ToString("HH:mm:ss.fff")}", this);
-
 			await Task.Delay(1000);
+
+			DateTime sdt = DateTime.Now;
+
 			try
 			{
 				await NotebooksManager.SaveAllAsync();
@@ -188,26 +189,20 @@ namespace SafeNotebooks
 			}
 			finally
 			{
-				lock (_saveAllTaskRunningLock)
-				{
-					_saveAllTaskRunning = false;
-				}
+				Interlocked.Exchange(ref _saveAllTaskRunning, 0);
 			}
 
-			Log.D($"ended at {DateTime.Now.ToString("HH:mm:ss.fff")}");
+			Log.D($"duration: {(DateTime.Now - sdt).Milliseconds}", this);
 		}
 
 		public event EventHandler<Item> ItemModifiedOnChanged;
 
 		public void OnItemModifiedOnChanged(Item item)
 		{
-			if (_saveAllTaskRunning)
+			if (Interlocked.Exchange(ref _saveAllTaskRunning, 1) == 1)
 				return;
-			lock (_saveAllTaskRunningLock)
-			{
-				Task.Run(SaveAllTask);
-				_saveAllTaskRunning = true;
-			}
+
+			Task.Run(SaveAllTask);
 
 			ItemModifiedOnChanged?.Invoke(this, item);
 		}
@@ -395,8 +390,9 @@ namespace SafeNotebooks
 						}
 
 						// Trying to make UI more responsive...
-						if (report.itemsAdded > batchSize)
-							await Task.Delay(25);
+						if ((StorageType.Quick & storageWithItems.Type) == storageWithItems.Type)
+							if (report.itemsAdded > batchSize)
+								await Task.Delay(25);
 					}
 				}
 
