@@ -233,7 +233,7 @@ Global
 		{6FE2DB7D-4FB5-4A33-AC48-41C22DEA02A5} = {D27F01C4-BDC1-4792-9875-2794D463A0A1}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		version = 1.0.0.21
+		version = 1.0.0.22
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.FileWidth = 160
