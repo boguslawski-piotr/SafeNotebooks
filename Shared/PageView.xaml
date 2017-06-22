@@ -57,7 +57,7 @@
 				IsVisible = "true"
 				AbsoluteLayout.LayoutFlags = "SizeProportional"
 				AbsoluteLayout.LayoutBounds = "0,0,1,1"
-				RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
+				RowHeight = "{x:Static pbXForms:Metrics.TallListItemHeightInt32}"
 				BackgroundColor = "{StaticResource PageBackgroundColor}"
 				SeparatorColor = "{StaticResource ListItemDividerColor}"
 				HeaderTemplate = "{StaticResource SearchBarTemplate}"

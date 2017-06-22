@@ -46,6 +46,8 @@
 
 			</DataTemplate>
 
+			<x:Int32 x:Key = "ItemListViewItemHeight">70</x:Int32>
+			
 			<Thickness
 				x:Key = "ItemListViewItemGridPadding"
 				Right = "{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}" />
@@ -84,8 +86,8 @@
 						<pbXForms:ImageEx
 							Clicked = "SelectUnselectItem_Clicked"
 							CommandParameter = "{Binding .}"
-							Source = "{Binding SelectedUnselectedImageNameForLists}"
-							WidthRequest = "{Binding SelectedUnselectedImageWidthForLists}"
+							Source = "{Binding SelectedUnselectedImageForListsName}"
+							WidthRequest = "{Binding SelectedUnselectedImageForListsWidth}"
 							Margin = "{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}"
 							VerticalOptions="Center"
 							HeightRequest = "-1" />
@@ -109,10 +111,18 @@
 								VerticalTextAlignment="Center"
 								TextColor = "{StaticResource ListItemDetailColor}" />
 
+							<Label
+								Text = "{Binding ModifiedOnForLists}"
+								LineBreakMode = "TailTruncation"
+								FontSize = "Micro"
+								Margin = "0"
+								VerticalTextAlignment="Center"
+								TextColor = "{StaticResource ListItemDetailColor}" />
+							
 						</StackLayout>
 
 						<Image
-							Source = "{Binding LockedImageNameForLists}"
+							Source = "{Binding LockedImageForListsName}"
 							WidthRequest = "{Binding LockedImageWidthForLists}"
 							VerticalOptions="Center"
 							HorizontalOptions = "Center" />

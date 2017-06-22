@@ -69,12 +69,12 @@ namespace SafeNotebooks
 
 		//
 
-		public string LockedImageNameForLists { get; } = "ic_lock_outline.png";
-		public double LockedImageWidthForLists { get; } = Metrics.SmallIconHeight;
+		public string LockedImageForListsName { get; } = "ic_lock_outline.png";
+		public double LockedImageForListsWidth { get; } = Metrics.SmallIconHeight;
 
-		public string SelectedImageNameForLists { get; } = "ic_radio_button_checked.png";
-		public string UnselectedImageNameForLists { get; } = "ic_radio_button_unchecked.png";
-		public double SelectedUnselectedImageWidthForLists { get; } = Metrics.SmallIconHeight;
+		public string SelectedImageForListsName { get; } = "ic_radio_button_checked.png";
+		public string UnselectedImageForListsName { get; } = "ic_radio_button_unchecked.png";
+		public double SelectedUnselectedImageForListsWidth { get; } = Metrics.SmallIconHeight;
 	}
 
 	public static class Wnd

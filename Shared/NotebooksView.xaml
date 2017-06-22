@@ -39,7 +39,7 @@
 				AbsoluteLayout.LayoutFlags = "SizeProportional"
 				AbsoluteLayout.LayoutBounds = "0,0,1,1"
 				BackgroundColor = "{StaticResource NotebooksBackgroundColor}"
-				RowHeight = "{x:Static pbXForms:Metrics.ListItemHeightInt32}"
+				RowHeight = "{x:Static pbXForms:Metrics.TallListItemHeightInt32}"
 				SeparatorColor = "{StaticResource ListItemDividerColor}"
 				HeaderTemplate = "{StaticResource SearchBarTemplate}"
 				Header = " "

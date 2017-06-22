@@ -18,11 +18,11 @@ namespace SafeNotebooks
 
         // For listviews
 
-        string LockedImageNameForLists { get; }
-		double LockedImageWidthForLists { get; }
+        string LockedImageForListsName { get; }
+		double LockedImageForListsWidth { get; }
 
-		string SelectedImageNameForLists { get; }
-		string UnselectedImageNameForLists { get; }
-        double SelectedUnselectedImageWidthForLists { get; }
+		string SelectedImageForListsName { get; }
+		string UnselectedImageForListsName { get; }
+        double SelectedUnselectedImageForListsWidth { get; }
 	}
 }

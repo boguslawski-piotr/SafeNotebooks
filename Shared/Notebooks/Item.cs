@@ -84,6 +84,13 @@ namespace SafeNotebooks
 
 		public bool Modified { get; protected set; }
 
+		string _modifiedOnForLists;
+		public virtual string ModifiedOnForLists
+		{
+			get => ModifiedOn.ToLocalTime().ToString();
+			set => SetValueForLists(ref _modifiedOnForLists, value);
+		}
+
 		public string Color
 		{
 			get => nedata.Color;
@@ -158,68 +165,68 @@ namespace SafeNotebooks
 		string _detailForLists;
 		public virtual string DetailForLists
 		{
-			get => ModifiedOn.ToLocalTime().ToString() + (DataIsAvailable && !string.IsNullOrEmpty(Detail) ? ", " + Detail : "");
+			get => DataIsAvailable && !string.IsNullOrEmpty(Detail) ? Detail : "";
 			set => SetValueForLists(ref _detailForLists, value);
 		}
 
-		string _lockedImageNameForLists;
-		public virtual string LockedImageNameForLists
+		string _lockedImageForListsName;
+		public virtual string LockedImageForListsName
 		{
-			get => !DataIsAvailable ? NotebooksManager.UI.LockedImageNameForLists : "";
-			set => SetValueForLists(ref _lockedImageNameForLists, value);
+			get => !DataIsAvailable ? NotebooksManager.UI.LockedImageForListsName : "";
+			set => SetValueForLists(ref _lockedImageForListsName, value);
 		}
 
-		double _lockedImageWidthForLists;
-		public virtual double LockedImageWidthForLists
+		double _lockedImageForListsWidth;
+		public virtual double LockedImageForListsWidth
 		{
-			get => !DataIsAvailable ? NotebooksManager.UI.LockedImageWidthForLists : 0;
-			set => SetValueForLists(ref _lockedImageWidthForLists, value);
+			get => !DataIsAvailable ? NotebooksManager.UI.LockedImageForListsWidth : 0;
+			set => SetValueForLists(ref _lockedImageForListsWidth, value);
 		}
 
-		bool _SelectModeEnabled;
+		bool _selectModeEnabled;
 		public virtual bool SelectModeEnabled
 		{
-			get => _SelectModeEnabled;
+			get => _selectModeEnabled;
 			set {
-				_SelectModeEnabled = value;
-				SelectedUnselectedImageNameForLists = _SelectModeEnabled ? "e" : "d";
-				SelectedUnselectedImageWidthForLists = _SelectModeEnabled ? 1 : 0;
+				_selectModeEnabled = value;
+				SelectedUnselectedImageForListsName = _selectModeEnabled ? "e" : "d";
+				SelectedUnselectedImageForListsWidth = _selectModeEnabled ? 1 : 0;
 			}
 		}
 
-		bool _IsSelected;
+		bool _isSelected;
 		public bool IsSelected
 		{
-			get => _IsSelected;
+			get => _isSelected;
 			set {
-				_IsSelected = value;
-				SelectedUnselectedImageNameForLists = _IsSelected ? "s" : "u";
-				SelectedUnselectedImageWidthForLists = _IsSelected ? 2 : 3;
+				_isSelected = value;
+				SelectedUnselectedImageForListsName = _isSelected ? "s" : "u";
+				SelectedUnselectedImageForListsWidth = _isSelected ? 2 : 3;
 			}
 		}
 
-		string _selectedUnselectedImageNameForLists;
-		public virtual string SelectedUnselectedImageNameForLists
+		string _selectedUnselectedImageForListsName;
+		public virtual string SelectedUnselectedImageForListsName
 		{
 			get {
 				if (SelectModeEnabled)
-					return IsSelected ? NotebooksManager.UI.SelectedImageNameForLists : NotebooksManager.UI.UnselectedImageNameForLists;
+					return IsSelected ? NotebooksManager.UI.SelectedImageForListsName : NotebooksManager.UI.UnselectedImageForListsName;
 				else
 					return "";
 			}
-			set => SetValueForLists(ref _selectedUnselectedImageNameForLists, value);
+			set => SetValueForLists(ref _selectedUnselectedImageForListsName, value);
 		}
 
-		double _selectedUnselectedImageWidthForLists;
-		public virtual double SelectedUnselectedImageWidthForLists
+		double _selectedUnselectedImageForListsWidth;
+		public virtual double SelectedUnselectedImageForListsWidth
 		{
 			get {
 				if (SelectModeEnabled)
-					return NotebooksManager.UI.SelectedUnselectedImageWidthForLists;
+					return NotebooksManager.UI.SelectedUnselectedImageForListsWidth;
 				else
 					return 0;
 			}
-			set => SetValueForLists(ref _selectedUnselectedImageWidthForLists, value);
+			set => SetValueForLists(ref _selectedUnselectedImageForListsWidth, value);
 		}
 
 		protected void SetValueForLists<T>(ref T storage, T value, [CallerMemberName]string name = null)
@@ -252,7 +259,7 @@ namespace SafeNotebooks
 			if (!BatchInProgress)
 				NotebooksManager.OnItemModifiedOnChanged(this);
 
-			DetailForLists = DetailForLists + nedata.ModifiedOn.ToLocalTime().ToString();
+			ModifiedOnForLists = ModifiedOnForLists + nedata.ModifiedOn.ToLocalTime().ToString();
 		}
 
 		protected virtual void TouchParent()
@@ -330,11 +337,11 @@ namespace SafeNotebooks
 
 				NameForLists = Name;
 				DetailForLists = Detail;
-				LockedImageNameForLists = "u";
+				LockedImageForListsName = "u";
 			}
 			else
 			{
-				LockedImageNameForLists = "l";
+				LockedImageForListsName = "l";
 			}
 
 			NotebooksManager.OnItemOpened(this);

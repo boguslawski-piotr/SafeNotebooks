@@ -9,7 +9,7 @@ namespace SafeNotebooks
 {
 	public class Notebook : ItemWithItems
 	{
-		public override string DetailForLists => $"{ModifiedOn.ToLocalTime().ToString()}, {Storage?.Name}";
+		public override string ModifiedOnForLists => $"{ModifiedOn.ToLocalTime().ToString()}, {Storage?.Name}";
 
 		public const string IdForStoragePrefix = "N-";
 
