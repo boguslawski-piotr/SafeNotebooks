@@ -155,8 +155,11 @@ namespace SafeNotebooks
 
 			//foreach (var folder in Enum.GetValues(typeof(Environment.SpecialFolder)))
 			//{
-			//    Debug.WriteLine("{0}={1}", folder, System.Environment.GetFolderPath((Environment.SpecialFolder)folder));
+			//	if(!string.IsNullOrWhiteSpace(System.Environment.GetFolderPath((Environment.SpecialFolder)folder)))
+			//	   Debug.WriteLine("{0}={1}", folder, System.Environment.GetFolderPath((Environment.SpecialFolder)folder));
 			//}
+
+			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.UserDefined, "~/Safe Notebooks");
 
 			//***
 
@@ -184,7 +187,7 @@ namespace SafeNotebooks
 
 			//***
 
-			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Personal);
+			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Local);
 			//try
 			//{
 			//    string fn = "O-" + pbXNet.Tools.CreateGuid() + "-" + pbXNet.Tools.CreateGuid() + "-" + pbXNet.Tools.CreateGuid() + "-1";
@@ -197,7 +200,7 @@ namespace SafeNotebooks
 			//    Debug.WriteLine(e.ToString());
 			//}
 
-			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Personal);
+			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Local);
 			//await fs.SetCurrentDirectoryAsync("a");
 			//IFileSystem fsc = await fs.MakeCopyAsync();
 			//await fs.SetCurrentDirectoryAsync("..");
@@ -219,7 +222,7 @@ namespace SafeNotebooks
 
 			//await fs.CreateDirectoryAsync("dir1");
 
-			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Personal);
+			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Local);
 			//await fs.WriteTextAsync("ala", "jakiś tekst");
 			//await fs.SetModifiedOnAsync("ala", DateTime.UtcNow - TimeSpan.FromMinutes(5));
 			//DateTime dd = await fs.GetModifiedOnAsync("ala");
