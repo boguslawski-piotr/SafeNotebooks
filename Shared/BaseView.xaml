@@ -74,103 +74,110 @@
 							Text = "{T:Localized Delete}" />
 
 					</ViewCell.ContextActions>
+
 					<StackLayout
-						Style="{StaticResource stVerticalNoSpaces}">
+						Style = "{StaticResource stVerticalNoSpaces}">
 
 						<StackLayout
-							Padding="{StaticResource ItemListViewItemGridPadding}"
-							Style="{StaticResource stHorizontalNoSpaces}">
+							Padding = "{StaticResource ItemListViewItemGridPadding}"
+							Style = "{StaticResource stHorizontalNoSpaces}">
 
 							<pbXForms:ImageEx
-								Clicked="SelectUnselectItem_Clicked"
-								CommandParameter="{Binding .}"
-								Source="{Binding SelectedUnselectedImageForListsName}"
-								WidthRequest="{Binding SelectedUnselectedImageForListsWidth}"
-								Margin="{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}"
-								VerticalOptions="Start"
-								HeightRequest="-1" />
+								Clicked = "SelectUnselectItem_Clicked"
+								CommandParameter = "{Binding .}"
+								Source = "{Binding SelectedUnselectedImageForListsName}"
+								WidthRequest = "{Binding SelectedUnselectedImageForListsWidth}"
+								Margin = "{x:Static pbXForms:Metrics.ScreenEdgeHalfMargin}"
+								VerticalOptions = "Start"
+								HeightRequest = "-1" />
 
 							<StackLayout
-								Orientation="Vertical"
-								HorizontalOptions="FillAndExpand"
-								VerticalOptions="CenterAndExpand"
-								Spacing="0"
-								Margin="0"
-								Padding="0,4">
+								Orientation = "Vertical"
+								HorizontalOptions = "FillAndExpand"
+								VerticalOptions = "CenterAndExpand"
+								Spacing = "0"
+								Margin = "0"
+								Padding = "0,4">
 
 								<Label
-									Text="{Binding NameForLists}"
-									LineBreakMode="TailTruncation"
-									Margin="0"
-									VerticalTextAlignment="Center"
-									TextColor="{StaticResource ListItemTextColor}">
+									Text = "{Binding NameForLists}"
+									LineBreakMode = "TailTruncation"
+									Margin = "0"
+									VerticalTextAlignment = "Center"
+									TextColor = "{StaticResource ListItemTextColor}">
+
 									<Label.FontSize>
 
 										<OnPlatform
-											x:TypeArguments="x:Double"
-											iOS="20"
-											Android="20"
-											WinPhone="18" />
+											x:TypeArguments = "x:Double"
+											iOS = "18"
+											Android = "18"
+											WinPhone = "18" />
 
 									</Label.FontSize>
+
 								</Label>
 
 								<Label
-									Text="{Binding DetailForLists}"
-									LineBreakMode="TailTruncation"
-									Margin="0"
-									VerticalTextAlignment="Center"
-									TextColor="{StaticResource ListItemDetailColor}">
+									Text = "{Binding DetailForLists}"
+									LineBreakMode = "TailTruncation"
+									Margin = "0"
+									VerticalTextAlignment = "Center"
+									TextColor = "{StaticResource ListItemDetailColor}">
+
 									<Label.FontSize>
 
 										<OnPlatform
-											x:TypeArguments="x:Double"
-											iOS="14"
-											Android="22"
-											WinPhone="16" />
+											x:TypeArguments = "x:Double"
+											iOS = "14"
+											Android = "14"
+											WinPhone = "14" />
 
 									</Label.FontSize>
+
 								</Label>
 
 								<Label
-									Text="{Binding ModifiedOnForLists}"
-									LineBreakMode="TailTruncation"
-									Margin="0"
-									VerticalTextAlignment="Center"
-									TextColor="{StaticResource ListItemDetailColor}">
+									Text = "{Binding ModifiedOnForLists}"
+									LineBreakMode = "TailTruncation"
+									Margin = "0"
+									VerticalTextAlignment = "Center"
+									TextColor = "{StaticResource ListItemDetailColor}">
+
 									<Label.FontSize>
 
 										<OnPlatform
-											x:TypeArguments="x:Double"
-											iOS="12"
-											Android="20"
-											WinPhone="12" />
+											x:TypeArguments = "x:Double"
+											iOS = "12"
+											Android = "12"
+											WinPhone = "12" />
 
 									</Label.FontSize>
+
 								</Label>
 
 							</StackLayout>
 
 							<Image
-								Source="{Binding LockedImageForListsName}"
-								WidthRequest="{Binding LockedImageWidthForLists}"
-								HorizontalOptions="Center"
-								VerticalOptions="Start"
-								Margin="0,4" />
+								Source = "{Binding LockedImageForListsName}"
+								WidthRequest = "{Binding LockedImageWidthForLists}"
+								HorizontalOptions = "Center"
+								VerticalOptions = "Start"
+								Margin = "0,4" />
 
 							<Label
-								TextColor="{Binding Color}"
-								Text="●"
-								Margin="8,0,4,0"
-								VerticalTextAlignment="Start">
+								TextColor = "{Binding Color}"
+								Text = "●"
+								Margin = "8,0,4,0"
+								VerticalTextAlignment = "Start">
 
 								<Label.FontSize>
 
 									<OnPlatform
-										x:TypeArguments="x:Double"
-										iOS="14"
-										Android="24"
-										WinPhone="22" />
+										x:TypeArguments = "x:Double"
+										iOS = "18"
+										Android = "22"
+										WinPhone = "22" />
 
 								</Label.FontSize>
 
@@ -180,19 +187,19 @@
 							Source = "ic_chevron_right.png"
 							VerticalOptions="Center"
 							HorizontalOptions = "Center" />-->
-
+							
 						</StackLayout>
 
 						<BoxView
-							BackgroundColor="{StaticResource ListItemDividerColor}">
+							BackgroundColor = "{StaticResource ListItemDividerColor}">
 
 							<BoxView.HeightRequest>
 
 								<OnPlatform
-									x:TypeArguments="x:Double"
-									iOS="0"
-									Android="0"
-									WinPhone="1.1" />
+									x:TypeArguments = "x:Double"
+									iOS = "0"
+									Android = "0"
+									WinPhone = "1.1" />
 
 							</BoxView.HeightRequest>
 

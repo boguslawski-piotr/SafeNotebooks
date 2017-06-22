@@ -165,7 +165,7 @@ namespace SafeNotebooks
 		string _detailForLists;
 		public virtual string DetailForLists
 		{
-			get => DataIsAvailable && !string.IsNullOrEmpty(Detail) ? Detail : "";
+			get => DataIsAvailable && !string.IsNullOrEmpty(Detail) ? Detail : " ";
 			set => SetValueForLists(ref _detailForLists, value);
 		}
 
