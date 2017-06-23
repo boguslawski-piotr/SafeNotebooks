@@ -202,7 +202,7 @@ namespace SafeNotebooks
 
 			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.Local);
 			//await fs.SetCurrentDirectoryAsync("a");
-			//IFileSystem fsc = await fs.MakeCopyAsync();
+			//IFileSystem fsc = await fs.CloneAsync();
 			//await fs.SetCurrentDirectoryAsync("..");
 
 			//IEnumerable<string> d = await fs.GetDirectoriesAsync();

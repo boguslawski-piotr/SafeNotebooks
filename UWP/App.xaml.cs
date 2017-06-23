@@ -1,4 +1,5 @@
 ﻿using System;
+using pbXNet;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -80,10 +81,12 @@ namespace SafeNotebooks.UWP
 		/// </summary>
 		/// <param name="sender">The source of the suspend request.</param>
 		/// <param name="e">Details about the suspend request.</param>
-		private void OnSuspending(object sender, SuspendingEventArgs e)
+		async void OnSuspending(object sender, SuspendingEventArgs e)
 		{
 			var deferral = e.SuspendingOperation.GetDeferral();
-			//TODO: Save application state and stop any background activity
+
+			await DeviceFileSystem.SaveAllModifiedOnDictsAsync();
+
 			deferral.Complete();
 		}
 	}
