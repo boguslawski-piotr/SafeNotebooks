@@ -15,13 +15,12 @@ namespace SafeNotebooks
 		public SettingsDlg()
 		{
 			InitializeComponent();
-
-			InitializeSettings();
 			InitializeUI();
 		}
 
 		public void InitializeUI()
 		{
+			InitializeSettings();
 		}
 
 		public void OK_Clicked(object sender, System.EventArgs e)
@@ -33,9 +32,8 @@ namespace SafeNotebooks
 
 		void InitializeSettings()
 		{
-			if (App.C.SecretsManager.AvailableDOAuthentication == DOAuthentication.None)
-				UnlockUsingDOAuthentication.IsEnabled = false;
-			
+			UnlockUsingDOAuthentication.IsEnabled = !(App.C.SecretsManager.AvailableDOAuthentication == DOAuthentication.None);
+
 			if (!App.Settings.UnlockUsingPin)
 				App.Settings.UsePinAsMasterPassword = false;
 

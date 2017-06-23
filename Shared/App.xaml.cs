@@ -8,10 +8,6 @@ using pbXNet;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-#if __ANDROID__
-using SafeNotebooks.Droid;
-#endif
-
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
 {
@@ -95,11 +91,6 @@ namespace SafeNotebooks
 
 		void InitializeSecretsManager()
 		{
-#if __ANDROID__
-			SecretsManager.Initialize(MainActivity.Current);
-#else
-			SecretsManager.Initialize(null);
-#endif
 		}
 
 		void CreateStoragesManager()
