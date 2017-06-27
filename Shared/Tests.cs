@@ -62,6 +62,11 @@ namespace SafeNotebooks
 		async Task Tests()
 		{
 			//***
+			 
+			RsaCryptographer c = new RsaCryptographer();
+			IAsymmetricCryptographerKeyPair keys = c.GenerateKeyPair();
+
+			//***
 
 			//AzureStorageSettings settings = new AzureStorageSettings
 			//{
