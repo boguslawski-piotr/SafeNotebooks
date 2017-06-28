@@ -476,8 +476,11 @@ namespace SafeNotebooks
 			if (IsSecured)
 			{
 				await PrepareCKeyAsync();
-				d = NotebooksManager.SecretsManager.Decrypt(d, IdForCKey, IV);
-				if (string.IsNullOrEmpty(d))
+				try
+				{
+					d = NotebooksManager.SecretsManager.Decrypt(d, IdForCKey, IV);
+				}
+				catch (Exception)
 				{
 					// Most likely, a bad password has been entered. 
 					// To be safe delete ckey from repository in order to give a chance to ask again.

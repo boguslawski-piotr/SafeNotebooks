@@ -69,22 +69,22 @@ namespace SafeNotebooks
 			{
 				if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
 				{
-					DOAuthentication doa = App.C.SecretsManager.AvailableDOAuthentication;
-					if (doa != DOAuthentication.None && TryToUnlockUsingDOAuthentication())
+					DOAuthenticationType doa = DOAuthentication.Type;
+					if (doa != DOAuthenticationType.NotAvailable && TryToUnlockUsingDOAuthentication())
 					{
 						if (string.IsNullOrEmpty(_Message.Text))
 						{
-							if (doa == DOAuthentication.Fingerprint)
+							if (doa == DOAuthenticationType.Fingerprint)
 							{
 								_FPIcon.IsVisible = true;
 								_Message.Text = T.Localized("ScanFingerprint");
 							}
-							else if (doa == DOAuthentication.Password)
+							else if (doa == DOAuthenticationType.Password)
 								_Message.Text = T.Localized("EnterSystemPassword");
 							else
 								_Message.Text = T.Localized("UseSomeDOA");
 
-							if (App.C.SecretsManager.CanDOAuthenticationBeCanceled())
+							if (DOAuthentication.CanBeCanceled())
 							{
 								_UnlockOrCancelBtn.Text = T.Localized("Cancel");
 								_UnlockOrCancelBtn.IsVisible = true;
@@ -114,7 +114,7 @@ namespace SafeNotebooks
 
 		bool TryToUnlockUsingDOAuthentication()
 		{
-			return App.C.SecretsManager.StartDOAuthentication(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDOAuthentication, OnNotUnlockedUsingDOAuthentication);
+			return DOAuthentication.Start(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDOAuthentication, OnNotUnlockedUsingDOAuthentication);
 		}
 
 #pragma warning disable CS4014
@@ -224,9 +224,9 @@ namespace SafeNotebooks
 
 		void UnlockOrCancelBtn_Clicked(object sender, System.EventArgs e)
 		{
-			if (App.C.SecretsManager.CanDOAuthenticationBeCanceled())
+			if (DOAuthentication.CanBeCanceled())
 			{
-				if (App.C.SecretsManager.CancelDOAuthentication())
+				if (DOAuthentication.Cancel())
 				{
 					OnNotUnlockedUsingDOAuthentication(T.Localized("DOAWasCanceled"), false);
 					return;

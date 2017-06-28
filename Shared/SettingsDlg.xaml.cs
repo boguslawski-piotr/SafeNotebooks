@@ -32,7 +32,7 @@ namespace SafeNotebooks
 
 		void InitializeSettings()
 		{
-			UnlockUsingDOAuthentication.IsEnabled = !(App.C.SecretsManager.AvailableDOAuthentication == DOAuthentication.None);
+			UnlockUsingDOAuthentication.IsEnabled = (DOAuthentication.Type != DOAuthenticationType.NotAvailable);
 
 			if (!App.Settings.UnlockUsingPin)
 				App.Settings.UsePinAsMasterPassword = false;

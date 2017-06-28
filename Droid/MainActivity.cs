@@ -17,7 +17,7 @@ namespace SafeNotebooks.Droid
 #endif
 			base.OnCreate(bundle);
 
-			SecretsManager.MainActivity = this;
+			DOAuthentication.MainActivity = this;
 
 			global::Xamarin.Forms.Forms.Init(this, bundle);
 
@@ -26,7 +26,7 @@ namespace SafeNotebooks.Droid
 
 		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
 		{
-			if (SecretsManager.OnActivityResult(requestCode, resultCode, data))
+			if (DOAuthentication.OnActivityResult(requestCode, resultCode, data))
 				return;
 
 			base.OnActivityResult(requestCode, resultCode, data);
