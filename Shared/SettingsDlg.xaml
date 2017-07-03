@@ -1,90 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pbXForms:SettingsContentView
-	xmlns = "http://xamarin.com/schemas/2014/forms"
-	xmlns:x = "http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:pbXForms = "clr-namespace:pbXForms;assembly=pbXForms"
-	xmlns:T = "clr-namespace:pbXForms;assembly=pbXForms"
-	xmlns:local = "clr-namespace:SafeNotebooks"
-	x:Class = "SafeNotebooks.SettingsDlg"
-	BackgroundColor = "{StaticResource NotebookBackgroundColor}"
-	GroupDescTextColor = "{StaticResource ListItemDetailColor}"
-	GroupCollapsedExpandedImage = "ic_chevron_right.png"
-	ControlBackgroundColor = "{StaticResource PageBackgroundColor}"
-	ControlTextTextColor = "{StaticResource ListItemTextColor}"
-	ControlDescTextColor = "{StaticResource ListItemDetailColor}"
-	BindingContext = "{x:Static local:App.Settings}">
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pbXForms="clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:T="clr-namespace:pbXForms;assembly=pbXForms"
+	xmlns:local="clr-namespace:SafeNotebooks"
+	x:Class="SafeNotebooks.SettingsDlg"
+	BackgroundColor="{StaticResource NotebookBackgroundColor}"
+	GroupBackgroundColor="{StaticResource NotebookBackgroundColor}"
+	GroupTextColor="{StaticResource ListItemTextColor}"
+	GroupDescColor="{StaticResource ListItemDetailColor}"
+	GroupImage="ic_chevron_right.png"
+	GroupContentBackgroundColor="{StaticResource NotebooksBackgroundColor}"
+	ControlBackgroundColor="{StaticResource PageBackgroundColor}"
+	ControlTextColor="{StaticResource ListItemTextColor}"
+	ControlDescColor="{StaticResource ListItemDetailColor}"
+	SeparatorColor="{StaticResource ListItemTextColor}"
+	BindingContext="{x:Static local:App.Settings}">
 
 	<pbXForms:SettingsContentView.AppBarContent>
 
 		<Label
-			x:Name = "_title"
-			Margin = "8,0"
+			x:Name="_title"
+			Margin="8,0"
 			VerticalOptions="FillAndExpand"
-			VerticalTextAlignment = "Center"
-			HorizontalOptions = "StartAndExpand"
-			FontSize = "Large"
-			LineBreakMode = "TailTruncation"
-			Text = "Ustawienia Bezpieczne Notaniki" />
+			VerticalTextAlignment="Center"
+			HorizontalOptions="StartAndExpand"
+			FontSize="Large"
+			LineBreakMode="TailTruncation"
+			Text="Ustawienia Bezpieczne Notatniki" />
 
 		<pbXForms:PIButton
-			Image = "ic_close.png"
+			Image="ic_close.png"
 			VerticalOptions="Center"
 			HorizontalOptions="Center"
-			Clicked = "OK_Clicked" />
+			Clicked="OK_Clicked" />
 
 	</pbXForms:SettingsContentView.AppBarContent>
 
 	<pbXForms:SettingsContentView.ViewContent>
 
 		<pbXForms:SettingsGroup
-			IsCollapsed = "true"
-			Text = "JAKAŚ SEKCJA"
-			Desc = "jakis dlugi opis mozna tu dac">
+			IsCollapsed="true"
+			Text="JAKAŚ SEKCJA"
+			Description="jakis dlugi opis mozna tu dac">
 
 			<pbXForms:SettingsSwitch
-				Text = "switch in group -1"
-				Desc = "asddfggggggh dkd dkkd dkd kkkks skks skkks skks skksk" />
+				Text="switch in group -1"
+				Description="asddfggggggh dkd dkkd dkd kkkks skks skkks skks skksk" />
 
 			<pbXForms:SettingsSwitch
-				Text = "second switch in group -1" />
+				Text="second switch in group -1" />
 
 			<pbXForms:SettingsSwitch
-				Text = "second switch in group -1" />
+				Text="second switch in group -1" />
 
 			<pbXForms:SettingsSwitch
-				Text = "second switch in group -1" />
+				Text="second switch in group -1" />
 
 			<pbXForms:SettingsSwitch
-				Separator = "false"
-				Text = "second switch in group -1" />
+				SeparatorIsVisible="false"
+				Text="second switch in group -1" />
 
 		</pbXForms:SettingsGroup>
 
 		<pbXForms:SettingsGroup
-			IsCollapsed = "true"
-			Text = "ZABEZPIECZENIA"
-			Desc = "Różne opcje dotyczące zabezpieczenia dostępu do programu i danych.">
+			IsCollapsed="true"
+			Image="ic_settings.png"
+			Text="ZABEZPIECZENIA"
+			Description="Różne opcje dotyczące zabezpieczenia dostępu do programu i danych.">
 
 			<pbXForms:SettingsSwitch
-				x:Name = "UnlockUsingDOAuthentication"
-				IsToggled = "{Binding UnlockUsingDeviceOwnerAuthentication}"
-				Text = "device owner auth"
-				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
+				x:Name="UnlockUsingDOAuthentication"
+				IsToggled="{Binding UnlockUsingDeviceOwnerAuthentication}"
+				Text="device owner auth"
+				Description="tutaj trzeba napisac jakies ladne wyjasnienie" />
 
 			<pbXForms:SettingsSwitch
-				x:Name = "UnlockUsingPin"
-				Text = "unlock with pin"
-				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
+				x:Name="UnlockUsingPin"
+				Text="unlock with pin"
+				Description="tutaj trzeba napisac jakies ladne wyjasnienie" />
 
 			<pbXForms:SettingsSwitch
-				x:Name = "UsePinAsMasterPassword"
-				Text = "use pin as the master password"
-				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
+				x:Name="UsePinAsMasterPassword"
+				Text="use pin as the master password"
+				Description="tutaj trzeba napisac jakies ladne wyjasnienie" />
 
 			<pbXForms:SettingsSwitch
-				IsToggled = "{Binding TryToUnlockItemItems}"
-				Text = "try to unlock items"
-				Desc = "tutaj trzeba napisac jakies ladne wyjasnienie" />
+				IsToggled="{Binding TryToUnlockItemItems}"
+				Text="try to unlock items"
+				Description="tutaj trzeba napisac jakies ladne wyjasnienie" />
 
 		</pbXForms:SettingsGroup>
 
