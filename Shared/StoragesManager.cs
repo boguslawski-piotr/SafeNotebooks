@@ -41,7 +41,7 @@ namespace SafeNotebooks
 				FileSystems = new List<IFileSystem>();
 				foreach (DeviceFileSystemRoot root in DeviceFileSystem.AvailableRootsForEndUser)
 				{
-					IFileSystem fs = new DeviceFileSystem(root);
+					IFileSystem fs = DeviceFileSystem.New(root);
 					FileSystems.Add(fs);
 					StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);
 					if (storage != null)

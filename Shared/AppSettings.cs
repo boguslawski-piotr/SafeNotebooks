@@ -87,7 +87,7 @@ namespace SafeNotebooks
 
 				public string Name => T.Localized("Settings");
 
-				public Task<bool> InitializeAsync() => Task.FromResult(true);
+				public Task InitializeAsync() => Task.FromResult(true);
 
 				public Task StoreAsync(string id, string data, DateTime modifiedOn)
 				{

@@ -74,7 +74,7 @@ namespace SafeNotebooks
 			IPassword passwd = new Password(Obfuscator.Obfuscate(Tools.GetUaqpid()));
 			Log.D($"pwd: {passwd}", this);
 
-			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, new DeviceFileSystem(DeviceFileSystemRoot.LocalConfig), passwd);
+			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, DeviceFileSystem.New(DeviceFileSystemRoot.LocalConfig), passwd);
 			SafeStorage = new StorageOnFileSystem<string>(App.Name, SafeFs, Serializer);
 		}
 
