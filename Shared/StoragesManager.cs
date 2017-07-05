@@ -10,8 +10,6 @@ namespace SafeNotebooks
 	{
 		public ISerializer Serializer { get; set; }
 
-		public IList<IFileSystem> FileSystems { get; private set; }
-
 		public IEnumerable<ISearchableStorage<string>> Storages => _storages?.Values;
 
 		protected IDictionary<string, ISearchableStorage<string>> _storages;
@@ -38,15 +36,27 @@ namespace SafeNotebooks
 
 			try
 			{
-				FileSystems = new List<IFileSystem>();
 				foreach (DeviceFileSystemRoot root in DeviceFileSystem.AvailableRootsForEndUser)
 				{
 					IFileSystem fs = DeviceFileSystem.New(root);
-					FileSystems.Add(fs);
 					StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);
 					if (storage != null)
 						_storages[fs.Id] = storage;
 				}
+			}
+			catch (Exception ex)
+			{
+				await MainWnd.C.DisplayError(ex);
+			}
+
+			try
+			{
+#if DEBUG
+				IFileSystem fs = await FileSystemInDatabase.NewAsync(new SimpleDatabaseInMemory(), "Safe Notebooks");
+				StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);
+				if (storage != null)
+					_storages[fs.Id] = storage;
+#endif
 			}
 			catch (Exception ex)
 			{

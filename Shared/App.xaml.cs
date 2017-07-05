@@ -61,7 +61,6 @@ namespace SafeNotebooks
 		void InitializeLocalization()
 		{
 			LocalizationManager.AddResource("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly, true);
-			LocalizationManager.AddResource("pbXNet.Texts.T", typeof(pbXNet.LocalizationManager).GetTypeInfo().Assembly);
 		}
 
 		void CreateSerializer()
