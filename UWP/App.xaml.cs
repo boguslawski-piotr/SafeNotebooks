@@ -85,7 +85,7 @@ namespace SafeNotebooks.UWP
 		{
 			var deferral = e.SuspendingOperation.GetDeferral();
 
-			await DeviceFileSystem.SaveAllModifiedOnDictsAsync();
+			//await DeviceFileSystem.SaveAllModifiedOnDictsAsync();
 
 			deferral.Complete();
 		}

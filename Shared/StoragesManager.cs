@@ -36,7 +36,7 @@ namespace SafeNotebooks
 
 			try
 			{
-				foreach (DeviceFileSystemRoot root in DeviceFileSystem.AvailableRootsForEndUser)
+				foreach (DeviceFileSystem.RootType root in DeviceFileSystem.AvailableRootsForEndUser)
 				{
 					IFileSystem fs = DeviceFileSystem.New(root);
 					StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);

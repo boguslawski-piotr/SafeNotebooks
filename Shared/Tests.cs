@@ -62,9 +62,9 @@ namespace SafeNotebooks
 		async Task Tests()
 		{
 			//***
-			 
-			RsaCryptographer c = new RsaCryptographer();
-			IAsymmetricCryptographerKeyPair keys = c.GenerateKeyPair();
+
+			//RsaCryptographer c = new RsaCryptographer();
+			//IAsymmetricCryptographerKeyPair keys = c.GenerateKeyPair();
 
 			//***
 
@@ -164,7 +164,15 @@ namespace SafeNotebooks
 			//	   Debug.WriteLine("{0}={1}", folder, System.Environment.GetFolderPath((Environment.SpecialFolder)folder));
 			//}
 
-			//DeviceFileSystem fs = new DeviceFileSystem(DeviceFileSystemRoot.UserDefined, "~/Safe Notebooks");
+			//try
+			//{
+			//	IFileSystem fs = DeviceFileSystem.New(DeviceFileSystemRoot.UserDefined, "Safe Notebooks");
+			//	await fs.WriteTextAsync("test", "test data");
+			//}
+			//catch (Exception ex)
+			//{
+			//	Log.E(ex.Message, this);
+			//}
 
 			//***
 
