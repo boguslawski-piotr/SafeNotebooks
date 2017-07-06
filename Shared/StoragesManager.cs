@@ -52,7 +52,7 @@ namespace SafeNotebooks
 			try
 			{
 #if DEBUG
-				IFileSystem fs = await FileSystemInDatabase.NewAsync(new SimpleDatabaseInMemory(), "Safe Notebooks");
+				IFileSystem fs = await FileSystemInDatabase.NewAsync("Safe Notebooks", new SimpleDatabaseInMemory());
 				StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);
 				if (storage != null)
 					_storages[fs.Id] = storage;

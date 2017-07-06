@@ -60,7 +60,7 @@ namespace SafeNotebooks
 
 		void InitializeLocalization()
 		{
-			LocalizationManager.AddResource("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly, true);
+			LocalizationManager.AddResource("SafeNotebooks.Texts.T", typeof(SafeNotebooks.Texts.Dummy).GetTypeInfo().Assembly);
 		}
 
 		void CreateSerializer()
