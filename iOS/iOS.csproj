@@ -9,7 +9,7 @@
     <RootNamespace>SafeNotebooks.iOS</RootNamespace>
     <AssemblyName>SafeNotebooks</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <ReleaseVersion>1.0.0.26</ReleaseVersion>
+    <ReleaseVersion>1.0.0.27</ReleaseVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
