@@ -346,18 +346,11 @@ namespace SafeNotebooks
 		{
 			ISearchableStorage<string> storageWithItems = storage ?? forWhom.Storage;
 
-			// On Windows (UWP) we have true async IO even for local file system, not faked one like on other systems.
-			// That's why the first data load algorithm is off.
-
-#if !WINDOWS_UWP
-
 			if ((StorageType.Quick & storageWithItems.Type) == storageWithItems.Type)
 			{
 				OnEnd(await LoadItemsForItemAsync<T>(forWhom, pattern, tryToUnlock, storage));
 				return;
 			}
-
-#endif
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 

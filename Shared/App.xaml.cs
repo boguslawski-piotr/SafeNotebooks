@@ -67,10 +67,11 @@ namespace SafeNotebooks
 		void CreateSafeStorage()
 		{
 			IPassword passwd = new Password(Obfuscator.Obfuscate(Tools.GetUaqpid()));
-			Log.D($"pwd: {passwd}", this);
+			Log.D($"pwd1: {passwd}", this);
 
-			IFileSystem SafeFs = new EncryptedFileSystem(App.Name, DeviceFileSystem.New(DeviceFileSystem.RootType.LocalConfig), passwd);
-			SafeStorage = new StorageOnFileSystem<string>(App.Name, SafeFs, Serializer);
+			IFileSystem safeFs = new EncryptedFileSystem(App.Name, DeviceFileSystem.New(DeviceFileSystem.RootType.LocalConfig), passwd);
+
+			SafeStorage = new StorageOnFileSystem<string>(App.Name, safeFs, Serializer);
 		}
 
 		void CreateSecretsManager()
@@ -79,7 +80,7 @@ namespace SafeNotebooks
 			CreateSafeStorage();
 
 			IPassword passwd = new Password(Tools.GetUaqpid());
-			Log.D($"pwd: {passwd}", this);
+			Log.D($"pwd2: {passwd}", this);
 
 			SecretsManager = new SecretsManager(App.Name, Serializer, SafeStorage, passwd);
 		}
@@ -90,27 +91,30 @@ namespace SafeNotebooks
 
 		void CreateStoragesManager()
 		{
-			StoragesManager = new StoragesManager(App.Name);
+			StoragesManager = new StoragesManager(App.Name)
+			{
+				Serializer = this.Serializer
+			};
 		}
 
 		async Task InitializeStoragesManagerAsync()
 		{
 			await SafeStorage.InitializeAsync();
 
-			StoragesManager.Serializer = Serializer;
 			await StoragesManager.InitializeAsync();
 		}
 
 		void CreateNotebooksManager()
 		{
-			NotebooksManager = new NotebooksManager();
+			NotebooksManager = new NotebooksManager()
+			{
+				SecretsManager = this.SecretsManager,
+				Serializer = this.Serializer,
+			};
 		}
 
 		async Task InitializeNotebooksManagerAsync()
 		{
-			NotebooksManager.Serializer = Serializer;
-			NotebooksManager.SecretsManager = SecretsManager;
-			NotebooksManager.UI = MainWnd.Current;
 			await NotebooksManager.InitializeAsync(SafeStorage);
 		}
 
@@ -131,8 +135,6 @@ namespace SafeNotebooks
 
 			CreateSecretsManager();
 
-			InitializeSecretsManager();
-
 			CreateStoragesManager();
 
 			CreateNotebooksManager();
@@ -142,6 +144,8 @@ namespace SafeNotebooks
 			Tests();
 
 			MainPage = new MainWnd();
+
+			NotebooksManager.UI = MainWnd.Current;
 		}
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
