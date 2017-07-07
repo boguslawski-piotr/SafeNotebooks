@@ -34,11 +34,11 @@ namespace SafeNotebooks
 
 		public static App C => (Current as App);
 
-		// Settings in AppSettings.cs
-
 		public ISerializer Serializer;
 
 		public ISearchableStorage<string> SafeStorage;
+
+		// Settings in AppSettings.cs
 
 		public ISecretsManager SecretsManager;
 
@@ -46,13 +46,7 @@ namespace SafeNotebooks
 
 		public NotebooksManager NotebooksManager;
 
-
-		//
-
 		UnlockWnd _unlockWnd;
-
-
-		//
 
 		void InitializeLocalization()
 		{
@@ -74,18 +68,20 @@ namespace SafeNotebooks
 			SafeStorage = new StorageOnFileSystem<string>(App.Name, safeFs, Serializer);
 		}
 
+		async Task InitializeSafeStorageAsync()
+		{
+			await SafeStorage.InitializeAsync();
+		}
+
 		void CreateSecretsManager()
 		{
-			CreateSerializer();
-			CreateSafeStorage();
-
 			IPassword passwd = new Password(Tools.GetUaqpid());
 			Log.D($"pwd2: {passwd}", this);
 
 			SecretsManager = new SecretsManager(App.Name, Serializer, SafeStorage, passwd);
 		}
 
-		void InitializeSecretsManager()
+		async Task InitializeSecretsManagerAsync()
 		{
 		}
 
@@ -99,8 +95,6 @@ namespace SafeNotebooks
 
 		async Task InitializeStoragesManagerAsync()
 		{
-			await SafeStorage.InitializeAsync();
-
 			await StoragesManager.InitializeAsync();
 		}
 
@@ -116,10 +110,6 @@ namespace SafeNotebooks
 		async Task InitializeNotebooksManagerAsync()
 		{
 			await NotebooksManager.InitializeAsync(SafeStorage);
-		}
-
-		async Task LoadNotebooksAsync()
-		{
 			await NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, Settings.TryToUnlockItemItems);
 
 			// TODO: restore last selections (with unlocking if necessary)
@@ -132,6 +122,10 @@ namespace SafeNotebooks
 		public App()
 		{
 			InitializeLocalization();
+
+			CreateSerializer();
+
+			CreateSafeStorage();
 
 			CreateSecretsManager();
 
@@ -155,6 +149,17 @@ namespace SafeNotebooks
 		protected override async void OnStart()
 		{
 			Log.D("", this);
+
+			try
+			{
+				await InitializeSafeStorageAsync();
+				await InitializeSecretsManagerAsync();
+			}
+			catch (Exception ex)
+			{
+				Log.E(ex, this);
+				MainWnd.C.DisplayError(ex);
+			}
 
 			_unlockWnd = new UnlockWnd();
 			_unlockWnd.UnlockedCorrectly += UnlockedCorrectlyInOnStart;
@@ -183,14 +188,12 @@ namespace SafeNotebooks
 
 			try
 			{
-				InitializeSecretsManager();
 				await InitializeStoragesManagerAsync();
 				await InitializeNotebooksManagerAsync();
-				await LoadNotebooksAsync();
 			}
 			catch (Exception ex)
 			{
-				Log.E(ex.Message, this);
+				Log.E(ex, this);
 				MainWnd.C.DisplayError(ex);
 			}
 		}

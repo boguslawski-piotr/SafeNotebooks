@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using pbXForms;
 using pbXNet;
@@ -26,16 +27,17 @@ namespace SafeNotebooks
 			Device.BeginInvokeOnMainThread(action);
 		}
 
-		public async Task DisplayError(NotebooksException ex)
+		public async Task DisplayError(NotebooksException ex, object caller = null, [CallerMemberName]string callerName = null)
 		{
 			string message = $"NotebooksException:Err {ex.Err}"; // TODO: wyciagac komunikaty bledow z zasobow
-			await DisplayError(new Exception(message));
+			await DisplayError(new Exception(message), caller, callerName);
 		}
 
-		public async Task DisplayError(Exception ex)
+		public async Task DisplayError(Exception ex, object caller = null, [CallerMemberName]string callerName = null)
 		{
+			string message = Log.E(ex, caller, callerName);
 			await Task.Run(() =>
-				BeginInvokeOnMainThread(async () => await DisplayAlert(T.Localized("Error"), ex.Message, T.Localized("OK")))
+				BeginInvokeOnMainThread(async () => await DisplayAlert(T.Localized("Error"), message, T.Localized("OK")))
 			);
 		}
 

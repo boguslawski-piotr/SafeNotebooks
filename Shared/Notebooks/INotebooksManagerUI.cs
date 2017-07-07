@@ -9,8 +9,8 @@ namespace SafeNotebooks
 	{
 		void BeginInvokeOnMainThread(Action action);
 
-		Task DisplayError(NotebooksException ex);
-		Task DisplayError(Exception ex);
+		Task DisplayError(NotebooksException ex, object caller, string callerName = null);
+		Task DisplayError(Exception ex, object caller, string callerName = null);
 
 		Task<IPassword> GetPasswordAsync(Item item, bool passwordForTheFirstTime);
 

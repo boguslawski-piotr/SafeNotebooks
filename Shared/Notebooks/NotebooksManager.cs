@@ -298,44 +298,41 @@ namespace SafeNotebooks
 			(int itemsAdded, int itemsReloaded) report = (0, 0);
 			int tasksScheduled = 0;
 
-			IEnumerable<string> idsInStorage = await storageWithItems.FindIdsAsync(pattern);
-			if (idsInStorage != null)
+			const int batchSize = 128;
+			IList<Task> tasks = new List<Task>();
+
+			foreach (var idInStorage in await storageWithItems.FindIdsAsync(pattern))
 			{
-				const int batchSize = 128;
-				IList<Task> tasks = new List<Task>();
-
-				foreach (var idInStorage in idsInStorage)
+				T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
+				if (item == null)
 				{
-					T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
-					if (item == null)
+					tasks.Add(OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock));
+					tasksScheduled++;
+					report.itemsAdded++;
+				}
+				else
+				{
+					if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
 					{
-						tasks.Add(OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock));
+						tasks.Add(ReloadItemAsync(item));
 						tasksScheduled++;
-						report.itemsAdded++;
+						report.itemsReloaded++;
 					}
-					else
-					{
-						if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
-						{
-							tasks.Add(ReloadItemAsync(item));
-							tasksScheduled++;
-							report.itemsReloaded++;
-						}
-					}
+				}
 
-					if (tasks.Count > batchSize)
-					{
-						allTasks.Add(tasks);
-						tasks = new List<Task>();
-					}
+				if (tasks.Count > batchSize)
+				{
+					allTasks.Add(tasks);
+					tasks = new List<Task>();
 				}
 			}
 
 			if (tasksScheduled > 0)
 			{
-				foreach (var tasks in allTasks)
+				foreach (var scheduledTasks in allTasks)
 				{
-					await Task.WhenAll(tasks);
+					await Task.WhenAll(scheduledTasks);
+					await Task.Delay(100);
 				}
 			}
 
@@ -359,32 +356,29 @@ namespace SafeNotebooks
 				(int itemsAdded, int itemsReloaded) report = (0, 0);
 
 				IEnumerable<string> idsInStorage = await storageWithItems.FindIdsAsync(pattern);
-				if (idsInStorage != null)
+				foreach (var idInStorage in idsInStorage)
 				{
-					foreach (var idInStorage in idsInStorage)
+					//const int batchSize = 32;
+
+					T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
+					if (item == null)
 					{
-						const int batchSize = 32;
-
-						T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
-						if (item == null)
-						{
-							await OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock);
-							report.itemsAdded++;
-						}
-						else
-						{
-							if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
-							{
-								await ReloadItemAsync(item);
-								report.itemsReloaded++;
-							}
-						}
-
-						// Trying to make UI more responsive...
-						if ((StorageType.Quick & storageWithItems.Type) == storageWithItems.Type)
-							if (report.itemsAdded > batchSize)
-								await Task.Delay(25);
+						await OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock);
+						report.itemsAdded++;
 					}
+					else
+					{
+						if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
+						{
+							await ReloadItemAsync(item);
+							report.itemsReloaded++;
+						}
+					}
+
+					// Trying to make UI more responsive...
+					//if ((StorageType.Quick & storageWithItems.Type) == storageWithItems.Type)
+					//	if (report.itemsAdded > batchSize)
+					//		await Task.Delay(25);
 				}
 
 				UI.BeginInvokeOnMainThread(() => OnEnd(report));

@@ -76,54 +76,6 @@ namespace SafeNotebooks
 				_AddOrUpdateValue(key, value, name);
 				return CrossSettings.Current.AddOrUpdateValue(key, value);
 			}
-
-
-			// Storage
-
-			public IStorage<string> Storage = new StorageImpl();
-
-			public class StorageImpl : IStorage<string>
-			{
-				public StorageType Type => StorageType.Memory;
-
-				public string Id => "2b60a5af8f5e4fa4be62cb05bacbdf2b";
-
-				public string Name => T.Localized("Settings");
-
-				public Task InitializeAsync() => Task.FromResult(true);
-
-				public Task StoreAsync(string id, string data, DateTime modifiedOn)
-				{
-					CrossSettings.Current.AddOrUpdateValue(id, data); 
-					return Task.FromResult(true);
-				}
-
-				public Task<bool> ExistsAsync(string id) => Task.FromResult(CrossSettings.Current.Contains(id));
-
-				public Task<DateTime> GetModifiedOnAsync(string id) => Task.FromResult(DateTime.MinValue); // TODO: obsluzyc GetModifiedOnAsync
-
-				public Task DiscardAsync(string id)
-				{
-					CrossSettings.Current.Remove(id);
-					return Task.FromResult(true);
-				}
-
-				public Task<string> GetACopyAsync(string id)
-				{
-					string rc = null;
-					if (CrossSettings.Current.Contains(id))
-						rc = CrossSettings.Current.GetValueOrDefault(id, "");
-					return Task.FromResult(rc);
-				}
-
-				public async Task<string> RetrieveAsync(string id)
-				{
-					string data = await GetACopyAsync(id);
-					if (data != null)
-						await DiscardAsync(id);
-					return data;
-				}
-			}
 		}
 	}
 }

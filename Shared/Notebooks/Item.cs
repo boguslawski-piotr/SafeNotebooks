@@ -315,7 +315,12 @@ namespace SafeNotebooks
 
 		protected virtual async Task<bool> InternalOpenAsync(string idInStorage, bool tryToUnlock)
 		{
-			string d = await Storage?.GetACopyAsync(idInStorage);
+			string d = null;
+			try
+			{
+				d = await Storage?.GetACopyAsync(idInStorage);
+			}
+			catch (StorageThingNotFoundException) { }
 			if (string.IsNullOrEmpty(d))
 			{
 				// No data for the item in storage probably means that this object was just created (it is new).
@@ -376,12 +381,16 @@ namespace SafeNotebooks
 		{
 			Log.D($"for {GetType().FullName}: {Id}", this);
 
-			DateTime modifiedOn = await Storage?.GetModifiedOnAsync(IdForStorage);
-			if (modifiedOn > nedata.ModifiedOn)
+			try
 			{
-				throw new Exception($"SafeNotebooks: Item: InternalSaveAsync: {GetType().FullName}: {Id}: modified date in storage is newer than modified date in memory!");
-				// TODO: obsluzyc problem gdy dane zapisane sa nowsze niz te, ktore chcemy zapisac
+				DateTime modifiedOn = await Storage?.GetModifiedOnAsync(IdForStorage);
+				if (modifiedOn > nedata.ModifiedOn)
+				{
+					throw new Exception($"SafeNotebooks: Item: InternalSaveAsync: {GetType().FullName}: {Id}: modified date in storage is newer than modified date in memory!");
+					// TODO: obsluzyc problem gdy dane zapisane sa nowsze niz te, ktore chcemy zapisac
+				}
 			}
+			catch (StorageThingNotFoundException) { }
 
 			string ned = SerializeNotEncryptedData();
 			string d = await EncryptAsync(Serialize());
@@ -526,7 +535,7 @@ namespace SafeNotebooks
 			}
 		}
 
-		protected async Task<bool> TryExecute(Task<bool> t)
+		protected async Task<bool> TryExecute(Task<bool> t, [CallerMemberName]string callerName = null)
 		{
 			BatchBegin();
 			try
@@ -535,14 +544,13 @@ namespace SafeNotebooks
 			}
 			catch (NotebooksException nex)
 			{
-				Log.E(nex.ToString(), this);
-				await NotebooksManager.UI?.DisplayError(nex);
+				await NotebooksManager.UI?.DisplayError(nex, this, callerName);
 				return false;
 			}
 			catch (Exception ex)
 			{
 				Log.E(ex.ToString(), this);
-				await NotebooksManager.UI?.DisplayError(ex);
+				await NotebooksManager.UI?.DisplayError(ex, this, callerName);
 				return false;
 			}
 			finally
