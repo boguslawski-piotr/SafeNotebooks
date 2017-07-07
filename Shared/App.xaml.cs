@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using pbXForms;
 using pbXNet;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+//[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SafeNotebooks
 {
 	public partial class App : Application

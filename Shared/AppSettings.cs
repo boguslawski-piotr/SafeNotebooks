@@ -11,14 +11,14 @@ namespace SafeNotebooks
 {
 	public partial class App : Application
 	{
-		public static SettingsImpl Settings => new SettingsImpl();
+		public static SettingsImpl Settings { get; } = new SettingsImpl();
 
 		public class SettingsImpl : Observable
 		{
 			// Security settings
 
-			const string UnlockUsingDeviceOwnerAuthenticationKey = "_uudoa";
-			static readonly bool UnlockUsingDeviceOwnerAuthenticationDefault = false;
+			const string UnlockUsingDOAuthenticationKey = "_uudoa";
+			static readonly bool UnlockUsingDOAuthenticationDefault = false;
 
 			const string UnlockUsingPinKey = "_uup";
 			static readonly bool UnlockUsingPinDefault = false;
@@ -29,49 +29,52 @@ namespace SafeNotebooks
 			const string TryToUnlockItemItemsKey = "_ttuii";
 			static readonly bool TryToUnlockItemItemsDefault = false;
 
-			public bool UnlockUsingDeviceOwnerAuthentication
+			public bool UnlockUsingDOAuthentication
 			{
-				get => GetValueOrDefault<bool>(UnlockUsingDeviceOwnerAuthenticationKey, UnlockUsingDeviceOwnerAuthenticationDefault);
-				set => AddOrUpdateValue<bool>(UnlockUsingDeviceOwnerAuthenticationKey, value);
+				get => GetValueOrDefault(UnlockUsingDOAuthenticationKey, UnlockUsingDOAuthenticationDefault);
+				set => AddOrUpdateValue(UnlockUsingDOAuthenticationKey, value);
 			}
 
 			public bool UnlockUsingPin
 			{
-				get => GetValueOrDefault<bool>(UnlockUsingPinKey, UnlockUsingPinDefault);
-				set => AddOrUpdateValue<bool>(UnlockUsingPinKey, value);
+				get => GetValueOrDefault(UnlockUsingPinKey, UnlockUsingPinDefault);
+				set => AddOrUpdateValue(UnlockUsingPinKey, value);
 			}
 
 			public bool UsePinAsMasterPassword
 			{
-				get => GetValueOrDefault<bool>(UsePinAsMasterPasswordKey, UsePinAsMasterPasswordDefault);
-				set => AddOrUpdateValue<bool>(UsePinAsMasterPasswordKey, value);
+				get => GetValueOrDefault(UsePinAsMasterPasswordKey, UsePinAsMasterPasswordDefault);
+				set => AddOrUpdateValue(UsePinAsMasterPasswordKey, value);
 			}
 
 			public bool TryToUnlockItemItems
 			{
-				get => GetValueOrDefault<bool>(TryToUnlockItemItemsKey, TryToUnlockItemItemsDefault);
-				set => AddOrUpdateValue<bool>(TryToUnlockItemItemsKey, value);
+				get => GetValueOrDefault(TryToUnlockItemItemsKey, TryToUnlockItemItemsDefault);
+				set => AddOrUpdateValue(TryToUnlockItemItemsKey, value);
 			}
 
 
 			// Direct access to entries
 
-			public T GetValueOrDefault<T>(string key, T defaultValue = default(T))
+			bool GetValueOrDefault(string key, bool defaultValue = false)
 			{
-				return CrossSettings.Current.GetValueOrDefault<T>(key, defaultValue);
+				return CrossSettings.Current.GetValueOrDefault(key, defaultValue);
 			}
 
 			IDictionary<string, object> _values = new Dictionary<string, object>();
 
-			public bool AddOrUpdateValue<T>(string key, T value, [CallerMemberName]string name = null)
+			void _AddOrUpdateValue(string key, object value, [CallerMemberName]string name = null)
 			{
 				// This piece is only for the fully functional Observable interface.
 				_values.TryGetValue(key, out object storage);
 				SetValue(ref storage, value, name);
 				_values[key] = storage;
+			}
 
-				// Here is the place where the data is really written ;)
-				return CrossSettings.Current.AddOrUpdateValue<T>(key, value);
+			bool AddOrUpdateValue(string key, bool value, [CallerMemberName]string name = null)
+			{
+				_AddOrUpdateValue(key, value, name);
+				return CrossSettings.Current.AddOrUpdateValue(key, value);
 			}
 
 
@@ -91,7 +94,7 @@ namespace SafeNotebooks
 
 				public Task StoreAsync(string id, string data, DateTime modifiedOn)
 				{
-					CrossSettings.Current.AddOrUpdateValue<string>(id, data); 
+					CrossSettings.Current.AddOrUpdateValue(id, data); 
 					return Task.FromResult(true);
 				}
 
@@ -109,7 +112,7 @@ namespace SafeNotebooks
 				{
 					string rc = null;
 					if (CrossSettings.Current.Contains(id))
-						rc = CrossSettings.Current.GetValueOrDefault<string>(id, "");
+						rc = CrossSettings.Current.GetValueOrDefault(id, "");
 					return Task.FromResult(rc);
 				}
 

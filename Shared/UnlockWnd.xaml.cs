@@ -67,7 +67,7 @@ namespace SafeNotebooks
 
 			try
 			{
-				if (App.Settings.UnlockUsingDeviceOwnerAuthentication)
+				if (App.Settings.UnlockUsingDOAuthentication)
 				{
 					DOAuthenticationType doa = DOAuthentication.Type;
 					if (doa != DOAuthenticationType.NotAvailable && TryToUnlockUsingDOAuthentication())
