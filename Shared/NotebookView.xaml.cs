@@ -107,7 +107,7 @@ namespace SafeNotebooks
 			if (await page.OpenAsync(true))
 			{
 				await Wnd.C.ShowDetailViewAsync<PageView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward, page);
-				await App.C.NotebooksManager.SelectPageAsync(page, App.Settings.TryToUnlockItemItems);
+				await App.C.NotebooksManager.SelectPageAsync(page, App.C.Settings.TryToUnlockItemItems);
 			}
 		}
 

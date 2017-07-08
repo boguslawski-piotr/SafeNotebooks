@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using pbXNet;
@@ -38,7 +38,7 @@ namespace SafeNotebooks
 
 		public ISearchableStorage<string> SafeStorage;
 
-		// Settings in AppSettings.cs
+		public Settings Settings;
 
 		public ISecretsManager SecretsManager;
 
@@ -71,6 +71,16 @@ namespace SafeNotebooks
 		async Task InitializeSafeStorageAsync()
 		{
 			await SafeStorage.InitializeAsync();
+		}
+
+		void CreateSettings()
+		{
+			Settings = new Settings(".3b0d86fceb1e4dcb80596205d5adf851", Serializer);
+		}
+
+		async Task InitializeSettingsAsync()
+		{
+			await Settings.LoadAsync();
 		}
 
 		void CreateSecretsManager()
@@ -122,15 +132,11 @@ namespace SafeNotebooks
 		public App()
 		{
 			InitializeLocalization();
-
 			CreateSerializer();
-
 			CreateSafeStorage();
-
+			CreateSettings();
 			CreateSecretsManager();
-
 			CreateStoragesManager();
-
 			CreateNotebooksManager();
 
 			InitializeComponent();
@@ -138,7 +144,6 @@ namespace SafeNotebooks
 			Tests();
 
 			MainPage = new MainWnd();
-
 			NotebooksManager.UI = MainWnd.Current;
 		}
 
@@ -153,6 +158,7 @@ namespace SafeNotebooks
 			try
 			{
 				await InitializeSafeStorageAsync();
+				await InitializeSettingsAsync();
 				await InitializeSecretsManagerAsync();
 			}
 			catch (Exception ex)

@@ -78,7 +78,7 @@ namespace SafeNotebooks
 
 		async Task RefreshNotebooksAsync()
 		{
-			await App.C.NotebooksManager.LoadNotebooksAsync(App.C.StoragesManager.Storages, App.Settings.TryToUnlockItemItems);
+			await App.C.NotebooksManager.LoadNotebooksAsync(App.C.StoragesManager.Storages, App.C.Settings.TryToUnlockItemItems);
 			Device.BeginInvokeOnMainThread(ListCtl.EndRefresh);
 		}
 
@@ -96,7 +96,7 @@ namespace SafeNotebooks
 			if (await notebook.OpenAsync(true)) 
 			{
 				await Wnd.C.ShowMasterViewAsync<NotebookView>(MastersDetailsPage.ViewsSwitchingAnimation.Forward, notebook);
-				await App.C.NotebooksManager.SelectNotebookAsync(notebook, App.Settings.TryToUnlockItemItems);
+				await App.C.NotebooksManager.SelectNotebookAsync(notebook, App.C.Settings.TryToUnlockItemItems);
 			}
 		}
 

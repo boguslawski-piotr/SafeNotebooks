@@ -47,6 +47,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Note.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Item.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NotebooksManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UnlockWnd.xaml.cs">
       <DependentUpon>UnlockWnd.xaml</DependentUpon>
     </Compile>
@@ -59,7 +60,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MainWnd.xaml.cs">
       <DependentUpon>MainWnd.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\INotebooksManagerUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notebooks\NoteType.cs" />

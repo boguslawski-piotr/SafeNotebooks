@@ -48,13 +48,14 @@ namespace SafeNotebooks
 			//return null;
 		}
 
-		static int lll = 0;
 
 		public async Task<(bool, IPassword)> EditItemAsync(Item item)
 		{
 			//if (!await DisplayAlert("New/Edit", $"{item.GetType().Name}", T.Localized("OK"), T.Localized("Cancel")))
 			//return (false, "");
 
+			object lllo = App.C.Settings["lll"];
+			int lll = Convert.ToInt32(lllo ?? 0);
 
 			//item.Color = "#800000ff";
 			item.Nick = $"{item.GetType().Name} Nick " + lll;
@@ -64,6 +65,8 @@ namespace SafeNotebooks
 			//item.ThisCKeyLifeTime = CKeyLifeTime.Infinite;
 			//item.ThisCKeyLifeTime = SecretLifeTime.WhileAppRunning;
 			//item.ThisCKeyLifeTime = CKeyLifeTime.OneTime;
+
+			App.C.Settings["lll"] = lll;
 
 			return (true, new Password("123"));
 		}

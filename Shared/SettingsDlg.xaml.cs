@@ -14,6 +14,7 @@ namespace SafeNotebooks
 	{
 		public SettingsDlg()
 		{
+			BindingContext = App.C.Settings;
 			InitializeComponent();
 			InitializeUI();
 		}
@@ -34,8 +35,8 @@ namespace SafeNotebooks
 		{
 			UnlockUsingDOAuthentication.IsEnabled = (DOAuthentication.Type != DOAuthenticationType.NotAvailable);
 
-			if (!App.Settings.UnlockUsingPin)
-				App.Settings.UsePinAsMasterPassword = false;
+			if (!App.C.Settings.UnlockUsingPin)
+				App.C.Settings.UsePinAsMasterPassword = false;
 
 			UnlockUsingPin.Toggled -= UnlockUsingPin_Toggled;
 			UsePinAsMasterPassword.Toggled -= UsePinAsMasterPassword_Toggled;
@@ -44,17 +45,17 @@ namespace SafeNotebooks
 			// and simple: unregister from event, change observable value (IsToggled), register to event again
 			// doesn't work every time :(. So the following guards are used.
 
-			if (UnlockUsingPin.IsToggled != App.Settings.UnlockUsingPin)
+			if (UnlockUsingPin.IsToggled != App.C.Settings.UnlockUsingPin)
 			{
 				LockEvent(_UsePinAsMasterPassword_Toggled_Guard);
-				UnlockUsingPin.IsToggled = App.Settings.UnlockUsingPin;
+				UnlockUsingPin.IsToggled = App.C.Settings.UnlockUsingPin;
 			}
 
 			UsePinAsMasterPassword.IsEnabled = UnlockUsingPin.IsToggled;
-			if (UsePinAsMasterPassword.IsToggled != App.Settings.UsePinAsMasterPassword)
+			if (UsePinAsMasterPassword.IsToggled != App.C.Settings.UsePinAsMasterPassword)
 			{
 				LockEvent(_UsePinAsMasterPassword_Toggled_Guard);
-				UsePinAsMasterPassword.IsToggled = App.Settings.UsePinAsMasterPassword;
+				UsePinAsMasterPassword.IsToggled = App.C.Settings.UsePinAsMasterPassword;
 			}
 
 			UnlockUsingPin.Toggled += UnlockUsingPin_Toggled;
@@ -116,7 +117,7 @@ namespace SafeNotebooks
 				if (rc)
 				{
 					// Everything is in order, pin confirmed and we can save it (sort of ;))
-					App.Settings.UnlockUsingPin = true;
+					App.C.Settings.UnlockUsingPin = true;
 					App.C.SecretsManager.AddOrUpdatePassword(App.Name, SecretLifeTime.Infinite, pinDlg.Pin);
 				}
 
@@ -138,10 +139,10 @@ namespace SafeNotebooks
 
 		async Task<bool> TurnOffUnlockUsingPin()
 		{
-			if (App.Settings.UsePinAsMasterPassword && !await TurnOffUsePinAsMasterPassword())
+			if (App.C.Settings.UsePinAsMasterPassword && !await TurnOffUsePinAsMasterPassword())
 				return false;
 
-			App.Settings.UnlockUsingPin = false;
+			App.C.Settings.UnlockUsingPin = false;
 			App.C.SecretsManager.DeletePassword(App.Name);
 
 			return true;
@@ -164,7 +165,7 @@ namespace SafeNotebooks
 		{
 			bool rc = false;
 
-			if (App.Settings.UnlockUsingPin == true)
+			if (App.C.Settings.UnlockUsingPin == true)
 			{
 				PinDlg pinDlg = UnlockWnd.CreatePinDlg(Wnd.C.Bounds.Height);
 				pinDlg.Title.Text = T.Localized("PinTitle");
@@ -180,7 +181,7 @@ namespace SafeNotebooks
 
 					// encrypt all data on low level
 
-					App.Settings.UsePinAsMasterPassword = rc;
+					App.C.Settings.UsePinAsMasterPassword = rc;
 				}
 				else
 				{
@@ -199,7 +200,7 @@ namespace SafeNotebooks
 
 			// Decrypt all data on low level...
 
-			App.Settings.UsePinAsMasterPassword = false;
+			App.C.Settings.UsePinAsMasterPassword = false;
 			App.C.SecretsManager.DeleteCKey(App.Name);
 
 			return true;

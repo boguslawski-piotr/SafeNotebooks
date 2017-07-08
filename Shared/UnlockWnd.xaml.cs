@@ -67,7 +67,7 @@ namespace SafeNotebooks
 
 			try
 			{
-				if (App.Settings.UnlockUsingDOAuthentication)
+				if (App.C.Settings.UnlockUsingDOAuthentication)
 				{
 					DOAuthenticationType doa = DOAuthentication.Type;
 					if (doa != DOAuthenticationType.NotAvailable && TryToUnlockUsingDOAuthentication())
@@ -166,7 +166,7 @@ namespace SafeNotebooks
 		async Task TryToUnlockUsingPinAsync()
 		{
 			//if(false)
-			if (App.Settings.UnlockUsingPin)
+			if (App.C.Settings.UnlockUsingPin)
 			{
 				SetUnlockingMode();
 
@@ -188,7 +188,7 @@ namespace SafeNotebooks
 						bool pok = App.C.SecretsManager.ComparePassword(App.Name, dlg.Pin);
 						if (pok)
 						{
-							if (App.Settings.UsePinAsMasterPassword)
+							if (App.C.Settings.UsePinAsMasterPassword)
 								App.C.SecretsManager.CreateCKey(App.Name, SecretLifeTime.WhileAppRunning, dlg.Pin);
 						}
 

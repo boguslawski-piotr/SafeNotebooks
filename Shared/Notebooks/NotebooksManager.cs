@@ -298,7 +298,7 @@ namespace SafeNotebooks
 			(int itemsAdded, int itemsReloaded) report = (0, 0);
 			int tasksScheduled = 0;
 
-			const int batchSize = 128;
+			const int batchSize = 64;
 			IList<Task> tasks = new List<Task>();
 
 			foreach (var idInStorage in await storageWithItems.FindIdsAsync(pattern))

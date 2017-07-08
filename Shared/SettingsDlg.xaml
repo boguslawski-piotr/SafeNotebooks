@@ -15,8 +15,7 @@
 	ControlBackgroundColor="{StaticResource PageBackgroundColor}"
 	ControlTextColor="{StaticResource ListItemTextColor}"
 	ControlDescColor="{StaticResource ListItemDetailColor}"
-	SeparatorColor="{StaticResource ListItemTextColor}"
-	BindingContext="{x:Static local:App.Settings}">
+	SeparatorColor="{StaticResource ListItemTextColor}">
 
 	<pbXForms:SettingsContentView.AppBarContent>
 
@@ -47,6 +46,7 @@
 
 			<pbXForms:SettingsSwitch
 				Text="switch in group -1"
+				IsToggled="{Binding Test}"
 				Description="asddfggggggh dkd dkkd dkd kkkks skks skkks skks skksk" />
 
 			<pbXForms:SettingsSwitch

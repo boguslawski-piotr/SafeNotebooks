@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using pbXForms;
 using pbXNet;
-using Plugin.Settings;
-using Plugin.Settings.Abstractions;
 using Xamarin.Forms;
 
 namespace SafeNotebooks
