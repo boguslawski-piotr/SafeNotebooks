@@ -54,8 +54,7 @@ namespace SafeNotebooks
 			//if (!await DisplayAlert("New/Edit", $"{item.GetType().Name}", T.Localized("OK"), T.Localized("Cancel")))
 			//return (false, "");
 
-			object lllo = App.C.Settings["lll"];
-			int lll = Convert.ToInt32(lllo ?? 0);
+			int lll = App.C.Settings.Get<int>("llll");
 
 			//item.Color = "#800000ff";
 			item.Nick = $"{item.GetType().Name} Nick " + lll;
@@ -66,7 +65,7 @@ namespace SafeNotebooks
 			//item.ThisCKeyLifeTime = SecretLifeTime.WhileAppRunning;
 			//item.ThisCKeyLifeTime = CKeyLifeTime.OneTime;
 
-			App.C.Settings["lll"] = lll;
+			App.C.Settings["llll"] = lll;
 
 			return (true, new Password("123"));
 		}
