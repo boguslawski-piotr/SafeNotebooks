@@ -92,7 +92,7 @@ namespace SafeNotebooks
 
 		//
 
-		async Task<bool> TurnOnUnlockUsingPin()
+		async Task TurnOnUnlockUsingPin()
 		{
 			// The design of the function is a bit strange to be sure to clear the entire memory where the pin could be stored as soon as possible.
 
@@ -101,6 +101,7 @@ namespace SafeNotebooks
 
 			PinDlg pinDlg = UnlockWnd.CreatePinDlg(Wnd.C.Bounds.Height);
 			pinDlg.Title.Text = T.Localized("NewPinTitle");
+
 			bool rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 			if (rc)
 			{
@@ -124,7 +125,7 @@ namespace SafeNotebooks
 				pinDlg.Reset();
 
 				if (rc)
-					return true;
+					return;
 				else
 				{
 					// Pin was not confirmed.
@@ -134,7 +135,6 @@ namespace SafeNotebooks
 
 			pinDlg.Reset();
 			await TurnOffUnlockUsingPin();
-			return false;
 		}
 
 		async Task<bool> TurnOffUnlockUsingPin()
@@ -161,15 +161,14 @@ namespace SafeNotebooks
 			InitializeSettings();
 		}
 
-		async Task<bool> TurnOnUsePinAsMasterPassword()
+		async Task TurnOnUsePinAsMasterPassword()
 		{
-			bool rc = false;
-
 			if (App.C.Settings.UnlockUsingPin == true)
 			{
 				PinDlg pinDlg = UnlockWnd.CreatePinDlg(Wnd.C.Bounds.Height);
 				pinDlg.Title.Text = T.Localized("PinTitle");
-				rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
+
+				bool rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 				if (rc)
 					rc = App.C.SecretsManager.ComparePassword(App.Name, pinDlg.Pin);
 
@@ -188,8 +187,6 @@ namespace SafeNotebooks
 					// bad pin message
 				}
 			}
-
-			return false;
 		}
 
 		async Task<bool> TurnOffUsePinAsMasterPassword()

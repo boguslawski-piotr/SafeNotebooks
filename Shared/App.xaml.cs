@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using pbXNet;
@@ -126,8 +126,11 @@ namespace SafeNotebooks
 			//await App.DataManager.SelectNotebookAsync(n);
 		}
 
-
-		//
+		void CreateMainWnd()
+		{
+			MainPage = new MainWnd();
+			NotebooksManager.UI = MainWnd.Current;
+		}
 
 		public App()
 		{
@@ -143,13 +146,10 @@ namespace SafeNotebooks
 
 			Tests();
 
-			MainPage = new MainWnd();
-			NotebooksManager.UI = MainWnd.Current;
+			CreateMainWnd();
 		}
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-		//
 
 		protected override async void OnStart()
 		{
@@ -182,7 +182,7 @@ namespace SafeNotebooks
 			await Task.Delay(500);
 
 			_unlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnStart;
-			await Application.Current.MainPage.Navigation.PopModalAsync(true);
+			await MainPage.Navigation.PopModalAsync(true);
 			_unlockWnd = null;
 
 			ContinueOnStartAsync();
@@ -254,7 +254,7 @@ namespace SafeNotebooks
 			Log.D("", this);
 
 			_unlockWnd.UnlockedCorrectly -= UnlockedCorrectlyInOnResume;
-			await Application.Current.MainPage.Navigation.PopModalAsync(true);
+			await MainPage.Navigation.PopModalAsync(true);
 			_unlockWnd = null;
 
 			ContinueOnResumeAsync();
