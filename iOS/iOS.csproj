@@ -115,6 +115,12 @@
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\packages\Xamarin.Forms.2.3.5.256-pre6\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.pbXSettings.Abstractions">
+      <HintPath>..\packages\Xam.Plugins.pbXSettings.1.0.46\lib\Xamarin.iOS10\Plugin.pbXSettings.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.pbXSettings">
+      <HintPath>..\packages\Xam.Plugins.pbXSettings.1.0.46\lib\Xamarin.iOS10\Plugin.pbXSettings.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">

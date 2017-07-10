@@ -75,7 +75,7 @@ namespace SafeNotebooks
 
 		void CreateSettings()
 		{
-			Settings = new Settings(".3b0d86fceb1e4dcb80596205d5adf851", Serializer);
+			Settings = new Settings();
 		}
 
 		async Task InitializeSettingsAsync()

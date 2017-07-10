@@ -5,12 +5,8 @@ using pbXNet;
 
 namespace SafeNotebooks
 {
-	public class Settings : PlatformSettings
+	public class Settings : Plugin.pbXSettings.Settings
 	{
-		public Settings(string id, ISerializer serializer = null)
-			: base(id, serializer)
-		{ }
-
 		// Security settings
 
 		[Default(false)]
