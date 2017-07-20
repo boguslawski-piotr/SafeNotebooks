@@ -93,7 +93,7 @@ namespace SafeNotebooks
 			}
 			catch (Exception ex)
 			{
-				await MainWnd.C.DisplayError(ex, this);
+				//await MainWnd.C.DisplayError(ex, this);
 			}
 		}
 

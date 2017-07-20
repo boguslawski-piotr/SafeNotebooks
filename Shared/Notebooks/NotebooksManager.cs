@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -287,22 +288,27 @@ namespace SafeNotebooks
 			//await Task.Delay(500);
 		}
 
-		Dictionary<string, CancellationTokenSource> _loadItemsForItemCancellationTokens = new Dictionary<string, CancellationTokenSource>();
+		ConcurrentDictionary<string, CancellationTokenSource> _loadItemsForItemCancellationTokens = new ConcurrentDictionary<string, CancellationTokenSource>();
 
 		public async Task StartLoadItemsForItemAsync<T>(ItemWithItems forWhom, string pattern, bool tryToUnlock, Action<(int, int)> OnEnd, ISearchableStorage<string> storage = null) where T : Item, new()
 		{
 			ISearchableStorage<string> storageWithItems = storage ?? forWhom.Storage;
 
-			if (_loadItemsForItemCancellationTokens.TryGetValue(storageWithItems.Name, out CancellationTokenSource cts))
-			{
-				cts.Cancel();
+			string cancellationTokenId = forWhom.Id + storageWithItems.Name;
 
-				DateTime start = DateTime.Now;
-				while (_loadItemsForItemCancellationTokens.ContainsKey(storageWithItems.Name) && (DateTime.Now - start).Milliseconds < 1000)
-					await Task.Delay(100);
+			if (_loadItemsForItemCancellationTokens.TryGetValue(cancellationTokenId, out CancellationTokenSource cts))
+			{
+				if (cts != null)
+				{
+					cts.Cancel();
+
+					int retries = 10;
+					while (retries-- > 0 && _loadItemsForItemCancellationTokens[cancellationTokenId] != null)
+						await Task.Delay(500);
+				}
 			}
 
-			_loadItemsForItemCancellationTokens[storageWithItems.Name] = new CancellationTokenSource();
+			_loadItemsForItemCancellationTokens[cancellationTokenId] = new CancellationTokenSource();
 
 			await Task.Factory.StartNew(async () =>
 			{
@@ -312,7 +318,7 @@ namespace SafeNotebooks
 					IEnumerable<string> idsInStorage = await storageWithItems.FindIdsAsync(pattern);
 					foreach (var idInStorage in idsInStorage)
 					{
-						if (_loadItemsForItemCancellationTokens[storageWithItems.Name].IsCancellationRequested)
+						if (_loadItemsForItemCancellationTokens[cancellationTokenId].IsCancellationRequested)
 							break;
 
 						T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
@@ -344,11 +350,11 @@ namespace SafeNotebooks
 				}
 				finally
 				{
-					_loadItemsForItemCancellationTokens[storageWithItems.Name].Dispose();
-					_loadItemsForItemCancellationTokens.Remove(storageWithItems.Name);
+					_loadItemsForItemCancellationTokens[cancellationTokenId].Dispose();
+					_loadItemsForItemCancellationTokens[cancellationTokenId] = null;
 				}
 			},
-			_loadItemsForItemCancellationTokens[storageWithItems.Name].Token
+			_loadItemsForItemCancellationTokens[cancellationTokenId].Token
 			)
 			.ConfigureAwait(false);
 		}
