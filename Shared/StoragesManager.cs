@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
 using pbXNet;
 using pbXNet.Database;
 
@@ -18,7 +20,6 @@ namespace SafeNotebooks
 		protected string Id;
 
 		public StoragesManager(string id)
-		{
 			Id = id;
 		}
 
@@ -29,8 +30,6 @@ namespace SafeNotebooks
 			return m;
 		}
 
-		// TODO: obsluga wyjatkow!
-
 		public async Task InitializeAsync()
 		{
 			_storages = new Dictionary<string, ISearchableStorage<string>>();
@@ -39,10 +38,26 @@ namespace SafeNotebooks
 			{
 				foreach (DeviceFileSystem.RootType root in DeviceFileSystem.AvailableRootsForEndUser)
 				{
+					//IFileSystem fs = DeviceFileSystem.New(root);
+					//StorageOnFileSystem < string > storage = await NewStorageOnFileSystemAsync(fs);
+					//if (storage != null)
+					//storages[fs.Id] = storage;
+
 					IFileSystem fs = DeviceFileSystem.New(root);
-					StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);
+					IDatabase db = new SDCDatabase(new SqliteConnection($"Data Source={Path.Combine(fs.RootPath, Id)}.db"))
+					{
+						Name = fs.Name,
+						ConnectionType = ConnectionType.Local
+					};
+
+					StorageOnFileSystem<string> storage = 
+						await StorageOnFileSystem<string>.NewAsync(
+							Id,
+							await FileSystemInDatabase.NewAsync(Id.Replace(" ", ""), db, true), 
+							Serializer
+						);
 					if (storage != null)
-						_storages[fs.Id] = storage;
+						_storages[db.Name] = storage;
 				}
 			}
 			catch (Exception ex)
@@ -53,50 +68,22 @@ namespace SafeNotebooks
 			try
 			{
 #if DEBUG
-				IFileSystem fs = await FileSystemInDatabase.NewAsync("Safe Notebooks", new SimpleDatabaseInMemory());
-				StorageOnFileSystem<string> storage = await NewStorageOnFileSystemAsync(fs);
-				if (storage != null)
-					_storages[fs.Id] = storage;
-#endif
-			}
-			catch (Exception ex)
-			{
-				await MainWnd.C.DisplayError(ex);
-			}
-
-			try
-			{
-#if DEBUG
 #if WINDOWS_UWP
-				//AzureStorageSettings azureStorageSettings = new AzureStorageSettings
-				//{
-				//	ConnectionString = "UseDevelopmentStorage=true",
-				//	Type = AzureStorageSettings.StorageType.PageBlob,
-				//};
+				AzureStorageSettings azureStorageSettings = new AzureStorageSettings
+				{
+					ConnectionString = "UseDevelopmentStorage=true",
+					Type = AzureStorageSettings.StorageType.PageBlob,
+				};
 
-				//StorageOnAzureStorage<string> azureStorage = await StorageOnAzureStorage<string>.NewAsync("Azure Storage Emulator", azureStorageSettings, Serializer);
-				//if (azureStorage != null)
-				//	_storages[azureStorage.Id] = azureStorage;
+				StorageOnAzureStorage<string> azureStorage = await StorageOnAzureStorage<string>.NewAsync("Azure Storage Emulator", azureStorageSettings, Serializer);
+				if (azureStorage != null)
+					_storages[azureStorage.Id] = azureStorage;
 #endif
 #endif
 			}
 			catch (Exception ex)
 			{
 				await MainWnd.C.DisplayError(ex);
-			}
-		}
-
-		async Task<StorageOnFileSystem<string>> NewStorageOnFileSystemAsync(IFileSystem fs)
-		{
-			try
-			{
-				StorageOnFileSystem<string> storage = await StorageOnFileSystem<string>.NewAsync(Id, fs, Serializer);
-				return storage;
-			}
-			catch (Exception ex)
-			{
-				await MainWnd.C.DisplayError(ex);
-				return null;
 			}
 		}
 

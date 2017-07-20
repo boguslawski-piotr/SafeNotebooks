@@ -1,5 +1,6 @@
 ﻿{
   "dependencies": {
+    "Microsoft.Data.SQLite": "1.1.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
     "Newtonsoft.Json": "10.0.3",
     "System.ValueTuple": "4.3.1",

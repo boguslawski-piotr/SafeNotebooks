@@ -7,7 +7,7 @@
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>SafeNotebooks.iOS</RootNamespace>
-    <AssemblyName>SafeNotebooks</AssemblyName>
+    <AssemblyName>Safe Notebooks</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <ReleaseVersion>1.0.0.28</ReleaseVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -121,6 +121,10 @@
     <Reference Include="Plugin.pbXSettings">
       <HintPath>..\packages\Xam.Plugins.pbXSettings.1.0.46\lib\Xamarin.iOS10\Plugin.pbXSettings.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Data.Sqlite">
+      <HintPath>..\packages\Microsoft.Data.Sqlite.1.1.1\lib\netstandard1.3\Microsoft.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">

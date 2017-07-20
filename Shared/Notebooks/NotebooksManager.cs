@@ -284,107 +284,76 @@ namespace SafeNotebooks
 
 		async Task ReloadItemAsync(Item item)
 		{
-			// TODO: co tu zrobic???
+			//await Task.Delay(500);
 		}
 
-		/// <summary>
-		/// Returns true if any item was opened/loaded, false otherwise
-		/// </summary>
-		public async Task<(int, int)> LoadItemsForItemAsync<T>(ItemWithItems forWhom, string pattern, bool tryToUnlock, ISearchableStorage<string> storage = null) where T : Item, new()
-		{
-			ISearchableStorage<string> storageWithItems = storage ?? forWhom.Storage;
-			IList<IList<Task>> allTasks = new List<IList<Task>>();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-			(int itemsAdded, int itemsReloaded) report = (0, 0);
-			int tasksScheduled = 0;
-
-			const int batchSize = 64;
-			IList<Task> tasks = new List<Task>();
-
-			foreach (var idInStorage in await storageWithItems.FindIdsAsync(pattern))
-			{
-				T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
-				if (item == null)
-				{
-					tasks.Add(OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock));
-					tasksScheduled++;
-					report.itemsAdded++;
-				}
-				else
-				{
-					if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
-					{
-						tasks.Add(ReloadItemAsync(item));
-						tasksScheduled++;
-						report.itemsReloaded++;
-					}
-				}
-
-				if (tasks.Count > batchSize)
-				{
-					allTasks.Add(tasks);
-					tasks = new List<Task>();
-				}
-			}
-
-			if (tasksScheduled > 0)
-			{
-				foreach (var scheduledTasks in allTasks)
-				{
-					await Task.WhenAll(scheduledTasks);
-					await Task.Delay(100);
-				}
-			}
-
-			return report;
-		}
+		Dictionary<string, CancellationTokenSource> _loadItemsForItemCancellationTokens = new Dictionary<string, CancellationTokenSource>();
 
 		public async Task StartLoadItemsForItemAsync<T>(ItemWithItems forWhom, string pattern, bool tryToUnlock, Action<(int, int)> OnEnd, ISearchableStorage<string> storage = null) where T : Item, new()
 		{
 			ISearchableStorage<string> storageWithItems = storage ?? forWhom.Storage;
 
-			if ((StorageType.Quick & storageWithItems.Type) == storageWithItems.Type)
+			if (_loadItemsForItemCancellationTokens.TryGetValue(storageWithItems.Name, out CancellationTokenSource cts))
 			{
-				OnEnd(await LoadItemsForItemAsync<T>(forWhom, pattern, tryToUnlock, storage));
-				return;
+				cts.Cancel();
+
+				DateTime start = DateTime.Now;
+				while (_loadItemsForItemCancellationTokens.ContainsKey(storageWithItems.Name) && (DateTime.Now - start).Milliseconds < 1000)
+					await Task.Delay(100);
 			}
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+			_loadItemsForItemCancellationTokens[storageWithItems.Name] = new CancellationTokenSource();
 
-			Task.Run(async () =>
+			await Task.Factory.StartNew(async () =>
 			{
 				(int itemsAdded, int itemsReloaded) report = (0, 0);
-
-				IEnumerable<string> idsInStorage = await storageWithItems.FindIdsAsync(pattern);
-				foreach (var idInStorage in idsInStorage)
+				try
 				{
-					//const int batchSize = 32;
+					IEnumerable<string> idsInStorage = await storageWithItems.FindIdsAsync(pattern);
+					foreach (var idInStorage in idsInStorage)
+					{
+						if (_loadItemsForItemCancellationTokens[storageWithItems.Name].IsCancellationRequested)
+							break;
 
-					T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
-					if (item == null)
-					{
-						await OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock);
-						report.itemsAdded++;
-					}
-					else
-					{
-						if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
+						T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
+						if (item == null)
 						{
-							await ReloadItemAsync(item);
-							report.itemsReloaded++;
+							await OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock);
+							report.itemsAdded++;
 						}
+						else
+						{
+							if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
+							{
+								await ReloadItemAsync(item);
+								report.itemsReloaded++;
+							}
+						}
+
+						// TODO: nadal jest zle :( za bardzo to spowalnia wszystko...
+						// Trying to make UI more responsive...
+						await Task.Delay(storageWithItems.Type >= StorageType.RemoteIO ? 0 : 50);
 					}
 
-					// Trying to make UI more responsive...
-					//if ((StorageType.Quick & storageWithItems.Type) == storageWithItems.Type)
-					//	if (report.itemsAdded > batchSize)
-					//		await Task.Delay(25);
+					UI.BeginInvokeOnMainThread(() => OnEnd(report));
 				}
+				catch (Exception ex)
+				{
+					await UI.DisplayError(ex, this);
+				}
+				finally
+				{
+					_loadItemsForItemCancellationTokens[storageWithItems.Name].Dispose();
+					_loadItemsForItemCancellationTokens.Remove(storageWithItems.Name);
+				}
+			},
 
-				UI.BeginInvokeOnMainThread(() => OnEnd(report));
-			});
+			_loadItemsForItemCancellationTokens[storageWithItems.Name].Token);
+		}
 
 #pragma warning restore CS4014
-		}
+
 	}
 }
