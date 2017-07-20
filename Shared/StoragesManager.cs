@@ -20,6 +20,9 @@ namespace SafeNotebooks
 		protected string Id;
 
 		public StoragesManager(string id)
+		{
+			Check.Empty(id, nameof(id));
+
 			Id = id;
 		}
 
