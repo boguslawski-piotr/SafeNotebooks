@@ -275,7 +275,7 @@ namespace SafeNotebooks
 
 		async Task OpenAndAddItemAsync<T>(ItemWithItems parent, ISearchableStorage<string> storage, string idInStorage, bool tryToUnlock) where T : Item, new()
 		{
-			T item = await Item.OpenAsync<T>(this, (parent == this) ? null : parent, storage, idInStorage, tryToUnlock);
+			T item = await Item.OpenAsync<T>(this, (parent == this) ? null : parent, storage, idInStorage, tryToUnlock).ConfigureAwait(false);
 			if (item != null)
 			{
 				UI.BeginInvokeOnMainThread(() => parent.AddItem(item));
@@ -286,8 +286,6 @@ namespace SafeNotebooks
 		{
 			//await Task.Delay(500);
 		}
-
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 		Dictionary<string, CancellationTokenSource> _loadItemsForItemCancellationTokens = new Dictionary<string, CancellationTokenSource>();
 
@@ -320,12 +318,12 @@ namespace SafeNotebooks
 						T item = (T)forWhom.ObservableItems?.Find((i) => i.IdForStorage == idInStorage);
 						if (item == null)
 						{
-							await OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock);
+							await OpenAndAddItemAsync<T>(forWhom, storage, idInStorage, tryToUnlock).ConfigureAwait(false);
 							report.itemsAdded++;
 						}
 						else
 						{
-							if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage) > item.ModifiedOn)
+							if (await storageWithItems.GetModifiedOnAsync(item.IdForStorage).ConfigureAwait(false) > item.ModifiedOn)
 							{
 								await ReloadItemAsync(item);
 								report.itemsReloaded++;
@@ -334,14 +332,15 @@ namespace SafeNotebooks
 
 						// TODO: nadal jest zle :( za bardzo to spowalnia wszystko...
 						// Trying to make UI more responsive...
-						await Task.Delay(storageWithItems.Type >= StorageType.RemoteIO ? 0 : 50);
+						if(storageWithItems.Type < StorageType.RemoteIO)
+							await Task.Delay(50).ConfigureAwait(false);
 					}
 
 					UI.BeginInvokeOnMainThread(() => OnEnd(report));
 				}
 				catch (Exception ex)
 				{
-					await UI.DisplayError(ex, this);
+					await UI.DisplayError(ex, this, nameof(StartLoadItemsForItemAsync)).ConfigureAwait(false);
 				}
 				finally
 				{
@@ -349,11 +348,9 @@ namespace SafeNotebooks
 					_loadItemsForItemCancellationTokens.Remove(storageWithItems.Name);
 				}
 			},
-
-			_loadItemsForItemCancellationTokens[storageWithItems.Name].Token);
+			_loadItemsForItemCancellationTokens[storageWithItems.Name].Token
+			)
+			.ConfigureAwait(false);
 		}
-
-#pragma warning restore CS4014
-
 	}
 }

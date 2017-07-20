@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using pbXNet;
@@ -55,7 +57,7 @@ namespace SafeNotebooks
 
 		void CreateSerializer()
 		{
-			Serializer = new NewtonsoftJsonSerializer();  // very, very fast
+			Serializer = new NewtonsoftJsonSerializer();
 		}
 
 		void CreateSafeStorage()
@@ -120,10 +122,6 @@ namespace SafeNotebooks
 		async Task InitializeNotebooksManagerAsync()
 		{
 			await NotebooksManager.InitializeAsync(SafeStorage);
-			await NotebooksManager.LoadNotebooksAsync(StoragesManager.Storages, Settings.TryToUnlockItemItems);
-
-			// TODO: restore last selections (with unlocking if necessary)
-			//await App.DataManager.SelectNotebookAsync(n);
 		}
 
 		void CreateMainWnd()
@@ -163,8 +161,7 @@ namespace SafeNotebooks
 			}
 			catch (Exception ex)
 			{
-				Log.E(ex, this);
-				MainWnd.C.DisplayError(ex);
+				MainWnd.C.DisplayError(ex, this);
 			}
 
 			_unlockWnd = new UnlockWnd();
@@ -194,16 +191,27 @@ namespace SafeNotebooks
 
 			try
 			{
-				await InitializeStoragesManagerAsync();
 				await InitializeNotebooksManagerAsync();
+
+				// Start initialization for notebooks storages in background...
+				StoragesManager.StorageAddded += StoragesManager_StorageAddded;
+				InitializeStoragesManagerAsync();
 			}
 			catch (Exception ex)
 			{
-				Log.E(ex, this);
-				MainWnd.C.DisplayError(ex);
+				MainWnd.C.DisplayError(ex, this);
 			}
 		}
 
+		async void StoragesManager_StorageAddded(object sender, ISearchableStorage<string> storage)
+		{
+			Check.Null(storage, nameof(storage));
+
+			await NotebooksManager.LoadNotebooksAsync(new List<ISearchableStorage<string>>() { storage, }, Settings.TryToUnlockItemItems);
+
+			// TODO: restore last selections (with unlocking if necessary)
+			//await App.DataManager.SelectNotebookAsync(n);
+		}
 
 		//
 

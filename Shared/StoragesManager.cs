@@ -15,9 +15,11 @@ namespace SafeNotebooks
 
 		public IEnumerable<ISearchableStorage<string>> Storages => _storages?.Values;
 
+		public event EventHandler<ISearchableStorage<string>> StorageAddded;
+
 		protected IDictionary<string, ISearchableStorage<string>> _storages;
 
-		protected string Id;
+		protected readonly string Id;
 
 		public StoragesManager(string id)
 		{
@@ -41,10 +43,7 @@ namespace SafeNotebooks
 			{
 				foreach (DeviceFileSystem.RootType root in DeviceFileSystem.AvailableRootsForEndUser)
 				{
-					//IFileSystem fs = DeviceFileSystem.New(root);
-					//StorageOnFileSystem < string > storage = await NewStorageOnFileSystemAsync(fs);
-					//if (storage != null)
-					//storages[fs.Id] = storage;
+					//await Task.Delay(2000); // simulate network access...
 
 					IFileSystem fs = DeviceFileSystem.New(root);
 					IDatabase db = new SDCDatabase(new SqliteConnection($"Data Source={Path.Combine(fs.RootPath, Id)}.db"))
@@ -59,13 +58,18 @@ namespace SafeNotebooks
 							await FileSystemInDatabase.NewAsync(Id.Replace(" ", ""), db, true), 
 							Serializer
 						);
+
 					if (storage != null)
+					{
 						_storages[db.Name] = storage;
+						StorageAddded?.Invoke(this, storage);
+					}
+
 				}
 			}
 			catch (Exception ex)
 			{
-				await MainWnd.C.DisplayError(ex);
+				await MainWnd.C.DisplayError(ex, this);
 			}
 
 			try
@@ -80,13 +84,16 @@ namespace SafeNotebooks
 
 				StorageOnAzureStorage<string> azureStorage = await StorageOnAzureStorage<string>.NewAsync("Azure Storage Emulator", azureStorageSettings, Serializer);
 				if (azureStorage != null)
+				{
 					_storages[azureStorage.Id] = azureStorage;
+					StorageAddded?.Invoke(this, azureStorage);
+				}
 #endif
 #endif
 			}
 			catch (Exception ex)
 			{
-				await MainWnd.C.DisplayError(ex);
+				await MainWnd.C.DisplayError(ex, this);
 			}
 		}
 

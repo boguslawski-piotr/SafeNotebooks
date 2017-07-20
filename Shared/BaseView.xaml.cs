@@ -116,7 +116,10 @@ namespace SafeNotebooks
 
         public static void ListViewScrollToFirst(ListView ListCtl)
         {
-            IEnumerator e = ListCtl.ItemsSource.GetEnumerator();
+			if (ListCtl.ItemsSource == null)
+				return;
+
+			IEnumerator e = ListCtl.ItemsSource.GetEnumerator();
             e.Reset();
             object o = null;
             if (e.MoveNext())
