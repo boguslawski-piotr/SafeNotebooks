@@ -151,14 +151,14 @@ namespace SafeNotebooks
 			//}
 			//App.NotebooksManager.SortNotebooks();
 
-			base.SortBtn_Clicked(T.Localized("Notebooks"), App.C.NotebooksManager, ListCtl);
+			base.SortBtn_Clicked(Localized.T("Notebooks"), App.C.NotebooksManager, ListCtl);
 		}
 
 		async Task<ISearchableStorage<string>> SelectStorageUIAsync(IEnumerable<ISearchableStorage<string>> storages)
 		{
 			// TODO: do zmiany na wlasny dialog (modal view)
-			string fsName = await App.Current.MainPage.DisplayActionSheet(T.Localized("WhereStoreNotebook"),
-																		  T.Localized("Cancel"),
+			string fsName = await App.Current.MainPage.DisplayActionSheet(Localized.T("WhereStoreNotebook"),
+																		  Localized.T("Cancel"),
 																		  null,
 																		  storages.Select((storage1) => storage1.Name).ToArray());
 			try

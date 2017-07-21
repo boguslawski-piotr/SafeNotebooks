@@ -72,7 +72,7 @@ namespace SafeNotebooks
         public void SearchQuery_Unfocused(object sender, Xamarin.Forms.FocusEventArgs e)
         {
             _CancelSearchBtn.IsVisible = false;
-            _SearchQuery.Placeholder = T.Localized("SearchQueryPlaceholder");
+            _SearchQuery.Placeholder = Localized.T("SearchQueryPlaceholder");
             _SearchBar.Padding = (Thickness)Resources["SearchBarPadding"];
         }
 
@@ -97,7 +97,7 @@ namespace SafeNotebooks
             if (item == null)
                 return;
 
-            SortParametersDlg dlg = new SortParametersDlg(T.Localized("HowToSort") + " " + title + "?", item.SortParams);
+            SortParametersDlg dlg = new SortParametersDlg(Localized.T("HowToSort") + " " + title + "?", item.SortParams);
             if (await Wnd.C.ModalManager.DisplayModalAsync(dlg, Wnd.C.IsSplitView && !detailView ? ModalViewsManager.ModalPosition.BottomLeft : ModalViewsManager.ModalPosition.BottomCenter))
             {
                 item.SortParams = dlg.SortParams;

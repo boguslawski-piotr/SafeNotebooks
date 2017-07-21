@@ -100,7 +100,7 @@ namespace SafeNotebooks
 			// Twice, just to be sure... ;)
 
 			PinDlg pinDlg = UnlockWnd.CreatePinDlg(Wnd.C.Bounds.Height);
-			pinDlg.Title.Text = T.Localized("NewPinTitle");
+			pinDlg.Title.Text = Localized.T("NewPinTitle");
 
 			bool rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 			if (rc)
@@ -108,7 +108,7 @@ namespace SafeNotebooks
 				Password pin = new Password(pinDlg.Pin);
 				pinDlg.Reset();
 
-				pinDlg.Title.Text = T.Localized("ConfirmNewPinTitle");
+				pinDlg.Title.Text = Localized.T("ConfirmNewPinTitle");
 				rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 				if (rc)
 					rc = pin.Equals(pinDlg.Pin);
@@ -166,7 +166,7 @@ namespace SafeNotebooks
 			if (App.C.Settings.UnlockUsingPin == true)
 			{
 				PinDlg pinDlg = UnlockWnd.CreatePinDlg(Wnd.C.Bounds.Height);
-				pinDlg.Title.Text = T.Localized("PinTitle");
+				pinDlg.Title.Text = Localized.T("PinTitle");
 
 				bool rc = await Wnd.C.ModalManager.DisplayModalAsync(pinDlg, ModalViewsManager.ModalPosition.BottomCenter);
 				if (rc)

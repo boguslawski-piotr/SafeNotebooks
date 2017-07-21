@@ -37,13 +37,13 @@ namespace SafeNotebooks
 		{
 			string message = Log.E(ex, caller, callerName);
 			await Task.Run(() =>
-				BeginInvokeOnMainThread(async () => await DisplayAlert(T.Localized("Error"), message, T.Localized("OK")))
+				BeginInvokeOnMainThread(async () => await DisplayAlert(Localized.T("Error"), message, Localized.T("OK")))
 			);
 		}
 
 		public async Task<IPassword> GetPasswordAsync(Item item, bool passwordForTheFirstTime)
 		{
-			await DisplayAlert("Password", $"is needed for: {item.Nick}; first: {passwordForTheFirstTime}", T.Localized("Cancel"));
+			await DisplayAlert("Password", $"is needed for: {item.Nick}; first: {passwordForTheFirstTime}", Localized.T("Cancel"));
 			return new Password("123");
 			//return null;
 		}
@@ -51,7 +51,7 @@ namespace SafeNotebooks
 
 		public async Task<(bool, IPassword)> EditItemAsync(Item item)
 		{
-			//if (!await DisplayAlert("New/Edit", $"{item.GetType().Name}", T.Localized("OK"), T.Localized("Cancel")))
+			//if (!await DisplayAlert("New/Edit", $"{item.GetType().Name}", Localized.T("OK"), Localized.T("Cancel")))
 			//return (false, "");
 
 			int lll = App.C.Settings.Get<int>("llll");

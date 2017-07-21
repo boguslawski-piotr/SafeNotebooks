@@ -97,7 +97,7 @@ namespace SafeNotebooks
 		void SetPageName(Page page)
 		{
 			SelectedPageName.Text = page?.NameForLists;
-			SelectedPageParentName.Text = $"{T.Localized("in")} {page?.Notebook?.NameForLists}, {page?.Notebook?.Storage?.Name}";
+			SelectedPageParentName.Text = $"{Localized.T("in")} {page?.Notebook?.NameForLists}, {page?.Notebook?.Storage?.Name}";
 		}
 
 		void UI(bool forPage)
@@ -168,12 +168,12 @@ namespace SafeNotebooks
 
 		void SortBtn_Clicked(object sender, System.EventArgs e)
 		{
-			base.SortBtn_Clicked(T.Localized("Notes"), App.C.NotebooksManager.SelectedPage, ListCtl, true);
+			base.SortBtn_Clicked(Localized.T("Notes"), App.C.NotebooksManager.SelectedPage, ListCtl, true);
 		}
 
 		async void NewBtn_Clicked(object sender, System.EventArgs e)
 		{
-			string rc = await Application.Current.MainPage.DisplayActionSheet(T.Localized("SelectAndNew"), T.Localized("Cancel"), null, "Note", "Checklist", "Secret");
+			string rc = await Application.Current.MainPage.DisplayActionSheet(Localized.T("SelectAndNew"), Localized.T("Cancel"), null, "Note", "Checklist", "Secret");
 			New(rc);
 		}
 

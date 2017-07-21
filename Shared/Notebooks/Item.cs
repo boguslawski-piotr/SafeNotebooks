@@ -422,13 +422,13 @@ namespace SafeNotebooks
 
 		public virtual async Task MoveAsync()
 		{
-			await App.Current.MainPage.DisplayAlert("Move", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
+			await App.Current.MainPage.DisplayAlert("Move", $"{GetType().Name}: {NameForLists}", null, Localized.T("Cancel"));
 		}
 
 		public virtual async Task DeleteAsync()
 		{
 			// TODO: should ask for a password is locked
-			await App.Current.MainPage.DisplayAlert("Delete", $"{GetType().Name}: {NameForLists}", null, T.Localized("Cancel"));
+			await App.Current.MainPage.DisplayAlert("Delete", $"{GetType().Name}: {NameForLists}", null, Localized.T("Cancel"));
 		}
 
 

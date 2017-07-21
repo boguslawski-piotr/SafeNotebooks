@@ -77,16 +77,16 @@ namespace SafeNotebooks
 							if (doa == DOAuthenticationType.Fingerprint)
 							{
 								_FPIcon.IsVisible = true;
-								_Message.Text = T.Localized("ScanFingerprint");
+								_Message.Text = Localized.T("ScanFingerprint");
 							}
 							else if (doa == DOAuthenticationType.Password)
-								_Message.Text = T.Localized("EnterSystemPassword");
+								_Message.Text = Localized.T("EnterSystemPassword");
 							else
-								_Message.Text = T.Localized("UseSomeDOA");
+								_Message.Text = Localized.T("UseSomeDOA");
 
 							if (DOAuthentication.CanBeCanceled())
 							{
-								_UnlockOrCancelBtn.Text = T.Localized("Cancel");
+								_UnlockOrCancelBtn.Text = Localized.T("Cancel");
 								_UnlockOrCancelBtn.IsVisible = true;
 							}
 						}
@@ -114,7 +114,7 @@ namespace SafeNotebooks
 
 		bool TryToUnlockUsingDOAuthentication()
 		{
-			return DOAuthentication.Start(T.Localized("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDOAuthentication, OnNotUnlockedUsingDOAuthentication);
+			return DOAuthentication.Start(Localized.T("AuthenticateDeviceOwnerReason"), OnUnlockedCorrectlyUsingDOAuthentication, OnNotUnlockedUsingDOAuthentication);
 		}
 
 #pragma warning disable CS4014
@@ -134,7 +134,7 @@ namespace SafeNotebooks
 			if (!hint)
 			{
 				_FPIcon.IsVisible = false;
-				_UnlockOrCancelBtn.Text = T.Localized("TryAgain");
+				_UnlockOrCancelBtn.Text = Localized.T("TryAgain");
 				_UnlockOrCancelBtn.IsVisible = true;
 			}
 		}
@@ -179,7 +179,7 @@ namespace SafeNotebooks
 
 				// Run PIN dialog
 				PinDlg dlg = CreatePinDlg(Bounds.Height);
-				dlg.Title.Text = T.Localized("PinTitle");
+				dlg.Title.Text = Localized.T("PinTitle");
 
 				while (true)
 				{
@@ -228,7 +228,7 @@ namespace SafeNotebooks
 			{
 				if (DOAuthentication.Cancel())
 				{
-					OnNotUnlockedUsingDOAuthentication(T.Localized("DOAWasCanceled"), false);
+					OnNotUnlockedUsingDOAuthentication(Localized.T("DOAWasCanceled"), false);
 					return;
 				}
 			}

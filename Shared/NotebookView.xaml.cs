@@ -157,7 +157,7 @@ namespace SafeNotebooks
 
 		void SortBtn_Clicked(object sender, System.EventArgs e)
 		{
-			base.SortBtn_Clicked(T.Localized("Pages"), App.C.NotebooksManager.SelectedNotebook, ListCtl);
+			base.SortBtn_Clicked(Localized.T("Pages"), App.C.NotebooksManager.SelectedNotebook, ListCtl);
 		}
 
 
